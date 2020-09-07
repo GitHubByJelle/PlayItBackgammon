@@ -7,7 +7,7 @@ public class Die {
     public Die(){
 
     }
-    public void generateDie(){
+    private void generateDie(){
         int roll1=0;
         int roll2=0;
         Random rn = new Random();
