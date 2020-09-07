@@ -5,3 +5,4 @@
 .idea/PlayItBackgammon.iml
 .idea/libraries/lib.xml
 out/production/PlayItBackgammon/Main.class
+*.class
