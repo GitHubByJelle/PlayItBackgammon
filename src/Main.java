@@ -12,7 +12,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setTitle("Hello, World!");
+        ViewManager manager= new ViewManager();
+        stage = manager.getMainStage();
+        stage.setTitle("Backgammon!");
         stage.show();
     }
 }
