@@ -12,7 +12,7 @@ public class Space {
         pieces = new ArrayList<Piece>();
     }
 
-    public boolean movePiece( Space to){
+    public boolean movePiece(Space to){
 
         return true;
     }
