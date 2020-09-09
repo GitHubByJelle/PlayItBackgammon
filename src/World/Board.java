@@ -44,7 +44,7 @@ public class Board {
     public String toString() {
         String res="";
         for(int i=0;i<spaces.length;i++){
-            res+= spaces[i];
+            res+= spaces[i]+ "\n";
         }
 
 
