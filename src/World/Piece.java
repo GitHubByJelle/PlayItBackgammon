@@ -8,7 +8,16 @@ public class Piece {
     }
 
 
+    public String toString(){
+        String res;
+        if(id==0){
+            res="W";
+        }else{
+            res="R";
+        }
 
+        return res;
+    }
 
 
 
