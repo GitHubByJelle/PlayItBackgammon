@@ -13,9 +13,11 @@ public class Space {
     }
 
     public boolean movePiece(Space to){
+
         Piece p= pieces.get(0);
         pieces.remove(p);
         to.getPieces().add(p);
+
         return true;
     }
 
