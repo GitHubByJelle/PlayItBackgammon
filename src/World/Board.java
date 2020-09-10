@@ -9,7 +9,7 @@ public class Board {
         this.width=width;
         this.height=height;
 
-        spaces = new Space[25];//24 play spaces +1 out space for "eaten" pieces
+        spaces = new Space[25];//0 is for the "eaten" ,1-12 is the bottom(right-left), 13-24 is top (Left to right)
         int y_offset = height / 2;
         int cury = 0;
         createSide(width, cury);
@@ -55,6 +55,7 @@ public class Board {
 
         return res;
     }
+
     public int getWidth(){
         return this.width;
     }

@@ -5,4 +5,7 @@ public class Variables {
     public static double SCREEN_WIDTH=  screenSize.getWidth();
     public static double  SCREEN_HEIGHT= screenSize.getHeight();
 
+
+    public String[] PLAYERS= {"Human", "BotA", "BotB"};
+
 }
