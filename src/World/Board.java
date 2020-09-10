@@ -2,12 +2,8 @@ package src.World;
 
 public class Board {
     private Space[] spaces;
-    private int width;
-    private int height;
 
     public Board(int width, int height) {
-        this.width=width;
-        this.height=height;
         spaces = new Space[25];//24 play spaces +1 out space for "eaten" pieces
         int y_offset = height / 2;
         int cury = 0;
@@ -25,13 +21,9 @@ public class Board {
         addPieces(18,5,0);
         addPieces(23,2,1);
 
-    }
 
-    public int getWidth(){
-        return this.width;
-    }
-    public int getHeight(){
-        return this.height;
+
+
     }
 
     private void addPieces(int spaceIndex, int num, int colorId) {
