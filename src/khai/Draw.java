@@ -1,7 +1,7 @@
 package src.khai;
 
+
 import javax.swing.*;
-import java.awt.Point;
 import java.awt.*;
 
 public class Draw extends JFrame {
