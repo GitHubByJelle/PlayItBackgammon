@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class Space {
 
     private ArrayList<Piece> pieces;
-
-    public Space(){
+    private int label;
+    public Space(int l){
+        label=l;
         pieces = new ArrayList<Piece>();
     }
 
@@ -14,7 +15,6 @@ public class Space {
         Piece p= pieces.get(0);
         pieces.remove(p);
         to.getPieces().add(p);
-
         return true;
     }
 
@@ -26,5 +26,13 @@ public class Space {
             res +=pieces.get(i);
         }
         return res;
+    }
+
+    public boolean isEmpty(){
+        return pieces.size()==0;
+    }
+
+    public int getLabel(){
+        return label;
     }
 }

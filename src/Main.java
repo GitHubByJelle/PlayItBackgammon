@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import GUI.MainMenu;
 import World.Board;
+import World.Die;
 
 public class Main {
 
@@ -20,8 +21,11 @@ public class Main {
 
 
         Board b= new Board();
-
         System.out.println(b);
+
+
+
+
 
 
 
