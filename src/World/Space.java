@@ -10,8 +10,6 @@ public class Space {
         pieces = new ArrayList<Piece>();
     }
 
-
-
     public boolean movePiece(Space to){
         Piece p= pieces.get(0);
         pieces.remove(p);

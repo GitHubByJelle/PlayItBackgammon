@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public class Board {
     private Space[] spaces;
+
     public Board(){
         spaces = new Space[25];//0 is for the "eaten" ,1-12 is the bottom(right-left), 13-24 is top (Left to right)
         createSpaces();
@@ -45,7 +46,7 @@ public class Board {
 
         String res="";
         for(int i=0;i<spaces.length;i++){
-            res+= spaces[i]+ "\n";
+            res+= i+ " "+spaces[i]+ "\n";
         }
 
         return res;
