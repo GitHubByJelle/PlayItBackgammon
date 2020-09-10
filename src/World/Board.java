@@ -1,5 +1,6 @@
 package World;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Board {
@@ -7,8 +8,10 @@ public class Board {
     private Die die;
 
     public Board(){
-        Die die=new Die();
+        die=new Die();
         die.generateDie();
+        die.getNextRoll();//remove this later
+
 
         spaces = new Space[25];//0 is for the "eaten" ,1-12 is the bottom(right-left), 13-24 is top (Left to right)
         createSpaces();
@@ -50,24 +53,27 @@ public class Board {
         return spaces;
     }
 
-//    public Space[] getValidMoves(Space selected){
-//        Space[] res = new Space[3];
-//        int[] roll= die.getCurRoll();
-//        //if the piece is red, the movement is from 24->1 so make the roll -ve
-//        if(selected.getPieces().get(0).id==1)
-//            for(int i=0;i< roll.length;i++) roll[i]*=-1;
-//
-//
-//        for(int i=0;i< roll.length;i++) {
-//            //check if move is inbound
-//            if (selected.getLabel() + roll[0] < 25 && selected.getLabel() + roll[0] >=0 ) {
-//                if()
-//            }
-//        }
-//        if()
-//        return res;
-//    }
+    public ArrayList<Space> getValidMoves(Space selected){
+
+        ArrayList<Space> res = new ArrayList<Space>();
+        int[] roll= die.getCurRoll();
+        //if the piece is red, the movement is from 24->1 so make the roll -ve
+        if(selected.getPieces().get(0).id==1)
+            for(int i=0;i< roll.length;i++) roll[i]*=-1;
+
+        for(int i=0;i< roll.length;i++) {
+            res.add(spaces[selected.getLabel()+roll[i]]);
+                //check if move is inbound
+                //check if a double roll applies
+                //check single move
+                //check double move
+
+        }
+
+        return res;
+    }
     public boolean playerMove(Space from, Space to){
+        from.movePiece(to);
         return true;
     }
 

@@ -4,6 +4,7 @@ import javax.swing.*;
 import GUI.MainMenu;
 import World.Board;
 import World.Die;
+import World.Space;
 
 public class Main {
 
@@ -21,8 +22,11 @@ public class Main {
 
 
         Board b= new Board();
+        Space[] s = b.getSpaces();
         System.out.println(b);
 
+        b.playerMove(s[6],s[2]);
+        System.out.println(b);
 
 
 

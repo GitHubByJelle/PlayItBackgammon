@@ -57,4 +57,8 @@ public class Die {
     public void printCurRoll(){
         System.out.println(Arrays.toString(DieList.get(pointer)));
     }
+
+    public boolean isDouble(int[] roll){
+       return roll[0]==roll[1];
+    }
 }
