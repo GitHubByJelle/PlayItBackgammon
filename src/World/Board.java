@@ -1,4 +1,4 @@
-package World;
+package src.World;
 
 public class Board {
     private Space[] spaces;
