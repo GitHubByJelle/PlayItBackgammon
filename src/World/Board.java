@@ -8,7 +8,7 @@ public class Board {
     public Board(int width, int height) {
         this.width=width;
         this.height=height;
-
+        //TODO:@alaa
         spaces = new Space[25];//0 is for the "eaten" ,1-12 is the bottom(right-left), 13-24 is top (Left to right)
         int y_offset = height / 2;
         int cury = 0;
