@@ -1,6 +1,6 @@
-package src;
 
-import src.World.Board;
+
+import World.Board;
 
 public class Main {
 

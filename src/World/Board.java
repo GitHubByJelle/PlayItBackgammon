@@ -1,9 +1,14 @@
-package src.World;
+package World;
 
 public class Board {
     private Space[] spaces;
+    private int width;
+    private int height;
 
     public Board(int width, int height) {
+        this.width=width;
+        this.height=height;
+
         spaces = new Space[25];//24 play spaces +1 out space for "eaten" pieces
         int y_offset = height / 2;
         int cury = 0;
@@ -50,6 +55,13 @@ public class Board {
 
         return res;
     }
+    public int getWidth(){
+        return this.width;
+    }
+    public int getHeight(){
+        return this.height;
+    }
+
 }
 
 
