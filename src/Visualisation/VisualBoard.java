@@ -12,7 +12,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 public class VisualBoard extends JPanel{
-
+/*
         static TestPane.TriangleShape triangleShape;
         private static Board board= new Board(1000, 700);
         private final JPanel pane = new JPanel(new BorderLayout(3, 3));
@@ -63,5 +63,7 @@ public class VisualBoard extends JPanel{
                 }
             }
         }
+        */
+
     }
 

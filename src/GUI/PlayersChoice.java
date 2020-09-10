@@ -14,7 +14,7 @@ public class PlayersChoice extends JPanel {
         this.img = new ImageIcon("pics/Player choice.jpg").getImage();
         setLayout(null);
         Variables var = new Variables();
-        String[] players = (var.getPlayers());
+        String[] players = (var.PLAYERS);
         player1 = new JComboBox(players);
         player1.setBackground(new Color(138, 69, 0));
         player1.setForeground(Color.WHITE);

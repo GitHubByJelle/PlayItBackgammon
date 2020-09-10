@@ -3,14 +3,14 @@ package World;
 import java.util.ArrayList;
 
 public class Space {
-    private int x,y;
+
     private ArrayList<Piece> pieces;
 
-    public Space(int x,int y){
-        this.x=x;
-        this.y=y;
+    public Space(){
         pieces = new ArrayList<Piece>();
     }
+
+
 
     public boolean movePiece(Space to){
         Piece p= pieces.get(0);
