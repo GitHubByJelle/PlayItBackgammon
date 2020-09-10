@@ -24,14 +24,8 @@ public class Space {
 
     public String toString(){
         String res = "";
-        if(y==2){
-            res="_";
-        }
         for(int i=0;i<pieces.size();i++){
             res +=pieces.get(i);
-        }
-        if(y==1){
-            res+="_";
         }
         return res;
     }
