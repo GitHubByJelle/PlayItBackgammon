@@ -1,7 +1,6 @@
 import javax.swing.*;
 
 
-import World.Board;
 import GUI.MainMenu;
 
 public class Main {
