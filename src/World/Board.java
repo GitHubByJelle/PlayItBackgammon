@@ -12,7 +12,6 @@ public class Board {
         die.generateDie();
         die.getNextRoll();//remove this later
 
-
         spaces = new Space[25];//0 is for the "eaten" ,1-12 is the bottom(right-left), 13-24 is top (Left to right)
         createSpaces();
 
