@@ -95,7 +95,8 @@ public class Draw extends JFrame {
                             }
                         }
                     }
-               else{  int currentXPiece = currentStartX;
+               else{
+                   int currentXPiece = currentStartX;
                                       for (int k = 0; k < p.getSize(); k++) {
                                           if (p.getDominantId() == 1) {
                                            g.setColor(Color.black);
