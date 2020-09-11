@@ -6,10 +6,20 @@ public class Space {
 
     private ArrayList<Piece> pieces;
     private int id;
-    private int playerId;
     private boolean isHome;
-    private int dominantId;
+    private int domainID;
 
+
+    public Space(int id) {
+        pieces=new ArrayList<Piece>();
+        if(id!=0){
+            if(id>12)
+                domainID=1;
+            else
+                domainID=2;
+        }
+        this.id = id;
+    }
 
     public boolean movePiece(Space to) {
         Piece p = pieces.get(0);
@@ -27,13 +37,7 @@ public class Space {
         this.pieces.add(piece);
     }
 
-    public Space(int id, int playerId) {
-        this.id = id;
-        this.playerId = playerId;
-        if ((this.playerId == 1 && this.id < 6) || (this.id > 19 && this.playerId == 2)) {
-            isHome = true;
-        }
-    }
+
 
     public String toString(){
         String res = "";
@@ -51,17 +55,13 @@ public class Space {
         return id;
     }
 
-
-    public void setDominantId() {
-        if (pieces.size() > 0) {
-            dominantId = pieces.get(0).getId();
-        }
-    }
-
     public int getSize() {
         return this.pieces.size();
     }
-    public int getDominantId(){
-        return this.dominantId;
+
+
+    public int getDomainID(){
+        return domainID;
     }
+
 }

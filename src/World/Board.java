@@ -34,11 +34,7 @@ public class Board {
     private void createSpaces() {
         int x=0;
         for (int i = 0; i < spaces.length; i++) {
-            if(i<12)
-                x=1;
-            else
-                x=2;
-            spaces[i] = new Space(i, x);
+            spaces[i] = new Space(i);
         }
     }
 

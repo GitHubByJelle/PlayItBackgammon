@@ -1,6 +1,7 @@
 package Visualisation;
 
 
+import World.Board;
 import World.Space;
 
 import javax.swing.*;
@@ -13,10 +14,10 @@ public class Draw extends JFrame {
     int width = 60;
     int height = 200;
     int space = 15;
-    Game game;
+    Board board;
 
-    public Draw(Game game) {
-        this.game = game;
+    public Draw(Board b) {
+        board=b;
     }
 
     public void run() {
@@ -33,12 +34,12 @@ public class Draw extends JFrame {
         protected void paintComponent(Graphics g1) {
             Graphics2D g = (Graphics2D) g1;
             g.setColor(Color.BLUE);
-            System.out.println(game.allSpaces.size());
+            //System.out.println(board.getSpaces);
 
             boolean isBlue = true;
-            for (int i = 0; i < game.allSpaces.size(); i++) {
+            for (int i = 0; i < board.getSpaces().length; i++) {
                 int currentStartX, currentStartY;
-                Space p = game.allSpaces.get(i);
+                Space p = board.getSpaces()[i];
                 if (isBlue) {
                     if (i == 13) {
                         g.setColor(Color.white);
@@ -76,7 +77,7 @@ public class Draw extends JFrame {
                     if (i<13){
                         int currentXPiece = currentStartX - (width);
                         for (int k = 1; k <= p.getSize(); k++) {
-                            if (p.getDominantId() == 1) {
+                            if (p.getDomainID() == 1) {
                                 g.setColor(Color.black);
 
                                 if(p.getSize()==5)
@@ -98,7 +99,7 @@ public class Draw extends JFrame {
                else{
                    int currentXPiece = currentStartX;
                                       for (int k = 0; k < p.getSize(); k++) {
-                                          if (p.getDominantId() == 1) {
+                                          if (p.getDomainID() == 1) {
                                            g.setColor(Color.black);
                                               g.fillOval(currentXPiece, currentStartY + k * 30, 60, 30);
 
