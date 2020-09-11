@@ -9,8 +9,8 @@ import java.util.Stack;
 public class Game {
     Stack<Piece> allPieces;
     ArrayList<Space> allSpaces;
-    int[] startPlayer1 = {5, 7, 12, 23};
-    int[] startPlayer2 = {18, 16, 11, 0};
+    int[] startPlayer1 = {5, 8, 13, 25};
+    int[] startPlayer2 = {20, 17, 12, 0};
     int[] startPieces = {5, 3, 5, 2};
 
     public Game() {
@@ -37,7 +37,7 @@ public class Game {
 
     private void generateAllPoints() {
         for (int i = 1; i < 3; i++) {
-            for (int j = 0; j < 12; j++) {
+            for (int j = 0; j < 13; j++) {
                 Space space = new Space(i * j, i);
                 allSpaces.add(space);
             }

@@ -26,6 +26,7 @@ public class Space {
     public void addPiece(Piece piece){
         this.pieces.add(piece);
     }
+
     public Space(int id, int playerId) {
         this.id = id;
         this.playerId = playerId;
