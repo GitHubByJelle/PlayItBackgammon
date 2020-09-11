@@ -19,6 +19,10 @@ public class Piece {
         return res;
     }
 
+    public int getId() {
+        return id;
+    }
+
 
 
 }

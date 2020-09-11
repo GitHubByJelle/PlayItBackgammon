@@ -2,7 +2,7 @@ package Visualisation;
 
 import World.Board;
 import World.Piece;
-import World.Space;
+
 import World.Die;
 import java.awt.*;
 import java.awt.geom.Path2D;
