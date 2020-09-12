@@ -53,7 +53,7 @@ public class Draw extends JFrame {
                 }
                 if (i < 13) {
 
-                    if (i == 6) {
+                    if (i == 0) {
                         currentStartX = startX +  (13-i) * (width + space);
                         currentStartY = startY+ height+ space;
                     } else {
@@ -62,8 +62,9 @@ public class Draw extends JFrame {
 //                    g.fillRect(startX + i * (width + space), startY, width, height);
                         g.fillPolygon(new int[]{currentStartX, currentStartX - width/2, currentStartX - width }, new int[]{currentStartY+height, currentStartY, currentStartY + height}, 3);
                     }
+
                 }else {
-                    if (i == 19) {
+                    if (i == 25) {
                         currentStartX = startX + (i%13) * (width + space);
                         currentStartY = startY;
                     } else {
@@ -83,7 +84,7 @@ public class Draw extends JFrame {
                                 if(p.getSize()==5)
                                     g.fillOval(currentXPiece, currentStartY+ 20 + k * 30, 60, 30);
                                 else
-                                    g.fillOval(currentXPiece, currentStartY+ 80 + k * 30, 60, 30);
+                                    g.fillOval(currentXPiece, currentStartY+ 110 + k * 30, 60, 30);
 
 
                             } else {
@@ -92,7 +93,7 @@ public class Draw extends JFrame {
                                 if(p.getSize()==5)
                                     g.fillOval(currentXPiece, currentStartY+ 20 + k * 30, 60, 30);
                                 else
-                                    g.fillOval(currentXPiece, currentStartY+ 110 + k * 30, 60, 30);
+                                    g.fillOval(currentXPiece, currentStartY+ 80 + k * 30, 60, 30);
                             }
                         }
                     }

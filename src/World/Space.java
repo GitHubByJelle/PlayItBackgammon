@@ -13,7 +13,7 @@ public class Space {
     public Space(int id) {
         pieces=new ArrayList<Piece>();
         if(id!=0){
-            if(id>12)
+            if(id==1 || id==12 || id==17 || id==19)
                 domainID=1;
             else
                 domainID=2;
