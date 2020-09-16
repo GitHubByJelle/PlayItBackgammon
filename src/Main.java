@@ -26,7 +26,10 @@ public class Main {
         //TODO: TALK DAMMIT
         Board b= new Board();
         Draw d= new Draw(b);
+
+
         d.run();
+
 
         b.playerMove(b.getSpaces()[1], b.getSpaces()[2]);
         b.playerMove(b.getSpaces()[2], b.getSpaces()[6]);

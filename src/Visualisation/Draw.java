@@ -1,17 +1,19 @@
 package Visualisation;
 
 
+import Utils.Variables;
 import World.Board;
 import World.Space;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Draw extends JFrame {
     int startX = 100;
     int startY = 100;
-    boolean isRed = true;
-    int width = 60;
+    int width = 80;
     int height = 200;
     int space = 15;
     Board board;
@@ -29,6 +31,8 @@ public class Draw extends JFrame {
         this.setVisible(true);
     }
 
+
+
     class MiniDraw extends JPanel {
         @Override
         protected void paintComponent(Graphics g1) {
@@ -36,30 +40,24 @@ public class Draw extends JFrame {
             g.setColor(Color.BLUE);
             //System.out.println(board.getSpaces);
 
-            boolean isBlue = true;
             for (int i = 0; i < board.getSpaces().length; i++) {
+                //SPACE PLACEMENTS
                 int currentStartX, currentStartY;
                 Space p = board.getSpaces()[i];
-                if (isBlue) {
-                    if (i == 13) {
-                        g.setColor(Color.white);
-                    } else {
-                        isBlue = false;
-                        g.setColor(new Color(51,204,255));
-                    }
-                } else {
-                    isBlue = true;
-                    g.setColor(Color.white);
-                }
-                if (i < 13) {
 
+                if(i%2==0){
+                    g.setColor(Variables.EVEN_SPACES);
+                }else{
+                    g.setColor(Variables.ODD_SPACES);
+                }
+
+                if (i < 13) {
                     if (i == 0) {
                         currentStartX = startX +  (13-i) * (width + space);
                         currentStartY = startY+ height+ space;
                     } else {
                         currentStartX = startX +  (13-i) * (width + space) -space;
                         currentStartY = startY+ height+ space;
-//                    g.fillRect(startX + i * (width + space), startY, width, height);
                         g.fillPolygon(new int[]{currentStartX, currentStartX - width/2, currentStartX - width }, new int[]{currentStartY+height, currentStartY, currentStartY + height}, 3);
                     }
 
@@ -70,36 +68,26 @@ public class Draw extends JFrame {
                     } else {
                         currentStartX = startX + (i % 13) * (width + space);
                         currentStartY = startY;
-//                    g.fillRect(startX + (i % 12) * (width + space), startY + height + space, width, height);
                         g.fillPolygon(new int[]{currentStartX, currentStartX + width, currentStartX + width / 2}, new int[]{currentStartY, currentStartY, currentStartY + height}, 3);
                     }
                 }
 
                 //PIECE PLACEMENTS
-
                 if (p.getSize() > 0) {
                     if (i<13){
                         int currentXPiece = currentStartX - (width);
                         for (int k = 1; k <= p.getSize(); k++) {
                             g.setColor(p.getPieces().get(k-1).getColor());
-                           g.fillOval(currentXPiece, currentStartY+height- k*30, 60, 30);
+                           g.fillOval(currentXPiece, currentStartY+height- k*30, width, 30);
                         }
-                    }
-                   else{
-                       int currentXPiece = currentStartX;
-                      for (int k = 0; k < p.getSize(); k++) {
-                          if (p.getDomainID() == 1) {
-                           g.setColor(p.getPieces().get(k).getColor());
-                              g.fillOval(currentXPiece, currentStartY + k * 30, 60, 30);
-
-                           } else {
-                               g.setColor(p.getPieces().get(k).getColor());
-                              g.fillOval(currentXPiece, currentStartY + k * 30, 60, 30);
-                           }
-                      }
+                    }else{
+                        int currentXPiece = currentStartX;
+                        for (int k = 0; k < p.getSize(); k++) {
+                            g.setColor(p.getPieces().get(k).getColor());
+                            g.fillOval(currentXPiece, currentStartY + k * 30, width, 30);
+                        }
                    }
                 }
-
             }
         }
     }
