@@ -31,6 +31,8 @@ public class Main {
         b.playerMove(b.getSpaces()[1], b.getSpaces()[2]);
         b.playerMove(b.getSpaces()[2], b.getSpaces()[6]);
 
+        b.playerMove(b.getSpaces()[24], b.getSpaces()[19]);
+
 
 
         System.out.println(b);

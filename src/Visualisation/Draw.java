@@ -75,45 +75,30 @@ public class Draw extends JFrame {
                     }
                 }
 
+                //PIECE PLACEMENTS
+
                 if (p.getSize() > 0) {
                     if (i<13){
                         int currentXPiece = currentStartX - (width);
                         for (int k = 1; k <= p.getSize(); k++) {
                             g.setColor(p.getPieces().get(k-1).getColor());
-                            if (p.getDomainID() == 1) {
-
-
-                                if(p.getSize()==5)
-                                    g.fillOval(currentXPiece, currentStartY+ 20 + k * 30, 60, 30);
-                                else
-                                    g.fillOval(currentXPiece, currentStartY+ 110 + k * 30, 60, 30);
-
-
-                            } else {
-
-
-                                if(p.getSize()==5)
-                                    g.fillOval(currentXPiece, currentStartY+ 20 + k * 30, 60, 30);
-                                else
-                                    g.fillOval(currentXPiece, currentStartY+ 80 + k * 30, 60, 30);
-                            }
+                           g.fillOval(currentXPiece, currentStartY+height- k*30, 60, 30);
                         }
                     }
-               else{
-                   int currentXPiece = currentStartX;
-                                      for (int k = 0; k < p.getSize(); k++) {
-                                          if (p.getDomainID() == 1) {
-                                           g.setColor(Color.black);
-                                              g.fillOval(currentXPiece, currentStartY + k * 30, 60, 30);
+                   else{
+                       int currentXPiece = currentStartX;
+                      for (int k = 0; k < p.getSize(); k++) {
+                          if (p.getDomainID() == 1) {
+                           g.setColor(p.getPieces().get(k).getColor());
+                              g.fillOval(currentXPiece, currentStartY + k * 30, 60, 30);
 
-                                           } else {
-                                               g.setColor(new Color(204, 204, 204));
-                                              g.fillOval(currentXPiece, currentStartY + k * 30, 60, 30);
-                                           }
-                                      }
-                                 }
-
-                        }
+                           } else {
+                               g.setColor(p.getPieces().get(k).getColor());
+                              g.fillOval(currentXPiece, currentStartY + k * 30, 60, 30);
+                           }
+                      }
+                   }
+                }
 
             }
         }
