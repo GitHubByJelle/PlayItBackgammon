@@ -6,6 +6,10 @@ import Utils.Variables;
 import Visualisation.BoardSpace;
 import Visualisation.BoardView;
 import World.Board;
+import World.Space;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
 
@@ -41,8 +45,8 @@ public class Main {
         System.out.println(b);
 
 
-
-
+       ArrayList<Space> v= b.getValidMoves(b.getSpaces()[24]);
+        System.out.println(Arrays.toString(v.toArray()));
 
 
 
