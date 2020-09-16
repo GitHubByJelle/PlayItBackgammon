@@ -76,6 +76,10 @@ public class Board {
         from.movePiece(to);
         return true;
     }
+    public boolean playerMove(int from, int to){
+        spaces[from].movePiece(spaces[to]);
+        return true;
+    }
 
 }
 

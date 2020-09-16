@@ -3,6 +3,7 @@ import javax.swing.*;
 
 import GUI.MainMenu;
 import Utils.Variables;
+import Visualisation.BoardSpace;
 import Visualisation.BoardView;
 import World.Board;
 
@@ -14,7 +15,9 @@ public class Main {
         JFrame frame = new JFrame();
         JPanel MainGui = new MainMenu(frame);
         Board b= new Board();
+
         JPanel boardvis= new BoardView(b,frameWid, frameHei);
+
         frame.add(boardvis);
         frame.setTitle("Play it Backgammon");
         frame.setSize(frameWid,frameHei);

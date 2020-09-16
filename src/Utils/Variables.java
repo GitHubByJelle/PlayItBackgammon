@@ -16,7 +16,7 @@ public final class Variables {
     public static Color ODD_SPACES_COLOR =Color.WHITE;
     public static Color EVEN_SPACES_COLOR = new Color(51,204,255);
 
-    public static Color GAME_BACKGROUND_COLOR;
+    public static Color GAME_BACKGROUND_COLOR = Color.MAGENTA;
 
     //fornow its gonna be like this, later we can change it to store AI objects @ali
     public static String[] PLAYERS= {"Human", "BotA", "BotB"};
