@@ -74,12 +74,14 @@ public class Draw extends JFrame {
                         g.fillPolygon(new int[]{currentStartX, currentStartX + width, currentStartX + width / 2}, new int[]{currentStartY, currentStartY, currentStartY + height}, 3);
                     }
                 }
+
                 if (p.getSize() > 0) {
                     if (i<13){
                         int currentXPiece = currentStartX - (width);
                         for (int k = 1; k <= p.getSize(); k++) {
+                            g.setColor(p.getPieces().get(k-1).getColor());
                             if (p.getDomainID() == 1) {
-                                g.setColor(Color.black);
+
 
                                 if(p.getSize()==5)
                                     g.fillOval(currentXPiece, currentStartY+ 20 + k * 30, 60, 30);
@@ -88,7 +90,7 @@ public class Draw extends JFrame {
 
 
                             } else {
-                                g.setColor(new Color(204, 204, 204));
+
 
                                 if(p.getSize()==5)
                                     g.fillOval(currentXPiece, currentStartY+ 20 + k * 30, 60, 30);
