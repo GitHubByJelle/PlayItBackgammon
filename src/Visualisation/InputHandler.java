@@ -9,14 +9,14 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
-public class BoardSpace implements MouseListener {
+public class InputHandler implements MouseListener {
     Shape[] visSpaces ;
     ArrayList<Ellipse2D> visPieces ;
     boolean selected=false;
     Board board;
     int spaceRecord;
     BoardView bv;
-    public BoardSpace(Shape [] s, ArrayList<Ellipse2D> e, BoardView bv){
+    public InputHandler(Shape [] s, ArrayList<Ellipse2D> e, BoardView bv){
         visPieces=e;
         visSpaces=s;
         board= bv.board;

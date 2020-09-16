@@ -27,6 +27,7 @@ public class BoardView extends JPanel  {
         height = frameHeight/3;
         space = 15;
         board=b;
+        setBackground(Variables.GAME_BACKGROUND_COLOR);
 
     }
 
@@ -107,7 +108,7 @@ public class BoardView extends JPanel  {
 
         if(this.getMouseListeners().length==0){
             System.out.println("CCCCCCCCCCCCCCCCCCCC");
-            this.addMouseListener(new BoardSpace(visSpaces,visPieces, this));
+            this.addMouseListener(new InputHandler(visSpaces,visPieces, this));
         }
     }
 

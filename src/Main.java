@@ -3,7 +3,6 @@ import javax.swing.*;
 
 import GUI.MainMenu;
 import Utils.Variables;
-import Visualisation.BoardSpace;
 import Visualisation.BoardView;
 import World.Board;
 import World.Space;
