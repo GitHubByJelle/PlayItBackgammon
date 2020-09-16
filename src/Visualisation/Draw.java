@@ -7,8 +7,6 @@ import World.Space;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class Draw extends JFrame {
     int startX = 100;
@@ -46,9 +44,9 @@ public class Draw extends JFrame {
                 Space p = board.getSpaces()[i];
 
                 if(i%2==0){
-                    g.setColor(Variables.EVEN_SPACES);
+                    g.setColor(Variables.EVEN_SPACES_COLOR);
                 }else{
-                    g.setColor(Variables.ODD_SPACES);
+                    g.setColor(Variables.ODD_SPACES_COLOR);
                 }
 
                 if (i < 13) {
