@@ -56,24 +56,50 @@ public class Board {
     public ArrayList<Space> getValidMoves(Space selected){
 
         ArrayList<Space> res = new ArrayList<Space>();
+        Space target;
         int[] roll= die.getCurRoll();
+        //check for double roll
+        if(die.isDouble(roll)) roll = new int[]{roll[0],roll[0],roll[0],roll[0]};
         //if the piece is red, the movement is from 24->1 so make the roll -ve
         if(selected.getPieces().get(0).id==1)
-            for(int i=0;i< roll.length;i++) roll[i]*=-1;
+            for(int i=0;i< roll.length;i++){
+                roll[i]*=-1;
+                System.out.println(roll[i]);
+            }
 
         for(int i=0;i< roll.length;i++) {
-            res.add(spaces[selected.getId()+roll[i]]);
-                //check if move is inbound
-                //check if a double roll applies
-                //check single move
-                //check double move
+            //check for inbounds (TODO: NO validity check yet)
+            if(selected.getId()+roll[i]<25 || selected.getId()+roll[i]>-1) {
+                target=spaces[selected.getId() + roll[i]];
+
+                if(validityCheck(selected, target))
+                    res.add(spaces[selected.getId() + roll[i]]);
+                System.out.println(spaces[selected.getId() + roll[i]].getId());
+            }else{
+                //check if all the pieces are home in case the rolls can take the current piece out of play
+            }
+        }
+        //comnbination of rolls
+        //will only exist if we have atleast 2 valid moves
+        if(res.size()>1){
 
         }
 
+
         return res;
     }
+    //check if the target space is empty or if it has pieces of the same color, or if it has 1 piece of the opposite color
+    private boolean validityCheck(Space selected, Space target) {
+        return target.getPieces().size()==0 || target.getPieces().get(0).getId()==selected.getPieces().get(0).getId()||
+                (target.getPieces().size()==1 &&target.getPieces().get(0).getId()!=selected.getPieces().get(0).getId());
+    }
+
     public boolean playerMove(Space from, Space to){
         from.movePiece(to);
+        return true;
+    }
+    public boolean playerMove(int from, int to){
+        spaces[from].movePiece(spaces[to]);
         return true;
     }
 
