@@ -65,6 +65,7 @@ public class PlayersChoice extends JPanel {
         JButton button = new JButton(ButtonName);
         Color buttonColor = new Color(138, 69, 0);
         button.setBackground(buttonColor);
+        button.setBorderPainted(false);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         button.setForeground(Color.WHITE);
 
