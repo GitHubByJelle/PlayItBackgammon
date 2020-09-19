@@ -1,9 +1,7 @@
-package src.Visualisation;
+package Visualisation;
 
-import src.World.Board;
-import src.Visualisation.BoardView;
+import World.Board;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

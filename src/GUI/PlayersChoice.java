@@ -1,9 +1,9 @@
-package src.GUI;
+package GUI;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import src.Utils.Variables;
+import Utils.Variables;
 public class PlayersChoice extends JPanel {
 
     private Image img;

@@ -1,6 +1,4 @@
-package src.World;
-
-import src.World.Piece;
+package World;
 
 import java.util.ArrayList;
 

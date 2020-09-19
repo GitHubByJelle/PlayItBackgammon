@@ -1,7 +1,6 @@
-package src.World;
+package World;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Board {
     private Space[] spaces;

@@ -1,6 +1,6 @@
-package src.GUI;
+package GUI;
 
-import src.GUI.PlayersChoice;
+import GUI.PlayersChoice;
 
 import javax.swing.*;
 import java.awt.*;

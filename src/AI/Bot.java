@@ -1,5 +1,5 @@
-package src.AI;
-import src.World.*;
+package AI;
+import World.*;
 
 public class Bot {
 //    assume board is structured in list from 1-25

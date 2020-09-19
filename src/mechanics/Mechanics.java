@@ -1,9 +1,9 @@
-package src.mechanics;
+package mechanics;
 
 
-import src.World.Board;
-import src.World.Piece;
-import src.World.Space;
+import World.Board;
+import World.Piece;
+import World.Space;
 
 
 public class Mechanics {
