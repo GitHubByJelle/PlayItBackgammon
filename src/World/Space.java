@@ -38,7 +38,6 @@ public class Space {
     }
 
 
-
     public String toString(){
         String res = "";
         for(int i=0;i<pieces.size();i++){
@@ -57,11 +56,6 @@ public class Space {
 
     public int getSize() {
         return this.pieces.size();
-    }
-
-
-    public int getDomainID(){
-        return domainID;
     }
 
     public int getDominantId() {
