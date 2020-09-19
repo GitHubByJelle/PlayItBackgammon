@@ -1,6 +1,6 @@
-package World;
+package src.World;
 
-import Utils.Variables;
+import src.Utils.Variables;
 
 import java.awt.*;
 

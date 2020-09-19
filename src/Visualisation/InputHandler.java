@@ -1,6 +1,7 @@
-package Visualisation;
+package src.Visualisation;
 
-import World.Board;
+import src.World.Board;
+import src.Visualisation.BoardView;
 
 import javax.swing.*;
 import java.awt.*;

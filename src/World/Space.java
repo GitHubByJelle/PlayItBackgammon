@@ -1,4 +1,6 @@
-package World;
+package src.World;
+
+import src.World.Piece;
 
 import java.util.ArrayList;
 
@@ -64,4 +66,7 @@ public class Space {
         return domainID;
     }
 
+    public int getDominantId() {
+        return this.domainID;
+    }
 }

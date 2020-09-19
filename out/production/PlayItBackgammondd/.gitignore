@@ -1,0 +1,10 @@
+
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/PlayItBackgammon.iml
+.idea/libraries/lib.xml
+out/production/PlayItBackgammon/Main.class
+*.class
+*.bin
+*.xml

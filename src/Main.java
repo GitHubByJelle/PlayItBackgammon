@@ -1,11 +1,14 @@
+package src;
+
 import javax.swing.*;
 
 
-import GUI.MainMenu;
-import Utils.Variables;
-import Visualisation.BoardView;
-import World.Board;
-import World.Space;
+import src.GUI.MainMenu;
+import src.GUI.MainMenu;
+import src.Utils.Variables;
+import src.Visualisation.BoardView;
+import src.World.Board;
+import src.World.Space;
 
 import java.util.ArrayList;
 import java.util.Arrays;

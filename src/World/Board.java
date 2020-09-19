@@ -1,4 +1,4 @@
-package World;
+package src.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class Board {
     private Space[] spaces;
     private Die die;
-
+    private Space eatenSpace;
     public Board(){
         die=new Die();
         die.generateDie();
@@ -24,6 +24,7 @@ public class Board {
         addPieces(17,3,0);
         addPieces(19,5,0);
         addPieces(24,2,1);
+        eatenSpace = spaces[24];
 
     }
     //methods for board creation
@@ -113,6 +114,9 @@ public class Board {
         }
     }
 
+    public Space getEatenSpace() {
+        return this.eatenSpace;
+    }
 }
 
 
