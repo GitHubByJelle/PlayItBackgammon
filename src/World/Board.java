@@ -68,7 +68,7 @@ public class Board {
             }
 
         for(int i=0;i< roll.length;i++) {
-            //check for inbounds (TODO: NO validity check yet)
+            //check for inbounds
             if(selected.getId()+roll[i]<25 || selected.getId()+roll[i]>-1) {
                 target=spaces[selected.getId() + roll[i]];
 
@@ -89,18 +89,28 @@ public class Board {
         return res;
     }
     //check if the target space is empty or if it has pieces of the same color, or if it has 1 piece of the opposite color
-    private boolean validityCheck(Space selected, Space target) {
+    public boolean validityCheck(Space selected, Space target) {
         return target.getPieces().size()==0 || target.getPieces().get(0).getId()==selected.getPieces().get(0).getId()||
                 (target.getPieces().size()==1 &&target.getPieces().get(0).getId()!=selected.getPieces().get(0).getId());
     }
 
     public boolean playerMove(Space from, Space to){
-        from.movePiece(to);
-        return true;
+        if(validityCheck(from, to)) {
+            from.movePiece(to);
+            return true;
+        }else{
+            System.out.println("Move invalid");
+            return false;
+        }
     }
     public boolean playerMove(int from, int to){
-        spaces[from].movePiece(spaces[to]);
-        return true;
+        if(validityCheck(spaces[from],spaces[to])) {
+            spaces[from].movePiece(spaces[to]);
+            return true;
+        }else{
+            System.out.println("Move invalid");
+            return false;
+        }
     }
 
 }
