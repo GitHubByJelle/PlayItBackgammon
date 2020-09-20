@@ -1,5 +1,6 @@
 package World;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class Board {
@@ -113,10 +114,27 @@ public class Board {
         }
     }
 
+
     public Space getEatenSpace() {
         return this.eatenSpace;
     }
+
+    public boolean playerMovePossibilities(int from) {
+        boolean ans=false;
+        for (int i = 1; i < spaces.length; i++) {
+            if (validityCheck(spaces[from], spaces[i])) {
+                System.out.println("space " + i + " should be colored");
+                ans=true;
+            }
+            else{
+                System.out.println(i+ "is not a valid space");
+            }
+        }
+        return ans;
+
+    }
 }
+
 
 
 
