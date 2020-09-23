@@ -7,12 +7,11 @@ import World.Space;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main {
 
     public static void main(String[] args) {
-        int frameWid=(int)Variables.SCREEN_WIDTH*4/5;
+        int frameWid=(int) Variables.SCREEN_WIDTH*4/5;
         int frameHei=(int) Variables.SCREEN_HEIGHT*4/5;
         JFrame frame = new JFrame();
         JPanel MainGui = new MainMenu(frame);
@@ -28,23 +27,8 @@ public class Main {
         frame.setVisible(true);
 
 
-        //TODO: change the draw class to match the "eaten" pieces in board
-        //TODO: make sure we can draw the game and the menu after each other (rn they are both JFrames)
-        //TODO: TALK DAMMIT
-
-//
-//        b.playerMove(b.getSpaces()[1], b.getSpaces()[2]);
-//        b.playerMove(b.getSpaces()[2], b.getSpaces()[6]);
-//
-//        b.playerMove(b.getSpaces()[24], b.getSpaces()[19]);
-
-
-
         System.out.println(b);
-
-
-       ArrayList<Space> v= b.getValidMoves(b.getSpaces()[24]);
-        System.out.println(Arrays.toString(v.toArray()));
+       
 
 
 

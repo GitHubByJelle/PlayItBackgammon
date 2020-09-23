@@ -25,6 +25,7 @@ public class Space {
         Piece p = pieces.get(0);
         pieces.remove(p);
         to.getPieces().add(p);
+        checkHome(p,to.getId());
         return true;
     }
 
@@ -63,11 +64,28 @@ public class Space {
     public int getDominantId() {
         return this.domainID;
     }
+
+    private void checkHome(Piece a, int index){
+        if(a.id==0){
+            //piece is white then home is
+            if(index>18) {
+                a.isHome = true;
+            }
+        }else{
+            //piece is red
+            if(index<7){
+                a.isHome=true;
+            }
+        }
+    }
+
+
     public void checkHome(Piece a){
         if(a.id==0){
             //piece is white then home is
-            if(id>18)
-                a.isHome=true;
+            if(id>18) {
+                a.isHome = true;
+            }
         }else{
             //piece is red
             if(id<7){
