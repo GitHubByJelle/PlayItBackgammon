@@ -7,6 +7,7 @@ import java.awt.*;
 public class Piece {
     public int id;//0 for white, 1 for red
     public Color color;
+    public boolean isHome=false;
     public Piece(int clr){
         if(clr==0)
             color= Variables.WHITE_PIECE_COLOR;
@@ -38,4 +39,6 @@ public class Piece {
     public void setColor(Color c){
         color=c;
     }
+
+
 }

@@ -77,14 +77,11 @@ public class Board {
                     res.add(spaces[selected.getId() + roll[i]]);
                 System.out.println(spaces[selected.getId() + roll[i]].getId());
             }else{
-                //check if all the pieces are home in case the rolls can take the current piece out of play
+                //check if all the pieces are home in case the rolls can take the current piece out of play(eaten SPace)
+
             }
         }
-        //comnbination of rolls
-        //will only exist if we have atleast 2 valid moves
-        if(res.size()>1){
 
-        }
 
 
         return res;

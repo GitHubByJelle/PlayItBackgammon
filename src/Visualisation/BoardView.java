@@ -59,9 +59,9 @@ public class BoardView extends JPanel  {
              if (i % 2 == 0) {
                 g.setColor(Variables.EVEN_SPACES_COLOR);
 
-            } else
+            } else {
                 g.setColor(Variables.ODD_SPACES_COLOR);
-
+            }
 
             if (i < 13) {
                 if (i == 0) {

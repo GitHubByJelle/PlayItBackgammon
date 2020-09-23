@@ -33,6 +33,7 @@ public class InputHandler implements MouseListener {
                     for(int n=1;n<visSpaces.length;n++){
                         if (visSpaces[n].contains(mouseEvent.getX(), mouseEvent.getY())) {
                             spaceRecord=n;
+                            
                            // System.out.println("space number "+ n);
                         }
 
@@ -54,13 +55,6 @@ public class InputHandler implements MouseListener {
             }
         }
 
-//        for(int n=1;n<visSpaces.length;n++){
-//                if (visSpaces[n].contains(mouseEvent.getX(), mouseEvent.getY())) {
-//                    System.out.println("BBBBBBBBBBBBBBBBBBBBBB");
-//
-//                }
-//
-//        }
     }
 
     @Override

@@ -73,8 +73,8 @@ public class InputColoring implements MouseListener {
     }
 
 
-        @Override
-        public void mouseExited (MouseEvent mouseEvent){
+    @Override
+    public void mouseExited (MouseEvent mouseEvent){
 
-        }
     }
+}

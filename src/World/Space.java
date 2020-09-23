@@ -1,13 +1,12 @@
 package World;
 
-import java.awt.*;
+
 import java.util.ArrayList;
 
 public class Space {
 
     private ArrayList<Piece> pieces;
     private int id;
-    private boolean isHome;
     private int domainID;
 
 
@@ -63,5 +62,17 @@ public class Space {
 
     public int getDominantId() {
         return this.domainID;
+    }
+    public void checkHome(Piece a){
+        if(a.id==0){
+            //piece is white then home is
+            if(id>18)
+                a.isHome=true;
+        }else{
+            //piece is red
+            if(id<7){
+                a.isHome=true;
+            }
+        }
     }
 }
