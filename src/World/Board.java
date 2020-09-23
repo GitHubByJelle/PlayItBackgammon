@@ -82,10 +82,9 @@ public class Board {
             }
         }
 
-
-
         return res;
     }
+
     //check if the target space is empty or if it has pieces of the same color, or if it has 1 piece of the opposite color
     public boolean validityCheck(Space selected, Space target) {
         return target.getPieces().size()==0 || target.getPieces().get(0).getId()==selected.getPieces().get(0).getId()||
