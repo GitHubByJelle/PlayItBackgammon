@@ -1,6 +1,9 @@
 package AI;
 import World.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Bot {
 //    assume board is structured in list from 1-25
 //    standard start position
@@ -9,15 +12,19 @@ public class Bot {
     //TODO Use Evaluation function to select move out of nextValidMoves
     //TODO Use profiles in bot to make player 1 think 1 move ahead and player 2 2 or 3 moves ahead. Using winning as evolution for bot
     //TODO Optimize selection out of ValidMoves using GA
-    //
     public boolean profile;
     public static void main(String[] args) {
         Board b= new Board();
-
-        System.out.println(b);
-        double[] weightsarr = {0.1,2,3,23,2};
+//        System.out.println(b);
+//        double[] weightsarr = {0.1,2,3,23,2};
         Bot bot = new Bot(true);
-        System.out.println(bot.pipCount(b));
+//        System.out.println(bot.pipCount(b));
+        System.out.println(b.toString());
+        b.getValidMoves(b.getSpaces()[5]);
+//        bot.getAllValidMoves(b);
+        System.out.println("DICE");
+        b.getDice().printCurRoll();
+    //        System.out.println(bot.getAllValidMoves(b));
     }
     public Bot(boolean profile){
         this.profile = profile;
@@ -30,7 +37,6 @@ public class Bot {
     public double OtherPiecesSlain(Board B, Board prevB){
         return numberOfEnemyPieces(prevB) - numberOfEnemyPieces(B);
     }
-
     // Count the number of enemy pieces
     public double numberOfEnemyPieces(Board B){
         if(this.profile) {

@@ -160,6 +160,19 @@ public class Board {
         return ans;
 
     }
+    public Die getDice(){
+        return die;
+    }
+    //Gets all valid moves
+    public ArrayList<Space> getAllValidMoves(Board B){
+        ArrayList returnSpaces = new ArrayList<Space>();
+        for(Space space : B.getSpaces()){
+            if(space.getSize() != 0) {
+                returnSpaces.add(B.getValidMoves(space));
+            }
+        }
+        return returnSpaces;
+    }
 }
 
 
