@@ -73,6 +73,7 @@ public class Board {
         //check for double roll
         if(die.isDouble(roll))
             roll = new int[]{roll[0],roll[0],roll[0],roll[0]};
+
         //if the piece is red, the movement is from 24->1 so make the roll -ve
         if(selected.getPieces().get(0).id==1)
             for(int i=0;i< roll.length;i++){
@@ -92,11 +93,17 @@ public class Board {
                 //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
                 if(allPiecesHome(selected.getPieces().get(0).getId())){
                     res.add(outOfPlay);
-
                 }
             }
         }
 
+
+        String r= "";
+        for(int i=0; i<res.size();i++){
+            r+=res.get(i).getId()+ ", ";
+        }
+
+        System.out.println( res.size()+ " VALID MOVE(S) FROM "+selected.getId()+" ARE: "+ r);
         return res;
     }
 
@@ -119,8 +126,15 @@ public class Board {
     //check if the target space is empty or if it has pieces of the same color, or if it has 1 piece of the opposite color
     public boolean validityCheck(Space selected, Space target) {
         return target.isEmpty() || //if the target space is empty
-                target.getPieces().get(0).getId()==selected.getPieces().get(0).getId()|| //if the space has pieces of the same color
-                (target.getPieces().size()==1 &&target.getPieces().get(0).getId()!=selected.getPieces().get(0).getId()); //target has one piece and its color doesnt match
+                piecesOfSameColor(selected,target)|| //if the space has pieces of the same color
+                pieceCanBeEaten(selected, target); //target has one piece and its color doesnt match
+    }
+
+    private boolean piecesOfSameColor(Space selected, Space target){
+        return target.getPieces().get(0).getId()==selected.getPieces().get(0).getId();
+    }
+    private boolean pieceCanBeEaten(Space selected, Space target){
+        return (target.getPieces().size()==1 &&target.getPieces().get(0).getId()!=selected.getPieces().get(0).getId());
     }
 
     public boolean playerMove(Space from, Space to){
