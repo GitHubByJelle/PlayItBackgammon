@@ -31,7 +31,7 @@ public class Main {
         System.out.println(b);
 
 
-        b.getValidMoves(b.getSpaces()[6]);
+        System.out.println(b.getValidMoves(b.getSpaces()[13]));
 
 
 

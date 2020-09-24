@@ -12,7 +12,7 @@ public class Die {
         int roll1=0;
         int roll2=0;
         //force the first roll to be smth u r testing for
-        DieList.add(new int[]{6,2});
+        DieList.add(new int[]{1,2});
         Random rn = new Random();
         for(int i=0;i<150;i++){
             roll1 = rn.nextInt(6) + 1;

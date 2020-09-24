@@ -42,7 +42,7 @@ public class Mechanics {
     public int isWin() {
         int p1 = 0;
         int p2 = 0;
-        for (int i = 18; i < 24; i++) {
+        for (int i = 19; i < 25; i++) {
             Space current = board.getSpaces()[i];
             for (Piece p : current.getPieces()) {
                 if (p.getId() == 1) {
@@ -52,7 +52,7 @@ public class Mechanics {
         }
         if (p1 >= 15) return 1;
         else {
-            for (int i = 0; i < 6; i++) {
+            for (int i = 1; i < 7; i++) {
                 Space current = board.getSpaces()[i];
                 for (Piece p : current.getPieces()) {
                     if (p.getId() == 2) {

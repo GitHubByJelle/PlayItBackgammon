@@ -7,6 +7,7 @@ public class Board {
     private Space[] spaces;
     private Die die;
     private Space outOfPlay;
+
     public Board(){
         die=new Die();
         die.generateDie();
@@ -28,6 +29,7 @@ public class Board {
 
         //to correct for hishome values of the pieces
         for(int i=0;i< spaces.length;i++){
+            spaces[i].setDominateId();
             for(int a=0;a<spaces[i].getPieces().size();a++){
                 spaces[i].checkHome(spaces[i].getPieces().get(a));
             }
