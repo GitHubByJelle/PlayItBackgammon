@@ -7,6 +7,7 @@ import World.Space;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
 
@@ -28,7 +29,13 @@ public class Main {
 
 
         System.out.println(b);
-       
+
+        b.playerMove(24,23);
+        b.playerMove(1,2);
+
+        System.out.println(b);
+
+        System.out.println(Arrays.toString(b.getDie().getCurRoll()));
 
 
 

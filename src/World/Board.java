@@ -118,8 +118,9 @@ public class Board {
 
     //check if the target space is empty or if it has pieces of the same color, or if it has 1 piece of the opposite color
     public boolean validityCheck(Space selected, Space target) {
-        return target.getPieces().size()==0 || target.getPieces().get(0).getId()==selected.getPieces().get(0).getId()||
-                (target.getPieces().size()==1 &&target.getPieces().get(0).getId()!=selected.getPieces().get(0).getId());
+        return target.isEmpty() || //if the target space is empty
+                target.getPieces().get(0).getId()==selected.getPieces().get(0).getId()|| //if the space has pieces of the same color
+                (target.getPieces().size()==1 &&target.getPieces().get(0).getId()!=selected.getPieces().get(0).getId()); //target has one piece and its color doesnt match
     }
 
     public boolean playerMove(Space from, Space to){
@@ -160,6 +161,8 @@ public class Board {
         return ans;
 
     }
+
+    public Die getDie(){return die;}
 }
 
 
