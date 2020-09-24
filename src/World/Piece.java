@@ -24,7 +24,6 @@ public class Piece {
         }else{
             res="R";
         }
-
         return res;
     }
 

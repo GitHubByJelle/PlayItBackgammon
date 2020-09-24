@@ -27,7 +27,7 @@ public class Board {
         addPieces(24,2,1);
         outOfPlay = new Space(26);
 
-        //to correct for hishome values of the pieces
+        //to correct for ishome values of the pieces
         for(int i=0;i< spaces.length;i++){
             spaces[i].setDominateId();
             for(int a=0;a<spaces[i].getPieces().size();a++){
@@ -135,6 +135,7 @@ public class Board {
     private boolean piecesOfSameColor(Space selected, Space target){
         return target.getPieces().get(0).getId()==selected.getPieces().get(0).getId();
     }
+
     private boolean pieceCanBeEaten(Space selected, Space target){
         return (target.getPieces().size()==1 &&target.getPieces().get(0).getId()!=selected.getPieces().get(0).getId());
     }
@@ -148,6 +149,8 @@ public class Board {
             return false;
         }
     }
+
+
     public boolean playerMove(int from, int to){
         if(validityCheck(spaces[from],spaces[to])) {
             spaces[from].movePiece(spaces[to]);
@@ -157,7 +160,6 @@ public class Board {
             return false;
         }
     }
-
 
     public Space getEatenSpace() {
         return spaces[0];
@@ -175,10 +177,18 @@ public class Board {
             }
         }
         return ans;
-
     }
 
     public Die getDie(){return die;}
+
+
+    private boolean checkIfCanDominate(int pieceId, Space to) {
+        int size = to.getSize();
+        if (to.getDominantId() != pieceId) {
+            return size <= 1;
+        }
+        return true;
+    }
 }
 
 

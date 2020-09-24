@@ -2,6 +2,7 @@ import GUI.MainMenu;
 import Utils.Variables;
 import Visualisation.BoardView;
 import World.Board;
+import World.GameLoop;
 import World.Space;
 
 
@@ -18,7 +19,9 @@ public class Main {
         JPanel MainGui = new MainMenu(frame);
         Board b= new Board();
 
+
         JPanel boardvis= new BoardView(b,frameWid, frameHei);
+        GameLoop g= new GameLoop(b);
 
         frame.add(boardvis);
         frame.setTitle("Play it Backgammon");
