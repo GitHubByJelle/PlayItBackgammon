@@ -19,6 +19,7 @@ public class Main {
         JPanel MainGui = new MainMenu(frame);
         Board b= new Board();
 
+        // new StatusPanel();
 
         JPanel boardvis= new BoardView(b,frameWid, frameHei);
         GameLoop g= new GameLoop(b);
