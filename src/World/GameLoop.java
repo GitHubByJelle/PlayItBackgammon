@@ -22,7 +22,7 @@ public class GameLoop {
             //check win condition (TODO:K)
             if (!board.checkWinCondition()) {
                 int[] rolls = die.getNextRoll();
-
+                int dieIndex = 0;
                 if (isPlayer1) {
 
                     isPlayer1 = false;
@@ -44,7 +44,6 @@ public class GameLoop {
             }
             if (gameOver) {
                 //game over screen
-
                 break;
             }
         }

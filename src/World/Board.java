@@ -210,6 +210,7 @@ public class Board {
                 }
             }
         }
+        // return if the all the pieces are in out of play
         return p1 >= 15 || p2 >= 15;
     }
 }
