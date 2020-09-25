@@ -1,4 +1,5 @@
 import GUI.MainMenu;
+import GUI.StatusPanel;
 import Utils.Variables;
 import Visualisation.BoardView;
 import World.Board;
@@ -7,6 +8,7 @@ import World.Space;
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -25,6 +27,7 @@ public class Main {
         GameLoop g= new GameLoop(b);
 
         frame.add(boardvis);
+        frame.add(new StatusPanel(), BorderLayout.EAST);
         frame.setTitle("Play it Backgammon");
         frame.setSize(frameWid,frameHei);
         frame.setLocationRelativeTo(null);

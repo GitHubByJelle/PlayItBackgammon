@@ -11,7 +11,7 @@ public class StatusPanel extends JPanel{
     static JTextField tf1,tf2,tf3,tf4,tf5,tf6,tf7,tf8;
     static JPanel jp1,jp2,jp3,jp4,jp5;
 
-    StatusPanel(){
+    public StatusPanel(){
 
         lb1 = new JLabel("Dice Roll:");
         lb1.setFont(new Font("Verdana", Font.PLAIN, 18));
