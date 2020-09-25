@@ -21,13 +21,14 @@ public class Main {
         JPanel MainGui = new MainMenu(frame);
         Board b= new Board();
 
-        // new StatusPanel();
+        //new StatusPanel();
 
         JPanel boardvis= new BoardView(b,frameWid, frameHei);
         GameLoop g= new GameLoop(b);
 
         frame.add(boardvis);
         frame.add(new StatusPanel(), BorderLayout.EAST);
+
         frame.setTitle("Play it Backgammon");
         frame.setSize(frameWid,frameHei);
         frame.setLocationRelativeTo(null);

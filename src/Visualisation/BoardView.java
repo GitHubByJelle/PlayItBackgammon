@@ -113,7 +113,6 @@ public class BoardView extends JPanel  {
 
 
         if(this.getMouseListeners().length==0){
-            System.out.println("CCCCCCCCCCCCCCCCCCCC");
             this.addMouseListener(new InputHandler(visSpaces,visPieces, this));
         }
     }
