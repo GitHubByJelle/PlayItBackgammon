@@ -22,7 +22,7 @@ public class GameLoop {
             //check win condition (TODO:K)
             if (!board.checkWinCondition()) {
                 int[] rolls = die.getNextRoll();
-                int dieIndex = 0;
+                int dieIndex = 0;//  die is prompted for a move
                 if (isPlayer1) {
 
                     isPlayer1 = false;

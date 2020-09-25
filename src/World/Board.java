@@ -211,6 +211,7 @@ public class Board {
             }
         }
         // return if the all the pieces are in out of play
+        // this won't tell which player wins
         return p1 >= 15 || p2 >= 15;
     }
 }
