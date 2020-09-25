@@ -6,15 +6,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 
-public class StatusPanel {
-   	static JLabel lb1,lb2,lb3,lb4,lb5,lb6,lb7,lb8;
+public class StatusPanel extends JPanel{
+	static JLabel lb1,lb2,lb3,lb4,lb5,lb6,lb7,lb8;
     static JTextField tf1,tf2,tf3,tf4,tf5,tf6,tf7,tf8;
     static JPanel jp1,jp2,jp3,jp4,jp5;
 
     StatusPanel(){
-        JFrame f= new JFrame("Player Status");
-        JFrame.setDefaultLookAndFeelDecorated(true);
-        f.getRootPane().setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.GRAY));
+
         lb1 = new JLabel("Dice Roll:");
         lb1.setFont(new Font("Verdana", Font.PLAIN, 18));
         lb2 = new JLabel("White Pieces in play:");
@@ -35,31 +33,29 @@ public class StatusPanel {
         tf1=new JTextField(); tf2=new JTextField(); tf3=new JTextField();
         tf4=new JTextField(); tf5=new JTextField(); tf6=new JTextField();
         tf7=new JTextField(); tf8=new JTextField();
+
         tf1.setEditable(false); tf2.setEditable(false);tf3.setEditable(false);
         tf4.setEditable(false); tf5.setEditable(false);tf6.setEditable(false);
         tf7.setEditable(false); tf8.setEditable(false);
 
 
-       	JPanel jp = new JPanel(new GridLayout(8,2));
-       	jp.add(lb1);
-       	jp.add(tf1);
-       	jp.add(lb2);
-       	jp.add(tf2);
-       	jp.add(lb3);
-       	jp.add(tf3);
-       	jp.add(lb4);
-       	jp.add(tf4);
-       	jp.add(lb5);
-       	jp.add(tf5);
-       	jp.add(lb6);
-       	jp.add(tf6);
-       	jp.add(lb7);
-       	jp.add(tf7);
-       	jp.add(lb8);
-       	jp.add(tf8);
-       	f.setSize(new Dimension(500,500));
-       	f.add(jp);
-        f.setVisible(true);
+       	this.setLayout(new GridLayout(8,2));
+       	this.add(lb1);
+       	this.add(tf1);
+       	this.add(lb2);
+       	this.add(tf2);
+       	this.add(lb3);
+       	this.add(tf3);
+       	this.add(lb4);
+       	this.add(tf4);
+       	this.add(lb5);
+       	this.add(tf5);
+       	this.add(lb6);
+       	this.add(tf6);
+       	this.add(lb7);
+       	this.add(tf7);
+       	this.add(lb8);
+       	this.add(tf8);
     }
 
     public static void updateDiceRolls(int[] rolls) {
@@ -93,4 +89,4 @@ public class StatusPanel {
     public static void updatePlNextMove(String playerToMove) {
     	tf8.setText(playerToMove+"");
     }
- }
+ } 
