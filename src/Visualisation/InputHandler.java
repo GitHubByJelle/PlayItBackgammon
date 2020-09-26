@@ -1,8 +1,10 @@
-package Visualisation;
+package src.Visualisation;
 
-import Utils.Variables;
-import World.Board;
-import World.Space;
+import src.Utils.Variables;
+import src.World.Board;
+
+
+import src.World.Space;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -11,69 +13,86 @@ import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
 public class InputHandler implements MouseListener {
-    Shape[] visSpaces ;
-    ArrayList<Ellipse2D> visPieces ;
-    boolean selected=false;
+    Shape[] visSpaces;
+    ArrayList<Ellipse2D> visPieces;
+    boolean selected = false;
     Board board;
     int spaceRecord;
     BoardView bv;
     Space s;
-    public InputHandler(Shape [] s, ArrayList<Ellipse2D> e, BoardView bv){
-        visPieces=e;
-        visSpaces=s;
-        board= bv.board;
-        this.bv=bv;
+    boolean canMove = false;
+    int currentPlayer = 0;
+
+    public InputHandler(int startPlayer, Shape[] s, ArrayList<Ellipse2D> e, BoardView bv) {
+        visPieces = e;
+        visSpaces = s;
+        board = bv.board;
+        this.bv = bv;
+        currentPlayer = startPlayer;
+        System.out.println("Current player is: " + currentPlayer);
+
     }
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        if(!selected) {
+        int k = convertCoordsToId(mouseEvent);
+        if (board.getSpaces()[k].getSize() >= 1) {
+            int currentPiece = board.getSpaces()[k].getPieces().get(0).getId();
+            if (currentPiece == currentPlayer) {
+                System.out.println("The player can move this piece");
+                canMove = true;
+            } else {
+                System.out.println("Cannot move");
+                canMove = false;
+            }
+        }
+
+        if (!selected) {
             for (int i = 0; i < visPieces.size(); i++) {
                 if (visPieces.get(i).contains(mouseEvent.getX(), mouseEvent.getY())) {
-                    System.out.println(i+"AAAAAAAAAAAAAAAAAA");
-
-                    selected=true;
-                    for(int n=1;n<visSpaces.length;n++){
+                    System.out.println(mouseEvent.getX() + " " + mouseEvent.getY() + "DIT ME MAY");
+                    selected = true;
+                    for (int n = 1; n < visSpaces.length; n++) {
                         if (visSpaces[n].contains(mouseEvent.getX(), mouseEvent.getY())) {
-                            spaceRecord=n;
+                            spaceRecord = n;
                             // System.out.println("space number "+ n);
 
-                            ArrayList<Space> arr= board.getValidMoves(board.getSpaces()[n]);
-                            for (int j=0; j<arr.size(); j++){
+                            ArrayList<Space> arr = board.getValidMoves(board.getSpaces()[n]);
+                            for (int j = 0; j < arr.size(); j++) {
 
                                 int currentStartX, currentStartY;
                                 Polygon coloredSpace;
-                                Graphics g= bv.getGraphics();
+                                Graphics g = bv.getGraphics();
                                 g.setColor(Variables.RECOLOR_SPACES_COLOR);
 
                                 if (arr.get(j).getId() < 13) {
-                                    currentStartX = bv.getStartX() +  (13-i) * (bv.getWidth() + bv.getSpace()) -bv.getSpace();
-                                    currentStartY = bv.getStartY()+ bv.getHeight()+ bv.getSpace();
-                                    coloredSpace = new Polygon(new int[]{currentStartX, currentStartX - bv.getWidth()/2, currentStartX - bv.getWidth() }, new int[]{currentStartY+bv.getHeight(), currentStartY, currentStartY + bv.getHeight()}, 3);
+                                    currentStartX = bv.getStartX() + (13 - i) * (bv.getWidth() + bv.getSpace()) - bv.getSpace();
+                                    currentStartY = bv.getStartY() + bv.getHeight() + bv.getSpace();
+                                    coloredSpace = new Polygon(new int[]{currentStartX, currentStartX - bv.getWidth() / 2, currentStartX - bv.getWidth()}, new int[]{currentStartY + bv.getHeight(), currentStartY, currentStartY + bv.getHeight()}, 3);
 
-                                }else {
+                                } else {
 
-                                currentStartX = bv.getStartX() + (i % 13) * (bv.getWidth() + bv.getSpace());
-                                currentStartY = bv.getStartY();
+                                    currentStartX = bv.getStartX() + (i % 13) * (bv.getWidth() + bv.getSpace());
+                                    currentStartY = bv.getStartY();
 
-                                coloredSpace = new Polygon(new int[]{currentStartX, currentStartX + bv.getWidth(), currentStartX + bv.getWidth() / 2}, new int[]{currentStartY, currentStartY, currentStartY + bv.getHeight()}, 3);
+                                    coloredSpace = new Polygon(new int[]{currentStartX, currentStartX + bv.getWidth(), currentStartX + bv.getWidth() / 2}, new int[]{currentStartY, currentStartY, currentStartY + bv.getHeight()}, 3);
                                 }
-                                visSpaces[arr.get(j).getId()]=coloredSpace;
+                                visSpaces[arr.get(j).getId()] = coloredSpace;
                                 g.fillPolygon(coloredSpace);
                             }
 
-                        bv.repaint();
+                            bv.repaint();
                         }
                     }
                     break;
                 }
             }
-        }else{
-            for(int n=1;n<visSpaces.length;n++){
+        } else {
+            for (int n = 1; n < visSpaces.length; n++) {
                 if (visSpaces[n].contains(mouseEvent.getX(), mouseEvent.getY())) {
-                    System.out.println(n+"BBBBBBBBBBBBBBBBBBBBBB");
-                    board.playerMove(spaceRecord,n);
-                    selected=false;
+                    System.out.println(n + "BBBBBBBBBBBBBBBBBBBBBB");
+                    board.playerMove(spaceRecord, n);
+                    selected = false;
                     bv.repaint();
                     System.out.println(board);
                     break;
@@ -102,5 +121,17 @@ public class InputHandler implements MouseListener {
     @Override
     public void mouseExited(MouseEvent mouseEvent) {
 
+    }
+
+    private int convertCoordsToId(MouseEvent mouseEvent) {
+        double q = mouseEvent.getX() + 15;
+        q = q - 60;
+        q = q / 75;
+        q = 13 - q;
+        if (mouseEvent.getY() <= 231) {
+            q = 25 - q;
+        }
+        q = Math.round(q);
+        return (int) q;
     }
 }
