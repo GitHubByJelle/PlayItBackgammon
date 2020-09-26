@@ -1,9 +1,9 @@
-package Visualisation;
+package src.Visualisation;
 
 
-import Utils.Variables;
-import World.Board;
-import World.Space;
+import src.Utils.Variables;
+import src.World.Board;
+import src.World.Space;
 
 
 import javax.swing.*;
@@ -21,7 +21,7 @@ public class BoardView extends JPanel  {
     Board board;
     private Shape[] visSpaces = new Shape[25];
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
-
+    int startPlayer = 1;
     public BoardView(Board b, int frameWidth, int frameHeight) {
         startX = frameWidth/20;
         startY = frameHeight/30;
@@ -53,10 +53,10 @@ public class BoardView extends JPanel  {
             int currentStartX, currentStartY;
             Space p = board.getSpaces()[i];
 
-           // if (ic.getSelected(i)) {
-             //   g.setColor(Variables.RECOLOR_SPACES_COLOR);
+            // if (ic.getSelected(i)) {
+            //   g.setColor(Variables.RECOLOR_SPACES_COLOR);
 
-             if (i % 2 == 0) {
+            if (i % 2 == 0) {
                 g.setColor(Variables.EVEN_SPACES_COLOR);
 
             } else {
@@ -68,9 +68,12 @@ public class BoardView extends JPanel  {
                     currentStartX = startX +  (13-i) * (width + space);
                     currentStartY = startY+ height+ space;
                 } else {
+
                     currentStartX = startX +  (13-i) * (width + space) -space;
                     currentStartY = startY+ height+ space;
                     dummySpace = new Polygon(new int[]{currentStartX, currentStartX - width/2, currentStartX - width }, new int[]{currentStartY+height, currentStartY, currentStartY + height}, 3);
+                    if(i == 1) {
+                    }
                     visSpaces[i]=dummySpace;
                     g.fillPolygon(dummySpace);
                 }
@@ -107,13 +110,13 @@ public class BoardView extends JPanel  {
                         visPieces.add(dummyPiece);
                         g.fill(dummyPiece);
                     }
-               }
+                }
             }
         }
 
 
         if(this.getMouseListeners().length==0){
-            this.addMouseListener(new InputHandler(visSpaces,visPieces, this));
+            this.addMouseListener(new InputHandler(startPlayer,visSpaces,visPieces, this));
         }
     }
 
