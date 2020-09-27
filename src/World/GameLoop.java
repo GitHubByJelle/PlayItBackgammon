@@ -1,34 +1,30 @@
 package World;
 
+import GUI.StatusPanel;
 import Visualisation.BoardView;
 import World.Board;
+import Utils.Variables;
 
 public class GameLoop {
 
     private Board board;
     private boolean gameOver = false;
-    boolean isPlayer1 = false;
-
+    private Player current;
     public GameLoop(Board b) {
         board = b;
     }
 
     public void start() {
-        isPlayer1 = true;
-        Die die = new Die();
+        current= board.getPlayer1();
         while (!gameOver) {
+            //update status
+
             //game start
 
             //check win condition (TODO:K)
             if (!board.checkWinCondition()) {
-                int[] rolls = die.getNextRoll();
-                int dieIndex = 0;//  die is prompted for a move
-                if (isPlayer1) {
+                //die is prompted for a move
 
-                    isPlayer1 = false;
-                } else {
-                    isPlayer1 = true;
-                }
                 //if win condition not met
                 //change the turn
                 //new die roll
@@ -41,6 +37,8 @@ public class GameLoop {
                 //end turn
 
                 //else
+            }else{
+                gameOver=true;
             }
             if (gameOver) {
                 //game over screen

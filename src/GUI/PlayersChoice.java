@@ -71,7 +71,7 @@ public class PlayersChoice extends JPanel {
         GameLoop g= new GameLoop(b);
         ((BoardView) boardvis).addStatPane(frame);
         frame.add(boardvis);
-    
+       // g.start();
 
     }
 

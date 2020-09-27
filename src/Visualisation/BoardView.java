@@ -48,6 +48,14 @@ public class BoardView extends JPanel  {
         rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g.setRenderingHints(rh);
 
+        StatusPanel.updateDiceRolls(board.getDie().getCurRoll());
+        StatusPanel.updateBlackPiecesDied(board.getPlayer2().getPiecesSlain());
+        StatusPanel.updateBlackPiecesInPlay(board.getPlayer2().getPiecesInPlay());
+        StatusPanel.updateBlackPiecesOutOfPlay(board.getPlayer2().getPiecesOutOfPlay());
+        StatusPanel.updateWhitePiecesDied(board.getPlayer1().getPiecesSlain());
+        StatusPanel.updateWhitePiecesInPlay(board.getPlayer1().getPiecesInPlay());
+        StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
+
         Ellipse2D dummyPiece;
         Polygon dummySpace;
 

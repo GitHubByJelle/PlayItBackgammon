@@ -10,9 +10,9 @@ public class Board {
     private Space[] spaces;
     private Die die;
     private Space outOfPlay;
-    private Space[] outofPlays;
-     Player player1;
-    Player player2;
+
+    private Player player1;
+    private Player player2;
 
     public Board() {
         die = new Die();
@@ -33,7 +33,7 @@ public class Board {
         addPieces(24, 2, 1);
         outOfPlay = new Space(26);
 
-        //to correct for ishome values of the pieces
+        //to correct for is home values of the pieces
         for (int i = 0; i < spaces.length; i++) {
             spaces[i].setDominateId();
             for (int a = 0; a < spaces[i].getPieces().size(); a++) {
@@ -77,7 +77,6 @@ public class Board {
 
         Space target;
         int[] roll = die.getCurRoll();
-
 
         //check for double roll
         if (die.isDouble(roll))
@@ -200,20 +199,7 @@ public class Board {
 
 
     public boolean checkWinCondition() {
-        int p1 = 0;
-        int p2 = 0;
-        if (outOfPlay.getSize() >= 15) {
-            for (int i = 0; i < outOfPlay.getSize(); i++) {
-                if (outOfPlay.getPieces().get(i).getId() == 0) {
-                    p1++;
-                } else {
-                    p2++;
-                }
-            }
-        }
-        // return if the all the pieces are in out of play
-        // this won't tell which player wins
-        return p1 >= 15 || p2 >= 15;
+        return player1.getPiecesOutOfPlay()==15 ||player2.getPiecesOutOfPlay()==15;
     }
 
 

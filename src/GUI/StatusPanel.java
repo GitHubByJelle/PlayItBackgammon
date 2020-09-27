@@ -75,11 +75,11 @@ public class StatusPanel extends JPanel{
     }
 
     public static void updateBlackPiecesInPlay(int blackPieceInPlay) {
-    	tf3.setText(blackPieceInPlay+" " );
+    	tf5.setText(blackPieceInPlay+" " );
     }
 
     public static void updateBlackPiecesOutOfPlay(int blackPieceOutOfPlay) {
-    	tf4.setText(blackPieceOutOfPlay+" ");
+    	tf6.setText(blackPieceOutOfPlay+" ");
     }
 
     public static void updateBlackPiecesDied(int piecesDiedForBlack) {
