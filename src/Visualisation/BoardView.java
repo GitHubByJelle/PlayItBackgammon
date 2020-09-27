@@ -36,7 +36,7 @@ public class BoardView extends JPanel  {
         space = 15;
         board=b;
         setBackground(Variables.GAME_BACKGROUND_COLOR);
-        s=new StatusPanel(12);
+        s=new StatusPanel(10);
         g= new GameLoop(b);
 
     }

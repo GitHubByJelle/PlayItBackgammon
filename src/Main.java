@@ -15,11 +15,11 @@ import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args) {
-        int frameWid=(int) Variables.SCREEN_WIDTH*4/5;
-        int frameHei=(int) Variables.SCREEN_HEIGHT*4/5;
+        int frameWid=(int) Variables.FRAME_WIDTH;
+        int frameHei=(int) Variables.FRAME_HEIGHT;
         JFrame frame = new JFrame();
         JPanel MainGui = new MainMenu(frame);
-      //  Board b= new Board();
+      //Board b= new Board();
        // b.setPlayers("Human","Human");
         //new StatusPanel();
 
