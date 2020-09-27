@@ -18,14 +18,14 @@ public class InputHandler implements MouseListener {
     boolean selected = false;
     World.Board board;
     int spaceRecord;
-    BoardView bv;
+    Visualisation.BoardView bv;
     Space s;
     Player currentPlayer;
     public static int currentDie = 0;
     int from,to = -1;
     int validLeft = -1;
     int justValid = -1;
-    public InputHandler(Shape[] s, ArrayList<Ellipse2D> e, BoardView bv) {
+    public InputHandler(Shape[] s, ArrayList<Ellipse2D> e, Visualisation.BoardView bv) {
         visPieces = e;
         visSpaces = s;
         board = bv.board;
@@ -157,16 +157,16 @@ public class InputHandler implements MouseListener {
         int[] currentDies = board.getDie().getCurRoll();
         for(int i = 0; i < currentDies.length; i++){
             if(validLeft != -1 && justValid != -1){
-            if( currentDies[i] == diff){
-                justValid = i;
-                if(i == 0){
-                    validLeft = 1;
-                }else{
-                    validLeft = 0;
+                if( currentDies[i] == diff){
+                    justValid = i;
+                    if(i == 0){
+                        validLeft = 1;
+                    }else{
+                        validLeft = 0;
+                    }
+                    return true;
                 }
-                return true;
             }
-                }
         }
         return false;
     }
