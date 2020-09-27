@@ -19,15 +19,16 @@ public class Main {
         int frameHei=(int) Variables.SCREEN_HEIGHT*4/5;
         JFrame frame = new JFrame();
         JPanel MainGui = new MainMenu(frame);
-        Board b= new Board();
-
+      //  Board b= new Board();
+       // b.setPlayers("Human","Human");
         //new StatusPanel();
 
-        JPanel boardvis= new BoardView(b,frameWid, frameHei);
-        GameLoop g= new GameLoop(b);
+      //  JPanel boardvis= new BoardView(b,frameWid, frameHei);
+        //GameLoop g= new GameLoop(b);
+        //((BoardView) boardvis).addStatPane(frame);
+        //frame.add(boardvis);
 
-        frame.add(boardvis);
-        frame.add(new StatusPanel(), BorderLayout.EAST);
+        frame.add(MainGui);
 
         frame.setTitle("Play it Backgammon");
         frame.setSize(frameWid,frameHei);
@@ -36,10 +37,6 @@ public class Main {
         frame.setVisible(true);
 
 
-        System.out.println(b);
-
-
-        System.out.println(b.getValidMoves(b.getSpaces()[13]));
 
 
 

@@ -21,6 +21,17 @@ public class Player {
     public String toString(){
         return "Player "+ type+" " +id;
     }
+    public int getPiecesInPlay(){
+        return piecesInPlay;
+    }
+
+    public int getPiecesOutOfPlay(){
+        return piecesOutOfPlay;
+    }
+
+    public int getPiecesSlain(){
+        return piecesSlain;
+    }
 
 
 

@@ -1,6 +1,7 @@
 package World;
 
 
+import Utils.Variables;
 import World.Space;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class Board {
     private Die die;
     private Space outOfPlay;
     private Space[] outofPlays;
-    Player player1;
+     Player player1;
     Player player2;
 
     public Board() {
@@ -214,6 +215,24 @@ public class Board {
         // this won't tell which player wins
         return p1 >= 15 || p2 >= 15;
     }
+
+
+    public  void setPlayers(String one, String two){
+        //if the player is Human
+        for(int i=0; i< Variables.PLAYERS.length;i++){
+            //if the player is Human
+            if(one.equals(Variables.PLAYERS[i])){
+                player1= new Player(0,one);
+            }
+
+            if(two.equals(Variables.PLAYERS[i])){
+                player2= new Player(0,two);
+            }
+        }
+    }
+
+    public Player getPlayer1(){return player1;}
+    public Player getPlayer2(){return player2;}
 }
 
 

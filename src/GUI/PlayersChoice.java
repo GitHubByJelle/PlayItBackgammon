@@ -4,13 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import Utils.Variables;
+import Visualisation.BoardView;
+import World.Board;
+import World.GameLoop;
+
 public class PlayersChoice extends JPanel {
 
     private Image img;
     private JComboBox player1;
     private JComboBox player2;
-
+    private JFrame frame;
     public PlayersChoice(JFrame frame, JPanel main) {
+        this.frame=frame;
         this.img = new ImageIcon("pics/Player choice.jpg").getImage();
         setLayout(null);
         Variables var = new Variables();
@@ -33,9 +38,10 @@ public class PlayersChoice extends JPanel {
         play.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         play.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String choice1 = (String)player1.getSelectedItem();
-                String choice2 = (String)player2.getSelectedItem();
+                String choice1 = (String) player1.getSelectedItem();
+                String choice2 = (String) player2.getSelectedItem();
                 System.out.println(choice1 + " vs " + choice2);
+                gameSetup(choice1,choice2);
             }
         } );
         // Back button
@@ -55,6 +61,20 @@ public class PlayersChoice extends JPanel {
         add(back);
 
     }
+
+    private void gameSetup(String choice1, String choice2) {
+        setVisible(false);
+        Board b= new Board();
+        b.setPlayers("Human","Human");
+
+        JPanel boardvis= new BoardView(b, frame.getWidth(), frame.getHeight());
+        GameLoop g= new GameLoop(b);
+        ((BoardView) boardvis).addStatPane(frame);
+        frame.add(boardvis);
+    
+
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         g.drawImage(img, 0, 0, null);

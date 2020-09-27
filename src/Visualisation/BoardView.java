@@ -1,9 +1,11 @@
 package Visualisation;
 
 
+import GUI.StatusPanel;
 import Utils.Variables;
 import World.Board;
 import World.Space;
+
 
 
 import javax.swing.*;
@@ -22,6 +24,8 @@ public class BoardView extends JPanel  {
     private Shape[] visSpaces = new Shape[25];
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
     int startPlayer = 1;
+    StatusPanel s ;
+
     public BoardView(Board b, int frameWidth, int frameHeight) {
         startX = frameWidth/20;
         startY = frameHeight/30;
@@ -30,6 +34,7 @@ public class BoardView extends JPanel  {
         space = 15;
         board=b;
         setBackground(Variables.GAME_BACKGROUND_COLOR);
+        s=new StatusPanel(12);
 
     }
 
@@ -115,6 +120,7 @@ public class BoardView extends JPanel  {
         }
 
 
+
         if(this.getMouseListeners().length==0){
             this.addMouseListener(new InputHandler(startPlayer,visSpaces,visPieces, this));
         }
@@ -133,5 +139,9 @@ public class BoardView extends JPanel  {
 
     public int getStartX() {
         return startX;
+    }
+
+    public void addStatPane(JFrame frame){
+        frame.add(s, BorderLayout.EAST);
     }
 }
