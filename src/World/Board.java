@@ -147,8 +147,10 @@ public class Board {
     }
 
     public boolean playerMove(Space from, Space to) {
-        if (validityCheck(from, to)) {
+        ArrayList<Space> res = getValidMoves(from);
+        if (res.contains(to)) {
             from.movePiece(to);
+
             return true;
         } else {
             System.out.println("Move invalid");

@@ -63,30 +63,30 @@ public class StatusPanel extends JPanel{
     }
 
     public static void updateWhitePiecesInPlay(int whitePieceInPlay) {
-    	tf2.setText(whitePieceInPlay+" ");
+    	tf2.setText(" "+whitePieceInPlay+" ");
     }
 
     public static void updateWhitePiecesOutOfPlay(int whitePieceOutOfPlay) {
-    	tf3.setText(whitePieceOutOfPlay+" ");
+    	tf3.setText(" "+whitePieceOutOfPlay+" ");
     }
 
     public static void updateWhitePiecesDied(int piecesDiedForWhite) {
-    	tf4.setText(piecesDiedForWhite+" ");
+    	tf4.setText(" "+piecesDiedForWhite+" ");
     }
 
     public static void updateBlackPiecesInPlay(int blackPieceInPlay) {
-    	tf5.setText(blackPieceInPlay+" " );
+    	tf5.setText(" "+blackPieceInPlay+" " );
     }
 
     public static void updateBlackPiecesOutOfPlay(int blackPieceOutOfPlay) {
-    	tf6.setText(blackPieceOutOfPlay+" ");
+    	tf6.setText(" "+blackPieceOutOfPlay+" ");
     }
 
     public static void updateBlackPiecesDied(int piecesDiedForBlack) {
-    	tf7.setText(piecesDiedForBlack+" ");
+    	tf7.setText(" "+piecesDiedForBlack+" ");
     }
 
     public static void updatePlNextMove(String playerToMove) {
-    	tf8.setText(playerToMove+" ");
+    	tf8.setText(" "+playerToMove+" ");
     }
  } 

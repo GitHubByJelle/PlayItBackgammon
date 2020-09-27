@@ -4,6 +4,7 @@ package Visualisation;
 import GUI.StatusPanel;
 import Utils.Variables;
 import World.Board;
+import World.GameLoop;
 import World.Space;
 
 
@@ -25,6 +26,7 @@ public class BoardView extends JPanel  {
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
     int startPlayer = 1;
     StatusPanel s ;
+    GameLoop g;
 
     public BoardView(Board b, int frameWidth, int frameHeight) {
         startX = frameWidth/20;
@@ -35,6 +37,7 @@ public class BoardView extends JPanel  {
         board=b;
         setBackground(Variables.GAME_BACKGROUND_COLOR);
         s=new StatusPanel(12);
+        g= new GameLoop(b);
 
     }
 
