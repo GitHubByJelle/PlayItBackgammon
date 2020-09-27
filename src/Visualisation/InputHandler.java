@@ -34,65 +34,6 @@ public class InputHandler implements MouseListener {
 
     }
 
-//    @Override
-//    public void mouseClicked(MouseEvent mouseEvent) {
-//        int h = convertCoordsToSpaceId(mouseEvent);
-//        System.out.println("i: " + h);
-//
-//        if (!selected) {
-//            for (int i = 0; i < visPieces.size(); i++) {
-//                if (visPieces.get(i).contains(mouseEvent.getX(), mouseEvent.getY())) {
-//                    selected = true;
-//                    for (int n = 1; n < visSpaces.length; n++) {
-//                        if (visSpaces[n].contains(mouseEvent.getX(), mouseEvent.getY())) {
-//                            spaceRecord = n;
-//                            // System.out.println("space number "+ n);
-//
-//                            ArrayList<Space> arr = board.getValidMoves(board.getSpaces()[n]);
-//                            for (int j = 0; j < arr.size(); j++) {
-//
-//                                int currentStartX, currentStartY;
-//                                Polygon coloredSpace;
-//                                Graphics g = bv.getGraphics();
-//                                g.setColor(Variables.RECOLOR_SPACES_COLOR);
-//
-//                                if (arr.get(j).getId() < 13) {
-//                                    currentStartX = bv.getStartX() + (13 - i) * (bv.getWidth() + bv.getSpace()) - bv.getSpace();
-//                                    currentStartY = bv.getStartY() + bv.getHeight() + bv.getSpace();
-//                                    coloredSpace = new Polygon(new int[]{currentStartX, currentStartX - bv.getWidth() / 2, currentStartX - bv.getWidth()}, new int[]{currentStartY + bv.getHeight(), currentStartY, currentStartY + bv.getHeight()}, 3);
-//
-//                                } else {
-//
-//                                    currentStartX = bv.getStartX() + (i % 13) * (bv.getWidth() + bv.getSpace());
-//                                    currentStartY = bv.getStartY();
-//
-//                                    coloredSpace = new Polygon(new int[]{currentStartX, currentStartX + bv.getWidth(), currentStartX + bv.getWidth() / 2}, new int[]{currentStartY, currentStartY, currentStartY + bv.getHeight()}, 3);
-//                                }
-//                                visSpaces[arr.get(j).getId()] = coloredSpace;
-//                                g.fillPolygon(coloredSpace);
-//                            }
-//
-//                            bv.repaint();
-//                        }
-//                    }
-//                    break;
-//                }
-//            }
-//        } else {
-//            for (int n = 1; n < visSpaces.length; n++) {
-//                if (visSpaces[n].contains(mouseEvent.getX(), mouseEvent.getY())) {
-//                    System.out.println(n + "BBBBBBBBBBBBBBBBBBBBBB");
-//                    board.playerMove(spaceRecord, n);
-//                    selected = false;
-//                    bv.repaint();
-//                    System.out.println(board);
-//                    break;
-//                }
-//
-//            }
-//        }
-//
-//    }
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         boolean z = getValidPiece(mouseEvent, currentPlayer);
