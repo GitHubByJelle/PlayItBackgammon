@@ -47,31 +47,37 @@ public class InputHandler implements MouseListener {
                             spaceRecord = n;
                             // System.out.println("space number "+ n);
 
+                            int currentStartX, currentStartY;
+                            Polygon coloredSpace;
+                            Graphics g = bv.getGraphics();
+                            g.setColor(Variables.RECOLOR_SPACES_COLOR);
+
+
                             ArrayList<Space> arr = board.getValidMoves(board.getSpaces()[n]);
                             for (int j = 0; j < arr.size(); j++) {
+                                int id= arr.get(j).getId();
+                                int space= bv.getSpace();
+                                int spaceWidth= bv.getWidth()/18;
+                                int spaceHeight= bv.getHeight()/3;
 
-                                int currentStartX, currentStartY;
-                                Polygon coloredSpace;
-                                Graphics g = bv.getGraphics();
-                                g.setColor(Variables.RECOLOR_SPACES_COLOR);
 
-                                if (arr.get(j).getId() < 13) {
-                                    currentStartX = bv.getStartX() + (13 - i) * (bv.getWidth() + bv.getSpace()) - bv.getSpace();
-                                    currentStartY = bv.getStartY() + bv.getHeight() + bv.getSpace();
-                                    coloredSpace = new Polygon(new int[]{currentStartX, currentStartX - bv.getWidth() / 2, currentStartX - bv.getWidth()}, new int[]{currentStartY + bv.getHeight(), currentStartY, currentStartY + bv.getHeight()}, 3);
+                                if (id < 13) {
+                                    currentStartX = bv.getStartX() + (13 - id) *(bv.getWidth()/20 + (space-1)) -(space);
+                                    currentStartY = bv.getStartY() + spaceHeight + space;
+                                    g.fillRect(currentStartX,currentStartY,spaceWidth, spaceHeight+space);
 
                                 } else {
 
-                                    currentStartX = bv.getStartX() + (i % 13) * (bv.getWidth() + bv.getSpace());
+                                    currentStartX = bv.getStartX() + (id % 13) * (spaceWidth + (space-1));
                                     currentStartY = bv.getStartY();
+                                    g.fillRect(currentStartX,currentStartY,spaceWidth, spaceHeight);
 
-                                    coloredSpace = new Polygon(new int[]{currentStartX, currentStartX + bv.getWidth(), currentStartX + bv.getWidth() / 2}, new int[]{currentStartY, currentStartY, currentStartY + bv.getHeight()}, 3);
                                 }
-                                visSpaces[arr.get(j).getId()] = coloredSpace;
-                                g.fillPolygon(coloredSpace);
+                                //visSpaces[arr.get(j).getId()] = coloredSpace;
+                               // g.fillPolygon(coloredSpace);
                             }
 
-                            bv.repaint();
+                           // bv.repaint();
                         }
                     }
                     break;
