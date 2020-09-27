@@ -35,17 +35,7 @@ public class InputHandler implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        int k = convertCoordsToId(mouseEvent);
-        if (board.getSpaces()[k].getSize() >= 1) {
-            int currentPiece = board.getSpaces()[k].getPieces().get(0).getId();
-            if (currentPiece == currentPlayer) {
-                System.out.println("The player can move this piece");
-                canMove = true;
-            } else {
-                System.out.println("Cannot move");
-                canMove = false;
-            }
-        }
+
 
         if (!selected) {
             for (int i = 0; i < visPieces.size(); i++) {
@@ -123,15 +113,5 @@ public class InputHandler implements MouseListener {
 
     }
 
-    private int convertCoordsToId(MouseEvent mouseEvent) {
-        double q = mouseEvent.getX() + 15;
-        q = q - 60;
-        q = q / 75;
-        q = 13 - q;
-        if (mouseEvent.getY() <= 231) {
-            q = 25 - q;
-        }
-        q = Math.round(q);
-        return (int) q;
-    }
+   
 }
