@@ -1,7 +1,7 @@
-package src.World;
+package World;
 
-import src.Visualisation.BoardView;
-import src.World.Board;
+import Visualisation.BoardView;
+import World.Board;
 
 public class GameLoop {
 

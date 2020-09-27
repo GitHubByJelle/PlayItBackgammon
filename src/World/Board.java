@@ -1,7 +1,7 @@
-package src.World;
+package World;
 
 
-import src.World.Space;
+import World.Space;
 
 import java.util.ArrayList;
 

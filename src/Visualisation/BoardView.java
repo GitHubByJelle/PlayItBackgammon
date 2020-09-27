@@ -1,9 +1,9 @@
-package src.Visualisation;
+package Visualisation;
 
 
-import src.Utils.Variables;
-import src.World.Board;
-import src.World.Space;
+import Utils.Variables;
+import World.Board;
+import World.Space;
 
 
 import javax.swing.*;

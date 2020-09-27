@@ -1,10 +1,10 @@
-package src.Visualisation;
+package Visualisation;
 
-import src.Utils.Variables;
-import src.World.Board;
+import Utils.Variables;
+import World.Board;
 
 
-import src.World.Space;
+import World.Space;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;

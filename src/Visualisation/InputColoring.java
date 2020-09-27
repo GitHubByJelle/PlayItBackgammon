@@ -1,5 +1,4 @@
-
- package Visualisation;
+package Visualisation;
 
 import World.Board;
 

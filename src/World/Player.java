@@ -10,12 +10,12 @@ public class Player {
     private String type;
 
     //player id should match the piece id for our sakes
-    public Player(int id){
+    public Player(int id, String type){
         this.id=id;
         piecesInPlay=15;
         piecesOutOfPlay=0;
         piecesSlain=0;
-        type= Variables.PLAYERS[0];
+        this.type= type;
     }
 
     public String toString(){
