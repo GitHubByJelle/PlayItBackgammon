@@ -45,7 +45,6 @@ public class InputHandler implements MouseListener {
                     for (int n = 1; n < visSpaces.length; n++) {
                         if (visSpaces[n].contains(mouseEvent.getX(), mouseEvent.getY())) {
                             spaceRecord = n;
-                            // System.out.println("space number "+ n);
 
                             int currentStartX, currentStartY;
                             Polygon coloredSpace;
@@ -62,7 +61,7 @@ public class InputHandler implements MouseListener {
 
 
                                 if (id < 13) {
-                                    currentStartX = bv.getStartX() + (13 - id) *(bv.getWidth()/20 + (space-1)) -(space);
+                                    currentStartX = bv.getStartX()-10 + (13 - id) *(bv.getWidth()/20 + (space-1)) -(space);
                                     currentStartY = bv.getStartY() + spaceHeight + space;
                                     g.fillRect(currentStartX,currentStartY,spaceWidth, spaceHeight+space);
 
@@ -73,14 +72,13 @@ public class InputHandler implements MouseListener {
                                     g.fillRect(currentStartX,currentStartY,spaceWidth, spaceHeight);
 
                                 }
-                                //visSpaces[arr.get(j).getId()] = coloredSpace;
-                               // g.fillPolygon(coloredSpace);
+
                             }
 
-                           // bv.repaint();
                         }
                     }
                     break;
+
                 }
             }
         } else {
