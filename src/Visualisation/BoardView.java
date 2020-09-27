@@ -20,7 +20,6 @@ public class BoardView extends JPanel  {
     private int width;
     private int height;
     private int space;
-    InputColoring ic;
     Board board;
     private Shape[] visSpaces = new Shape[25];
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
@@ -68,9 +67,6 @@ public class BoardView extends JPanel  {
             //SPACE PLACEMENTS
             int currentStartX, currentStartY;
             Space p = board.getSpaces()[i];
-
-            // if (ic.getSelected(i)) {
-            //   g.setColor(Variables.RECOLOR_SPACES_COLOR);
 
             if (i % 2 == 0) {
                 g.setColor(Variables.EVEN_SPACES_COLOR);
