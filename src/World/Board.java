@@ -1,7 +1,7 @@
 package World;
 
 
-import src.World.Space;
+import World.Space;
 
 import java.util.ArrayList;
 
@@ -162,22 +162,12 @@ public class Board {
 
 
     public boolean playerMove(int from, int to) {
-        if(from != 0) {
-            if (validityCheck(spaces[from], spaces[to])) {
-                spaces[from].movePiece(spaces[to]);
-                return true;
-            } else {
-                System.out.println("Move invalid");
-                return false;
-            }
-        }else{
-            if (validityCheck(spaces[from], spaces[to])) {
-                spaces[from].movePiece(spaces[to]);
-                return true;
-            } else {
-                System.out.println("Move invalid");
-                return false;
-            }
+        if (validityCheck(spaces[from], spaces[to])) {
+            spaces[from].movePiece(spaces[to]);
+            return true;
+        } else {
+            System.out.println("Move invalid");
+            return false;
         }
     }
 

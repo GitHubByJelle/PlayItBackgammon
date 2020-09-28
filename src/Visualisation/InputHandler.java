@@ -1,7 +1,7 @@
-package src.Visualisation;
+package Visualisation;
 
 
-import src.World.Space;
+import World.Space;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
