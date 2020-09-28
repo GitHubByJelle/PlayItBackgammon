@@ -2,6 +2,7 @@ package Visualisation;
 
 
 import World.Space;
+import src.Visualisation.BoardView;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 public class InputHandler implements MouseListener {
     Shape[] visSpaces;
     ArrayList<Ellipse2D> visPieces;
@@ -76,6 +76,7 @@ public class InputHandler implements MouseListener {
         }
         System.out.println("Die: " + currentDie);
         checker();
+        checkEaten(k);
         if (board.checkWinCondition()) {
             System.out.println("game over");
         }
@@ -155,5 +156,16 @@ public class InputHandler implements MouseListener {
             }
         }
         return false;
+    }
+    private void checkEaten(int k){
+        Space s = board.getSpaces()[k];
+        if(s.getSize() == 2){
+
+            if(s.getPieces().get(0).getId() != s.getPieces().get(1).getId()){
+                board.playerMove(k,0);
+//                board.updateEaten();
+            }
+        }
+        bv.repaint();
     }
 }
