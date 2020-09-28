@@ -2,20 +2,20 @@ package World;
 
 
 import Utils.Variables;
-import World.Space;
+import src.World.Space;
 
 import java.util.ArrayList;
 
 public class Board {
     private Space[] spaces;
-    private Die die;
+    private World.Die die;
     private Space outOfPlay;
 
-    private Player player1;
-    private Player player2;
+    private World.Player player1;
+    private World.Player player2;
 
     public Board() {
-        die = new Die();
+        die = new World.Die();
         die.generateDie();
         die.getNextRoll();//remove this later
 
@@ -46,7 +46,7 @@ public class Board {
     //methods for board creation
     private void addPieces(int spaceIndex, int num, int colorId) {
         for (int i = 0; i < num; i++)
-            spaces[spaceIndex].getPieces().add(new Piece(colorId));
+            spaces[spaceIndex].getPieces().add(new World.Piece(colorId));
     }
 
     private void createSpaces() {
@@ -118,7 +118,7 @@ public class Board {
 
     private boolean allPiecesHome(int pieceID) {
 
-        Piece cur;
+        World.Piece cur;
         for (int i = 0; i < spaces.length; i++) {
             for (int x = 0; x < spaces[i].getPieces().size(); x++) {
                 cur = spaces[i].getPieces().get(x);
@@ -173,7 +173,8 @@ public class Board {
         return spaces[0];
     }
 
-    public Die getDie() {
+
+    public World.Die getDie() {
         return die;
     }
 
@@ -197,17 +198,17 @@ public class Board {
         for(int i=0; i< Variables.PLAYERS.length;i++){
             //if the player is Human
             if(one.equals(Variables.PLAYERS[i])){
-                player1= new Player(0,one);
+                player1= new World.Player(0,one);
             }
 
             if(two.equals(Variables.PLAYERS[i])){
-                player2= new Player(0,two);
+                player2= new World.Player(1,two);
             }
         }
     }
 
-    public Player getPlayer1(){return player1;}
-    public Player getPlayer2(){return player2;}
+    public World.Player getPlayer1(){return player1;}
+    public World.Player getPlayer2(){return player2;}
 }
 
 
