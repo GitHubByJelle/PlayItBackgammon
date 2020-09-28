@@ -2,17 +2,17 @@ package World;
 
 
 import Utils.Variables;
-import src.World.Space;
+import World.Space;
 
 import java.util.ArrayList;
 
 public class Board {
     private Space[] spaces;
-    private World.Die die;
+    private Die die;
     private Space outOfPlay;
 
-    private World.Player player1;
-    private World.Player player2;
+    private Player player1;
+    private Player player2;
 
     public Board() {
         die = new World.Die();
@@ -174,7 +174,7 @@ public class Board {
     }
 
 
-    public World.Die getDie() {
+    public Die getDie() {
         return die;
     }
 
@@ -198,17 +198,17 @@ public class Board {
         for(int i=0; i< Variables.PLAYERS.length;i++){
             //if the player is Human
             if(one.equals(Variables.PLAYERS[i])){
-                player1= new World.Player(0,one);
+                player1= new Player(0,one);
             }
 
             if(two.equals(Variables.PLAYERS[i])){
-                player2= new World.Player(1,two);
+                player2= new Player(1,two);
             }
         }
     }
 
-    public World.Player getPlayer1(){return player1;}
-    public World.Player getPlayer2(){return player2;}
+    public Player getPlayer1(){return player1;}
+    public Player getPlayer2(){return player2;}
 }
 
 

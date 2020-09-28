@@ -5,8 +5,8 @@ import GUI.StatusPanel;
 import Utils.Variables;
 import World.Board;
 import World.GameLoop;
-import src.Visualisation.InputHandler;
-import src.World.Space;
+import Visualisation.InputHandler;
+import World.Space;
 
 
 
@@ -57,6 +57,7 @@ public class BoardView extends JPanel  {
         StatusPanel.updateWhitePiecesDied(board.getPlayer1().getPiecesSlain());
         StatusPanel.updateWhitePiecesInPlay(board.getPlayer1().getPiecesInPlay());
         StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
+       // StatusPanel.updateCurrentPlayer();
 
         Ellipse2D dummyPiece;
         Polygon dummySpace;

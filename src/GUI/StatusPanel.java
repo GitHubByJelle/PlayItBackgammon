@@ -27,7 +27,7 @@ public class StatusPanel extends JPanel{
         lb6.setFont(new Font("Verdana", Font.PLAIN, size));
         lb7 = new JLabel("Black Pieces died:");
         lb7.setFont(new Font("Verdana", Font.PLAIN, size));
-        lb8 = new JLabel("Next Move:");
+        lb8 = new JLabel("Current Player");
         lb8.setFont(new Font("Verdana", Font.PLAIN, size));
 
         tf1=new JTextField(); tf2=new JTextField(); tf3=new JTextField();
@@ -86,7 +86,7 @@ public class StatusPanel extends JPanel{
     	tf7.setText(" "+piecesDiedForBlack+" ");
     }
 
-    public static void updatePlNextMove(String playerToMove) {
-    	tf8.setText(" "+playerToMove+" ");
+    public static void updateCurrentPlayer(String currentPlayer) {
+    	tf8.setText(currentPlayer);
     }
  } 
