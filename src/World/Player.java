@@ -33,6 +33,7 @@ public class Player {
         return piecesSlain;
     }
 
-
-
+    public int getId() {
+        return id;
+    }
 }
