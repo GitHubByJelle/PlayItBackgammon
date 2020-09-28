@@ -1,18 +1,17 @@
 package World;
 
 
-import Utils.Variables;
-import World.Space;
+import src.World.Space;
 
 import java.util.ArrayList;
 
 public class Board {
     private Space[] spaces;
-    private Die die;
+    private World.Die die;
     private Space outOfPlay;
 
-    private Player player1;
-    private Player player2;
+    private World.Player player1;
+    private World.Player player2;
 
     public Board() {
         die = new World.Die();
@@ -133,6 +132,9 @@ public class Board {
 
     //check if the target space is empty or if it has pieces of the same color, or if it has 1 piece of the opposite color
     public boolean validityCheck(Space selected, Space target) {
+        if(target.getId() == 0){
+            return true;
+        }
         return target.isEmpty() || //if the target space is empty
                 piecesOfSameColor(selected, target) || //if the space has pieces of the same color
                 pieceCanBeEaten(selected, target); //target has one piece and its color doesnt match
@@ -160,12 +162,22 @@ public class Board {
 
 
     public boolean playerMove(int from, int to) {
-        if (validityCheck(spaces[from], spaces[to])) {
-            spaces[from].movePiece(spaces[to]);
-            return true;
-        } else {
-            System.out.println("Move invalid");
-            return false;
+        if(from != 0) {
+            if (validityCheck(spaces[from], spaces[to])) {
+                spaces[from].movePiece(spaces[to]);
+                return true;
+            } else {
+                System.out.println("Move invalid");
+                return false;
+            }
+        }else{
+            if (validityCheck(spaces[from], spaces[to])) {
+                spaces[from].movePiece(spaces[to]);
+                return true;
+            } else {
+                System.out.println("Move invalid");
+                return false;
+            }
         }
     }
 
@@ -174,7 +186,7 @@ public class Board {
     }
 
 
-    public Die getDie() {
+    public World.Die getDie() {
         return die;
     }
 
@@ -195,20 +207,20 @@ public class Board {
 
     public  void setPlayers(String one, String two){
         //if the player is Human
-        for(int i=0; i< Variables.PLAYERS.length;i++){
+        for(int i = 0; i< Utils.Variables.PLAYERS.length; i++){
             //if the player is Human
-            if(one.equals(Variables.PLAYERS[i])){
-                player1= new Player(0,one);
+            if(one.equals(Utils.Variables.PLAYERS[i])){
+                player1= new World.Player(0,one);
             }
 
-            if(two.equals(Variables.PLAYERS[i])){
-                player2= new Player(1,two);
+            if(two.equals(Utils.Variables.PLAYERS[i])){
+                player2= new World.Player(1,two);
             }
         }
     }
 
-    public Player getPlayer1(){return player1;}
-    public Player getPlayer2(){return player2;}
+    public World.Player getPlayer1(){return player1;}
+    public World.Player getPlayer2(){return player2;}
 }
 
 

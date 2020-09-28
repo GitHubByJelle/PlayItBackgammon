@@ -1,8 +1,7 @@
-package Visualisation;
+package src.Visualisation;
 
 
-import World.Space;
-import src.Visualisation.BoardView;
+import src.World.Space;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -105,25 +104,32 @@ public class InputHandler implements MouseListener {
     private int convertCoordsToSpaceId(MouseEvent mouseEvent) {
         double x = mouseEvent.getX();
         System.out.println(x);
-        x = x + 15;
-        x = x - 45;
-        x = x / 60;
-        x = 12 - x;
-        int k = (int) x + 1;
-        if (mouseEvent.getY() <= 220) {
-            k = 25 - k;
+        if(x < 765) {
+
+            x = x + 15;
+            x = x - 45;
+            x = x / 60;
+            x = 12 - x;
+            int k = (int) x + 1;
+            if (mouseEvent.getY() <= 220) {
+                k = 25 - k;
+            }
+            System.out.println("i: " + k);
+            return k;
         }
-        System.out.println("i: " + k);
-        return k;
+        else return 0;
     }
 
     public boolean getValidPiece(MouseEvent mouseEvent, World.Player current) {
+
         int k = convertCoordsToSpaceId(mouseEvent);
+        if(k == 0) return true;
         Space s = board.getSpaces()[k];
         if (s.getSize() >= 1) {
             return s.getPieces().get(0).getId() == current.getId();
         } else if (s.getSize() == 0) return false;
         return false;
+
     }
 
     private void checker() {
@@ -166,6 +172,6 @@ public class InputHandler implements MouseListener {
 //                board.updateEaten();
             }
         }
-        bv.repaint();
+
     }
 }
