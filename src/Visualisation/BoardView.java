@@ -5,7 +5,8 @@ import GUI.StatusPanel;
 import Utils.Variables;
 import World.Board;
 import World.GameLoop;
-import World.Space;
+import src.Visualisation.InputHandler;
+import src.World.Space;
 
 
 
@@ -23,7 +24,6 @@ public class BoardView extends JPanel  {
     Board board;
     private Shape[] visSpaces = new Shape[25];
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
-    int startPlayer = 1;
     StatusPanel s ;
     GameLoop g;
 
@@ -129,7 +129,7 @@ public class BoardView extends JPanel  {
 
 
         if(this.getMouseListeners().length==0){
-            this.addMouseListener(new InputHandler(startPlayer,visSpaces,visPieces, this));
+            this.addMouseListener(new InputHandler(visSpaces,visPieces, this));
         }
     }
 
