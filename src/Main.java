@@ -36,6 +36,12 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
+        Board b= new Board();
+        b.setPlayers("Human","Human");
+        b.createLoop();
+
+
+
 
 
 

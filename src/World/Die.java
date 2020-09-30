@@ -57,10 +57,35 @@ public class Die {
     }
 
     public void printCurRoll(){
-        System.out.println(Arrays.toString(DieList.get(pointer)));
+        System.out.print(Arrays.toString(DieList.get(pointer)));
     }
 
     public boolean isDouble(int[] roll){
-       return roll[0]==roll[1];
+
+       return roll.length>1 &&roll[0]==roll[1];
     }
+
+    public void changeCurRoll(int [] newRoll){
+        DieList.set(pointer, newRoll);
+    }
+
+
+
+    public void removeUsedRoll(int target){
+       int [] newRoll= new int[getCurRoll().length-1];
+       int index=0;
+      for(int i=0;i<getCurRoll().length;i++){
+          if(getCurRoll()[i]==target){
+              continue;
+          }else{
+              newRoll[index]=getCurRoll()[i];
+              System.out.println(target+" "+Arrays.toString(newRoll));
+              ++index;
+          }
+      }
+      changeCurRoll(newRoll);
+    }
+
+
+
 }

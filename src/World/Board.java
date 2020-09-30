@@ -1,9 +1,9 @@
 package World;
 
 
-import World.Space;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Board {
     private Space[] spaces;
@@ -12,6 +12,7 @@ public class Board {
 
     private World.Player player1;
     private World.Player player2;
+    private GameLoop gameLoop;
 
     public Board() {
         die = new World.Die();
@@ -40,6 +41,11 @@ public class Board {
             }
         }
 
+
+
+    }
+    public void createLoop(){
+        gameLoop= new GameLoop(this);
     }
 
     //methods for board creation
@@ -79,7 +85,7 @@ public class Board {
 
         //check for double roll
         if (die.isDouble(roll))
-            roll = new int[]{roll[0], roll[0], roll[0], roll[0]};
+            die.changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
 
         //if the piece is red, the movement is from 24->1 so make the roll -ve
         if (selected.getPieces().get(0).id == 1)
@@ -148,21 +154,12 @@ public class Board {
         return (target.getPieces().size() == 1 && target.getPieces().get(0).getId() != selected.getPieces().get(0).getId());
     }
 
-    public boolean playerMove(Space from, Space to) {
-        ArrayList<Space> res = getValidMoves(from);
-        if (res.contains(to)) {
-            from.movePiece(to);
-
-            return true;
-        } else {
-            System.out.println("Move invalid");
-            return false;
-        }
-    }
 
 
     public boolean playerMove(int from, int to) {
-        if (validityCheck(spaces[from], spaces[to])) {
+        ArrayList<Space> poss = getValidMoves(spaces[from]);
+        if (validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to])) {
+            die.removeUsedRoll(to-from);
             spaces[from].movePiece(spaces[to]);
             return true;
         } else {
@@ -170,6 +167,8 @@ public class Board {
             return false;
         }
     }
+
+
 
     public Space getEatenSpace() {
         return spaces[0];
@@ -211,6 +210,24 @@ public class Board {
 
     public World.Player getPlayer1(){return player1;}
     public World.Player getPlayer2(){return player2;}
+    public GameLoop getLoop(){return gameLoop;}
+
+    public void checker() {
+        if (die.getCurRoll().length ==0) {
+            Player cur =  gameLoop.getCurrentPlayer();
+            System.out.println("Player: " +cur.getId() + " has finished his move");
+
+            if (gameLoop.getCurrentPlayer().getId() == 0) {
+                gameLoop.setCurrentPlayer(player2);
+            } else {
+                gameLoop.setCurrentPlayer(player1);
+            }
+            cur= gameLoop.getCurrentPlayer();
+            int[] dies = die.getNextRoll();
+            System.out.println("Player: " + cur.getId() + " please make move of: " + Arrays.toString(dies));
+            gameLoop.repaintBV();
+        }
+    }
 }
 
 

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.Arrays;
 
 public class StatusPanel extends JPanel{
 	static JLabel lb1,lb2,lb3,lb4,lb5,lb6,lb7,lb8;
@@ -59,7 +60,7 @@ public class StatusPanel extends JPanel{
     }
 
     public static void updateDiceRolls(int[] rolls) {
-        tf1.setText( rolls[0] + ", " +  rolls[1]);
+        tf1.setText(Arrays.toString(rolls));
     }
 
     public static void updateWhitePiecesInPlay(int whitePieceInPlay) {

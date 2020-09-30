@@ -2,6 +2,8 @@ package World;
 
 import Utils.Variables;
 
+import java.awt.*;
+
 public class Player {
     private int id;
     private int piecesInPlay;
@@ -35,5 +37,11 @@ public class Player {
 
     public int getId() {
         return id;
+    }
+    public Color getColor(){
+        if(id==0)
+            return Variables.WHITE_PIECE_COLOR;
+        else
+            return Variables.RED_PIECE_COLOR;
     }
 }
