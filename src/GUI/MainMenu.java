@@ -12,6 +12,7 @@ public class MainMenu extends JPanel {
     private JPanel panel;
     public MainMenu(JFrame frame) {
         this.img = new ImageIcon("pics/Bg gui.jpg").getImage();
+
         this.panel = this;
         setLayout(null);
         // Start button

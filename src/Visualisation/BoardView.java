@@ -1,9 +1,13 @@
 package Visualisation;
 
 
+import GUI.StatusPanel;
 import Utils.Variables;
 import World.Board;
+import World.GameLoop;
+import Visualisation.InputHandler;
 import World.Space;
+
 
 
 import javax.swing.*;
@@ -17,10 +21,11 @@ public class BoardView extends JPanel  {
     private int width;
     private int height;
     private int space;
-    InputColoring ic;
     Board board;
     private Shape[] visSpaces = new Shape[25];
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
+    StatusPanel s ;
+    GameLoop g;
 
     public BoardView(Board b, int frameWidth, int frameHeight) {
         startX = frameWidth/20;
@@ -30,6 +35,8 @@ public class BoardView extends JPanel  {
         space = 15;
         board=b;
         setBackground(Variables.GAME_BACKGROUND_COLOR);
+        s=new StatusPanel(10);
+        g= new GameLoop(b);
 
     }
 
@@ -43,6 +50,15 @@ public class BoardView extends JPanel  {
         rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         g.setRenderingHints(rh);
 
+        StatusPanel.updateDiceRolls(board.getDie().getCurRoll());
+        StatusPanel.updateBlackPiecesDied(board.getPlayer2().getPiecesSlain());
+        StatusPanel.updateBlackPiecesInPlay(board.getPlayer2().getPiecesInPlay());
+        StatusPanel.updateBlackPiecesOutOfPlay(board.getPlayer2().getPiecesOutOfPlay());
+        StatusPanel.updateWhitePiecesDied(board.getPlayer1().getPiecesSlain());
+        StatusPanel.updateWhitePiecesInPlay(board.getPlayer1().getPiecesInPlay());
+        StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
+       // StatusPanel.updateCurrentPlayer();
+
         Ellipse2D dummyPiece;
         Polygon dummySpace;
 
@@ -53,10 +69,7 @@ public class BoardView extends JPanel  {
             int currentStartX, currentStartY;
             Space p = board.getSpaces()[i];
 
-           // if (ic.getSelected(i)) {
-             //   g.setColor(Variables.RECOLOR_SPACES_COLOR);
-
-             if (i % 2 == 0) {
+            if (i % 2 == 0) {
                 g.setColor(Variables.EVEN_SPACES_COLOR);
 
             } else {
@@ -68,9 +81,12 @@ public class BoardView extends JPanel  {
                     currentStartX = startX +  (13-i) * (width + space);
                     currentStartY = startY+ height+ space;
                 } else {
+
                     currentStartX = startX +  (13-i) * (width + space) -space;
                     currentStartY = startY+ height+ space;
                     dummySpace = new Polygon(new int[]{currentStartX, currentStartX - width/2, currentStartX - width }, new int[]{currentStartY+height, currentStartY, currentStartY + height}, 3);
+                    if(i == 1) {
+                    }
                     visSpaces[i]=dummySpace;
                     g.fillPolygon(dummySpace);
                 }
@@ -107,13 +123,13 @@ public class BoardView extends JPanel  {
                         visPieces.add(dummyPiece);
                         g.fill(dummyPiece);
                     }
-               }
+                }
             }
         }
 
 
+
         if(this.getMouseListeners().length==0){
-            System.out.println("CCCCCCCCCCCCCCCCCCCC");
             this.addMouseListener(new InputHandler(visSpaces,visPieces, this));
         }
     }
@@ -131,5 +147,9 @@ public class BoardView extends JPanel  {
 
     public int getStartX() {
         return startX;
+    }
+
+    public void addStatPane(JFrame frame){
+        frame.add(s, BorderLayout.EAST);
     }
 }
