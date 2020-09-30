@@ -3,6 +3,7 @@ package Visualisation;
 
 import World.Space;
 
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,34 +19,36 @@ public class InputHandler implements MouseListener {
     BoardView bv;
     Space s;
     World.Player currentPlayer;
-    public static int currentDie = 0;
-    int from, to = -1;
-    int validLeft = -1;
-    int justValid = -1;
+
 
     public InputHandler(Shape[] s, ArrayList<Ellipse2D> e, BoardView bv) {
         visPieces = e;
         visSpaces = s;
         board = bv.board;
         this.bv = bv;
-        currentPlayer = board.getPlayer1();
+        currentPlayer = board.getLoop().getCurrentPlayer();
 
     }
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
+        //ensure the current piece and player match
         boolean z = getValidPiece(mouseEvent, currentPlayer);
         if (!z && !selected) {
             System.out.println("Cant be moved");
             return;
         }
+        //get a quadrant from the board based on mouse coordinates
         int k = convertCoordsToSpaceId(mouseEvent);
         if (!selected) {
+            //if nothing is selected
+            //check if the 
             for (int i = 0; i < visPieces.size(); i++) {
                 if (visPieces.get(i).contains(mouseEvent.getX(), mouseEvent.getY())) {
                     selected = true;
                     spaceRecord = k;
                     System.out.println("space number "+ k);
+                    ///recoloring part
                     int currentStartX, currentStartY;
                     Graphics g = bv.getGraphics();
                     g.setColor(Utils.Variables.RECOLOR_SPACES_COLOR);
@@ -65,20 +68,12 @@ public class InputHandler implements MouseListener {
                 }
             }
         } else {
-
             board.playerMove(spaceRecord, k);
             selected = false;
             bv.repaint();
-            currentDie++;
-
 
         }
-        System.out.println("Die: " + currentDie);
-        checker();
-        checkEaten(k);
-        if (board.checkWinCondition()) {
-            System.out.println("game over");
-        }
+
     }
 
     @Override
@@ -121,7 +116,6 @@ public class InputHandler implements MouseListener {
     }
 
     public boolean getValidPiece(MouseEvent mouseEvent, World.Player current) {
-
         int k = convertCoordsToSpaceId(mouseEvent);
         if(k == 0) return true;
         Space s = board.getSpaces()[k];
@@ -132,46 +126,7 @@ public class InputHandler implements MouseListener {
 
     }
 
-    private void checker() {
-        if (currentDie == 2) {
-            System.out.println("Player: " + currentPlayer.getId() + " has finish his move");
-            if (currentPlayer.getId() == 0) {
-                currentPlayer = board.getPlayer2();
-            } else {
-                currentPlayer = board.getPlayer1();
-            }
-            int[] dies = board.getDie().getNextRoll();
-            System.out.println("Player: " + currentPlayer.getId() + " please make move of: " + Arrays.toString(dies));
-            currentDie = 0;
-        }
-    }
 
-    private boolean isValidMove(int diff) {
-        int[] currentDies = board.getDie().getCurRoll();
-        for (int i = 0; i < currentDies.length; i++) {
-            if (validLeft != -1 && justValid != -1) {
-                if (currentDies[i] == diff) {
-                    justValid = i;
-                    if (i == 0) {
-                        validLeft = 1;
-                    } else {
-                        validLeft = 0;
-                    }
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    private void checkEaten(int k){
-        Space s = board.getSpaces()[k];
-        if(s.getSize() == 2){
 
-            if(s.getPieces().get(0).getId() != s.getPieces().get(1).getId()){
-                board.playerMove(k,0);
-//                board.updateEaten();
-            }
-        }
 
-    }
 }

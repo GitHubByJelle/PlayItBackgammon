@@ -25,7 +25,7 @@ public class BoardView extends JPanel  {
     private Shape[] visSpaces = new Shape[25];
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
     StatusPanel s ;
-    GameLoop g;
+    GameLoop gameLoop;
 
     public BoardView(Board b, int frameWidth, int frameHeight) {
         startX = frameWidth/20;
@@ -36,7 +36,8 @@ public class BoardView extends JPanel  {
         board=b;
         setBackground(Variables.GAME_BACKGROUND_COLOR);
         s=new StatusPanel(10);
-        g= new GameLoop(b);
+        gameLoop= b.getLoop();
+        gameLoop.setBoardView(this);
 
     }
 
@@ -57,8 +58,8 @@ public class BoardView extends JPanel  {
         StatusPanel.updateWhitePiecesDied(board.getPlayer1().getPiecesSlain());
         StatusPanel.updateWhitePiecesInPlay(board.getPlayer1().getPiecesInPlay());
         StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
-       // StatusPanel.updateCurrentPlayer();
-
+        StatusPanel.updateCurrentPlayer(""+gameLoop.getCurrentPlayer().getId());
+        gameLoop.start();
         Ellipse2D dummyPiece;
         Polygon dummySpace;
 
