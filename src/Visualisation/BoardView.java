@@ -5,7 +5,6 @@ import GUI.StatusPanel;
 import Utils.Variables;
 import World.Board;
 import World.GameLoop;
-import Visualisation.InputHandler;
 import World.Space;
 
 
@@ -52,13 +51,13 @@ public class BoardView extends JPanel  {
         g.setRenderingHints(rh);
 
         StatusPanel.updateDiceRolls(board.getDie().getCurRoll());
-        StatusPanel.updateBlackPiecesDied(board.getPlayer2().getPiecesSlain());
-        StatusPanel.updateBlackPiecesInPlay(board.getPlayer2().getPiecesInPlay());
-        StatusPanel.updateBlackPiecesOutOfPlay(board.getPlayer2().getPiecesOutOfPlay());
-        StatusPanel.updateWhitePiecesDied(board.getPlayer1().getPiecesSlain());
-        StatusPanel.updateWhitePiecesInPlay(board.getPlayer1().getPiecesInPlay());
-        StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
-        StatusPanel.updateCurrentPlayer(""+gameLoop.getCurrentPlayer().getId());
+        StatusPanel.updateWhitePiecesDied(board.getPlayer2().getPiecesSlain());
+        StatusPanel.updateWhitePiecesInPlay(board.getPlayer2().getPiecesInPlay());
+        StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer2().getPiecesOutOfPlay());
+        StatusPanel.updateRedPiecesDied(board.getPlayer1().getPiecesSlain());
+        StatusPanel.updateRedPiecesInPlay(board.getPlayer1().getPiecesInPlay());
+        StatusPanel.updateRedPiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
+        StatusPanel.updateCurrentPlayer(""+gameLoop.getCurrentPlayer().toString());
         gameLoop.process();
         Ellipse2D dummyPiece;
         Polygon dummySpace;

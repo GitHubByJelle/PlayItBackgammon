@@ -16,17 +16,17 @@ public class StatusPanel extends JPanel{
 
         lb1 = new JLabel("Dice Roll:");
         lb1.setFont(new Font("Verdana", Font.PLAIN, size));
-        lb2 = new JLabel("White Pieces in play:");
+        lb2 = new JLabel("Red Pieces in play:");
         lb2.setFont(new Font("Verdana", Font.PLAIN, size));
-        lb3 = new JLabel("White Pieces out of play:");
+        lb3 = new JLabel("Red Pieces out of play:");
         lb3.setFont(new Font("Verdana", Font.PLAIN, size));
-        lb4 = new JLabel("White Pieces died:");
+        lb4 = new JLabel("Red Pieces slain:");
         lb4.setFont(new Font("Verdana", Font.PLAIN, size));
-        lb5 = new JLabel("Black Pieces in play:");
+        lb5 = new JLabel("White Pieces in play:");
         lb5.setFont(new Font("Verdana", Font.PLAIN, size));
-        lb6 = new JLabel("Black Pieces out of play:");
+        lb6 = new JLabel("White Pieces out of play:");
         lb6.setFont(new Font("Verdana", Font.PLAIN, size));
-        lb7 = new JLabel("Black Pieces died:");
+        lb7 = new JLabel("White Pieces slain:");
         lb7.setFont(new Font("Verdana", Font.PLAIN, size));
         lb8 = new JLabel("Current Player");
         lb8.setFont(new Font("Verdana", Font.PLAIN, size));
@@ -63,27 +63,27 @@ public class StatusPanel extends JPanel{
         tf1.setText(Arrays.toString(rolls));
     }
 
-    public static void updateWhitePiecesInPlay(int whitePieceInPlay) {
+    public static void updateRedPiecesInPlay(int whitePieceInPlay) {
     	tf2.setText(" "+whitePieceInPlay+" ");
     }
 
-    public static void updateWhitePiecesOutOfPlay(int whitePieceOutOfPlay) {
+    public static void updateRedPiecesOutOfPlay(int whitePieceOutOfPlay) {
     	tf3.setText(" "+whitePieceOutOfPlay+" ");
     }
 
-    public static void updateWhitePiecesDied(int piecesDiedForWhite) {
+    public static void updateRedPiecesDied(int piecesDiedForWhite) {
     	tf4.setText(" "+piecesDiedForWhite+" ");
     }
 
-    public static void updateBlackPiecesInPlay(int blackPieceInPlay) {
+    public static void updateWhitePiecesInPlay(int blackPieceInPlay) {
     	tf5.setText(" "+blackPieceInPlay+" " );
     }
 
-    public static void updateBlackPiecesOutOfPlay(int blackPieceOutOfPlay) {
+    public static void updateWhitePiecesOutOfPlay(int blackPieceOutOfPlay) {
     	tf6.setText(" "+blackPieceOutOfPlay+" ");
     }
 
-    public static void updateBlackPiecesDied(int piecesDiedForBlack) {
+    public static void updateWhitePiecesDied(int piecesDiedForBlack) {
     	tf7.setText(" "+piecesDiedForBlack+" ");
     }
 
