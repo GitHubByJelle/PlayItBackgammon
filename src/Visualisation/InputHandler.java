@@ -120,7 +120,7 @@ public class InputHandler implements MouseListener {
 
     public boolean getValidPiece(MouseEvent mouseEvent, World.Player current) {
         int k = convertCoordsToSpaceId(mouseEvent);
-        if(k == 0) return true;
+        if(k == 26) return true;
         Space s = board.getSpaces()[k];
         if (s.getSize() >= 1) {
             return s.getPieces().get(0).getId() == current.getId();

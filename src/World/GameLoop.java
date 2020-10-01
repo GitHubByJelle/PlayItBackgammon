@@ -105,16 +105,14 @@ public class GameLoop {
     }
 
     private void rollCheck(int[] roll) {
-
-
         //make the roll negative for player 2
         if(current== board.getPlayer2()) {
             for (int i = 0; i < roll.length; i++) {
                 if (roll[i] > 0)
                     roll[i] *= -1;
             }
-
         }
+
         if (board.getDie().isDouble(roll)){
             board.getDie().changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
         }

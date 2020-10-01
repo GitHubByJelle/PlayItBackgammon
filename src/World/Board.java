@@ -150,11 +150,16 @@ public class Board {
 
     public boolean playerMove(int from, int to) {
         ArrayList<Space> poss = getValidMoves(spaces[from]);
-        if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
-            die.removeUsedRoll(to-from);
-            spaces[from].movePiece(spaces[to]);
-            gameLoop.checkEaten(to);
+        if(to==26) {
+            moveOutOfPlay(from);
             return true;
+        }
+        if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
+                die.removeUsedRoll(to - from);
+                spaces[from].movePiece(spaces[to]);
+                gameLoop.checkEaten(to);
+                return true;
+
         } else {
             System.out.println("Move invalid");
             return false;
@@ -214,7 +219,8 @@ public class Board {
     }
 
     public void moveOutOfPlay(int k){
-        spaces[k].movePiece(spaces[26]);
+        gameLoop.getCurrentPlayer().pieceOut();
+        spaces[k].movePiece(outOfPlay);
     }
 }
 
