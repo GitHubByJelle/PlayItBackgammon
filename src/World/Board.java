@@ -167,8 +167,10 @@ public class Board {
             return false;
         }
     }
-
-
+    //Used for thinking in bot
+    public void playerMoveNoCheck(int from, int to){
+        spaces[from].movePiece(spaces[to]);
+    }
 
     public Space getEatenSpace() {
         return spaces[0];

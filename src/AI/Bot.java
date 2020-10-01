@@ -2,36 +2,106 @@ package AI;
 import World.*;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.*;
+
 
 public class Bot {
 //    assume board is structured in list from 1-25
 //    standard start position
-    //False is white and True is red
     //TODO Wait for nextValidMoves to be implemented
     //TODO Use Evaluation function to select move out of nextValidMoves
     //TODO Use profiles in bot to make player 1 think 1 move ahead and player 2 2 or 3 moves ahead. Using winning as evolution for bot
     //TODO Optimize selection out of ValidMoves using GA
+
+    //False is white and True is red
     public boolean profile;
+    public double[] weightsarr;
+
     public static void main(String[] args) {
         Board b= new Board();
 //        System.out.println(b);
-//        double[] weightsarr = {0.1,2,3,23,2};
-        Bot bot = new Bot(true);
+        double[] weightsarr = {0.1,2,3,23,2};
+        Bot bot = new Bot(true, weightsarr);
 //        System.out.println(bot.pipCount(b));
         System.out.println(b.toString());
-        b.getValidMoves(b.getSpaces()[5]);
+//        b.getValidMoves(b.getSpaces()[5]);
 //        bot.getAllValidMoves(b);
         System.out.println("DICE");
-        b.getDice().printCurRoll();
-    //        System.out.println(bot.getAllValidMoves(b));
+        System.out.println(bot.GetHighestSubSpace(b.getSpaces()[6], b, b));
+        bot.ExecuteNextMove(b, b);
     }
-    public Bot(boolean profile){
+
+    public Bot(boolean profile, double[] weightsarr){
         this.profile = profile;
+        this.weightsarr = weightsarr;
     }
-    public double EvaluationFunc(Board B, Board prevB, double[] weightsarr){
+
+    public double EvaluationFunc(Board B, Board prevB){
         return this.OtherPiecesSlain(B, prevB)*weightsarr[0] + this.pipCount(B)*weightsarr[1] + this.DoneScore(B)*weightsarr[2] + this.DoneBoardScore(B)*weightsarr[3] + this.piecesAlone(B)*weightsarr[4];
     }
+
+//    public void ExecuteHighestMove (ArrayList<Space> selected, double[] values, ArrayList<Space> highest_moves, Board B){
+//        int i = argmax(values);
+//        B.playerMove(selected.get(i).getId(), highest_moves.get(i).getId());
+//    }
+    public ArrayList<Space> GetHighestMoves(Board B, Board prevB, ArrayList<Space> selected_spaces){
+        ArrayList<Space> moves = new ArrayList<Space>();
+        for(Space selected : selected_spaces){
+            moves.add(GetHighestSubSpace(selected, B, prevB));
+        }
+        return moves;
+    }
+    public void ExecuteNextMove(Board B, Board prevB){
+        ArrayList<Space> all_selected = GetAllSelectedSpaces(B);
+        ArrayList<Space> all_highest_moves = GetHighestMoves(B, prevB, all_selected);
+        double[] value_moves = new double[all_selected.size()];
+        for(int i = 0; i<all_selected.size(); i++){
+            B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId());
+            value_moves[i] = EvaluationFunc(B,prevB);
+            B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId());
+        }
+        int index = argmax(value_moves);
+        System.out.println("MOVES CHOSEN");
+        System.out.println(value_moves[index]);
+        System.out.println(all_selected.get(index).getId());
+        System.out.println(all_highest_moves.get(index).getId());
+        B.playerMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
+    }
+    public ArrayList<Space> GetAllSelectedSpaces(Board B){
+        ArrayList returnSpaces = new ArrayList<Space>();
+        if(profile) {
+            for (Space space : B.getSpaces()) {
+                if (space.getSize() != 0) {
+                    if (space.getPieces().get(0).getId() == 1) {
+                        returnSpaces.add(space);
+                    }
+                }
+            }
+            return returnSpaces;
+        } else
+        {
+            for (Space space : B.getSpaces()) {
+                if (space.getSize() != 0) {
+                    if (space.getPieces().get(0).getId() == 0) {
+                        returnSpaces.add(space);
+                    }
+                }
+            }
+            return returnSpaces;
+        }
+    }
+    public Space GetHighestSubSpace(Space selected, Board B, Board prevB){
+        ArrayList<Space> moves = B.getValidMoves(selected);
+        double[] valuemoves = new double[moves.size()];
+        for(int i = 0; i < moves.size(); i++){
+            B.playerMoveNoCheck(selected.getId(), moves.get(i).getId());
+            valuemoves[i] = EvaluationFunc(B,prevB);
+            B.playerMoveNoCheck(moves.get(i).getId(), selected.getId());
+        }
+        System.out.println(moves.get(argmax(valuemoves)).toString());
+        return moves.get(argmax(valuemoves));
+    }
+
     // Number of pieces enemy pieces slain
     // Positive
     public double OtherPiecesSlain(Board B, Board prevB){
@@ -156,6 +226,20 @@ public class Bot {
             }
             return -alone;
         }
+    }
+    static int argmax(double[] weights) {
+        if (weights == null)
+            return -1;
+        if (weights.length == 1)
+            return 0;
+        double max = weights[0];
+        int maxindex = 0;
+        for (int i = 1; i < weights.length; i++)
+            if (weights[i] > max) {
+                maxindex = i;
+                max = weights[i];
+            }
+        return maxindex;
     }
 
 }
