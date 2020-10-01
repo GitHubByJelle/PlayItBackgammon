@@ -128,7 +128,7 @@ public class BoardView extends JPanel  {
                         g.setColor(p.getPieces().get(k-1).getColor());
 
                         if(i==25){
-                            dummyPiece= new Ellipse2D.Double(startX+k*width, startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
+                            dummyPiece= new Ellipse2D.Double(startX+(startX+6*width)+k*(width*2), startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
 
                         }else {
                             dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + (k-1) * 30, width, 30);
