@@ -21,7 +21,7 @@ public class BoardView extends JPanel  {
     private int height;
     private int space;
     Board board;
-    private Shape[] visSpaces = new Shape[25];
+    private Shape[] visSpaces = new Shape[26];
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
     StatusPanel s ;
     GameLoop gameLoop;
@@ -78,19 +78,30 @@ public class BoardView extends JPanel  {
 
             if (i < 13) {
                 if (i == 0) {
-                    dummySpace = new Polygon(new int[]{startX, startX+(space+width)*12, startX+(space+width)*12,startX }, new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2}, 4);
+                    dummySpace = new Polygon(new int[]{startX, startX+((space-1)+width)*6, startX+((space-1)+width)*6,startX },
+                            new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2},
+                            4);
                 } else {
                     currentStartX = startX +  (13-i) * (width + space) -space;
                     currentStartY = startY+ height+ space;
                     dummySpace = new Polygon(new int[]{currentStartX, currentStartX - width/2, currentStartX - width }, new int[]{currentStartY+height, currentStartY, currentStartY + height}, 3);
-
                 }
 
             }else {
+                if (i == 25) {
+                    dummySpace = new Polygon(new int[]{startX+((space-1)+width)*6  +space*2,  2*(startX+((space-3)+width)*6)-space,2*(startX+((space-3)+width)*6)-space, (startX+((space-1)+width)*6) +space*2 },
+                            new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2},
+                            4);
+                }
+//                else if (i == 26) {
+//
+//                }
+                else {
+                    currentStartX = startX + (i % 13) * (width + space);
+                    currentStartY = startY;
+                    dummySpace = new Polygon(new int[]{currentStartX, currentStartX + width, currentStartX + width / 2}, new int[]{currentStartY, currentStartY, currentStartY + height}, 3);
 
-                currentStartX = startX + (i % 13) * (width + space);
-                currentStartY = startY;
-                dummySpace = new Polygon(new int[]{currentStartX, currentStartX + width, currentStartX + width / 2}, new int[]{currentStartY, currentStartY, currentStartY + height}, 3);
+                }
             }
             visSpaces[i]=dummySpace;
             g.fillPolygon(dummySpace);
@@ -113,9 +124,16 @@ public class BoardView extends JPanel  {
                     }
                 }else{
                     int currentXPiece = currentStartX;
-                    for (int k = 0; k < p.getSize(); k++) {
-                        g.setColor(p.getPieces().get(k).getColor());
-                        dummyPiece =new Ellipse2D.Double(currentXPiece, currentStartY + k * 30, width, 30);
+                    for (int k = 1; k <=p.getSize(); k++) {
+                        g.setColor(p.getPieces().get(k-1).getColor());
+
+                        if(i==25){
+                            dummyPiece= new Ellipse2D.Double(startX+k*width, startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
+
+                        }else {
+                            dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + (k-1) * 30, width, 30);
+
+                        }
                         visPieces.add(dummyPiece);
                         g.fill(dummyPiece);
                     }

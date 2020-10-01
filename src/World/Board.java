@@ -19,7 +19,7 @@ public class Board {
         die.generateDie();
         die.getNextRoll();//remove this later
 
-        spaces = new Space[25];//0 is for the "eaten" ,1-12 is the bottom(right-left), 13-24 is top (Left to right), out of play has id 26
+        spaces = new Space[26];//0 is for the "eaten" for player 1, 25 is is for player 2 ,1-12 is the bottom(right-left), 13-24 is top (Left to right), out of play has id 26
         createSpaces();
 
         addPieces(1, 2, 0);
@@ -46,7 +46,7 @@ public class Board {
     }
     public void createLoop(){
         gameLoop= new GameLoop(this);
-        gameLoop.dieCheck(die.getCurRoll());
+
     }
 
     //methods for board creation
@@ -84,8 +84,10 @@ public class Board {
         Space target;
         int[] roll = die.getCurRoll();
         for (int i = 0; i < roll.length; i++) {
-            //check for inbounds
-            if (selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0) {
+            //check for eaten
+
+            if(selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0){//check for bounds
+
                 target = spaces[selected.getId() + roll[i]];
 
                 if (validityCheck(selected, target))
@@ -203,7 +205,11 @@ public class Board {
 
 
     public void moveToEatenSpace(int k){
-        spaces[k].movePiece(spaces[0]);
+        Piece p= spaces[k].getPieces().get(0);
+        if(p.getId()==player1.getId())
+            spaces[k].movePiece(spaces[0]);
+        else
+            spaces[k].movePiece(spaces[25]);
     }
 
     public void moveOutOfPlay(int k){

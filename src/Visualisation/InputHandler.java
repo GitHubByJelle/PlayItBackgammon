@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 public class InputHandler implements MouseListener {
     Shape[] visSpaces;
     ArrayList<Ellipse2D> visPieces;
@@ -100,6 +99,7 @@ public class InputHandler implements MouseListener {
         double x = mouseEvent.getX();
         System.out.println(x);
         if(visSpaces[0].contains(mouseEvent.getX(),mouseEvent.getY())) return 0;
+        if(visSpaces[25].contains(mouseEvent.getX(),mouseEvent.getY())) return 25;
         if(x < 765) {
 
             x = x + 15;

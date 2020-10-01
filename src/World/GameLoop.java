@@ -17,7 +17,9 @@ public class GameLoop {
     public GameLoop(Board b) {
         board = b;
         current= board.getPlayer1();
+        rollCheck(board.getDie().getCurRoll());
     }
+
     public void setBoardView(BoardView a){
         bv=a;
     }
@@ -84,17 +86,16 @@ public class GameLoop {
             }
 
             int[] roll =board.getDie().getNextRoll();
-            dieCheck(roll);
+            rollCheck(roll);
 
             System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(roll));
             repaintBV();
         }
     }
 
-    public void dieCheck(int[] roll) {
+    private void rollCheck(int[] roll) {
         if (board.getDie().isDouble(roll))
             board.getDie().changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
-
 
         //make the roll negative for player 2
         if(current== board.getPlayer2()) {
