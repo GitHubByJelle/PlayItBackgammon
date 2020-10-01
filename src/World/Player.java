@@ -5,7 +5,7 @@ import Utils.Variables;
 import java.awt.*;
 
 public class Player {
-    private int id;
+    private int id;//matches piece id
     private int piecesInPlay;
     private int piecesOutOfPlay;
     private int piecesSlain;//or eaten
@@ -23,6 +23,7 @@ public class Player {
     public String toString(){
         return "Player "+ type+" " +id;
     }
+
     public int getPiecesInPlay(){
         return piecesInPlay;
     }
@@ -38,10 +39,9 @@ public class Player {
     public int getId() {
         return id;
     }
-    public Color getColor(){
-        if(id==0)
-            return Variables.WHITE_PIECE_COLOR;
-        else
-            return Variables.RED_PIECE_COLOR;
+    public void pieceSlain(){
+        --piecesInPlay;
+        ++piecesSlain;
     }
+
 }

@@ -1,9 +1,6 @@
 package World;
-
-import GUI.StatusPanel;
 import Visualisation.BoardView;
-import World.Board;
-import Utils.Variables;
+
 
 import java.util.Arrays;
 
@@ -28,9 +25,8 @@ public class GameLoop {
 
 
     public void process() {
-        int [] roll= board.getDie().getCurRoll();
-        if (board.getDie().isDouble(roll))
-            board.getDie().changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
+
+
                 //if win condition not met
 
                 //change the turn
@@ -45,15 +41,14 @@ public class GameLoop {
 
                 //else
 
-                System.out.print("Die: ");
-                board.getDie().printCurRoll();
-                checker();//finished moves per turn
+        System.out.print("Die: ");
+        board.getDie().printCurRoll();
+        checker();//finished moves per turn
 
-               //checkEaten(k);
 
-                if (board.checkWinCondition()) {
-                    System.out.println("game over");
-                }
+        if (board.checkWinCondition()) {
+            System.out.println("game over");
+        }
 
     }
 
@@ -62,12 +57,12 @@ public class GameLoop {
     }
     public void setCurrentPlayer(Player a){current=a;}
 
-    private void checkEaten(int k){
+    public void checkEaten(int k){
         Space s = board.getSpaces()[k];
         if(s.getSize() == 2){
-
             if(s.getPieces().get(0).getId() != s.getPieces().get(1).getId()){
                 board.playerMove(k,0);
+                current.pieceSlain();
 //                board.updateEaten();
             }
         }
@@ -95,17 +90,28 @@ public class GameLoop {
     public void checker() {
         //if the player used all their moves
         if (board.getDie().getCurRoll().length ==0) {
-            Player cur =  getCurrentPlayer();
-            System.out.println("Player: " +cur.getId() + " has finished his move");
+
+            System.out.println("Player: " +current.getId() + " has finished his move");
 
             if (getCurrentPlayer().getId() == 0) {
                 setCurrentPlayer(board.getPlayer2());
             } else {
                 setCurrentPlayer(board.getPlayer1());
             }
-            cur=getCurrentPlayer();
-            int[] dies =board.getDie().getNextRoll();
-            System.out.println("Player: " + cur.getId() + " please make move of: " + Arrays.toString(dies));
+
+            int[] roll =board.getDie().getNextRoll();
+            
+            if (board.getDie().isDouble(roll))
+                board.getDie().changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
+            //make the roll negative for player 2
+            if(current== board.getPlayer2()) {
+                for (int i = 0; i < roll.length; i++) {
+                    if (roll[i] > 0)
+                        roll[i] *= -1;
+                }
+
+            }
+            System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(roll));
             repaintBV();
         }
     }

@@ -84,14 +84,6 @@ public class Board {
         int[] roll = die.getCurRoll();
 
 
-        //if the piece is red, the movement is from 24->1 so make the roll -ve
-        if (selected.getPieces().get(0).id == 1)
-            for (int i = 0; i < roll.length; i++) {
-                if(roll[i]>0)
-                    roll[i] *= -1;
-                System.out.println(roll[i]);
-            }
-
         for (int i = 0; i < roll.length; i++) {
             //check for inbounds
             if (selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0) {
@@ -159,6 +151,7 @@ public class Board {
         if ((to!=from) &&validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
             die.removeUsedRoll(to-from);
             spaces[from].movePiece(spaces[to]);
+            gameLoop.checkEaten(to);
             return true;
         } else {
             System.out.println("Move invalid");
