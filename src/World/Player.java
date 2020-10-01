@@ -44,4 +44,9 @@ public class Player {
         ++piecesSlain;
     }
 
+    public void pieceOut(){
+        --piecesInPlay;
+        ++piecesOutOfPlay;
+    }
+
 }

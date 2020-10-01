@@ -30,6 +30,11 @@ public class GameLoop {
         System.out.print("Die: ");
         board.getDie().printCurRoll();
         checker();//finished moves per turn
+        if(current== board.getPlayer1()){
+            if(board.getSpaces()[0].getSize()>0){
+                //force move from out space
+            }
+        }
 
 
         if (board.checkWinCondition()) {
@@ -79,18 +84,24 @@ public class GameLoop {
 
             System.out.println("Player: " +current.getId() + " has finished his move");
 
-            if (getCurrentPlayer().getId() == 0) {
-                setCurrentPlayer(board.getPlayer2());
-            } else {
-                setCurrentPlayer(board.getPlayer1());
-            }
 
-            int[] roll =board.getDie().getNextRoll();
+            changeTurn();
+            int[] roll =board.getDie().getCurRoll();
             rollCheck(roll);
 
             System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(roll));
-            repaintBV();
+
         }
+    }
+
+    public void changeTurn(){
+        if (getCurrentPlayer().getId() == 0) {
+            setCurrentPlayer(board.getPlayer2());
+        } else {
+            setCurrentPlayer(board.getPlayer1());
+        }
+        board.getDie().getNextRoll();
+        repaintBV();
     }
 
     private void rollCheck(int[] roll) {

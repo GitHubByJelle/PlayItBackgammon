@@ -5,6 +5,7 @@ import World.Space;
 
 
 import java.awt.*;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
@@ -100,6 +101,7 @@ public class InputHandler implements MouseListener {
         System.out.println(x);
         if(visSpaces[0].contains(mouseEvent.getX(),mouseEvent.getY())) return 0;
         if(visSpaces[25].contains(mouseEvent.getX(),mouseEvent.getY())) return 25;
+        if(visSpaces[26].contains(mouseEvent.getX(),mouseEvent.getY())) return 26;
         if(x < 765) {
 
             x = x + 15;
@@ -113,7 +115,7 @@ public class InputHandler implements MouseListener {
             System.out.println("i: " + k);
             return k;
         }
-        else return 0;
+        else return 26;
     }
 
     public boolean getValidPiece(MouseEvent mouseEvent, World.Player current) {
@@ -126,8 +128,6 @@ public class InputHandler implements MouseListener {
         return false;
 
     }
-
-
 
 
 }

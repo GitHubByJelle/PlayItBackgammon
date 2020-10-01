@@ -19,7 +19,11 @@ public class Board {
         die.generateDie();
         die.getNextRoll();//remove this later
 
-        spaces = new Space[26];//0 is for the "eaten" for player 1, 25 is is for player 2 ,1-12 is the bottom(right-left), 13-24 is top (Left to right), out of play has id 26
+        spaces = new Space[26];
+        //0 is for the "eaten" for player 1, 25 is is for player 2 ,
+        // 1-12 is the bottom(right-left),
+        // 13-24 is top (Left to right),
+        // out of play has id 26 but is not included in the array because it should not be accessable
         createSpaces();
 
         addPieces(1, 2, 0);
@@ -161,9 +165,6 @@ public class Board {
         spaces[from].movePiece(spaces[to]);
     }
 
-    public Space getEatenSpace() {
-        return spaces[0];
-    }
 
 
     public World.Die getDie() {

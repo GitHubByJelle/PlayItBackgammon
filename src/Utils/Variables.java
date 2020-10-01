@@ -17,6 +17,7 @@ public final class Variables {
 
     public static Color ODD_SPACES_COLOR =new Color(204,153,90);
     public static Color EVEN_SPACES_COLOR = Color.BLACK;
+    public static Color OUT_OF_PLAY_SPACE_COLOR= Color.DARK_GRAY;
     public static Color RECOLOR_SPACES_COLOR =new Color(250,20,20,50);
 
     public static Color GAME_BACKGROUND_COLOR = new Color(80,46,41);

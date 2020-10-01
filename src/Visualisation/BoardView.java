@@ -21,7 +21,7 @@ public class BoardView extends JPanel  {
     private int height;
     private int space;
     Board board;
-    private Shape[] visSpaces = new Shape[26];
+    private Shape[] visSpaces = new Shape[27];
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
     StatusPanel s ;
     GameLoop gameLoop;
@@ -78,7 +78,7 @@ public class BoardView extends JPanel  {
 
             if (i < 13) {
                 if (i == 0) {
-                    dummySpace = new Polygon(new int[]{startX, startX+((space-1)+width)*6, startX+((space-1)+width)*6,startX },
+                    dummySpace = new Polygon(new int[]{startX, startX+width*8, startX+width*8,startX },
                             new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2},
                             4);
                 } else {
@@ -89,14 +89,11 @@ public class BoardView extends JPanel  {
 
             }else {
                 if (i == 25) {
-                    dummySpace = new Polygon(new int[]{startX+((space-1)+width)*6  +space*2,  2*(startX+((space-3)+width)*6)-space,2*(startX+((space-3)+width)*6)-space, (startX+((space-1)+width)*6) +space*2 },
+                    dummySpace = new Polygon(new int[]{startX+width*8,startX+width*16,startX+width*16,startX+width*8 },
                             new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2},
                             4);
                 }
-//                else if (i == 26) {
-//
-//                }
-                else {
+                 else {
                     currentStartX = startX + (i % 13) * (width + space);
                     currentStartY = startY;
                     dummySpace = new Polygon(new int[]{currentStartX, currentStartX + width, currentStartX + width / 2}, new int[]{currentStartY, currentStartY, currentStartY + height}, 3);
@@ -141,11 +138,18 @@ public class BoardView extends JPanel  {
             }
         }
 
-
+        g.setColor(Variables.OUT_OF_PLAY_SPACE_COLOR);
         //out of Play space
+        dummySpace= new Polygon(new int[]{startX+width*16,startX+width*17,startX+width*17,startX+width*16 },
+                new int[]{startY,startY ,startY+height*2 +space ,startY+height*2+space},
+                4);
+        visSpaces[26]=dummySpace;
+        g.fillPolygon(dummySpace);
+
 
         if(this.getMouseListeners().length==0){
             this.addMouseListener(new InputHandler(visSpaces,visPieces, this));
+
         }
     }
 
