@@ -5,6 +5,8 @@ import Visualisation.BoardView;
 import World.Board;
 import Utils.Variables;
 
+import java.util.Arrays;
+
 public class GameLoop {
 
     private Board board;
@@ -23,12 +25,12 @@ public class GameLoop {
         bv=a;
     }
     public void repaintBV(){bv.repaint();}
-    public void start() {
 
 
-            //game start
-                //die is prompted for a move
-
+    public void process() {
+        int [] roll= board.getDie().getCurRoll();
+        if (board.getDie().isDouble(roll))
+            board.getDie().changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
                 //if win condition not met
 
                 //change the turn
@@ -45,7 +47,7 @@ public class GameLoop {
 
                 System.out.print("Die: ");
                 board.getDie().printCurRoll();
-                board.checker();//finished moves per turn
+                checker();//finished moves per turn
 
                //checkEaten(k);
 
@@ -88,6 +90,24 @@ public class GameLoop {
             }
         }
         return false;
+    }
+
+    public void checker() {
+        //if the player used all their moves
+        if (board.getDie().getCurRoll().length ==0) {
+            Player cur =  getCurrentPlayer();
+            System.out.println("Player: " +cur.getId() + " has finished his move");
+
+            if (getCurrentPlayer().getId() == 0) {
+                setCurrentPlayer(board.getPlayer2());
+            } else {
+                setCurrentPlayer(board.getPlayer1());
+            }
+            cur=getCurrentPlayer();
+            int[] dies =board.getDie().getNextRoll();
+            System.out.println("Player: " + cur.getId() + " please make move of: " + Arrays.toString(dies));
+            repaintBV();
+        }
     }
 
 }

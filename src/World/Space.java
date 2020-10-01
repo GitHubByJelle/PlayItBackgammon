@@ -97,6 +97,7 @@ public class Space {
     }
 
     public int getDominantId(){
+        setDominateId();
         return this.dominateId;
     }
 }

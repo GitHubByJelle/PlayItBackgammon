@@ -59,7 +59,7 @@ public class BoardView extends JPanel  {
         StatusPanel.updateWhitePiecesInPlay(board.getPlayer1().getPiecesInPlay());
         StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
         StatusPanel.updateCurrentPlayer(""+gameLoop.getCurrentPlayer().getId());
-        gameLoop.start();
+        gameLoop.process();
         Ellipse2D dummyPiece;
         Polygon dummySpace;
 

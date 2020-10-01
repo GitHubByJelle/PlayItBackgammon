@@ -83,9 +83,6 @@ public class Board {
         Space target;
         int[] roll = die.getCurRoll();
 
-        //check for double roll
-        if (die.isDouble(roll))
-            die.changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
 
         //if the piece is red, the movement is from 24->1 so make the roll -ve
         if (selected.getPieces().get(0).id == 1)
@@ -159,7 +156,7 @@ public class Board {
 
     public boolean playerMove(int from, int to) {
         ArrayList<Space> poss = getValidMoves(spaces[from]);
-        if ((to!=from)&&validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to])) {
+        if ((to!=from) &&validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
             die.removeUsedRoll(to-from);
             spaces[from].movePiece(spaces[to]);
             return true;
@@ -215,22 +212,7 @@ public class Board {
     public World.Player getPlayer2(){return player2;}
     public GameLoop getLoop(){return gameLoop;}
 
-    public void checker() {
-        if (die.getCurRoll().length ==0) {
-            Player cur =  gameLoop.getCurrentPlayer();
-            System.out.println("Player: " +cur.getId() + " has finished his move");
 
-            if (gameLoop.getCurrentPlayer().getId() == 0) {
-                gameLoop.setCurrentPlayer(player2);
-            } else {
-                gameLoop.setCurrentPlayer(player1);
-            }
-            cur= gameLoop.getCurrentPlayer();
-            int[] dies = die.getNextRoll();
-            System.out.println("Player: " + cur.getId() + " please make move of: " + Arrays.toString(dies));
-            gameLoop.repaintBV();
-        }
-    }
 }
 
 
