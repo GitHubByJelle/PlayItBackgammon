@@ -33,11 +33,11 @@ public class InputHandler implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         //ensure the current piece and player match
-        boolean z = getValidPiece(mouseEvent, currentPlayer);
-        if (!z && !selected) {
-            System.out.println("Cant be moved");
-            return;
-        }
+//        boolean z = getValidPiece(mouseEvent, currentPlayer);
+//        if (!z && !selected) {
+//            System.out.println("Cant be moved");
+//            return;
+//        }
         //get a quadrant from the board based on mouse coordinates
         int k = convertCoordsToSpaceId(mouseEvent);
         if (!selected) {

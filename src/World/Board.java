@@ -90,7 +90,8 @@ public class Board {
         //if the piece is red, the movement is from 24->1 so make the roll -ve
         if (selected.getPieces().get(0).id == 1)
             for (int i = 0; i < roll.length; i++) {
-                roll[i] *= -1;
+                if(roll[i]>0)
+                    roll[i] *= -1;
                 System.out.println(roll[i]);
             }
 
@@ -158,7 +159,7 @@ public class Board {
 
     public boolean playerMove(int from, int to) {
         ArrayList<Space> poss = getValidMoves(spaces[from]);
-        if (validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to])) {
+        if ((to!=from)&&validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to])) {
             die.removeUsedRoll(to-from);
             spaces[from].movePiece(spaces[to]);
             return true;
