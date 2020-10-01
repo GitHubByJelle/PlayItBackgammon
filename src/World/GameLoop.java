@@ -25,22 +25,6 @@ public class GameLoop {
 
 
     public void process() {
-
-
-                //if win condition not met
-
-                //change the turn
-                //new die roll
-                //for each element in roll
-                //prompt for a move
-                //different based on player
-                //if human then input listener
-                //else use whatever function for calculation for the bot
-                //carry out move(all checks included)
-                //end turn
-
-                //else
-
         System.out.print("Die: ");
         board.getDie().printCurRoll();
         checker();//finished moves per turn
@@ -110,13 +94,14 @@ public class GameLoop {
     public void dieCheck(int[] roll) {
         if (board.getDie().isDouble(roll))
             board.getDie().changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
+
+
         //make the roll negative for player 2
         if(current== board.getPlayer2()) {
             for (int i = 0; i < roll.length; i++) {
                 if (roll[i] > 0)
                     roll[i] *= -1;
             }
-
         }
     }
 

@@ -99,6 +99,7 @@ public class InputHandler implements MouseListener {
     private int convertCoordsToSpaceId(MouseEvent mouseEvent) {
         double x = mouseEvent.getX();
         System.out.println(x);
+        if(visSpaces[0].contains(mouseEvent.getX(),mouseEvent.getY())) return 0;
         if(x < 765) {
 
             x = x + 15;
