@@ -70,7 +70,7 @@ public class PlayersChoice extends JPanel {
         JPanel boardvis= new BoardView(b, frame.getWidth(), frame.getHeight());
 
         ((BoardView) boardvis).addStatPane(frame);
-        frame.setSize((int)Variables.FRAME_WIDTH+200,(int)Variables.FRAME_HEIGHT);
+        frame.setSize((int)Variables.FRAME_WIDTH+250,(int)Variables.FRAME_HEIGHT);
         frame.add(boardvis);
        // g.start();
 

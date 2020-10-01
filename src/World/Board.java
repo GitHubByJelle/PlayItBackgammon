@@ -46,6 +46,7 @@ public class Board {
     }
     public void createLoop(){
         gameLoop= new GameLoop(this);
+        gameLoop.dieCheck(die.getCurRoll());
     }
 
     //methods for board creation
@@ -82,8 +83,6 @@ public class Board {
 
         Space target;
         int[] roll = die.getCurRoll();
-
-
         for (int i = 0; i < roll.length; i++) {
             //check for inbounds
             if (selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0) {
@@ -113,7 +112,7 @@ public class Board {
 
     private boolean allPiecesHome(int pieceID) {
 
-        World.Piece cur;
+        Piece cur;
         for (int i = 0; i < spaces.length; i++) {
             for (int x = 0; x < spaces[i].getPieces().size(); x++) {
                 cur = spaces[i].getPieces().get(x);
@@ -128,9 +127,6 @@ public class Board {
 
     //check if the target space is empty or if it has pieces of the same color, or if it has 1 piece of the opposite color
     public boolean validityCheck(Space selected, Space target) {
-        if(target.getId() == 0){
-            return true;
-        }
         return target.isEmpty() || //if the target space is empty
                 piecesOfSameColor(selected, target) || //if the space has pieces of the same color
                 pieceCanBeEaten(selected, target); //target has one piece and its color doesnt match
@@ -148,7 +144,7 @@ public class Board {
 
     public boolean playerMove(int from, int to) {
         ArrayList<Space> poss = getValidMoves(spaces[from]);
-        if ((to!=from) &&validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
+        if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
             die.removeUsedRoll(to-from);
             spaces[from].movePiece(spaces[to]);
             gameLoop.checkEaten(to);
@@ -206,6 +202,13 @@ public class Board {
     public GameLoop getLoop(){return gameLoop;}
 
 
+    public void moveToEatenSpace(int k){
+        spaces[k].movePiece(spaces[0]);
+    }
+
+    public void moveOutOfPlay(int k){
+        spaces[k].movePiece(spaces[26]);
+    }
 }
 
 

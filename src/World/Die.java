@@ -12,7 +12,7 @@ public class Die {
         int roll1=0;
         int roll2=0;
         //force the first roll to be smth u r testing for
-        DieList.add(new int[]{1,2});
+        DieList.add(new int[]{6,6});
         Random rn = new Random();
         for(int i=0;i<150;i++){
             roll1 = rn.nextInt(6) + 1;
@@ -61,8 +61,7 @@ public class Die {
     }
 
     public boolean isDouble(int[] roll){
-
-       return roll.length>1 &&roll[0]==roll[1];
+       return roll.length==2 && (roll[0]!=0 ||roll[1]!=0)&&roll[0]==roll[1];
     }
 
     public void changeCurRoll(int [] newRoll){
@@ -74,15 +73,17 @@ public class Die {
     public void removeUsedRoll(int target){
        int [] newRoll= new int[getCurRoll().length-1];
        int index=0;
-      for(int i=0;i<getCurRoll().length;i++){
-          if(getCurRoll()[i]==target){
-              continue;
-          }else{
-              newRoll[index]=getCurRoll()[i];
-              System.out.println(target+" "+Arrays.toString(newRoll));
-              ++index;
-          }
-      }
+       boolean found=false;
+        for(int i=0;i<getCurRoll().length;i++){
+            if(getCurRoll()[i]==target && !found){
+                found=true;
+                continue;
+            }else{
+                newRoll[index]=getCurRoll()[i];
+                System.out.println("A"+target+" "+Arrays.toString(newRoll));
+                ++index;
+            }
+        }
       changeCurRoll(newRoll);
     }
 

@@ -61,7 +61,7 @@ public class GameLoop {
         Space s = board.getSpaces()[k];
         if(s.getSize() == 2){
             if(s.getPieces().get(0).getId() != s.getPieces().get(1).getId()){
-                board.playerMove(k,0);
+                board.moveToEatenSpace(k);
                 current.pieceSlain();
 //                board.updateEaten();
             }
@@ -100,19 +100,23 @@ public class GameLoop {
             }
 
             int[] roll =board.getDie().getNextRoll();
-            
-            if (board.getDie().isDouble(roll))
-                board.getDie().changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
-            //make the roll negative for player 2
-            if(current== board.getPlayer2()) {
-                for (int i = 0; i < roll.length; i++) {
-                    if (roll[i] > 0)
-                        roll[i] *= -1;
-                }
+            dieCheck(roll);
 
-            }
             System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(roll));
             repaintBV();
+        }
+    }
+
+    public void dieCheck(int[] roll) {
+        if (board.getDie().isDouble(roll))
+            board.getDie().changeCurRoll(new int[]{roll[0], roll[0], roll[0], roll[0]});
+        //make the roll negative for player 2
+        if(current== board.getPlayer2()) {
+            for (int i = 0; i < roll.length; i++) {
+                if (roll[i] > 0)
+                    roll[i] *= -1;
+            }
+
         }
     }
 
