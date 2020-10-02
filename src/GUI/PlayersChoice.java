@@ -16,6 +16,7 @@ public class PlayersChoice extends JPanel {
     private JFrame frame;
     public PlayersChoice(JFrame frame, JPanel main) {
         this.frame=frame;
+        frame.setResizable(false);
         this.img = new ImageIcon("pics/Player choice.jpg").getImage();
         setLayout(null);
         Variables var = new Variables();

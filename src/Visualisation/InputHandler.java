@@ -65,9 +65,9 @@ public class InputHandler implements MouseListener {
                             int spaceWidth = bv.getWidth() / 20;
                             int spaceHeight = bv.getHeight() / 3;
                             if (id < 13) {
-                                currentStartX = bv.getStartX() + (13 - id) * (spaceWidth + (space-1)) - (3*space);
+                                currentStartX = bv.getStartX() + (13 - id) * (spaceWidth + (space-1)) - 3*space;
                                 currentStartY = bv.getStartY() + spaceHeight + space;
-                                g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight + space);
+                                g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight+space);
 
                             }
                             else{
