@@ -105,7 +105,7 @@ public class BoardView extends JPanel  {
 
             }else {
                 if (i == 25) {
-                    dummySpace = new Polygon(new int[]{startX+width*8,startX+width*16,startX+width*16,startX+width*8 },
+                    dummySpace = new Polygon(new int[]{startX+width*8+ space,space+startX+width*16,space+startX+width*16,startX+width*8+space },
                             new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2},
                             4);
                 }

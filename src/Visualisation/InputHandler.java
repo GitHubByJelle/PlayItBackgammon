@@ -43,9 +43,10 @@ public class InputHandler implements MouseListener {
         if (!selected) {
             //if nothing is selected
             //check the empty space first
-            if(board.getLoop().eatenSpaceHasPieces()){
+            if(board.getLoop().eatenSpaceHasPieces() &&(k!=0 ||k!=25)){
                 selected=true;
                 spaceRecord= board.getLoop().getSlainSpace();
+                System.out.println("Space selected "+k);
                 System.out.println("Player must move pieces out of slain space");
             }else {
                 for (int i = 0; i < visPieces.size(); i++) {
