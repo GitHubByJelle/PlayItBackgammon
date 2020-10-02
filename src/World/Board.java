@@ -152,6 +152,10 @@ public class Board {
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         if(to==26) {
             moveOutOfPlay(from);
+            gameLoop.getCurrentPlayer().pieceOut();
+            System.out.println(gameLoop.getCurrentPlayer()+" has "+ gameLoop.getCurrentPlayer().getPiecesOutOfPlay()+"pieces out");
+            System.out.println(player1+" has "+ player1.getPiecesOutOfPlay()+"pieces out");
+            System.out.println(player2+" has "+ player2.getPiecesOutOfPlay()+"pieces out");
             return true;
         }
         if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
@@ -205,8 +209,8 @@ public class Board {
         }
     }
 
-    public World.Player getPlayer1(){return player1;}
-    public World.Player getPlayer2(){return player2;}
+    public Player getPlayer1(){return player1;}
+    public Player getPlayer2(){return player2;}
     public GameLoop getLoop(){return gameLoop;}
 
 
@@ -219,7 +223,6 @@ public class Board {
     }
 
     public void moveOutOfPlay(int k){
-        gameLoop.getCurrentPlayer().pieceOut();
         spaces[k].movePiece(outOfPlay);
     }
 }

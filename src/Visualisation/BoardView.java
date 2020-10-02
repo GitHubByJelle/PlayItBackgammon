@@ -51,12 +51,16 @@ public class BoardView extends JPanel  {
         g.setRenderingHints(rh);
 
         StatusPanel.updateDiceRolls(board.getDie().getCurRoll());
-        StatusPanel.updateWhitePiecesDied(board.getPlayer2().getPiecesSlain());
-        StatusPanel.updateWhitePiecesInPlay(board.getPlayer2().getPiecesInPlay());
-        StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer2().getPiecesOutOfPlay());
-        StatusPanel.updateRedPiecesDied(board.getPlayer1().getPiecesSlain());
-        StatusPanel.updateRedPiecesInPlay(board.getPlayer1().getPiecesInPlay());
-        StatusPanel.updateRedPiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
+
+        StatusPanel.updateRedPiecesDied(board.getPlayer2().getPiecesSlain());
+        StatusPanel.updateRedPiecesInPlay(board.getPlayer2().getPiecesInPlay());
+        StatusPanel.updateRedPiecesOutOfPlay(board.getPlayer2().getPiecesOutOfPlay());
+
+
+        StatusPanel.updateWhitePiecesDied(board.getPlayer1().getPiecesSlain());
+        StatusPanel.updateWhitePiecesInPlay(board.getPlayer1().getPiecesInPlay());
+        StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
+
         StatusPanel.updateCurrentPlayer(""+gameLoop.getCurrentPlayer().toString());
         gameLoop.process();
         Ellipse2D dummyPiece;

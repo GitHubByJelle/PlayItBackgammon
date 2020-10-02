@@ -19,6 +19,7 @@ public class Space {
 
     public boolean movePiece(Space to) {
         Piece p = pieces.get(0);
+        System.out.println("PIECE BING MOVED:"+p.getId());
         pieces.remove(p);
         to.getPieces().add(p);
         checkHome(p,to.getId());

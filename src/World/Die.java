@@ -81,7 +81,6 @@ public class Die {
                 continue;
             }else{
                 newRoll[index]=getCurRoll()[i];
-                System.out.println("A"+target+" "+Arrays.toString(newRoll));
                 ++index;
             }
         }

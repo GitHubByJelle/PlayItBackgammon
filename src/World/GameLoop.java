@@ -53,7 +53,10 @@ public class GameLoop {
         if(s.getSize() == 2){
             if(s.getPieces().get(0).getId() != s.getPieces().get(1).getId()){
                 board.moveToEatenSpace(k);
-                current.pieceSlain();
+                if(current==board.getPlayer1())
+                    board.getPlayer2().pieceSlain();
+                else
+                    board.getPlayer1().pieceSlain();
 //                board.updateEaten();
             }
         }
