@@ -1,4 +1,5 @@
 package World;
+import Utils.Variables;
 import Visualisation.BoardView;
 
 
@@ -98,6 +99,7 @@ public class GameLoop {
         } else {
             setCurrentPlayer(board.getPlayer1());
         }
+        System.out.println("AAA");
         board.getDie().getNextRoll();
         repaintBV();
     }
@@ -128,4 +130,6 @@ public class GameLoop {
             return 25;
         }
     }
+
+
 }

@@ -11,6 +11,8 @@ import World.Space;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
@@ -23,7 +25,7 @@ public class BoardView extends JPanel  {
     Board board;
     private Shape[] visSpaces = new Shape[27];
     private ArrayList<Ellipse2D> visPieces = new ArrayList<Ellipse2D>();
-    StatusPanel s ;
+    private JPanel stat;
     GameLoop gameLoop;
 
     public BoardView(Board b, int frameWidth, int frameHeight) {
@@ -34,7 +36,16 @@ public class BoardView extends JPanel  {
         space = 15;
         board=b;
         setBackground(Variables.GAME_BACKGROUND_COLOR);
-        s=new StatusPanel(10);
+        StatusPanel s=new StatusPanel(10);
+        stat = new JPanel(new BorderLayout());
+        JButton passTurn = new JButton("Pass Turn");
+        passTurn.addActionListener(actionEvent -> {
+            gameLoop.changeTurn();
+            System.out.println("REQUEST TURN PASS");
+        });
+        stat.add(passTurn, BorderLayout.NORTH);
+        stat.add(s,BorderLayout.CENTER);
+
         gameLoop= b.getLoop();
         gameLoop.setBoardView(this);
 
@@ -63,6 +74,7 @@ public class BoardView extends JPanel  {
 
         StatusPanel.updateCurrentPlayer(""+gameLoop.getCurrentPlayer().toString());
         gameLoop.process();
+
         Ellipse2D dummyPiece;
         Polygon dummySpace;
 
@@ -172,6 +184,6 @@ public class BoardView extends JPanel  {
     }
 
     public void addStatPane(JFrame frame){
-        frame.add(s, BorderLayout.EAST);
+        frame.add(stat, BorderLayout.EAST);
     }
 }
