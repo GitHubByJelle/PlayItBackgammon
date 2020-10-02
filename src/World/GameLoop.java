@@ -30,11 +30,6 @@ public class GameLoop {
         System.out.print("Die: ");
         board.getDie().printCurRoll();
         checker();//finished moves per turn
-        if(current== board.getPlayer1()){
-            if(board.getSpaces()[0].getSize()>0){
-                //force move from out space
-            }
-        }
 
 
         if (board.checkWinCondition()) {
@@ -121,4 +116,16 @@ public class GameLoop {
         }
     }
 
+    public boolean eatenSpaceHasPieces(){
+        return current.getPiecesSlain()>0;
+
+    }
+
+    public int getSlainSpace() {
+        if(current==board.getPlayer1()){
+            return 0;
+        }else{
+            return 25;
+        }
+    }
 }

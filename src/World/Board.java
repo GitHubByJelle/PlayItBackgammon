@@ -3,7 +3,6 @@ package World;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Board {
     private Space[] spaces;
@@ -68,7 +67,7 @@ public class Board {
 
 
     public String toString() {
-        String res = String.format("%2d  %15s | %15s  %2d\n", 0, spaces[0], outOfPlay, (26));
+        String res = String.format("%2d  %15s | %15s  %2d\n", 0, spaces[0], spaces[25], (25));
         for (int i = 1; i <= 12; i++) {
             res += String.format("%2d  %15s | %15s  %2d\n", i, spaces[i], spaces[25 - i], (25 - i));
         }
@@ -149,6 +148,8 @@ public class Board {
 
 
     public boolean playerMove(int from, int to) {
+        int id = gameLoop.getCurrentPlayer().getId();
+
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         if(to==26 ) {
             if(allPiecesHome(gameLoop.getCurrentPlayer().getId())) {
@@ -161,10 +162,13 @@ public class Board {
                 return false;
             }
         }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
-                die.removeUsedRoll(to - from);
-                spaces[from].movePiece(spaces[to]);
-                gameLoop.checkEaten(to);
-                return true;
+            if(from==0 ||from==25){
+                gameLoop.getCurrentPlayer().revivePiece();
+            }
+            die.removeUsedRoll(to - from);
+            spaces[from].movePiece(spaces[to]);
+            gameLoop.checkEaten(to);
+            return true;
 
         } else {
             System.out.println("Move invalid");
@@ -178,7 +182,7 @@ public class Board {
 
 
 
-    public World.Die getDie() {
+    public Die getDie() {
         return die;
     }
 

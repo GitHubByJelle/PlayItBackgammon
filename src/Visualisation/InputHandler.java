@@ -1,6 +1,7 @@
 package Visualisation;
 
 
+import World.Board;
 import World.Space;
 
 
@@ -14,10 +15,9 @@ public class InputHandler implements MouseListener {
     Shape[] visSpaces;
     ArrayList<Ellipse2D> visPieces;
     boolean selected = false;
-    World.Board board;
+    Board board;
     int spaceRecord;
     BoardView bv;
-    Space s;
     World.Player currentPlayer;
 
 
@@ -42,27 +42,33 @@ public class InputHandler implements MouseListener {
         int k = convertCoordsToSpaceId(mouseEvent);
         if (!selected) {
             //if nothing is selected
-            //check if the 
-            for (int i = 0; i < visPieces.size(); i++) {
-                if (visPieces.get(i).contains(mouseEvent.getX(), mouseEvent.getY())) {
-                    selected = true;
-                    spaceRecord = k;
-                    System.out.println("space number "+ k);
-                    ///recoloring part
-                    int currentStartX, currentStartY;
-                    Graphics g = bv.getGraphics();
-                    g.setColor(Utils.Variables.RECOLOR_SPACES_COLOR);
-                    ArrayList<Space> arr = board.getValidMoves(board.getSpaces()[k]);
-                    for (int j = 0; j < arr.size(); j++) {
-                        int id = arr.get(j).getId();
-                        int space = bv.getSpace();
-                        int spaceWidth = bv.getWidth() / 18;
-                        int spaceHeight = bv.getHeight() / 3;
-                        if (id < 13) {
-                            currentStartX = bv.getStartX() - 10 + (13 - id) * (bv.getWidth() / 20 + (space - 1)) - (space);
-                            currentStartY = bv.getStartY() + spaceHeight + space;
-                            g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight + space);
-                            break;
+            //check the empty space first
+            if(board.getLoop().eatenSpaceHasPieces()){
+                selected=true;
+                spaceRecord= board.getLoop().getSlainSpace();
+                System.out.println("Player must move pieces out of slain space");
+            }else {
+                for (int i = 0; i < visPieces.size(); i++) {
+                    if (visPieces.get(i).contains(mouseEvent.getX(), mouseEvent.getY())) {
+                        selected = true;
+                        spaceRecord = k;
+                        System.out.println("space number " + k);
+                        ///recoloring part
+                        int currentStartX, currentStartY;
+                        Graphics g = bv.getGraphics();
+                        g.setColor(Utils.Variables.RECOLOR_SPACES_COLOR);
+                        ArrayList<Space> arr = board.getValidMoves(board.getSpaces()[k]);
+                        for (int j = 0; j < arr.size(); j++) {
+                            int id = arr.get(j).getId();
+                            int space = bv.getSpace();
+                            int spaceWidth = bv.getWidth() / 18;
+                            int spaceHeight = bv.getHeight() / 3;
+                            if (id < 13) {
+                                currentStartX = bv.getStartX() - 10 + (13 - id) * (bv.getWidth() / 20 + (space - 1)) - (space);
+                                currentStartY = bv.getStartY() + spaceHeight + space;
+                                g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight + space);
+                                break;
+                            }
                         }
                     }
                 }

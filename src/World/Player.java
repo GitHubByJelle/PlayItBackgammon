@@ -11,6 +11,7 @@ public class Player {
     private int piecesSlain;//or eaten
     private String type;
 
+
     //player id should match the piece id for our sakes
     public Player(int id, String type){
         this.id=id;
@@ -18,6 +19,7 @@ public class Player {
         piecesOutOfPlay=0;
         piecesSlain=0;
         this.type= type;
+
     }
 
     public String toString(){
@@ -36,12 +38,18 @@ public class Player {
         return piecesSlain;
     }
 
+
     public int getId() {
         return id;
     }
     public void pieceSlain(){
         --piecesInPlay;
         ++piecesSlain;
+    }
+
+    public void revivePiece(){
+        --piecesSlain;
+        ++piecesInPlay;
     }
 
     public void pieceOut(){
