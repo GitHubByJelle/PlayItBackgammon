@@ -59,27 +59,27 @@ public class InputHandler implements MouseListener {
                         Graphics g = bv.getGraphics();
                         g.setColor(Utils.Variables.RECOLOR_SPACES_COLOR);
                         ArrayList<Space> arr = board.getValidMoves(board.getSpaces()[k]);
-                        String r = "";
-                        for (int m = 0; m < arr.size(); m++) {
-                            r += arr.get(m).getId() + ", ";
-                        }
-                        System.out.println(arr.size() + " VALID MOVE(S) FROM " + spaceRecord + " ARE: " + r);
-
                         for (int j = 0; j < arr.size(); j++) {
                             int id = arr.get(j).getId();
                             int space = bv.getSpace();
-                            int spaceWidth = bv.getWidth() / 18;
+                            int spaceWidth = bv.getWidth() / 20;
                             int spaceHeight = bv.getHeight() / 3;
                             if (id < 13) {
-                                currentStartX = bv.getStartX() - 10 + (13 - id) * (bv.getWidth() / 20 + (space - 1)) - (space);
+                                currentStartX = bv.getStartX() + (13 - id) * (spaceWidth + (space-1)) - (3*space);
                                 currentStartY = bv.getStartY() + spaceHeight + space;
                                 g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight + space);
-                                break;
+
                             }
-                        }
+                            else{
+                                currentStartX = bv.getStartX() + (id % 13) * (spaceWidth + (space+1));
+                                currentStartY = bv.getStartY();
+                                g.fillRect(currentStartX,currentStartY,spaceWidth, spaceHeight);
+                            }
+                        }break;
                     }
                 }
             }
+
         } else {
             board.playerMove(spaceRecord, k);
             selected = false;
