@@ -22,13 +22,13 @@ public class PlayersChoice extends JPanel {
         String[] players = (var.PLAYERS);
         player1 = new JComboBox(players);
         player1.setBackground(new Color(138, 69, 0));
-        player1.setForeground(Color.WHITE);
+        player1.setForeground(Color.BLACK);
         player1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         player1.setBounds(130, 300, 170, 40);
 
         player2 = new JComboBox(players);
         player2.setBackground(new Color(138, 69, 0));
-        player2.setForeground(Color.WHITE);
+        player2.setForeground(Color.BLACK);
         player2.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         player2.setBounds(560, 300, 170, 40);
 
@@ -89,7 +89,7 @@ public class PlayersChoice extends JPanel {
         button.setBackground(buttonColor);
         button.setBorderPainted(false);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.BLACK);
 
         return button;
 

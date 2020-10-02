@@ -50,7 +50,7 @@ public class MainMenu extends JPanel {
         button.setBackground(buttonColor);
         button.setBorderPainted(false);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.BLACK);
 
         return button;
 
