@@ -34,7 +34,7 @@ public class GameLoop {
 
 
         if (board.checkWinCondition()) {
-            System.out.println("game over");
+            System.out.println("GAME OVER");
         }
 
     }
@@ -80,16 +80,11 @@ public class GameLoop {
     public void checker() {
         //if the player used all their moves
         if (board.getDie().getCurRoll().length ==0) {
-
             System.out.println("Player: " +current.getId() + " has finished his move");
-
-
             changeTurn();
             int[] roll =board.getDie().getCurRoll();
             rollCheck(roll);
-
             System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(roll));
-
         }
     }
 
@@ -99,7 +94,6 @@ public class GameLoop {
         } else {
             setCurrentPlayer(board.getPlayer1());
         }
-        System.out.println("AAA");
         board.getDie().getNextRoll();
         repaintBV();
     }

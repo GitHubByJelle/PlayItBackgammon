@@ -88,14 +88,11 @@ public class Board {
         int[] roll = die.getCurRoll();
         for (int i = 0; i < roll.length; i++) {
             //check for eaten
-
             if(selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0){//check for bounds
-
                 target = spaces[selected.getId() + roll[i]];
-
                 if (validityCheck(selected, target))
                     res.add(spaces[selected.getId() + roll[i]]);
-                System.out.println(spaces[selected.getId() + roll[i]].getId());
+
             } else {
                 //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
                 if (allPiecesHome(selected.getPieces().get(0).getId())) {
@@ -103,14 +100,6 @@ public class Board {
                 }
             }
         }
-
-
-        String r = "";
-        for (int i = 0; i < res.size(); i++) {
-            r += res.get(i).getId() + ", ";
-        }
-
-        System.out.println(res.size() + " VALID MOVE(S) FROM " + selected.getId() + " ARE: " + r);
         return res;
     }
 
@@ -158,7 +147,7 @@ public class Board {
                 gameLoop.getCurrentPlayer().pieceOut();
                 return true;
             }else{
-                System.out.println("Move invalid");
+                System.out.println("Move invalid: All pieces must be home");
                 return false;
             }
         }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {

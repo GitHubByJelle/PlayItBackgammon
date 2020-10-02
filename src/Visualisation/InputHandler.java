@@ -35,7 +35,7 @@ public class InputHandler implements MouseListener {
        // ensure the current piece and player match
         boolean z = getValidPiece(mouseEvent, board.getLoop().getCurrentPlayer());
         if (!z && !selected) {
-            System.out.println("Cant be moved");
+            System.out.println("INCORRECT PIECE, cannot be moved");
             return;
         }
         //get a quadrant from the board based on mouse coordinates
@@ -52,12 +52,18 @@ public class InputHandler implements MouseListener {
                     if (visPieces.get(i).contains(mouseEvent.getX(), mouseEvent.getY())) {
                         selected = true;
                         spaceRecord = k;
-                        System.out.println("space number " + k);
+                        System.out.println("SPACE SELECTED: " + k);
                         ///recoloring part
                         int currentStartX, currentStartY;
                         Graphics g = bv.getGraphics();
                         g.setColor(Utils.Variables.RECOLOR_SPACES_COLOR);
                         ArrayList<Space> arr = board.getValidMoves(board.getSpaces()[k]);
+                        String r = "";
+                        for (int m = 0; m < arr.size(); m++) {
+                            r += arr.get(m).getId() + ", ";
+                        }
+                        System.out.println(arr.size() + " VALID MOVE(S) FROM " + spaceRecord + " ARE: " + r);
+
                         for (int j = 0; j < arr.size(); j++) {
                             int id = arr.get(j).getId();
                             int space = bv.getSpace();
@@ -104,7 +110,7 @@ public class InputHandler implements MouseListener {
 
     private int convertCoordsToSpaceId(MouseEvent mouseEvent) {
         double x = mouseEvent.getX();
-        System.out.println(x);
+       // System.out.println(x);
         if(visSpaces[0].contains(mouseEvent.getX(),mouseEvent.getY())) return 0;
         if(visSpaces[25].contains(mouseEvent.getX(),mouseEvent.getY())) return 25;
         if(visSpaces[26].contains(mouseEvent.getX(),mouseEvent.getY())) return 26;
@@ -118,7 +124,7 @@ public class InputHandler implements MouseListener {
             if (mouseEvent.getY() <= 220) {
                 k = 25 - k;
             }
-            System.out.println("i: " + k);
+            //System.out.println("i: " + k);
             return k;
         }
         else return 26;
