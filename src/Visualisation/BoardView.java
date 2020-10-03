@@ -78,8 +78,6 @@ public class BoardView extends JPanel  {
         Ellipse2D dummyPiece;
         Polygon dummySpace;
 
-        g.setColor(Color.BLUE);
-
         for (int i = 0; i < board.getSpaces().length; i++) {
             //SPACE PLACEMENTS
             int currentStartX = startX;
@@ -168,6 +166,11 @@ public class BoardView extends JPanel  {
             this.addMouseListener(new InputHandler(visSpaces,visPieces, this));
 
         }
+        // draw the line in the middle        
+        int lineX = (startX +  (13-7) * (width + space) -space) + space/2;
+        g.fillRect(lineX, startY, 5, (startY+height*2+space)-startY);
+        g.setColor(Color.BLUE);
+
     }
 
 
