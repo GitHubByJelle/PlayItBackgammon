@@ -46,6 +46,7 @@ public class InputHandler implements MouseListener {
             if(board.getLoop().eatenSpaceHasPieces() &&(k!=0 ||k!=25)){
                 selected=true;
                 spaceRecord= board.getLoop().getSlainSpace();
+                highlightValidSpaces(spaceRecord);
                 System.out.println("Space selected "+k);
                 System.out.println("Player must move pieces out of slain space");
             }else {
@@ -55,34 +56,9 @@ public class InputHandler implements MouseListener {
                         spaceRecord = k;
                         System.out.println("SPACE SELECTED: " + k);
                         ///recoloring part
-                        int currentStartX, currentStartY;
-                        Graphics g = bv.getGraphics();
-                        g.setColor(Utils.Variables.RECOLOR_SPACES_COLOR);
-                        ArrayList<Space> arr = board.getValidMoves(board.getSpaces()[k]);
-                        for (int j = 0; j < arr.size(); j++) {
-                            int id = arr.get(j).getId();
-                            int space = bv.getSpace();
-                            int spaceWidth = 45;
-                            int spaceHeight = 216;
-                            if (id < 13) {
-                                currentStartX = bv.getStartX() + (12 - id) * (spaceWidth + space) ;
-                                currentStartY = bv.getStartY() + spaceHeight + space;
-                                g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight);
-                                //System.out.println("inputhandler startx= "+bv.getStartX()+ " starty= "+bv.getStartY());
-                               // System.out.println("iIH space= "+space+ " width= "+spaceWidth+" height= "+spaceHeight);
+                        highlightValidSpaces(k);
 
-                            } else if(id<26){
-                                currentStartX = bv.getStartX() + (id % 13) * (spaceWidth + space);
-                                currentStartY = bv.getStartY();
-                                g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight);
-                            }else{
-                                currentStartX=bv.getStartX()+spaceWidth*16;
-                                currentStartY=bv.getStartY();
-                                g.fillRect(currentStartX,currentStartY,spaceWidth,spaceHeight*2 +space);
-                            }
-
-
-                        }break;
+                        break;
                     }
                 }
             }
@@ -94,6 +70,35 @@ public class InputHandler implements MouseListener {
 
         }
 
+    }
+
+    private void highlightValidSpaces(int k) {
+        int currentStartX, currentStartY;
+        Graphics g = bv.getGraphics();
+        g.setColor(Utils.Variables.RECOLOR_SPACES_COLOR);
+        ArrayList<Space> arr = board.getValidMoves(board.getSpaces()[k]);
+        for (int j = 0; j < arr.size(); j++) {
+            int id = arr.get(j).getId();
+            int space = bv.getSpace();
+            int spaceWidth = 45;
+            int spaceHeight = 216;
+            if (id < 13) {
+                currentStartX = bv.getStartX() + (12 - id) * (spaceWidth + space);
+                currentStartY = bv.getStartY() + spaceHeight + space;
+                g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight);
+                //System.out.println("inputhandler startx= "+bv.getStartX()+ " starty= "+bv.getStartY());
+                // System.out.println("iIH space= "+space+ " width= "+spaceWidth+" height= "+spaceHeight);
+
+            } else if (id < 26) {
+                currentStartX = bv.getStartX() + (id % 13) * (spaceWidth + space);
+                currentStartY = bv.getStartY();
+                g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight);
+            } else {
+                currentStartX = bv.getStartX() + spaceWidth * 16;
+                currentStartY = bv.getStartY();
+                g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight * 2 + space);
+            }
+        }
     }
 
     @Override
