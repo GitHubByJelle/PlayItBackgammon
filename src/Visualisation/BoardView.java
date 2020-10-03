@@ -121,33 +121,74 @@ public class BoardView extends JPanel  {
 
             //PIECE PLACEMENTS
             if (p.getSize() > 0) {
+
                 if (i<13){
 
                     int currentXPiece = currentStartX - (width);
                     for (int k = 1; k <= p.getSize(); k++) {
-
-                        g.setColor(p.getPieces().get(k-1).getColor());
-                        if(i==0){
-                            dummyPiece= new Ellipse2D.Double(startX+k*width, startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
-                        }else {
+                        if(k<7){
+                            g.setColor(p.getPieces().get(k-1).getColor());
+                            if(i==0){
+                                dummyPiece= new Ellipse2D.Double(startX+k*width, startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
+                            }else {
                             dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + height - k * 30, width, 30);
-                        }
-                        visPieces.add(dummyPiece);
-                        g.fill(dummyPiece);
+                            }  
+                        
+                            visPieces.add(dummyPiece);
+                            g.fill(dummyPiece);
+                     }
+                     else{
+                         if(k==7){
+                            g.setColor(Color.GRAY);
+                            String pLeft = "x" + p.getSize();
+                            FontMetrics fm = g.getFontMetrics();
+                            double textWidth = fm.getStringBounds(pLeft, g).getWidth();
+                            if(i==0){
+                                int xPos = (int) ((startX+k*width)-textWidth/2 - width/2);
+                                int yPos = (int)((startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space) + fm.getMaxAscent() / 2 + space);
+                                g.drawString(pLeft, xPos, yPos);
+                            }
+                            else{
+                                int xPos = (int)(currentXPiece-textWidth/2 + width/2);
+                                int yPos = (int)((currentStartY + height - k * 30)  + fm.getMaxAscent() / 2 + space*3);
+                                g.drawString(pLeft, xPos, yPos);
+                            }
+                         }
+                     }
                     }
                 }else{
                     int currentXPiece = currentStartX;
                     for (int k = 1; k <=p.getSize(); k++) {
-                        g.setColor(p.getPieces().get(k-1).getColor());
-
-                        if(i==25){
-                            dummyPiece= new Ellipse2D.Double(startX+(startX+6*width)+k*(width*2),
-                                    startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
-                        }else {
+                        if(k<7){
+                            g.setColor(p.getPieces().get(k-1).getColor());                        
+                            if(i==25){
+                                dummyPiece= new Ellipse2D.Double(startX+(startX+6*width)+k*(width*2),
+                                startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
+                            }else {
                             dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + (k-1) * 30, width, 30);
                         }
-                        visPieces.add(dummyPiece);
-                        g.fill(dummyPiece);
+                            visPieces.add(dummyPiece);
+                            g.fill(dummyPiece);
+                        }
+                        else{
+                            if(k==7){    
+                            g.setColor(Color.GRAY);
+                            String pLeft = "x" + p.getSize();
+                            FontMetrics fm = g.getFontMetrics();
+                            double textWidth = fm.getStringBounds(pLeft, g).getWidth();
+                            if(i==25){
+                                int xPos = (int )((startX+(startX+6*width)+k*(width*2))-textWidth/2);
+                                int yPos = (int) (((startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space))+ fm.getMaxAscent() / 2);
+                                g.drawString(pLeft,xPos+ width/2, yPos - (space /2));
+                            }
+                            else{
+                                int xPos = (int)(currentXPiece -textWidth/2);
+                                int yPos = (int)((currentStartY + (k-1) * 30));
+                                g.drawString(pLeft, xPos+ width/2, yPos - (space/2));
+                            }
+                        }
+
+                        }
                     }
                 }
             }
