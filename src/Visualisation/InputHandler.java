@@ -71,12 +71,17 @@ public class InputHandler implements MouseListener {
                                 //System.out.println("inputhandler startx= "+bv.getStartX()+ " starty= "+bv.getStartY());
                                // System.out.println("iIH space= "+space+ " width= "+spaceWidth+" height= "+spaceHeight);
 
-                            }
-                            else{
+                            } else if(id<26){
                                 currentStartX = bv.getStartX() + (id % 13) * (spaceWidth + space);
                                 currentStartY = bv.getStartY();
-                                g.fillRect(currentStartX,currentStartY,spaceWidth, spaceHeight);
+                                g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight);
+                            }else{
+                                currentStartX=bv.getStartX()+spaceWidth*16;
+                                currentStartY=bv.getStartY();
+                                g.fillRect(currentStartX,currentStartY,spaceWidth,spaceHeight*2 +space);
                             }
+
+
                         }break;
                     }
                 }
