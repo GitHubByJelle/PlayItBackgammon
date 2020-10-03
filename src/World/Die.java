@@ -74,15 +74,16 @@ public class Die {
        int [] newRoll= new int[getCurRoll().length-1];
        int index=0;
        boolean found=false;
-        for(int i=0;i<getCurRoll().length;i++){
-            if(getCurRoll()[i]==target && !found){
-                found=true;
-                continue;
-            }else{
-                newRoll[index]=getCurRoll()[i];
-                ++index;
+       if(newRoll.length!=0)
+            for(int i=0;i<getCurRoll().length;i++){
+                if(getCurRoll()[i]==target && !found){
+                    found=true;
+                    continue;
+                }else{
+                    newRoll[index]=getCurRoll()[i];
+                    ++index;
+                }
             }
-        }
       changeCurRoll(newRoll);
     }
 

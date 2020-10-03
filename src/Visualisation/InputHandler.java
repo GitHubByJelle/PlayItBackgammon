@@ -43,7 +43,7 @@ public class InputHandler implements MouseListener {
         if (!selected) {
             //if nothing is selected
             //check the empty space first
-            if(board.getLoop().eatenSpaceHasPieces() &&(k!=0 ||k!=25)){
+            if(board.getLoop().eatenSpaceHasPieces() &&(k!=0 ||k!=25) ){
                 selected=true;
                 spaceRecord= board.getLoop().getSlainSpace();
                 highlightValidSpaces(spaceRecord);
