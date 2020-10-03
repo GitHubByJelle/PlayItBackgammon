@@ -25,15 +25,31 @@ public class Board {
         // out of play has id 26 but is not included in the array because it should not be accessable
         createSpaces();
 
-        addPieces(1, 2, 0);
-        addPieces(6, 5, 1);
-        addPieces(8, 3, 1);
-        addPieces(12, 5, 0);
+        //actuall board
 
-        addPieces(13, 5, 1);
-        addPieces(17, 3, 0);
-        addPieces(19, 5, 0);
-        addPieces(24, 2, 1);
+//        addPieces(1, 2, 0);
+//        addPieces(6, 5, 1);
+//        addPieces(8, 3, 1);
+//        addPieces(12, 5, 0);
+//
+//        addPieces(13, 5, 1);
+//        addPieces(17, 3, 0);
+//        addPieces(19, 5, 0);
+//        addPieces(24, 2, 1);
+
+        //testboard
+
+        addPieces(6,3,1);
+        addPieces(5,3,1);
+        addPieces(4,3,1);
+        addPieces(3,3,1);
+        addPieces(2,3,1);
+
+        addPieces(19,3,0);
+        addPieces(20,3,0);
+        addPieces(21,3,0);
+        addPieces(22,3,0);
+        addPieces(23,3,0);
         outOfPlay = new Space(26);
 
         //to correct for is home values of the pieces
@@ -141,9 +157,13 @@ public class Board {
 
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         if(to==26) {
-            if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) &&poss.contains(outOfPlay)) {
+            if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
+
                 moveOutOfPlay(from);
-                die.removeUsedRollOutOfPlay();//remove the largest roll from the list
+                if((to-from)<=6)
+                    die.removeUsedRoll(to - from);
+                else
+                    die.removeUsedRollOutOfPlay();//remove the largest roll from the list
                 gameLoop.getCurrentPlayer().pieceOut();
                 return true;
             }else{
@@ -221,13 +241,4 @@ public class Board {
         spaces[k].movePiece(outOfPlay);
     }
 }
-
-
-
-
-
-
-
-
-
 
