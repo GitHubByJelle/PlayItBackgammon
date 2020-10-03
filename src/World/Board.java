@@ -27,12 +27,13 @@ public class Board {
 
         //actuall board
 
-        addPieces(0, 9, 0);
+
+        addPieces(1, 2, 0);
         addPieces(6, 5, 1);
         addPieces(8, 3, 1);
-        addPieces(25, 9, 1);
+        addPieces(12, 5, 0);
 
-        addPieces(13, 9, 1);
+        addPieces(13, 5, 1);
         addPieces(17, 3, 0);
         addPieces(19, 5, 0);
         addPieces(24, 2, 1);
