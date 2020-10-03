@@ -97,6 +97,8 @@ public class BoardView extends JPanel  {
                     dummySpace = new Polygon(new int[]{startX, startX+width*8, startX+width*8,startX },
                             new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2},
                             4);
+                   // System.out.println("boardview start x= "+ startX +" start y= "+startY);
+                    //System.out.println("boardview space= "+space+" height= "+height+" width= "+width);
                 } else {
                     currentStartX = startX +  (13-i) * (width + space) -space;
                     currentStartY = startY+ height+ space;
