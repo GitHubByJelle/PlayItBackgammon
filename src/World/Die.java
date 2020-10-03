@@ -93,17 +93,17 @@ public class Die {
         int max=0;
         int dummy=0;
         for(int i=0;i<getCurRoll().length;i++){
-           if(Math.abs(getCurRoll()[i])>max){
+           if(Math.abs(getCurRoll()[i])>Math.abs(max)){
                max=getCurRoll()[i];
-               index=i;
            }
         }
-        for(int i=0;i<getCurRoll().length;i++){
-            if(i!=index){
-                newRoll[dummy]=getCurRoll()[i];
-                ++dummy;
-            }
-        }
-        changeCurRoll(newRoll);
+//        for(int i=0;i<getCurRoll().length;i++){
+//            if(i!=index){
+//                newRoll[dummy]=getCurRoll()[i];
+//                ++dummy;
+//            }
+//        }
+//        changeCurRoll(newRoll);
+        removeUsedRoll(max);
     }
 }
