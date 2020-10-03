@@ -140,8 +140,8 @@ public class Board {
         int id = gameLoop.getCurrentPlayer().getId();
 
         ArrayList<Space> poss = getValidMoves(spaces[from]);
-        if(to==26 ) {
-            if(allPiecesHome(gameLoop.getCurrentPlayer().getId())) {
+        if(to==26) {
+            if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) &&poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
                 die.removeUsedRollOutOfPlay();//remove the largest roll from the list
                 gameLoop.getCurrentPlayer().pieceOut();
