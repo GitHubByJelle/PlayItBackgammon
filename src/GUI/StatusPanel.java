@@ -1,10 +1,9 @@
 package GUI;
 
+import Utils.Variables;
+
 import javax.swing.*;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.util.Arrays;
 
 public class StatusPanel extends JPanel{
@@ -30,11 +29,10 @@ public class StatusPanel extends JPanel{
         lb[6] = new JLabel("White Pieces slain:");
         lb[6].setFont(new Font("Verdana", Font.PLAIN, size));
 
-        lb[7] = new JLabel("Current Player");
+        lb[7] = new JLabel("Current Player:");
         lb[7].setFont(new Font("Verdana", Font.PLAIN, size));
 
         this.setLayout(new GridLayout(8,2));
-
         for(int i=0;i<8;i++){
             tf[i]=new JTextField();
             tf[i].setEditable(false);
@@ -45,6 +43,8 @@ public class StatusPanel extends JPanel{
 
 
     }
+
+
 
     public static void updateDiceRolls(int[] rolls) {
         tf[0].setText(Arrays.toString(rolls));
