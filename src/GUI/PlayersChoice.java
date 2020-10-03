@@ -6,7 +6,7 @@ import java.awt.event.*;
 import Utils.Variables;
 import Visualisation.BoardView;
 import World.Board;
-import World.GameLoop;
+
 
 public class PlayersChoice extends JPanel {
 

@@ -1,8 +1,5 @@
 package World;
 
-import Utils.Variables;
-
-import java.awt.*;
 
 public class Player {
     private int id;//matches piece id

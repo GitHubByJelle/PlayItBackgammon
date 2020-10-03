@@ -1,6 +1,6 @@
 package GUI;
 
-import Utils.Variables;
+
 
 import javax.swing.*;
 import java.awt.*;

@@ -6,13 +6,8 @@ import Utils.Variables;
 import World.Board;
 import World.GameLoop;
 import World.Space;
-
-
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
@@ -182,11 +177,11 @@ public class BoardView extends JPanel  {
                                     xPos = (int) ((startX + (startX + 6 * width) + k * (width * 2)) - textWidth / 2);
                                     yPos = (int) (((startY + (height * 2) + 30 + (p.getPieces().get(k - 1).getId() * 30) + space)) + fm.getMaxAscent() / 2);
                                 }else{
-                                        xPos = (int) (currentXPiece - textWidth / 2);
-                                        yPos = (int) ((currentStartY + (k - 1) * 30));
-                                    }
-                                    g.drawString(pLeft,xPos+ width/2, yPos - (space /2));
+                                    xPos = (int) (currentXPiece - textWidth / 2);
+                                    yPos = (int) ((currentStartY + (k - 1) * 30));
                                 }
+                                g.drawString(pLeft,xPos+ width/2, yPos - (space /2));
+                            }
 
                         }
                     }

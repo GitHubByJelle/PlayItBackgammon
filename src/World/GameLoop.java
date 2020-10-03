@@ -1,8 +1,7 @@
 package World;
-import Utils.Variables;
+
+
 import Visualisation.BoardView;
-
-
 import java.util.Arrays;
 
 public class GameLoop {
