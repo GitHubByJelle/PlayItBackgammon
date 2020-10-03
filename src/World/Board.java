@@ -37,7 +37,7 @@ public class Board {
 //        addPieces(19, 5, 0);
 //        addPieces(24, 2, 1);
 
-        //testboard
+        //testboard A
 
         addPieces(6,3,1);
         addPieces(5,3,1);
@@ -50,6 +50,22 @@ public class Board {
         addPieces(21,3,0);
         addPieces(22,3,0);
         addPieces(23,3,0);
+
+        //testBoard B
+//        addPieces(1,1,0);
+//        addPieces(2,2,1);
+//        addPieces(3,3,1);
+//        addPieces(4,1,1);
+//        addPieces(6,5,1);
+//        addPieces(7,1,1);
+//        addPieces(8,2,1);
+//        addPieces(9,1,1);
+//
+//        addPieces(17,1,0);
+//        addPieces(19,9,0);
+//        addPieces(20,2,0);
+//        addPieces(21,2,0);
+
         outOfPlay = new Space(26);
 
         //to correct for is home values of the pieces
@@ -158,7 +174,6 @@ public class Board {
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         if(to==26) {
             if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
-
                 moveOutOfPlay(from);
                 if((to-from)<=6)
                     die.removeUsedRoll(to - from);
