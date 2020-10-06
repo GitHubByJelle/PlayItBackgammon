@@ -175,29 +175,36 @@ public class Board {
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         if(to==26) {
             if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
-
+                moveOutOfPlay(from);
 
                 if(from>6){
-                    if (26-(from+1)<=6){
-                        if(26-(from+1)==die.getCurRoll()[0]||26-(from+1)==die.getCurRoll()[1]) {
-                            die.removeUsedRoll(to - (from + 1));
-                            moveOutOfPlay(from);
-                        }
-                        else if(26-(from+1)<die.getCurRoll()[0]|| 26-(from+1)<die.getCurRoll()[1]) {
-                            die.removeUsedRollOutOfPlay();
-                            moveOutOfPlay(from);
+                    if (26-(from+1)<=6) {
+                        if (die.getCurRoll().length > 1) {
+                            if (26 - (from + 1) == die.getCurRoll()[0] || 26 - (from + 1) == die.getCurRoll()[1])
+                                die.removeUsedRoll(to - (from + 1));
+                            else if (26 - (from + 1) < die.getCurRoll()[0] || 26 - (from + 1) < die.getCurRoll()[1])
+                                die.removeUsedRollOutOfPlay();
+                        } else {
+                            if (26 - (from + 1) == die.getCurRoll()[0])
+                                die.removeUsedRoll(to - (from + 1));
+                            else if (26 - (from + 1) < die.getCurRoll()[0])
+                                die.removeUsedRollOutOfPlay();
                         }
                     }
                 }
                 else
                     if(26-newFrom<=6)
-                        if(-(26-newFrom)==die.getCurRoll()[0]||-(26-(newFrom))==die.getCurRoll()[1]) {
-                            die.removeUsedRoll(-(26 - newFrom));
-                            moveOutOfPlay(from);
+                        if (die.getCurRoll().length > 1) {
+                            if (-(26 - newFrom) == die.getCurRoll()[0] || -(26 - (newFrom)) == die.getCurRoll()[1])
+                                die.removeUsedRoll(-(26 - newFrom));
+                            else if (-(26 - newFrom) > die.getCurRoll()[0] || -(26 - newFrom) > die.getCurRoll()[1])
+                                die.removeUsedRollOutOfPlay();
                         }
-                        else if(-(26-newFrom)>die.getCurRoll()[0] || -(26-newFrom)>die.getCurRoll()[1]) {
-                            die.removeUsedRollOutOfPlay();
-                            moveOutOfPlay(from);
+                    else {
+                            if (-(26 - newFrom) == die.getCurRoll()[0])
+                                die.removeUsedRoll(-(26 - newFrom));
+                            else if (-(26 - newFrom) > die.getCurRoll()[0])
+                                die.removeUsedRollOutOfPlay();
                         }
 
                 gameLoop.getCurrentPlayer().pieceOut();
