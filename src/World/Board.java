@@ -27,30 +27,30 @@ public class Board {
 
         //actuall board
 
-//
-//        addPieces(1, 2, 0);
-//        addPieces(6, 5, 1);
-//        addPieces(8, 3, 1);
-//        addPieces(12, 5, 0);
-//
-//        addPieces(13, 5, 1);
-//        addPieces(17, 3, 0);
-//        addPieces(19, 5, 0);
-//        addPieces(24, 2, 1);
+
+        addPieces(1, 2, 0);
+        addPieces(6, 5, 1);
+        addPieces(8, 3, 1);
+        addPieces(12, 5, 0);
+
+        addPieces(13, 5, 1);
+        addPieces(17, 3, 0);
+        addPieces(19, 5, 0);
+        addPieces(24, 2, 1);
 
         //testboard A
-
-        addPieces(6,3,1);
-        addPieces(5,3,1);
-        addPieces(4,3,1);
-        addPieces(3,3,1);
-        addPieces(2,3,1);
-
-        addPieces(19,3,0);
-        addPieces(20,3,0);
-        addPieces(21,3,0);
-        addPieces(22,3,0);
-        addPieces(23,3,0);
+//
+//        addPieces(6,3,1);
+//        addPieces(5,3,1);
+//        addPieces(4,3,1);
+//        addPieces(3,3,1);
+//        addPieces(2,3,1);
+//
+//        addPieces(19,3,0);
+//        addPieces(20,3,0);
+//        addPieces(21,3,0);
+//        addPieces(22,3,0);
+//        addPieces(23,3,0);
 
         //testBoard B
 //        addPieces(1,1,0);
@@ -176,13 +176,10 @@ public class Board {
         if(to==26) {
             if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
-                if(gameLoop.getCurrentPlayer()==player1){
-                    System.out.println("BDiff"+(25-from));
-                    die.removeUsedRoll(25-from);
-                }else{
-                    System.out.println("ADiff"+(from));
-                    die.removeUsedRoll(from*(-1));
-                }
+                if((to-from)<=6)
+                    die.removeUsedRoll(to - from);
+                else
+                    die.removeUsedRollOutOfPlay();//remove the largest roll from the list
                 gameLoop.getCurrentPlayer().pieceOut();
                 return true;
             }else{
