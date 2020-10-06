@@ -171,15 +171,19 @@ public class Board {
 
     public boolean playerMove(int from, int to) {
         int id = gameLoop.getCurrentPlayer().getId();
-
+        int newFrom= 26-from;
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         if(to==26) {
             if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
-                if((to-from)<=6)
-                    die.removeUsedRoll(to - from);
+
+                if(from>6){
+                    if (26-(from+1)<=6){
+                        die.removeUsedRoll(to- (from+1));
+                    }
+                }
                 else
-                    die.removeUsedRollOutOfPlay();//remove the largest roll from the list
+                    die.removeUsedRoll(-(26-newFrom));//remove the largest roll from the list
                 gameLoop.getCurrentPlayer().pieceOut();
                 return true;
             }else{

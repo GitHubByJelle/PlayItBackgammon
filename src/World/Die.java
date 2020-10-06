@@ -88,7 +88,7 @@ public class Die {
     }
 
 
-    public void removeUsedRollOutOfPlay() {
+   /* public void removeUsedRollOutOfPlay() {
         int [] newRoll= new int[getCurRoll().length-1];
         int index=0;
         int max=0;
@@ -106,5 +106,5 @@ public class Die {
 //        }
 //        changeCurRoll(newRoll);
         removeUsedRoll(max);
-    }
+    }*/
 }
