@@ -30,6 +30,7 @@ public class BoardView extends JPanel  {
         height = frameHeight/3;
         space = 15;
         board=b;
+        gameLoop= b.getLoop();
         setBackground(Variables.GAME_BACKGROUND_COLOR);
         StatusPanel s=new StatusPanel(10);
         stat = new JPanel(new BorderLayout());
@@ -41,7 +42,7 @@ public class BoardView extends JPanel  {
         stat.add(passTurn, BorderLayout.NORTH);
         stat.add(s,BorderLayout.CENTER);
 
-        gameLoop= b.getLoop();
+
         gameLoop.setBoardView(this);
 
     }
