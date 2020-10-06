@@ -86,8 +86,6 @@ public class InputHandler implements MouseListener {
                 currentStartX = bv.getStartX() + (12 - id) * (spaceWidth + space);
                 currentStartY = bv.getStartY() + spaceHeight + space;
                 g.fillRect(currentStartX, currentStartY, spaceWidth, spaceHeight);
-                //System.out.println("inputhandler startx= "+bv.getStartX()+ " starty= "+bv.getStartY());
-                // System.out.println("iIH space= "+space+ " width= "+spaceWidth+" height= "+spaceHeight);
 
             } else if (id < 26) {
                 currentStartX = bv.getStartX() + (id % 13) * (spaceWidth + space);
@@ -137,7 +135,6 @@ public class InputHandler implements MouseListener {
             if (mouseEvent.getY() <= 220) {
                 k = 25 - k;
             }
-            //System.out.println("i: " + k);
             return k;
         }
         else return 26;
