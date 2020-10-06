@@ -154,6 +154,7 @@ public class BoardView extends JPanel  {
                     }
                 }else{
                     int currentXPiece = currentStartX;
+                    //startX+width*8+ space,space+startX+width*16
                     for (int k = 1; k <=p.getSize(); k++) {
                         if(k<7){
                             g.setColor(p.getPieces().get(k-1).getColor());                        
@@ -174,13 +175,13 @@ public class BoardView extends JPanel  {
                                 int xPos;
                                 int yPos;
                                 if(i==25){
-                                    xPos = (int) ((startX + (startX + 6 * width) + k * (width * 2)) - textWidth / 2);
-                                    yPos = (int) (((startY + (height * 2) + 30 + (p.getPieces().get(k - 1).getId() * 30) + space)) + fm.getMaxAscent() / 2);
+                                    xPos = (int) ((startX+8*width+space+k*width)- width/2 - space + space/4);
+                                    yPos = (int) (startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space*2 + space/4);
                                 }else{
-                                    xPos = (int) (currentXPiece - textWidth / 2);
-                                    yPos = (int) ((currentStartY + (k - 1) * 30));
+                                    xPos = (int) ((currentXPiece - textWidth / 2)+ width/2);
+                                    yPos = (int) (((currentStartY + (k - 1) * 30)- (space /2)));
                                 }
-                                g.drawString(pLeft,xPos+ width/2, yPos - (space /2));
+                                g.drawString(pLeft,xPos, yPos);
                             }
 
                         }
