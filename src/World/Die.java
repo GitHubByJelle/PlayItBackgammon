@@ -74,36 +74,30 @@ public class Die {
        int [] newRoll= new int[getCurRoll().length-1];
        int index=0;
        boolean found=false;
-        for(int i=0;i<getCurRoll().length;i++){
-            if(getCurRoll()[i]==target && !found){
-                found=true;
-                continue;
-            }else{
-                newRoll[index]=getCurRoll()[i];
-                ++index;
+       if(newRoll.length!=0)
+            for(int i=0;i<getCurRoll().length;i++){
+                if(getCurRoll()[i]==target && !found){
+                    found=true;
+                    continue;
+                }else{
+                    newRoll[index]=getCurRoll()[i];
+                    ++index;
+                }
             }
-        }
       changeCurRoll(newRoll);
     }
 
 
     public void removeUsedRollOutOfPlay() {
-        int [] newRoll= new int[getCurRoll().length-1];
-        int index=0;
+
         int max=0;
-        int dummy=0;
         for(int i=0;i<getCurRoll().length;i++){
-           if(Math.abs(getCurRoll()[i])>max){
+           if(Math.abs(getCurRoll()[i])>Math.abs(max)){
                max=getCurRoll()[i];
-               index=i;
            }
         }
-        for(int i=0;i<getCurRoll().length;i++){
-            if(i!=index){
-                newRoll[dummy]=getCurRoll()[i];
-                ++dummy;
-            }
-        }
-        changeCurRoll(newRoll);
+
+        removeUsedRoll(max);
+
     }
 }

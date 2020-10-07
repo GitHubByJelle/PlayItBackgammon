@@ -1,8 +1,7 @@
 package World;
-import Utils.Variables;
+
+
 import Visualisation.BoardView;
-
-
 import java.util.Arrays;
 
 public class GameLoop {
@@ -82,9 +81,8 @@ public class GameLoop {
         if (board.getDie().getCurRoll().length ==0) {
             System.out.println("Player: " +current.getId() + " has finished his move");
             changeTurn();
-            int[] roll =board.getDie().getCurRoll();
-            rollCheck(roll);
-            System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(roll));
+           // int[] roll =board.getDie().getCurRoll();
+
         }
     }
 
@@ -95,6 +93,8 @@ public class GameLoop {
             setCurrentPlayer(board.getPlayer1());
         }
         board.getDie().getNextRoll();
+        rollCheck(board.getDie().getCurRoll());
+        System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(board.getDie().getCurRoll()));
         repaintBV();
     }
 
@@ -124,6 +124,5 @@ public class GameLoop {
             return 25;
         }
     }
-
 
 }

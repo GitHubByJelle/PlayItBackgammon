@@ -19,14 +19,6 @@ public class Main {
         int frameHei=(int) Variables.FRAME_HEIGHT;
         JFrame frame = new JFrame();
         JPanel MainGui = new MainMenu(frame);
-      //Board b= new Board();
-       // b.setPlayers("Human","Human");
-        //new StatusPanel();
-
-      //  JPanel boardvis= new BoardView(b,frameWid, frameHei);
-        //GameLoop g= new GameLoop(b);
-        //((BoardView) boardvis).addStatPane(frame);
-        //frame.add(boardvis);
 
         frame.add(MainGui);
 
@@ -35,18 +27,7 @@ public class Main {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
-        Board b= new Board();
-        b.setPlayers("Human","Human");
-        b.createLoop();
-
-
-
-
-
-
-
-
+        frame.setResizable(false);
 
 
     }

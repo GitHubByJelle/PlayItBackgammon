@@ -6,13 +6,8 @@ import Utils.Variables;
 import World.Board;
 import World.GameLoop;
 import World.Space;
-
-
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 
@@ -35,6 +30,7 @@ public class BoardView extends JPanel  {
         height = frameHeight/3;
         space = 15;
         board=b;
+        gameLoop= b.getLoop();
         setBackground(Variables.GAME_BACKGROUND_COLOR);
         StatusPanel s=new StatusPanel(10);
         stat = new JPanel(new BorderLayout());
@@ -46,7 +42,7 @@ public class BoardView extends JPanel  {
         stat.add(passTurn, BorderLayout.NORTH);
         stat.add(s,BorderLayout.CENTER);
 
-        gameLoop= b.getLoop();
+
         gameLoop.setBoardView(this);
 
     }
@@ -78,8 +74,6 @@ public class BoardView extends JPanel  {
         Ellipse2D dummyPiece;
         Polygon dummySpace;
 
-        g.setColor(Color.BLUE);
-
         for (int i = 0; i < board.getSpaces().length; i++) {
             //SPACE PLACEMENTS
             int currentStartX = startX;
@@ -97,6 +91,8 @@ public class BoardView extends JPanel  {
                     dummySpace = new Polygon(new int[]{startX, startX+width*8, startX+width*8,startX },
                             new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2},
                             4);
+                   // System.out.println("boardview start x= "+ startX +" start y= "+startY);
+                    //System.out.println("boardview space= "+space+" height= "+height+" width= "+width);
                 } else {
                     currentStartX = startX +  (13-i) * (width + space) -space;
                     currentStartY = startY+ height+ space;
@@ -121,33 +117,75 @@ public class BoardView extends JPanel  {
 
             //PIECE PLACEMENTS
             if (p.getSize() > 0) {
+
                 if (i<13){
 
                     int currentXPiece = currentStartX - (width);
                     for (int k = 1; k <= p.getSize(); k++) {
-
-                        g.setColor(p.getPieces().get(k-1).getColor());
-                        if(i==0){
-                            dummyPiece= new Ellipse2D.Double(startX+k*width, startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
-                        }else {
-                            dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + height - k * 30, width, 30);
+                        if(k<7){
+                            g.setColor(p.getPieces().get(k-1).getColor());
+                            if(i==0){
+                                dummyPiece= new Ellipse2D.Double(startX+k*width, startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
+                            }else {
+                                dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + height - k * 30, width, 30);
+                            }  
+                        
+                            visPieces.add(dummyPiece);
+                            g.fill(dummyPiece);
                         }
-                        visPieces.add(dummyPiece);
-                        g.fill(dummyPiece);
+                         else{
+                             if(k==7){
+                                g.setColor(Color.GRAY);
+                                String pLeft = "x" + p.getSize();
+                                FontMetrics fm = g.getFontMetrics();
+                                double textWidth = fm.getStringBounds(pLeft, g).getWidth();
+                                 int xPos;
+                                 int yPos;
+                                 if(i==0){
+                                     xPos = (int) ((startX + k * width) - textWidth / 2 - width / 2);
+                                     yPos = (int) ((startY + (height * 2) + 30 + (p.getPieces().get(k - 1).getId() * 30) + space) + fm.getMaxAscent() / 2 + space);
+                                 }
+                                else{
+                                     xPos = (int) (currentXPiece - textWidth / 2 + width / 2);
+                                     yPos = (int) ((currentStartY + height - k * 30) + fm.getMaxAscent() / 2 + space * 3);
+                                 }
+                                 g.drawString(pLeft, xPos, yPos);
+                             }
+                         }
                     }
                 }else{
                     int currentXPiece = currentStartX;
+                    //startX+width*8+ space,space+startX+width*16
                     for (int k = 1; k <=p.getSize(); k++) {
-                        g.setColor(p.getPieces().get(k-1).getColor());
+                        if(k<7){
+                            g.setColor(p.getPieces().get(k-1).getColor());                        
+                            if(i==25){
+                                dummyPiece= new Ellipse2D.Double(startX+8*width+space+k*width,
+                                        startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
+                            }else {
+                                dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + (k-1) * 30, width, 30);
+                            }
+                            visPieces.add(dummyPiece);
+                            g.fill(dummyPiece);
+                        } else{
+                            if(k==7){    
+                                g.setColor(Color.GRAY);
+                                String pLeft = "x" + p.getSize();
+                                FontMetrics fm = g.getFontMetrics();
+                                double textWidth = fm.getStringBounds(pLeft, g).getWidth();
+                                int xPos;
+                                int yPos;
+                                if(i==25){
+                                    xPos = (int) ((startX+8*width+space+k*width)- width/2 - space + space/4);
+                                    yPos = (int) (startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space*2 + space/4);
+                                }else{
+                                    xPos = (int) ((currentXPiece - textWidth / 2)+ width/2);
+                                    yPos = (int) (((currentStartY + (k - 1) * 30)- (space /2)));
+                                }
+                                g.drawString(pLeft,xPos, yPos);
+                            }
 
-                        if(i==25){
-                            dummyPiece= new Ellipse2D.Double(startX+(startX+6*width)+k*(width*2),
-                                    startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
-                        }else {
-                            dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + (k-1) * 30, width, 30);
                         }
-                        visPieces.add(dummyPiece);
-                        g.fill(dummyPiece);
                     }
                 }
             }
@@ -166,6 +204,11 @@ public class BoardView extends JPanel  {
             this.addMouseListener(new InputHandler(visSpaces,visPieces, this));
 
         }
+        // draw the line in the middle        
+        int lineX = (startX +  (13-7) * (width + space) -space) + space/2;
+        g.fillRect(lineX, startY, 5, (startY+height*2+space)-startY);
+        g.setColor(Color.BLUE);
+
     }
 
 

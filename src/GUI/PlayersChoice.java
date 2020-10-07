@@ -6,7 +6,7 @@ import java.awt.event.*;
 import Utils.Variables;
 import Visualisation.BoardView;
 import World.Board;
-import World.GameLoop;
+
 
 public class PlayersChoice extends JPanel {
 
@@ -16,19 +16,20 @@ public class PlayersChoice extends JPanel {
     private JFrame frame;
     public PlayersChoice(JFrame frame, JPanel main) {
         this.frame=frame;
+        frame.setResizable(false);
         this.img = new ImageIcon("pics/Player choice.jpg").getImage();
         setLayout(null);
         Variables var = new Variables();
         String[] players = (var.PLAYERS);
         player1 = new JComboBox(players);
         player1.setBackground(new Color(138, 69, 0));
-        player1.setForeground(Color.WHITE);
+        player1.setForeground(Color.BLACK);
         player1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         player1.setBounds(130, 300, 170, 40);
 
         player2 = new JComboBox(players);
         player2.setBackground(new Color(138, 69, 0));
-        player2.setForeground(Color.WHITE);
+        player2.setForeground(Color.BLACK);
         player2.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         player2.setBounds(560, 300, 170, 40);
 
@@ -65,7 +66,7 @@ public class PlayersChoice extends JPanel {
     private void gameSetup(String choice1, String choice2) {
         setVisible(false);
         Board b= new Board();
-        b.setPlayers("Human","Human");
+        b.setPlayers(choice1,choice2);
         b.createLoop();
         System.out.println(b);
         JPanel boardvis= new BoardView(b, frame.getWidth(), frame.getHeight());
@@ -89,7 +90,7 @@ public class PlayersChoice extends JPanel {
         button.setBackground(buttonColor);
         button.setBorderPainted(false);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.BLACK);
 
         return button;
 

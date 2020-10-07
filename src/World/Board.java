@@ -25,6 +25,9 @@ public class Board {
         // out of play has id 26 but is not included in the array because it should not be accessable
         createSpaces();
 
+        //actuall board
+
+
         addPieces(1, 2, 0);
         addPieces(6, 5, 1);
         addPieces(8, 3, 1);
@@ -34,6 +37,36 @@ public class Board {
         addPieces(17, 3, 0);
         addPieces(19, 5, 0);
         addPieces(24, 2, 1);
+
+   //     testboard A
+
+   //     addPieces(1,3,1);
+   //     addPieces(5,3,1);
+   //     addPieces(4,3,1);
+   //     addPieces(3,3,1);
+   //     addPieces(2,3,1);
+
+   //     addPieces(24,3,0);
+   //     addPieces(20,3,0);
+   //     addPieces(21,3,0);
+   //     addPieces(22,3,0);
+   //     addPieces(23,3,0);
+
+        //testBoard B
+//        addPieces(1,1,0);
+//        addPieces(2,2,1);
+//        addPieces(3,3,1);
+//        addPieces(4,1,1);
+//        addPieces(6,5,1);
+//        addPieces(7,1,1);
+//        addPieces(8,2,1);
+//        addPieces(9,1,1);
+//
+//        addPieces(17,1,0);
+//        addPieces(19,9,0);
+//        addPieces(20,2,0);
+//        addPieces(21,2,0);
+
         outOfPlay = new Space(26);
 
         //to correct for is home values of the pieces
@@ -138,12 +171,42 @@ public class Board {
 
     public boolean playerMove(int from, int to) {
         int id = gameLoop.getCurrentPlayer().getId();
-
+        int newFrom= 26-from;
         ArrayList<Space> poss = getValidMoves(spaces[from]);
-        if(to==26 ) {
-            if(allPiecesHome(gameLoop.getCurrentPlayer().getId())) {
+        if(to==26) {
+            if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
-                die.removeUsedRollOutOfPlay();//remove the largest roll from the list
+
+                if(from>6){
+                    if (26-(from+1)<=6) {
+                        if (die.getCurRoll().length > 1) {
+                            if (26 - (from + 1) == die.getCurRoll()[0] || 26 - (from + 1) == die.getCurRoll()[1])
+                                die.removeUsedRoll(to - (from + 1));
+                            else if (26 - (from + 1) < die.getCurRoll()[0] || 26 - (from + 1) < die.getCurRoll()[1])
+                                die.removeUsedRollOutOfPlay();
+                        } else {
+                            if (26 - (from + 1) == die.getCurRoll()[0])
+                                die.removeUsedRoll(to - (from + 1));
+                            else if (26 - (from + 1) < die.getCurRoll()[0])
+                                die.removeUsedRollOutOfPlay();
+                        }
+                    }
+                }
+                else
+                    if(26-newFrom<=6)
+                        if (die.getCurRoll().length > 1) {
+                            if (-(26 - newFrom) == die.getCurRoll()[0] || -(26 - (newFrom)) == die.getCurRoll()[1])
+                                die.removeUsedRoll(-(26 - newFrom));
+                            else if (-(26 - newFrom) > die.getCurRoll()[0] || -(26 - newFrom) > die.getCurRoll()[1])
+                                die.removeUsedRollOutOfPlay();
+                        }
+                    else {
+                            if (-(26 - newFrom) == die.getCurRoll()[0])
+                                die.removeUsedRoll(-(26 - newFrom));
+                            else if (-(26 - newFrom) > die.getCurRoll()[0])
+                                die.removeUsedRollOutOfPlay();
+                        }
+
                 gameLoop.getCurrentPlayer().pieceOut();
                 return true;
             }else{
@@ -221,13 +284,4 @@ public class Board {
         spaces[k].movePiece(outOfPlay);
     }
 }
-
-
-
-
-
-
-
-
-
 
