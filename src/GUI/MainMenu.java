@@ -1,6 +1,5 @@
 package GUI;
 
-import GUI.PlayersChoice;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,16 +1,6 @@
 import GUI.MainMenu;
-import GUI.StatusPanel;
 import Utils.Variables;
-import Visualisation.BoardView;
-import World.Board;
-import World.GameLoop;
-import World.Space;
-
-
 import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main {
 

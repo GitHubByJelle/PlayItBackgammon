@@ -27,21 +27,21 @@ public class Board {
 
         //actuall board
 
-
-        addPieces(1, 2, 0);
-        addPieces(6, 5, 1);
-        addPieces(8, 3, 1);
-        addPieces(12, 5, 0);
-
-        addPieces(13, 5, 1);
-        addPieces(17, 3, 0);
-        addPieces(19, 5, 0);
-        addPieces(24, 2, 1);
+//
+//        addPieces(1, 2, 0);
+//        addPieces(6, 5, 1);
+//        addPieces(8, 3, 1);
+//        addPieces(12, 5, 0);
+//
+//        addPieces(13, 5, 1);
+//        addPieces(17, 3, 0);
+//        addPieces(19, 5, 0);
+//        addPieces(24, 2, 1);
 
 
 
    //     testboard A
-        /*
+
        addPieces(1,3,1);
        addPieces(5,3,1);
        addPieces(4,3,1);
@@ -53,7 +53,7 @@ public class Board {
        addPieces(21,3,0);
        addPieces(22,3,0);
        addPieces(23,3,0);
-       */
+
 
         //testBoard B
 //        addPieces(1,1,0);
