@@ -26,7 +26,7 @@ public class Board {
         createSpaces();
 
         //actuall board
-/*
+
 
         addPieces(1, 2, 0);
         addPieces(6, 5, 1);
@@ -38,21 +38,22 @@ public class Board {
         addPieces(19, 5, 0);
         addPieces(24, 2, 1);
 
- */
+
 
    //     testboard A
-
+        /*
        addPieces(1,3,1);
        addPieces(5,3,1);
-      addPieces(4,3,1);
-        addPieces(3,3,1);
-        addPieces(2,3,1);
+       addPieces(4,3,1);
+       addPieces(3,3,1);
+       addPieces(2,3,1);
 
-        addPieces(24,3,0);
-        addPieces(20,3,0);
+       addPieces(24,3,0);
+       addPieces(20,3,0);
        addPieces(21,3,0);
-        addPieces(22,3,0);
-        addPieces(23,3,0);
+       addPieces(22,3,0);
+       addPieces(23,3,0);
+       */
 
         //testBoard B
 //        addPieces(1,1,0);
