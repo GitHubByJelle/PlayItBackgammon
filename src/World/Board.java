@@ -121,6 +121,10 @@ public class Board {
 
         Space target;
         int[] roll = die.getCurRoll();
+
+        int bigger=0;
+        int smaller=0;
+
         for (int i = 0; i < roll.length; i++) {
             //check for eaten
             if(selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0){//check for bounds
@@ -131,11 +135,67 @@ public class Board {
             } else {
                 //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
                 if (allPiecesHome(selected.getPieces().get(0).getId())) {
-                    res.add(outOfPlay);
+
+                    if (selected.getId()>6) {
+                        for (int j = 24; j > 18; j--) {
+                            if (spaces[j].getPieces().size() > 0) {
+                                bigger = j;
+                            }
+                        }
+
+                        if (die.getCurRoll().length > 1) {
+                            if ((25 - selected.getId()) == die.getCurRoll()[0] || (25 - selected.getId()) == die.getCurRoll()[1])
+                                res.add(outOfPlay);
+
+                            else if (selected.getId()== bigger && die.getCurRoll()[0] > (25 - selected.getId()) || selected.getId()== bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
+                                res.add(outOfPlay);
+                            }
+                            else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId()) && selected.getId() > bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
+                                res.remove(outOfPlay);
+                            }
+                        } else {
+                            if ((25 - selected.getId()) == die.getCurRoll()[0])
+                                res.add(outOfPlay);
+
+                            else if (selected.getId() == bigger && die.getCurRoll()[0] > (25 - selected.getId())) {
+                                res.add(outOfPlay);
+                            } else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId())) {
+                                res.remove(outOfPlay);
+                            }
+                        }
+                    } else {
+                        for (int j = 1; j < 6; j++) {
+                            if (spaces[j].getPieces().size() > 0) {
+                                bigger = j;
+                            }
+                        }
+                        if (die.getCurRoll().length > 1) {
+                            if (selected.getId() == Math.abs(die.getCurRoll()[0]) || selected.getId() == Math.abs(die.getCurRoll()[1]))
+                                res.add(outOfPlay);
+
+                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() || selected.getId() == bigger && Math.abs(die.getCurRoll()[1]) > selected.getId() ) {
+                                res.add(outOfPlay);
+                            }
+                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() && Math.abs(die.getCurRoll()[1]) > selected.getId()) {
+                                res.remove(outOfPlay);
+                            }
+                        } else {
+                            if (selected.getId() == Math.abs(die.getCurRoll()[0]))
+                                res.add(outOfPlay);
+
+                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
+                                res.add(outOfPlay);
+                            }
+                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
+                                res.remove(outOfPlay);
+                            }
+
+                        }
+                    }
                 }
             }
-        }
-        return res;
+        }return res;
+
     }
 
 
@@ -168,7 +228,6 @@ public class Board {
     private boolean pieceCanBeEaten(Space selected, Space target) {
         return (target.getPieces().size() == 1 && target.getPieces().get(0).getId() != selected.getPieces().get(0).getId());
     }
-
 
 
     public boolean playerMove(int from, int to) {
@@ -204,8 +263,6 @@ public class Board {
     public void playerMoveNoCheck(int from, int to){
         spaces[from].movePiece(spaces[to]);
     }
-
-
 
     public Die getDie() {
         return die;
