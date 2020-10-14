@@ -229,4 +229,5 @@ public class BoardView extends JPanel  {
     public void addStatPane(JFrame frame){
         frame.add(stat, BorderLayout.EAST);
     }
+    public void removeStatPanel(){stat.setVisible(false);}
 }

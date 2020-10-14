@@ -2,6 +2,7 @@ package World;
 
 
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Board {
@@ -55,20 +56,7 @@ public class Board {
        addPieces(23,3,0);
 
 
-        //testBoard B
-//        addPieces(1,1,0);
-//        addPieces(2,2,1);
-//        addPieces(3,3,1);
-//        addPieces(4,1,1);
-//        addPieces(6,5,1);
-//        addPieces(7,1,1);
-//        addPieces(8,2,1);
-//        addPieces(9,1,1);
-//
-//        addPieces(17,1,0);
-//        addPieces(19,9,0);
-//        addPieces(20,2,0);
-//        addPieces(21,2,0);
+
 
         outOfPlay = new Space(26);
 
@@ -83,8 +71,10 @@ public class Board {
 
 
     }
-    public void createLoop(){
-        gameLoop= new GameLoop(this);
+    public void createLoop(JFrame frame){
+        gameLoop= new GameLoop(this, frame);
+
+
 
     }
 

@@ -1,7 +1,11 @@
 package World;
 
 
+import GUI.GameOverPanel;
+import Utils.Variables;
 import Visualisation.BoardView;
+
+import javax.swing.*;
 import java.util.Arrays;
 
 public class GameLoop {
@@ -12,12 +16,13 @@ public class GameLoop {
     int from, to = -1;
     int validLeft = -1;
     int justValid = -1;
+    JFrame frame;
 
-
-    public GameLoop(Board b) {
+    public GameLoop(Board b, JFrame frame) {
         board = b;
         current= board.getPlayer1();
         rollCheck(board.getDie().getCurRoll());
+        this.frame=frame;
     }
 
     public void setBoardView(BoardView a){
@@ -34,6 +39,18 @@ public class GameLoop {
 
         if (board.checkWinCondition()) {
             System.out.println("GAME OVER");
+            bv.setVisible(false);
+            bv.removeStatPanel();
+            Player win;
+            if(board.getPlayer1().getPiecesOutOfPlay()==15){
+                win= board.getPlayer1();
+            }else{
+                win=board.getPlayer2();
+            }
+            GameOverPanel over = new GameOverPanel(frame);
+            over.updateResult(win.toString());
+            frame.add(over);
+
         }
 
     }

@@ -67,7 +67,7 @@ public class PlayersChoice extends JPanel {
         setVisible(false);
         Board b= new Board();
         b.setPlayers(choice1,choice2);
-        b.createLoop();
+        b.createLoop(frame);
         System.out.println(b);
         JPanel boardvis= new BoardView(b, frame.getWidth(), frame.getHeight());
 
