@@ -25,10 +25,19 @@ public class GameLoop {
         this.frame=frame;
     }
 
+    public GameLoop(Board b) {
+        board = b;
+        current= board.getPlayer1();
+        rollCheck(board.getDie().getCurRoll());
+    }
+
     public void setBoardView(BoardView a){
         bv=a;
     }
-    public void repaintBV(){bv.repaint();}
+    public void repaintBV(){
+        if(bv!=null)
+            bv.repaint();
+    }
 
 
     public void process() {
@@ -39,17 +48,25 @@ public class GameLoop {
 
         if (board.checkWinCondition()) {
             System.out.println("GAME OVER");
-            bv.setVisible(false);
-            bv.removeStatPanel();
-            Player win;
-            if(board.getPlayer1().getPiecesOutOfPlay()==15){
-                win= board.getPlayer1();
+            if(frame!=null) {
+                bv.setVisible(false);
+                bv.removeStatPanel();
+                Player win;
+                if (board.getPlayer1().getPiecesOutOfPlay() == 15) {
+                    win = board.getPlayer1();
+                } else {
+                    win = board.getPlayer2();
+                }
+                GameOverPanel over = new GameOverPanel(frame);
+                over.updateResult(win.toString());
+                frame.add(over);
             }else{
-                win=board.getPlayer2();
+                if (board.getPlayer1().getPiecesOutOfPlay() == 15) {
+                    System.out.println(board.getPlayer1().toString());
+                } else {
+                    System.out.println(board.getPlayer2().toString());
+                }
             }
-            GameOverPanel over = new GameOverPanel(frame);
-            over.updateResult(win.toString());
-            frame.add(over);
 
         }
 

@@ -73,9 +73,6 @@ public class Board {
     }
     public void createLoop(JFrame frame){
         gameLoop= new GameLoop(this, frame);
-
-
-
     }
 
     //methods for board creation

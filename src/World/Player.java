@@ -16,7 +16,6 @@ public class Player {
         piecesOutOfPlay=0;
         piecesSlain=0;
         this.type= type;
-
     }
 
     public String toString(){
@@ -53,5 +52,7 @@ public class Player {
         --piecesInPlay;
         ++piecesOutOfPlay;
     }
+
+
 
 }
