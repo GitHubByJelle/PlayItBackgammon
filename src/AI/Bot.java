@@ -1,157 +1,194 @@
 package AI;
 import World.*;
 
+import javax.swing.*;
 import java.lang.reflect.Array;
 import java.util.*;
+
 
 
 public class Bot {
 //    assume board is structured in list from 1-25
 //    standard start position
-    //TODO Wait for nextValidMoves to be implemented
-    //TODO Use Evaluation function to select move out of nextValidMoves
+    //TODO Make gameloop for Bot to train/game in
+    //TODO wait for Double moves
     //TODO Use profiles in bot to make player 1 think 1 move ahead and player 2 2 or 3 moves ahead. Using winning as evolution for bot
     //TODO Optimize selection out of ValidMoves using GA
 
     //False is white and True is red
     public boolean profile;
     public double[] weightsarr;
+    public Board B;
 
     public static void main(String[] args) {
         Board b= new Board();
+        b.setPlayers("Human", "Human");
+        b.createBotLoop();
 //        System.out.println(b);
-        double[] weightsarr = {0.1,2,3,23,2};
-        Bot bot = new Bot(true, weightsarr);
+        double[] weightsarr = {1,1,1,1,1};
+        Bot bot = new Bot(false, weightsarr, b);
 //        System.out.println(bot.pipCount(b));
         System.out.println(b.toString());
 //        b.getValidMoves(b.getSpaces()[5]);
 //        bot.getAllValidMoves(b);
-        System.out.println("DICE");
-        System.out.println(bot.GetHighestSubSpace(b.getSpaces()[6], b, b));
-        bot.ExecuteNextMove(b, b);
+//        System.out.println(bot.GetHighestSubSpace(b.getSpaces()[6], b, b));
+        bot.GameLoop();
+        System.out.println(b.toString());
+
     }
 
-    public Bot(boolean profile, double[] weightsarr){
+    public Bot(boolean profile, double[] weightsarr, Board b){
         this.profile = profile;
         this.weightsarr = weightsarr;
+        this.B = b;
     }
 
-    public double EvaluationFunc(Board B, Board prevB){
-        return this.OtherPiecesSlain(B, prevB)*weightsarr[0] + this.pipCount(B)*weightsarr[1] + this.DoneScore(B)*weightsarr[2] + this.DoneBoardScore(B)*weightsarr[3] + this.piecesAlone(B)*weightsarr[4];
+    public double EvaluationFunc(){
+        return this.OtherPiecesSlain()*weightsarr[0] + this.pipCount()*weightsarr[1] + this.DoneScore()*weightsarr[2] + this.DoneBoardScore()*weightsarr[3] + this.piecesAlone()*weightsarr[4];
     }
 
 //    public void ExecuteHighestMove (ArrayList<Space> selected, double[] values, ArrayList<Space> highest_moves, Board B){
 //        int i = argmax(values);
 //        B.playerMove(selected.get(i).getId(), highest_moves.get(i).getId());
 //    }
-    public ArrayList<Space> GetHighestMoves(Board B, Board prevB, ArrayList<Space> selected_spaces){
+    public void PlayerLoop() {
+        while (this.B.getDie().getCurRoll().length > 0) {
+            this.ExecuteNextMove();
+            System.out.println(this.B.toString());
+        }
+    }
+    public void GameLoop(){
+        for(int i = 0; i<1000; i++){
+            this.B.getDie().printCurRoll();
+            this.PlayerLoop();
+            B.getGameLoop().process();
+
+            //this.B.getDie().getNextRoll();
+            this.profile =!profile;
+        }
+    }
+
+    public ArrayList<Space> GetHighestMoves(ArrayList<Space> selected_spaces){
         ArrayList<Space> moves = new ArrayList<Space>();
         for(Space selected : selected_spaces){
-            moves.add(GetHighestSubSpace(selected, B, prevB));
+            ArrayList<Space> submoves = this.B.getValidMoves(selected);
+            if(submoves.size()>0) {
+                moves.add(GetHighestSubSpace(selected, submoves));
+            }
+
         }
         return moves;
     }
-    public void ExecuteNextMove(Board B, Board prevB){
-        ArrayList<Space> all_selected = GetAllSelectedSpaces(B);
-        ArrayList<Space> all_highest_moves = GetHighestMoves(B, prevB, all_selected);
+    public void ExecuteNextMove(){
+        ArrayList<Space> all_selected = GetAllSelectedSpaces();
+        ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
         double[] value_moves = new double[all_selected.size()];
-        for(int i = 0; i<all_selected.size(); i++){
-            B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId());
-            value_moves[i] = EvaluationFunc(B,prevB);
-            B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId());
+        int pieceID =0;
+        if(all_highest_moves.size()>0) {
+            for (int i = 0; i < all_selected.size(); i++) {
+                if(all_selected.get(i).getPieces().size()>0) {
+                    pieceID = all_selected.get(i).getPieces().get(0).getId();
+
+                }
+                all_selected.get(i).getId();
+                all_highest_moves.get(i).getId();
+                this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
+                value_moves[i] = EvaluationFunc();
+                this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
+            }
+            int index = argmax(value_moves);
+            System.out.println("MOVES CHOSEN");
+            System.out.println(value_moves[index]);
+            System.out.println(all_selected.get(index).getId());
+            System.out.println(all_highest_moves.get(index).getId());
+            B.playerMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
         }
-        int index = argmax(value_moves);
-        System.out.println("MOVES CHOSEN");
-        System.out.println(value_moves[index]);
-        System.out.println(all_selected.get(index).getId());
-        System.out.println(all_highest_moves.get(index).getId());
-        B.playerMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
+        else{
+            for(Integer inter: this.B.getDie().getCurRoll()){
+                this.B.getDie().removeUsedRoll(inter);
+            }
+        }
     }
-    public ArrayList<Space> GetAllSelectedSpaces(Board B){
+    public ArrayList<Space> GetAllSelectedSpaces(){
         ArrayList returnSpaces = new ArrayList<Space>();
         if(profile) {
-            for (Space space : B.getSpaces()) {
+            if(this.B.getSpaces()[25].getSize() > 0){
+                returnSpaces.add(this.B.getSpaces()[25]);
+                return returnSpaces;
+            }
+            for (Space space : this.B.getSpaces()) {
                 if (space.getSize() != 0) {
                     if (space.getPieces().get(0).getId() == 1) {
-                        returnSpaces.add(space);
+                        if(this.B.getValidMoves(space).size()>0) {
+                            returnSpaces.add(space);
+                        }
                     }
                 }
             }
             return returnSpaces;
         } else
         {
-            for (Space space : B.getSpaces()) {
+            if(this.B.getSpaces()[0].getSize() > 0){
+                returnSpaces.add(this.B.getSpaces()[0]);
+                return returnSpaces;
+            }
+            for (Space space : this.B.getSpaces()) {
                 if (space.getSize() != 0) {
                     if (space.getPieces().get(0).getId() == 0) {
-                        returnSpaces.add(space);
+                        if(this.B.getValidMoves(space).size()>0) {
+                            returnSpaces.add(space);
+                        }
                     }
                 }
             }
             return returnSpaces;
         }
     }
-    public Space GetHighestSubSpace(Space selected, Board B, Board prevB){
-        ArrayList<Space> moves = B.getValidMoves(selected);
+    public Space GetHighestSubSpace(Space selected, ArrayList<Space> moves){
+//        ArrayList<Space> moves = this.B.getValidMoves(selected);
         double[] valuemoves = new double[moves.size()];
+        int pieceID = 0;
         for(int i = 0; i < moves.size(); i++){
-            B.playerMoveNoCheck(selected.getId(), moves.get(i).getId());
-            valuemoves[i] = EvaluationFunc(B,prevB);
-            B.playerMoveNoCheck(moves.get(i).getId(), selected.getId());
+            if(selected.getPieces().size()>0) {
+                pieceID = selected.getPieces().get(0).getId();
+            }
+            this.B.playerMoveNoCheck(selected.getId(), moves.get(i).getId(), pieceID);
+            valuemoves[i] = EvaluationFunc();
+            this.B.playerMoveNoCheck(moves.get(i).getId(), selected.getId(), pieceID);
         }
-        System.out.println(moves.get(argmax(valuemoves)).toString());
         return moves.get(argmax(valuemoves));
     }
 
     // Number of pieces enemy pieces slain
     // Positive
-    public double OtherPiecesSlain(Board B, Board prevB){
-        return numberOfEnemyPieces(prevB) - numberOfEnemyPieces(B);
-    }
-    // Count the number of enemy pieces
-    public double numberOfEnemyPieces(Board B){
-        if(this.profile) {
-            double numberPieces = 0;
-            for (int i = 0; i < 25; i++) {
-                for (Piece piece : B.getSpaces()[i].getPieces()) {
-                    if (piece.getId() == 0) {
-                        numberPieces++;
-                    }
-                }
-            }
-            return numberPieces;
-        }else{
-            double numberPieces = 0;
-            for (int i = 0; i < 25; i++) {
-                for (Piece piece : B.getSpaces()[i].getPieces()) {
-                    if (piece.getId() == 1) {
-                        numberPieces++;
-                    }
-                }
-            }
-            return numberPieces;
+    public double OtherPiecesSlain(){
+        for(Space space : this.B.getSpaces()){
+               if(space.getSize()==2 && (space.getPieces().get(0).getId() + space.getPieces().get(1).getId()) == 1 ){
+                   return 1;
+               }
         }
+        return 0;
     }
-
     // Calculate the total number of points that the bot must move his pieces to bring them home
     // Negative
-    public double pipCount(Board B){
+    public double pipCount(){
         if(this.profile) {
             double pip = 0;
-            for (int i = 1; i < 25; i++) {
-                for (Piece piece : B.getSpaces()[i].getPieces()) {
+            for (int i = 1; i <= 25; i++) {
+                for (Piece piece : this.B.getSpaces()[i].getPieces()) {
                     if (piece.getId() == 1) {
                         pip += i;
                     }
                 }
             }
-            if(B.getSpaces()[0].getSize() > 0 && B.getSpaces()[0].getPieces().get(0).getId() == 1){
-                pip += B.getSpaces()[0].getSize()*24;
+            if(this.B.getSpaces()[0].getSize() > 0 && this.B.getSpaces()[0].getPieces().get(0).getId() == 1){
+                pip += this.B.getSpaces()[0].getSize()*24;
             }
             return -pip;
         } else {
             double pip = 0;
             for (int i = 0; i < 25; i++) {
-                for (Piece piece : B.getSpaces()[i].getPieces()) {
+                for (Piece piece : this.B.getSpaces()[i].getPieces()) {
                     if (piece.getId() == 0) {
                         pip += 25 - i;
                     }
@@ -162,11 +199,11 @@ public class Bot {
     }
     // How many pieces are finished, assuming finished position is at 0.
     // Positive
-    public double DoneScore(Board B){
+    public double DoneScore(){
         if(this.profile) {
             double numberPieces = 0;
             for (int i = 0; i < 25; i++) {
-                for (Piece piece : B.getSpaces()[i].getPieces()) {
+                for (Piece piece : this.B.getSpaces()[i].getPieces()) {
                     if (piece.getId() == 1) {
                         numberPieces++;
                     }
@@ -176,7 +213,7 @@ public class Bot {
         } else {
             double numberPieces = 0;
             for (int i = 0; i < 25; i++) {
-                for (Piece piece : B.getSpaces()[i].getPieces()) {
+                for (Piece piece : this.B.getSpaces()[i].getPieces()) {
                     if (piece.getId() == 0) {
                         numberPieces++;
                     }
@@ -187,20 +224,20 @@ public class Bot {
     }
     // How many pieces are in the last board
     // Positive
-    public double DoneBoardScore(Board B){
+    public double DoneBoardScore(){
         if(this.profile) {
             double score = 0;
             for (int i = 1; i < 7; i++) {
-                if (B.getSpaces()[i].getSize() > 0 && B.getSpaces()[i].getPieces().get(0).getId() == 1) {
-                    score = +B.getSpaces()[i].getSize();
+                if (this.B.getSpaces()[i].getSize() > 0 && this.B.getSpaces()[i].getPieces().get(0).getId() == 1) {
+                    score =+ this.B.getSpaces()[i].getSize();
                 }
             }
             return score;
         } else {
             double score = 0;
             for (int i = 19; i < 25; i++) {
-                if (B.getSpaces()[i].getSize() > 0 && B.getSpaces()[i].getPieces().get(0).getId() == 0) {
-                    score = +B.getSpaces()[i].getSize();
+                if (this.B.getSpaces()[i].getSize() > 0 && this.B.getSpaces()[i].getPieces().get(0).getId() == 0) {
+                    score =+ this.B.getSpaces()[i].getSize();
                 }
             }
             return score;
@@ -208,11 +245,11 @@ public class Bot {
     }
     // How many pieces of your own board are alone
     // Negative
-    public double piecesAlone(Board B){
+    public double piecesAlone(){
         if(this.profile) {
             double alone = 0;
             for (int i = 0; i < 25; i++) {
-                if (B.getSpaces()[i].getSize() == 1 && B.getSpaces()[i].getPieces().get(0).getId() == 1) {
+                if (this.B.getSpaces()[i].getSize() == 1 && this.B.getSpaces()[i].getPieces().get(0).getId() == 1) {
                     alone++;
                 }
             }
@@ -220,7 +257,7 @@ public class Bot {
         } else {
             double alone = 0;
             for (int i = 0; i < 25; i++) {
-                if (B.getSpaces()[i].getSize() == 1 && B.getSpaces()[i].getPieces().get(0).getId() == 0) {
+                if (this.B.getSpaces()[i].getSize() == 1 && this.B.getSpaces()[i].getPieces().get(0).getId() == 0) {
                     alone++;
                 }
             }

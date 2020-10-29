@@ -25,6 +25,14 @@ public class Space {
         checkHome(p,to.getId());
         return true;
     }
+    public boolean moveBotPiece(Space to) {
+        Piece p = pieces.get(0);
+        System.out.println("PIECE BEING MOVED:"+p.getId());
+        pieces.remove(p);
+        to.getPieces().add(0,p);
+        checkHome(p,to.getId());
+        return true;
+    }
 
 
 
