@@ -1,11 +1,11 @@
 package AI;
 import World.*;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 
-public class Bot {
+public class BotA //extends Player
+{
 //    assume board is structured in list from 1-25
 //    standard start position
     //TODO Wait for nextValidMoves to be implemented
@@ -21,7 +21,7 @@ public class Bot {
         Board b= new Board();
 //        System.out.println(b);
         double[] weightsarr = {0.1,2,3,23,2};
-        Bot bot = new Bot(true, weightsarr);
+        BotA bot = new BotA(true, weightsarr);
 //        System.out.println(bot.pipCount(b));
         System.out.println(b.toString());
 //        b.getValidMoves(b.getSpaces()[5]);
@@ -31,10 +31,11 @@ public class Bot {
         bot.ExecuteNextMove(b, b);
     }
 
-    public Bot(boolean profile, double[] weightsarr){
+    public BotA(boolean profile, double[] weightsarr){
         this.profile = profile;
         this.weightsarr = weightsarr;
     }
+
 
     public double EvaluationFunc(Board B, Board prevB){
         return this.OtherPiecesSlain(B, prevB)*weightsarr[0] + this.pipCount(B)*weightsarr[1] + this.DoneScore(B)*weightsarr[2] + this.DoneBoardScore(B)*weightsarr[3] + this.piecesAlone(B)*weightsarr[4];
@@ -241,5 +242,14 @@ public class Bot {
             }
         return maxindex;
     }
-
+//
+//    @Override
+//    public void executeTurn() {
+//        //TODO:Implement what you need here
+//    }
+//
+//    @Override
+//    public String getName() {
+//        return "BotA";//change this later if you want(make it more descriptive etc.)
+//    }
 }

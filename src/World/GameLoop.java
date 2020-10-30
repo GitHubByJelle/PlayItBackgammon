@@ -44,8 +44,6 @@ public class GameLoop {
         System.out.print("Die: ");
         board.getDie().printCurRoll();
         checker();//finished moves per turn
-
-
         if (board.checkWinCondition()) {
             System.out.println("GAME OVER");
             if(frame!=null) {
@@ -69,6 +67,7 @@ public class GameLoop {
             }
 
         }
+        current.executeTurn();
 
     }
 

@@ -1,8 +1,6 @@
 package GUI;
 
 import Utils.Variables;
-import World.Player;
-import com.sun.tools.javac.Main;
 
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;

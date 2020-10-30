@@ -1,5 +1,8 @@
 package Utils;
 
+import AI.BotA;
+import World.Player;
+
 import java.awt.*;
 
 public final class Variables {
@@ -24,6 +27,13 @@ public final class Variables {
 
 
     //fornow its gonna be like this, later we can change it to store AI objects @ali
-    public static String[] PLAYERS= {"Human", "BotA", "BotB"};
+    public static final Player[] PLAYERS= {new Player.Human(-1)};
+    public static String[] GET_PLAYER_TYPES(){
+        String[] p= new String[PLAYERS.length];
+        for(int i=0;i<p.length;i++){
+            p[i]=PLAYERS[i].getName();
+        }
+        return p;
+    }
 
 }
