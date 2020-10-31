@@ -2,6 +2,7 @@ package World;
 
 
 
+import AI.BotA;
 import Utils.Variables;
 
 import javax.swing.*;
@@ -32,7 +33,7 @@ public class Board {
 
         //actuall board
 
-
+//
 //        addPieces(1, 2, 0);
 //        addPieces(6, 5, 1);
 //        addPieces(8, 3, 1);
@@ -47,35 +48,36 @@ public class Board {
 
    //     testboard A
 
-//       addPieces(1,3,1);
-//       addPieces(5,3,1);
-//       addPieces(4,3,1);
-//       addPieces(3,3,1);
-//       addPieces(2,3,1);
-//
-//       addPieces(24,3,0);
-//       addPieces(20,3,0);
-//       addPieces(21,3,0);
-//       addPieces(22,3,0);
-//       addPieces(23,3,0);
+       addPieces(1,3,1);
+       addPieces(5,3,1);
+       addPieces(4,3,1);
+       addPieces(3,3,1);
+       addPieces(2,3,1);
 
-        //     testboard B
-        addPieces(1,15,1);
-        addPieces(24,15,0);
+       addPieces(24,3,0);
+       addPieces(20,3,0);
+       addPieces(21,3,0);
+       addPieces(22,3,0);
+       addPieces(23,3,0);
+
+//        //     testboard B
+//        addPieces(1,15,1);
+//        addPieces(24,15,0);
 
 
         outOfPlay = new Space(26);
 
         //to correct for is home values of the pieces
+        forceHomeCheck();
+    }
+
+    public void forceHomeCheck(){
         for (int i = 0; i < spaces.length; i++) {
             spaces[i].setDominateId();
             for (int a = 0; a < spaces[i].getPieces().size(); a++) {
                 spaces[i].checkHome(spaces[i].getPieces().get(a));
             }
         }
-
-
-
     }
     public void createLoop(JFrame frame){
         gameLoop= new GameLoop(this, frame);
@@ -102,7 +104,7 @@ public class Board {
         for (int i = 1; i <= 12; i++) {
             res += String.format("%2d  %15s | %15s  %2d\n", i, spaces[i], spaces[25 - i], (25 - i));
         }
-
+        res+= "\n26 "+ outOfPlay;
         return res;
 
     }
@@ -306,6 +308,7 @@ public class Board {
             for (int x = 0; x < spaces[i].getPieces().size(); x++) {
                 cur = spaces[i].getPieces().get(x);
                 if (cur.getId() == pieceID && !cur.isHome) {
+                    System.out.println("ID"+pieceID+"Space"+spaces[i].getId()+"piece"+cur.getId()+"isHome"+cur.isHome+" "+(cur.getId() == pieceID));
                     return false;
                 }
             }
@@ -338,8 +341,10 @@ public class Board {
         int id = gameLoop.getCurrentPlayer().getId();
 
         ArrayList<Space> poss = getValidMoves(spaces[from]);
+        die.printCurRoll();
+        System.out.println(from+"APH"+allPiecesHome(gameLoop.getCurrentPlayer().getId())+" poss"+poss.contains(outOfPlay)+"\nPoss"+Arrays.toString(poss.toArray()));
         if(to==26) {
-            if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
+            if(allPiecesHome(spaces[from].getPieces().get(0).getId()) && poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
                 lastPlays(from,to);
                 gameLoop.getCurrentPlayer().pieceOut();
@@ -404,6 +409,14 @@ public class Board {
         if(two.equals("Human")){
             player2= new Player.Human(1);
         }
+        if(one.equals("BotA")){
+            player1= new BotA(0);
+            player1.setBoard(this);
+        }
+        if(two.equals("BotA")){
+            player2= new BotA(1);
+            player2.setBoard(this);
+        }
 
         if(player1==null ||player2==null) {
             for (int i = 1; i < Utils.Variables.GET_PLAYER_TYPES().length; i++) {
@@ -416,6 +429,7 @@ public class Board {
 
             }
         }
+        System.out.println(player1+"  "+player2);
     }
    public Player getPlayer1(){return player1;}
    public Player getPlayer2(){return player2;}
