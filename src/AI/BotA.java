@@ -7,7 +7,7 @@ import java.util.*;
 
 
 
-public class Bot {
+public class BotA {
 //    assume board is structured in list from 1-25
 //    standard start position
     //TODO Make gameloop for Bot to train/game in
@@ -26,7 +26,7 @@ public class Bot {
         b.createBotLoop();
 //        System.out.println(b);
         double[] weightsarr = {1,1,1,1,1};
-        Bot bot = new Bot(false, weightsarr, b);
+        BotA bot = new BotA(false, weightsarr, b);
 //        System.out.println(bot.pipCount(b));
         System.out.println(b.toString());
 //        b.getValidMoves(b.getSpaces()[5]);
@@ -37,7 +37,7 @@ public class Bot {
 
     }
 
-    public Bot(boolean profile, double[] weightsarr, Board b){
+    public BotA(boolean profile, double[] weightsarr, Board b){
         this.profile = profile;
         this.weightsarr = weightsarr;
         this.B = b;

@@ -129,6 +129,7 @@ public class Board {
 
             } else {
                 //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
+                System.out.println(allPiecesHome(selected.getPieces().get(0).getId()));
                 if (allPiecesHome(selected.getPieces().get(0).getId())) {
 
                     if (selected.getId()>6) {
