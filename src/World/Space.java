@@ -47,7 +47,7 @@ public class Space {
 
 
     public String toString(){
-        String res = "";
+        String res ="";
         for(int i=0;i<pieces.size();i++){
             res +=pieces.get(i);
         }
@@ -73,11 +73,15 @@ public class Space {
             //piece is white then home is
             if(index>18) {
                 a.isHome = true;
+            }else{
+                a.isHome = false;
             }
         }else{
             //piece is red
             if(index<7){
                 a.isHome=true;
+            }else{
+                a.isHome = false;
             }
         }
     }
@@ -88,11 +92,15 @@ public class Space {
             //piece is white then home is
             if(id>18) {
                 a.isHome = true;
+            }else{
+                a.isHome = false;
             }
         }else{
             //piece is red
             if(id<7){
                 a.isHome=true;
+            }else{
+                a.isHome = false;
             }
         }
     }
