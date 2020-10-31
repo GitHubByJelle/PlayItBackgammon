@@ -255,12 +255,15 @@ public class Board {
     }
     //Used for thinking in bot
     public void playerMoveNoCheck(int from, int to, int pieceID){
-        if(to==26){
+        if(to>=26){
+            System.out.println("Pineapple");
             spaces[from].getPieces().remove(0);
         }else if(from==26){
-            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-
+//            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+//            System.out.println(this.toString());
             spaces[to].getPieces().add(new Piece(pieceID));
+            System.out.println(this.toString());
+
         } else{
             spaces[from].moveBotPiece(spaces[to]);
         }

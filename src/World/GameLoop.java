@@ -113,7 +113,7 @@ public class GameLoop {
     public void checker() {
         //if the player used all their moves
         if (board.getDie().getCurRoll().length ==0) {
-            System.out.println("Player: " +current.getId() + " has finished his move");
+//            System.out.println("Player: " +current.getId() + " has finished his move");
             changeTurn();
            // int[] roll =board.getDie().getCurRoll();
 
@@ -128,7 +128,7 @@ public class GameLoop {
         }
         board.getDie().getNextRoll();
         rollCheck(board.getDie().getCurRoll());
-        System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(board.getDie().getCurRoll()));
+//        System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(board.getDie().getCurRoll()));
         repaintBV();
     }
 

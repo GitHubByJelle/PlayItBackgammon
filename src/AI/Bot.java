@@ -60,6 +60,7 @@ public class Bot {
     public void GameLoop(){
         for(int i = 0; i<1000; i++){
             this.B.getDie().printCurRoll();
+            System.out.println();
             this.PlayerLoop();
             B.getGameLoop().process();
 
@@ -70,10 +71,14 @@ public class Bot {
 
     public ArrayList<Space> GetHighestMoves(ArrayList<Space> selected_spaces){
         ArrayList<Space> moves = new ArrayList<Space>();
-        for(Space selected : selected_spaces){
-            ArrayList<Space> submoves = this.B.getValidMoves(selected);
+        System.out.println(selected_spaces.size());
+        for(int i = 0; i<selected_spaces.size(); i++){
+            ArrayList<Space> submoves = this.B.getValidMoves(selected_spaces.get(i));
+            System.out.println(submoves.size());
             if(submoves.size()>0) {
-                moves.add(GetHighestSubSpace(selected, submoves));
+                moves.add(GetHighestSubSpace(selected_spaces.get(i), submoves));
+            } else {
+                selected_spaces.remove(i);
             }
 
         }
@@ -90,8 +95,10 @@ public class Bot {
                     pieceID = all_selected.get(i).getPieces().get(0).getId();
 
                 }
-                all_selected.get(i).getId();
-                all_highest_moves.get(i).getId();
+//                System.out.println("Selected movesblablabl");
+//                System.out.println(all_selected.get(i).getId());
+//                System.out.println(all_highest_moves.get(i).getId());
+//                all_highest_moves.get(i).getId();
                 this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
                 value_moves[i] = EvaluationFunc();
                 this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
@@ -119,6 +126,8 @@ public class Bot {
             for (Space space : this.B.getSpaces()) {
                 if (space.getSize() != 0) {
                     if (space.getPieces().get(0).getId() == 1) {
+                        System.out.println(this.B.getValidMoves(space).size());
+                        System.out.println(space.getId());
                         if(this.B.getValidMoves(space).size()>0) {
                             returnSpaces.add(space);
                         }
@@ -135,6 +144,8 @@ public class Bot {
             for (Space space : this.B.getSpaces()) {
                 if (space.getSize() != 0) {
                     if (space.getPieces().get(0).getId() == 0) {
+                        System.out.println(this.B.getValidMoves(space).size());
+                        System.out.println(space.getId());
                         if(this.B.getValidMoves(space).size()>0) {
                             returnSpaces.add(space);
                         }
