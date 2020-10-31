@@ -4,7 +4,7 @@ import World.*;
 import java.util.*;
 
 
-public class BotA //extends Player
+public class BotA
 {
 //    assume board is structured in list from 1-25
 //    standard start position
@@ -242,14 +242,5 @@ public class BotA //extends Player
             }
         return maxindex;
     }
-//
-//    @Override
-//    public void executeTurn() {
-//        //TODO:Implement what you need here
-//    }
-//
-//    @Override
-//    public String getName() {
-//        return "BotA";//change this later if you want(make it more descriptive etc.)
-//    }
+
 }

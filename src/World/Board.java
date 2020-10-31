@@ -33,16 +33,16 @@ public class Board {
         //actuall board
 
 
-        addPieces(1, 2, 0);
-        addPieces(6, 5, 1);
-        addPieces(8, 3, 1);
-        addPieces(12, 5, 0);
-
-        addPieces(13, 5, 1);
-        addPieces(17, 3, 0);
-        addPieces(19, 5, 0);
-        addPieces(24, 2, 1);
-
+//        addPieces(1, 2, 0);
+//        addPieces(6, 5, 1);
+//        addPieces(8, 3, 1);
+//        addPieces(12, 5, 0);
+//
+//        addPieces(13, 5, 1);
+//        addPieces(17, 3, 0);
+//        addPieces(19, 5, 0);
+//        addPieces(24, 2, 1);
+//
 
 
    //     testboard A
@@ -59,7 +59,9 @@ public class Board {
 //       addPieces(22,3,0);
 //       addPieces(23,3,0);
 
-
+        //     testboard B
+        addPieces(1,15,1);
+        addPieces(24,15,0);
 
 
         outOfPlay = new Space(26);
@@ -194,7 +196,7 @@ public class Board {
     }
 
 
-    public ArrayList<Space> getValidMoves(Space selected, int[]roll) {
+    private ArrayList<Space> getValidMoves(Space selected, int[]roll) {
         ArrayList<Space> res = new ArrayList<Space>();
         Space target;
         int bigger=0;
@@ -333,7 +335,6 @@ public class Board {
             if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
                 lastPlays(from,to);
-
                 gameLoop.getCurrentPlayer().pieceOut();
                 return true;
             }else{
