@@ -32,7 +32,7 @@ public class BotA {
 //        b.getValidMoves(b.getSpaces()[5]);
 //        bot.getAllValidMoves(b);
 //        System.out.println(bot.GetHighestSubSpace(b.getSpaces()[6], b, b));
-        bot.GameLoop();
+        System.out.println(bot.SingleGameLoop());
         System.out.println(b.toString());
 
     }
@@ -53,12 +53,14 @@ public class BotA {
 //    }
     public void PlayerLoop() {
         while (this.B.getDie().getCurRoll().length > 0) {
+            this.B.checkAllPiecesHome();
             this.ExecuteNextMove();
             System.out.println(this.B.toString());
         }
     }
-    public void GameLoop(){
-        for(int i = 0; i<1000; i++){
+    //returns 0 if W lost, 1 if W won
+    public int SingleGameLoop(){
+        while(!this.B.checkWinCondition()){
             this.B.getDie().printCurRoll();
             System.out.println();
             this.PlayerLoop();
@@ -66,7 +68,12 @@ public class BotA {
 
             //this.B.getDie().getNextRoll();
             this.profile =!profile;
+
         }
+        if(this.B.getGameLoop().getCurrentPlayer().getId() == 0){
+            return 0;
+        }
+        return 1;
     }
 
     public ArrayList<Space> GetHighestMoves(ArrayList<Space> selected_spaces){
@@ -77,7 +84,7 @@ public class BotA {
             System.out.println(submoves.size());
             if(submoves.size()>0) {
                 moves.add(GetHighestSubSpace(selected_spaces.get(i), submoves));
-            } else {
+            }else {
                 selected_spaces.remove(i);
             }
 
@@ -108,7 +115,7 @@ public class BotA {
             System.out.println(value_moves[index]);
             System.out.println(all_selected.get(index).getId());
             System.out.println(all_highest_moves.get(index).getId());
-            B.playerMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
+            B.BotMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
         }
         else{
             for(Integer inter: this.B.getDie().getCurRoll()){
