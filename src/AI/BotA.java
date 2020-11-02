@@ -7,7 +7,6 @@ import java.util.*;
 
 
 
-
 public class BotA {
 
 //    assume board is structured in list from 1-25
@@ -20,6 +19,7 @@ public class BotA {
     //False is white and True is red
     public boolean profile;
     public double[] weightsarr;
+    public double[] enemyweightsarr;
     public Board B;
 
     public static void main(String[] args) {
@@ -27,22 +27,39 @@ public class BotA {
         b.setPlayers("Human", "Human");
         b.createBotLoop();
 //        System.out.println(b);
-        double[] weightsarr = {1,2,1,4,23490};
-        BotA bot = new BotA(false, weightsarr, b);
-//        System.out.println(bot.pipCount(b));
-        System.out.println(b.toString());
-//        b.getValidMoves(b.getSpaces()[5]);
-//        bot.getAllValidMoves(b);
-//        System.out.println(bot.GetHighestSubSpace(b.getSpaces()[6], b, b));
-        System.out.println(bot.SingleGameLoop());
-        System.out.println(b.toString());
+        Random r = new Random();
+//        double[] weightsarr = {r.nextDouble(),r.nextDouble(),r.nextDouble(),r.nextDouble(),r.nextDouble()};
+        double[] weightsarr = {0,0,0,0,0};
+        double[] diffweightsarr = {-1,-1,-1,-1,-1};
 
+        BotA bot = new BotA(false, weightsarr, b, diffweightsarr);
+
+//        System.out.println(bot.pipCount(b));
+//        System.out.println(b.toString());
+        Board bro;
+        int count = 0;
+        for(int i = 0; i<1000; i++){
+//            System.out.println(i);
+            count = count + bot.SingleGameLoop();
+            b = new Board();
+            b.setPlayers("Human", "Human");
+            b.createBotLoop();
+            bot = new BotA(false, weightsarr, b,diffweightsarr);
+//            bot.setRandomWeights();
+        }
+        System.out.println(count);
     }
 
     public BotA(boolean profile, double[] weightsarr, Board b){
         this.profile = profile;
         this.weightsarr = weightsarr;
         this.B = b;
+    }
+    public BotA(boolean profile, double[] weightsarr, Board b, double[] enemyweightsarr){
+        this.profile = profile;
+        this.weightsarr = weightsarr;
+        this.B = b;
+        this.enemyweightsarr = enemyweightsarr;
     }
 
     public double EvaluationFunc(){
@@ -57,25 +74,37 @@ public class BotA {
         while (this.B.getDie().getCurRoll().length > 0) {
             this.B.checkAllPiecesHome();
             this.ExecuteNextMove();
-            //System.out.println(this.B.toString());
+//            System.out.println(this.B.toString());
+        }
+    }
+    public void TwoDeepLoop(){
+        while (this.B.getDie().getCurRoll().length > 0) {
+            this.B.checkAllPiecesHome();
+            this.ExecuteDeeperMove();
+//            System.out.println(this.B.toString());
         }
     }
     //returns 0 if W lost, 1 if W won
     public int SingleGameLoop(){
         while(!this.B.checkWinCondition()){
-            this.B.getDie().printCurRoll();
-            System.out.println();
-            this.PlayerLoop();
-            B.getGameLoop().process();
+//            this.B.getDie().printCurRoll();
+//            System.out.println();
+            if(profile){
+                this.TwoDeepLoop();
+            }else{
+                this.PlayerLoop();
 
+            }
+            B.getGameLoop().process();
             //this.B.getDie().getNextRoll();
             this.profile =!profile;
+            this.switchToEnemyArr();
 
         }
         if(this.B.getGameLoop().getCurrentPlayer().getId() == 0){
-            return 0;
+            return 1;
         }
-        return 1;
+        return 0;
     }
 
     public ArrayList<Space> GetHighestMoves(ArrayList<Space> selected_spaces){
@@ -83,16 +112,93 @@ public class BotA {
 //        System.out.println(selected_spaces.size());
         for(int i = 0; i<selected_spaces.size(); i++){
             ArrayList<Space> submoves = this.B.getValidMoves(selected_spaces.get(i));
-//            System.out.println(submoves.size());
+
             if(submoves.size()>0) {
                 moves.add(GetHighestSubSpace(selected_spaces.get(i), submoves));
             }else {
                 selected_spaces.remove(i);
+                i=i-1;
             }
 
         }
+//        if(!(moves.size()==selected_spaces.size())){
+//            System.out.println(moves.size());
+//            System.out.println(selected_spaces.size());
+//        }
         return moves;
     }
+    public void ExecuteDeeperMove(){
+        ArrayList<Space> all_selected = GetAllSelectedSpaces();
+        ArrayList<Space> all_selected_2d;
+
+        ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
+        ArrayList<Space> all_highest_moves_2d;
+
+        double[] value_moves = new double[all_selected.size()];
+        double[] value_moves_2d;
+        int pieceID =0;
+        double average = 0;
+        double[] maxarr = new double[all_highest_moves.size()];
+        if(all_highest_moves.size()>0) {
+            for (int i = 0; i < all_selected.size(); i++) {
+                if(all_selected.get(i).getPieces().size()>0) {
+                    pieceID = all_selected.get(i).getPieces().get(0).getId();
+
+                }
+//                System.out.println("Selected movesblablabl");
+//                System.out.println(all_selected.get(i).getId());
+//                System.out.println(all_highest_moves.get(i).getId());
+//                all_highest_moves.get(i).getId();
+                this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
+//                value_moves[i] = EvaluationFunc();
+
+                all_selected_2d = GetAllSelectedSpaces();
+                all_highest_moves_2d = GetHighestMoves(all_selected_2d);
+                value_moves_2d = new double[all_selected_2d.size()];
+                this.profile = !profile;
+                this.B.getGameLoop().SwitchPlayer();
+                if(all_highest_moves_2d.size()>0) {
+                    for (int j = 0; j < all_selected_2d.size(); j++) {
+                        if(all_selected_2d.get(j).getPieces().size()>0) {
+                            pieceID = all_selected_2d.get(j).getPieces().get(0).getId();
+
+                        }
+//                        System.out.println(all_selected_2d.get(j).getId());
+//                        System.out.println(all_selected_2d.size());
+//                        System.out.println(all_highest_moves_2d.size());
+//                        System.out.println(all_highest_moves_2d.get(j).getId());
+                        this.B.playerMoveNoCheck(all_selected_2d.get(j).getId(), all_highest_moves_2d.get(j).getId(), pieceID);
+//                        System.out.println(this.profile);
+                        value_moves_2d[j] = EvaluationFunc();
+                        this.B.playerMoveNoCheck(all_highest_moves_2d.get(j).getId(), all_selected_2d.get(j).getId(), pieceID);
+                    }
+//                    System.out.println("HERE LOSER 2");
+//                    System.out.println(Arrays.toString(value_moves_2d));
+                    maxarr[i] = max(value_moves_2d);
+                }
+                else{
+                    maxarr[i] = 0;
+                }
+                this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
+                this.profile = !profile;
+                this.B.getGameLoop().SwitchPlayer();
+//                System.out.println("HERE LOSER");
+//                System.out.println(Arrays.toString(maxarr));
+            }
+            int index = argmin(maxarr);
+//            System.out.println("MOVES CHOSEN");
+//            System.out.println(maxarr[index]);
+//            System.out.println(all_selected.get(index).getId());
+//            System.out.println(all_highest_moves.get(index).getId());
+            B.BotMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
+        }
+        else{
+            for(Integer inter: this.B.getDie().getCurRoll()){
+                this.B.getDie().removeUsedRoll(inter);
+            }
+        }
+    }
+
     public void ExecuteNextMove(){
         ArrayList<Space> all_selected = GetAllSelectedSpaces();
         ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
@@ -297,6 +403,72 @@ public class BotA {
                 max = weights[i];
             }
         return maxindex;
+    }
+    static double max(double[] weights) {
+        if (weights == null)
+            return -1;
+        if (weights.length == 1)
+            return 0;
+        double max = weights[0];
+        int maxindex = 0;
+        for (int i = 1; i < weights.length; i++)
+            if (weights[i] > max) {
+                maxindex = i;
+                max = weights[i];
+            }
+        return max;
+    }
+    static int argmin(double[] weights) {
+        if (weights == null)
+            return -1;
+        if (weights.length == 1)
+            return 0;
+        double min = weights[0];
+        int minindex = 0;
+        for (int i = 1; i < weights.length; i++)
+            if (weights[i] < min) {
+                minindex = i;
+                min = weights[i];
+            }
+        return minindex;
+    }
+    static double avg(double[] weights){
+        double x = 0;
+        for(int i = 0; i<weights.length; i++){
+            x = x + weights[i];
+        }
+        return x/weights.length;
+    }
+    static int[] arrayCopy(int[] arr){
+        int[] returnarray= new int[arr.length];
+        for(int i = 0; i<arr.length; i++){
+            returnarray[i] = arr[i];
+        }
+        return returnarray;
+    }
+    public void setRandomWeights(){
+        Random r = new Random();
+         for(int i = 0; i<this.weightsarr.length; i++){
+             this.weightsarr[i] = r.nextDouble();
+         }
+    }
+    public void setDifferentWeights(double[] arr){
+        for(int i = 0; i<arr.length; i++){
+            this.weightsarr[i] = arr[i];
+        }
+    }
+    public void setDifferentEnemyWeights(double[] arr){
+        for(int i = 0; i<arr.length; i++){
+            this.enemyweightsarr[i] = arr[i];
+        }
+    }
+    public void switchToEnemyArr(){
+        double[] saveweights = new double[this.weightsarr.length];
+        for(int i = 0; i<saveweights.length; i++){
+            saveweights[i] = this.weightsarr[i];
+        }
+        this.setDifferentWeights(this.enemyweightsarr);
+        this.setDifferentEnemyWeights(saveweights);
     }
 
 }

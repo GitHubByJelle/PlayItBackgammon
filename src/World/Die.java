@@ -35,6 +35,9 @@ public class Die {
         }
         return DieList.get(pointer);
     }
+    public int[] seeNextRoll(){
+        return DieList.get(pointer+1);
+    }
 
     public int[] getCurRoll(){
         return DieList.get(pointer);

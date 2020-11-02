@@ -41,11 +41,11 @@ public class GameLoop {
 
 
     public void process() {
-        System.out.print("Die: ");
-        board.getDie().printCurRoll();
+//        System.out.print("Die: ");
+//        board.getDie().printCurRoll();
         checker();//finished moves per turn
         if (board.checkWinCondition()) {
-            System.out.println("GAME OVER");
+//            System.out.println("GAME OVER");
             if(frame!=null) {
                 bv.setVisible(false);
                 bv.removeStatPanel();
@@ -60,9 +60,9 @@ public class GameLoop {
                 frame.add(over);
             }else{
                 if (board.getPlayer1().getPiecesOutOfPlay() == 15) {
-                    System.out.println(board.getPlayer1().toString());
+//                    System.out.println(board.getPlayer1().toString());
                 } else {
-                    System.out.println(board.getPlayer2().toString());
+//                    System.out.println(board.getPlayer2().toString());
                 }
             }
 
@@ -126,8 +126,15 @@ public class GameLoop {
         rollCheck(board.getDie().getCurRoll());
 //        System.out.println("Player: " + current.getId() + " please make move of: " + Arrays.toString(board.getDie().getCurRoll()));
         repaintBV();
-        System.out.println("NEW TURN__________________________________________");
-        board.getDie().printCurRoll();
+//        System.out.println("NEW TURN__________________________________________");
+//        board.getDie().printCurRoll();
+    }
+    public void SwitchPlayer(){
+        if (getCurrentPlayer().getId() == 0) {
+            setCurrentPlayer(board.getPlayer2());
+        } else {
+            setCurrentPlayer(board.getPlayer1());
+        }
     }
 
     private void rollCheck(int[] roll) {
