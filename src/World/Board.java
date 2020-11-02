@@ -304,10 +304,6 @@ public class Board {
                 cur = spaces[i].getPieces().get(x);
 
                 if (cur.getId() == pieceID && !cur.isHome) {
-                    System.out.println("CHECKHERE");
-                    System.out.println(cur.isHome);
-                    System.out.println(pieceID);
-                    System.out.println(cur.getId());
                     return false;
                 }
             }
@@ -340,10 +336,6 @@ public class Board {
 
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         if(to==26) {
-            System.out.println("ALLPEICESHOME TST");
-            System.out.println(allPiecesHome(gameLoop.getCurrentPlayer().getId()));
-            System.out.println(gameLoop.getCurrentPlayer().getId());
-            System.out.println(gameLoop.getCurrentPlayer().toString());
 
             if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
@@ -369,30 +361,7 @@ public class Board {
             return false;
         }
     }
-    //Probably temporary but thanks to this function we can work on Evolution until the unknown bug is fixed
-    public void BotMove(int from, int to){
-        int id = gameLoop.getCurrentPlayer().getId();
 
-        ArrayList<Space> poss = getValidMoves(spaces[from]);
-        if(to==26) {
-                moveOutOfPlay(from);
-                lastPlays(from,to);
-
-                gameLoop.getCurrentPlayer().pieceOut();
-
-
-        }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
-            if(from==0 ||from==25){
-                gameLoop.getCurrentPlayer().revivePiece();
-            }
-            die.removeUsedRoll(to - from);
-            spaces[from].movePiece(spaces[to]);
-            gameLoop.checkEaten(to);
-
-        } else {
-            System.out.println("Move invalid");
-        }
-    }
     //Used for thinking in bot
     public void playerMoveNoCheck(int from, int to, int pieceID){
         if(to>=26){
@@ -503,6 +472,30 @@ public class Board {
                     //System.out.println(piece.toString());
                 }
             }
+        }
+    }
+    //Probably temporary but thanks to this function we can work on Evolution until the unknown bug is fixed
+    public void BotMove(int from, int to){
+        int id = gameLoop.getCurrentPlayer().getId();
+
+        ArrayList<Space> poss = getValidMoves(spaces[from]);
+        if(to==26) {
+            moveOutOfPlay(from);
+            lastPlays(from,to);
+
+            gameLoop.getCurrentPlayer().pieceOut();
+
+
+        }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
+            if(from==0 ||from==25){
+                gameLoop.getCurrentPlayer().revivePiece();
+            }
+            die.removeUsedRoll(to - from);
+            spaces[from].movePiece(spaces[to]);
+            gameLoop.checkEaten(to);
+
+        } else {
+            System.out.println("Move invalid");
         }
     }
     public GameLoop getGameLoop(){

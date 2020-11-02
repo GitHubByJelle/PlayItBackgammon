@@ -27,7 +27,7 @@ public class BotA {
         b.setPlayers("Human", "Human");
         b.createBotLoop();
 //        System.out.println(b);
-        double[] weightsarr = {1,1,1,1,1};
+        double[] weightsarr = {1,2,1,4,23490};
         BotA bot = new BotA(false, weightsarr, b);
 //        System.out.println(bot.pipCount(b));
         System.out.println(b.toString());
@@ -57,7 +57,7 @@ public class BotA {
         while (this.B.getDie().getCurRoll().length > 0) {
             this.B.checkAllPiecesHome();
             this.ExecuteNextMove();
-            System.out.println(this.B.toString());
+            //System.out.println(this.B.toString());
         }
     }
     //returns 0 if W lost, 1 if W won
@@ -80,10 +80,10 @@ public class BotA {
 
     public ArrayList<Space> GetHighestMoves(ArrayList<Space> selected_spaces){
         ArrayList<Space> moves = new ArrayList<Space>();
-        System.out.println(selected_spaces.size());
+//        System.out.println(selected_spaces.size());
         for(int i = 0; i<selected_spaces.size(); i++){
             ArrayList<Space> submoves = this.B.getValidMoves(selected_spaces.get(i));
-            System.out.println(submoves.size());
+//            System.out.println(submoves.size());
             if(submoves.size()>0) {
                 moves.add(GetHighestSubSpace(selected_spaces.get(i), submoves));
             }else {
@@ -113,10 +113,10 @@ public class BotA {
                 this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
             }
             int index = argmax(value_moves);
-            System.out.println("MOVES CHOSEN");
-            System.out.println(value_moves[index]);
-            System.out.println(all_selected.get(index).getId());
-            System.out.println(all_highest_moves.get(index).getId());
+//            System.out.println("MOVES CHOSEN");
+//            System.out.println(value_moves[index]);
+//            System.out.println(all_selected.get(index).getId());
+//            System.out.println(all_highest_moves.get(index).getId());
             B.BotMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
         }
         else{
@@ -135,8 +135,8 @@ public class BotA {
             for (Space space : this.B.getSpaces()) {
                 if (space.getSize() != 0) {
                     if (space.getPieces().get(0).getId() == 1) {
-                        System.out.println(this.B.getValidMoves(space).size());
-                        System.out.println(space.getId());
+//                        System.out.println(this.B.getValidMoves(space).size());
+//                        System.out.println(space.getId());
                         if(this.B.getValidMoves(space).size()>0) {
                             returnSpaces.add(space);
                         }
@@ -153,8 +153,8 @@ public class BotA {
             for (Space space : this.B.getSpaces()) {
                 if (space.getSize() != 0) {
                     if (space.getPieces().get(0).getId() == 0) {
-                        System.out.println(this.B.getValidMoves(space).size());
-                        System.out.println(space.getId());
+//                        System.out.println(this.B.getValidMoves(space).size());
+//                        System.out.println(space.getId());
                         if(this.B.getValidMoves(space).size()>0) {
                             returnSpaces.add(space);
                         }
