@@ -7,7 +7,9 @@ import java.util.*;
 
 
 
+
 public class BotA {
+
 //    assume board is structured in list from 1-25
 //    standard start position
     //TODO Make gameloop for Bot to train/game in
