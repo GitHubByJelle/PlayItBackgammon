@@ -2,12 +2,12 @@ package World;
 
 
 
+import AI.BotA;
+import AI.SimpleBot;
 import Utils.Variables;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 public class Board {
     private Space[] spaces;
@@ -32,7 +32,6 @@ public class Board {
 
         //actuall board
 
-
         addPieces(1, 2, 0);
         addPieces(6, 5, 1);
         addPieces(8, 3, 1);
@@ -44,8 +43,8 @@ public class Board {
         addPieces(24, 2, 1);
 
 
-
    //     testboard A
+//
 
 //       addPieces(1,3,1);
 //       addPieces(5,3,1);
@@ -58,23 +57,21 @@ public class Board {
 //       addPieces(21,3,0);
 //       addPieces(22,3,0);
 //       addPieces(23,3,0);
-
-
-
-
         outOfPlay = new Space(26);
 
         //to correct for is home values of the pieces
+       forceHomeCheck();
+    }
+
+    public void forceHomeCheck(){
         for (int i = 0; i < spaces.length; i++) {
-            spaces[i].setDominateId();
             for (int a = 0; a < spaces[i].getPieces().size(); a++) {
                 spaces[i].checkHome(spaces[i].getPieces().get(a));
             }
         }
-
-
-
     }
+
+
     public void createLoop(JFrame frame){
         gameLoop= new GameLoop(this, frame);
     }
@@ -124,7 +121,6 @@ public class Board {
                 target = spaces[selected.getId() + roll[i]];
                 if (validityCheck(selected, target)) {
                     res.add(spaces[selected.getId() + roll[i]]);
-                  //  res.addAll(getDoubleMoves(spaces[selected.getId() + roll[i]], roll[i], roll));
                 }
 
             } else {
@@ -196,106 +192,6 @@ public class Board {
     }
 
 
-    public ArrayList<Space> getValidMoves(Space selected, int[]roll) {
-        ArrayList<Space> res = new ArrayList<Space>();
-        Space target;
-        int bigger=0;
-        int smaller=0;
-
-        for (int i = 0; i < roll.length; i++) {
-            if(selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0){//check for bounds
-                target = spaces[selected.getId() + roll[i]];
-                if (validityCheck(selected, target)) {
-                    res.add(spaces[selected.getId() + roll[i]]);
-                    res.addAll(getDoubleMoves(spaces[selected.getId() + roll[i]], roll[i], roll));
-                }
-
-            } else {
-                //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
-                if (allPiecesHome(selected.getPieces().get(0).getId())) {
-
-                    if (selected.getId()>6) {
-                        for (int j = 24; j > 18; j--) {
-                            if (spaces[j].getPieces().size() > 0) {
-                                bigger = j;
-                            }
-                        }
-
-                        if (roll.length > 1) {
-                            if ((25 - selected.getId()) == roll[0] || (25 - selected.getId()) == roll[1])
-                                res.add(outOfPlay);
-
-                            else if (selected.getId()== bigger && roll[0] > (25 - selected.getId()) || selected.getId()== bigger && roll[1] > (25 - selected.getId())) {
-                                res.add(outOfPlay);
-                            }
-                            else if (selected.getId() > bigger && roll[0] > (25 - selected.getId()) && selected.getId() > bigger && roll[1] > (25 - selected.getId())) {
-                                res.remove(outOfPlay);
-                            }
-                        } else {
-                            if ((25 - selected.getId()) == roll[0])
-                                res.add(outOfPlay);
-
-                            else if (selected.getId() == bigger && roll[0] > (25 - selected.getId())) {
-                                res.add(outOfPlay);
-                            } else if (selected.getId() > bigger && roll[0] > (25 - selected.getId())) {
-                                res.remove(outOfPlay);
-                            }
-                        }
-                    } else {
-                        for (int j = 1; j < 6; j++) {
-                            if (spaces[j].getPieces().size() > 0) {
-                                bigger = j;
-                            }
-                        }
-                        if (roll.length > 1) {
-                            if (selected.getId() == Math.abs(roll[0]) || selected.getId() == Math.abs(roll[1]))
-                                res.add(outOfPlay);
-
-                            else if (selected.getId() == bigger && Math.abs(roll[0]) > selected.getId() || selected.getId() == bigger && Math.abs(roll[1]) > selected.getId() ) {
-                                res.add(outOfPlay);
-                            }
-                            else if (selected.getId() < bigger && Math.abs(roll[0]) > selected.getId() && Math.abs(roll[1]) > selected.getId()) {
-                                res.remove(outOfPlay);
-                            }
-                        } else {
-                            if (selected.getId() == Math.abs(roll[0]))
-                                res.add(outOfPlay);
-
-                            else if (selected.getId() == bigger && Math.abs(roll[0]) > selected.getId()) {
-                                res.add(outOfPlay);
-                            }
-                            else if (selected.getId() < bigger && Math.abs(roll[0]) > selected.getId()) {
-                                res.remove(outOfPlay);
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-        return res;
-
-    }
-
-    private ArrayList<Space> getDoubleMoves(Space validMove,int connectedRoll, int [] roll) {
-        ArrayList<Space> doubleMoves=new ArrayList<>();
-        int []updatedRoll= new int[roll.length-1];
-        boolean connectedRollFound=false;
-        int index=0;
-        //remove connected roll and get new roll[]
-        for(int i=0;i<roll.length;i++){
-            if(!connectedRollFound&&roll[i]==connectedRoll){
-                connectedRollFound=true;
-            }else{
-                updatedRoll[index]=roll[i];
-                ++index;
-            }
-        }
-        //get validMoved given new roll[]
-        doubleMoves.addAll(getValidMoves(validMove, updatedRoll));
-        return doubleMoves;
-    }
-
 
     private boolean allPiecesHome(int pieceID) {
         Piece cur;
@@ -342,6 +238,7 @@ public class Board {
                 lastPlays(from,to);
 
                 gameLoop.getCurrentPlayer().pieceOut();
+                gameLoop.repaintBV();
                 return true;
             }else{
                 System.out.println("Move invalid: All pieces must be home");
@@ -350,16 +247,19 @@ public class Board {
         }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
             if(from==0 ||from==25){
                 gameLoop.getCurrentPlayer().revivePiece();
+                gameLoop.repaintBV();
             }
             die.removeUsedRoll(to - from);
             spaces[from].movePiece(spaces[to]);
             gameLoop.checkEaten(to);
+            gameLoop.repaintBV();
             return true;
 
         } else {
             System.out.println("Move invalid");
             return false;
         }
+
     }
 
     //Used for thinking in bot
@@ -379,13 +279,6 @@ public class Board {
     }
 
 
-    private boolean checkIfCanDominate(int pieceId, Space to) {
-        int size = to.getSize();
-        if (to.getDominantId() != pieceId) {
-            return size <= 1;
-        }
-        return true;
-    }
 
 
     public boolean checkWinCondition() {
@@ -394,28 +287,52 @@ public class Board {
 
 
     public  void setPlayers(String one, String two){
-        if(one.equals("Human")){
+
+        if(one.equals(Variables.HUMAN)){
             player1= new Player.Human(0);
         }
-        if(two.equals("Human")){
+        if(two.equals(Variables.HUMAN)){
             player2= new Player.Human(1);
         }
-
-        if(player1==null ||player2==null) {
-            for (int i = 1; i < Utils.Variables.GET_PLAYER_TYPES().length; i++) {
-                if (one.equals(Utils.Variables.GET_PLAYER_TYPES()[i])) {
-                    player1 = new Player.Bot(0, Variables.PLAYERS[i]);
-                }
-                if (one.equals(Utils.Variables.GET_PLAYER_TYPES()[i])) {
-                    player2 = new Player.Bot(1,Variables.PLAYERS[i]);
-                }
-
-            }
+        if(one.equals(Variables.BOTA)){
+            player1= new BotA(0);
+            player1.setBoard(this);
         }
+        if(two.equals(Variables.BOTA)){
+            player2= new BotA(1);
+            player2.setBoard(this);
+        }
+        if(one.equals(Variables.SIMPLEBOT)){
+            player1= new SimpleBot(0);
+            player1.setBoard(this);
+        }
+        if(two.equals(Variables.SIMPLEBOT)){
+            player2= new SimpleBot(1);
+            player2.setBoard(this);
+        }
+
+//        if(player1==null ||player2==null) {
+//            for (int i = 1; i < Utils.Variables.GET_PLAYER_TYPES().length; i++) {
+//                if (one.equals(Utils.Variables.GET_PLAYER_TYPES()[i])) {
+//                    player1 = new Player.Bot(0, Variables.PLAYERS[i]);
+//                }
+//                if (one.equals(Utils.Variables.GET_PLAYER_TYPES()[i])) {
+//                    player2 = new Player.Bot(1,Variables.PLAYERS[i]);
+//                }
+//
+//            }
+//        }
+    }
+
+
+    public void setPlayers(Player one, Player two){
+        player1=one;
+        player1.setBoard(this);
+        player2=two;
+        player2.setBoard(this);
     }
    public Player getPlayer1(){return player1;}
    public Player getPlayer2(){return player2;}
-    public GameLoop getLoop(){return gameLoop;}
 
 
     public void moveToEatenSpace(int k){
@@ -463,6 +380,7 @@ public class Board {
                     die.removeUsedRollOutOfPlay();
             }
     }
+
     public void checkAllPiecesHome(){
         for(Space space : this.getSpaces()){
             for(Piece piece: space.getPieces()){

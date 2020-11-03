@@ -44,7 +44,7 @@ public class GameLoop {
         System.out.print("Die: ");
         board.getDie().printCurRoll();
         checker();//finished moves per turn
-        if (board.checkWinCondition()) {
+        if (gameOver()) {
             System.out.println("GAME OVER");
             if(frame!=null) {
                 bv.setVisible(false);
@@ -60,15 +60,21 @@ public class GameLoop {
                 frame.add(over);
             }else{
                 if (board.getPlayer1().getPiecesOutOfPlay() == 15) {
-                    System.out.println(board.getPlayer1().toString());
+                    System.out.println("WINNER "+board.getPlayer1().toString());
                 } else {
-                    System.out.println(board.getPlayer2().toString());
+                    System.out.println("WINNER "+board.getPlayer2().toString());
                 }
             }
 
         }
-        current.executeTurn();
+
     }
+
+    public boolean gameOver(){
+        return board.checkWinCondition();
+    }
+
+
 
     public Player getCurrentPlayer(){
         return current;
@@ -112,11 +118,13 @@ public class GameLoop {
         //if the player used all their moves
         if (board.getDie().getCurRoll().length ==0) {
             changeTurn();
-
+        }else{
+            current.executeTurn();
         }
     }
 
     public void changeTurn(){
+
         if (getCurrentPlayer().getId() == 0) {
             setCurrentPlayer(board.getPlayer2());
         } else {
@@ -151,6 +159,14 @@ public class GameLoop {
 
     public int getSlainSpace() {
         if(current==board.getPlayer1()){
+            return 0;
+        }else{
+            return 25;
+        }
+    }
+
+    public int getSlainSpace(int id) {
+        if(id==0){
             return 0;
         }else{
             return 25;

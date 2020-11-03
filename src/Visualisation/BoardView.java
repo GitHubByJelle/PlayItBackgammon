@@ -6,6 +6,7 @@ import Utils.Variables;
 import World.Board;
 import World.GameLoop;
 import World.Space;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -30,7 +31,7 @@ public class BoardView extends JPanel  {
         height = frameHeight/3;
         space = 15;
         board=b;
-        gameLoop= b.getLoop();
+        gameLoop= b.getGameLoop();
         setBackground(Variables.GAME_BACKGROUND_COLOR);
         StatusPanel s=new StatusPanel(10);
         stat = new JPanel(new BorderLayout());
@@ -40,8 +41,8 @@ public class BoardView extends JPanel  {
             System.out.println("REQUEST TURN PASS");
         });
         stat.add(passTurn, BorderLayout.NORTH);
-        stat.add(s,BorderLayout.CENTER);
-
+        stat.add(s,BorderLayout.EAST);
+        this.repaint();
 
         gameLoop.setBoardView(this);
 
@@ -68,8 +69,8 @@ public class BoardView extends JPanel  {
         StatusPanel.updateWhitePiecesInPlay(board.getPlayer1().getPiecesInPlay());
         StatusPanel.updateWhitePiecesOutOfPlay(board.getPlayer1().getPiecesOutOfPlay());
 
-        StatusPanel.updateCurrentPlayer(""+gameLoop.getCurrentPlayer().toString());
-        gameLoop.process();
+        StatusPanel.updateCurrentPlayer("" + gameLoop.getCurrentPlayer().toString());
+
 
         Ellipse2D dummyPiece;
         Polygon dummySpace;
@@ -77,7 +78,7 @@ public class BoardView extends JPanel  {
         for (int i = 0; i < board.getSpaces().length; i++) {
             //SPACE PLACEMENTS
             int currentStartX = startX;
-            int currentStartY=startY;
+            int currentStartY = startY;
             Space p = board.getSpaces()[i];
 
             if (i % 2 == 0) {
@@ -88,101 +89,98 @@ public class BoardView extends JPanel  {
 
             if (i < 13) {
                 if (i == 0) {
-                    dummySpace = new Polygon(new int[]{startX, startX+width*8, startX+width*8,startX },
-                            new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2},
+                    dummySpace = new Polygon(new int[]{startX, startX + width * 8, startX + width * 8, startX},
+                            new int[]{startY + height * 2 + space * 2, startY + height * 2 + space * 2, startY + height * 2 + height / 2 + space * 2, startY + height * 2 + height / 2 + space * 2},
                             4);
-                   // System.out.println("boardview start x= "+ startX +" start y= "+startY);
+                    // System.out.println("boardview start x= "+ startX +" start y= "+startY);
                     //System.out.println("boardview space= "+space+" height= "+height+" width= "+width);
                 } else {
-                    currentStartX = startX +  (13-i) * (width + space) -space;
-                    currentStartY = startY+ height+ space;
-                    dummySpace = new Polygon(new int[]{currentStartX, currentStartX - width/2, currentStartX - width }, new int[]{currentStartY+height, currentStartY, currentStartY + height}, 3);
+                    currentStartX = startX + (13 - i) * (width + space) - space;
+                    currentStartY = startY + height + space;
+                    dummySpace = new Polygon(new int[]{currentStartX, currentStartX - width / 2, currentStartX - width}, new int[]{currentStartY + height, currentStartY, currentStartY + height}, 3);
                 }
 
-            }else {
+            } else {
                 if (i == 25) {
-                    dummySpace = new Polygon(new int[]{startX+width*8+ space,space+startX+width*16,space+startX+width*16,startX+width*8+space },
-                            new int[]{startY+height*2 +space*2,startY+height*2+ space*2 ,startY+height*2+height/2 +space*2,startY+height*2+height/2+space*2},
+                    dummySpace = new Polygon(new int[]{startX + width * 8 + space, space + startX + width * 16, space + startX + width * 16, startX + width * 8 + space},
+                            new int[]{startY + height * 2 + space * 2, startY + height * 2 + space * 2, startY + height * 2 + height / 2 + space * 2, startY + height * 2 + height / 2 + space * 2},
                             4);
-                }
-                 else {
+                } else {
                     currentStartX = startX + (i % 13) * (width + space);
                     currentStartY = startY;
                     dummySpace = new Polygon(new int[]{currentStartX, currentStartX + width, currentStartX + width / 2}, new int[]{currentStartY, currentStartY, currentStartY + height}, 3);
 
                 }
             }
-            visSpaces[i]=dummySpace;
+            visSpaces[i] = dummySpace;
             g.fillPolygon(dummySpace);
 
             //PIECE PLACEMENTS
             if (p.getSize() > 0) {
 
-                if (i<13){
+                if (i < 13) {
 
                     int currentXPiece = currentStartX - (width);
                     for (int k = 1; k <= p.getSize(); k++) {
-                        if(k<7){
-                            g.setColor(p.getPieces().get(k-1).getColor());
-                            if(i==0){
-                                dummyPiece= new Ellipse2D.Double(startX+k*width, startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
-                            }else {
+                        if (k < 7) {
+                            g.setColor(p.getPieces().get(k - 1).getColor());
+                            if (i == 0) {
+                                dummyPiece = new Ellipse2D.Double(startX + k * width, startY + (height * 2) + 30 + (p.getPieces().get(k - 1).getId() * 30) + space, width, 30);
+                            } else {
                                 dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + height - k * 30, width, 30);
-                            }  
-                        
-                            visPieces.add(dummyPiece);
-                            g.fill(dummyPiece);
-                        }
-                         else{
-                             if(k==7){
-                                g.setColor(Color.GRAY);
-                                String pLeft = "x" + p.getSize();
-                                FontMetrics fm = g.getFontMetrics();
-                                double textWidth = fm.getStringBounds(pLeft, g).getWidth();
-                                 int xPos;
-                                 int yPos;
-                                 if(i==0){
-                                     xPos = (int) ((startX + k * width) - textWidth / 2 - width / 2);
-                                     yPos = (int) ((startY + (height * 2) + 30 + (p.getPieces().get(k - 1).getId() * 30) + space) + fm.getMaxAscent() / 2 + space);
-                                 }
-                                else{
-                                     xPos = (int) (currentXPiece - textWidth / 2 + width / 2);
-                                     yPos = (int) ((currentStartY + height - k * 30) + fm.getMaxAscent() / 2 + space * 3);
-                                 }
-                                 g.drawString(pLeft, xPos, yPos);
-                             }
-                         }
-                    }
-                }else{
-                    int currentXPiece = currentStartX;
-                    //startX+width*8+ space,space+startX+width*16
-                    for (int k = 1; k <=p.getSize(); k++) {
-                        if(k<7){
-                            g.setColor(p.getPieces().get(k-1).getColor());                        
-                            if(i==25){
-                                dummyPiece= new Ellipse2D.Double(startX+8*width+space+k*width,
-                                        startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space, width, 30);
-                            }else {
-                                dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + (k-1) * 30, width, 30);
                             }
+
                             visPieces.add(dummyPiece);
                             g.fill(dummyPiece);
-                        } else{
-                            if(k==7){    
+                        } else {
+                            if (k == 7) {
                                 g.setColor(Color.GRAY);
                                 String pLeft = "x" + p.getSize();
                                 FontMetrics fm = g.getFontMetrics();
                                 double textWidth = fm.getStringBounds(pLeft, g).getWidth();
                                 int xPos;
                                 int yPos;
-                                if(i==25){
-                                    xPos = (int) ((startX+8*width+space+k*width)- width/2 - space + space/4);
-                                    yPos = (int) (startY+(height*2)+30+(p.getPieces().get(k-1).getId()*30)+space*2 + space/4);
-                                }else{
-                                    xPos = (int) ((currentXPiece - textWidth / 2)+ width/2);
-                                    yPos = (int) (((currentStartY + (k - 1) * 30)- (space /2)));
+                                if (i == 0) {
+                                    xPos = (int) ((startX + k * width) - textWidth / 2 - width / 2);
+                                    yPos = (int) ((startY + (height * 2) + 30 + (p.getPieces().get(k - 1).getId() * 30) + space) + fm.getMaxAscent() / 2 + space);
+                                } else {
+                                    xPos = (int) (currentXPiece - textWidth / 2 + width / 2);
+                                    yPos = (int) ((currentStartY + height - k * 30) + fm.getMaxAscent() / 2 + space * 3);
                                 }
-                                g.drawString(pLeft,xPos, yPos);
+                                g.drawString(pLeft, xPos, yPos);
+                            }
+                        }
+                    }
+                } else {
+                    int currentXPiece = currentStartX;
+                    //startX+width*8+ space,space+startX+width*16
+                    for (int k = 1; k <= p.getSize(); k++) {
+                        if (k < 7) {
+                            g.setColor(p.getPieces().get(k - 1).getColor());
+                            if (i == 25) {
+                                dummyPiece = new Ellipse2D.Double(startX + 8 * width + space + k * width,
+                                        startY + (height * 2) + 30 + (p.getPieces().get(k - 1).getId() * 30) + space, width, 30);
+                            } else {
+                                dummyPiece = new Ellipse2D.Double(currentXPiece, currentStartY + (k - 1) * 30, width, 30);
+                            }
+                            visPieces.add(dummyPiece);
+                            g.fill(dummyPiece);
+                        } else {
+                            if (k == 7) {
+                                g.setColor(Color.GRAY);
+                                String pLeft = "x" + p.getSize();
+                                FontMetrics fm = g.getFontMetrics();
+                                double textWidth = fm.getStringBounds(pLeft, g).getWidth();
+                                int xPos;
+                                int yPos;
+                                if (i == 25) {
+                                    xPos = (int) ((startX + 8 * width + space + k * width) - width / 2 - space + space / 4);
+                                    yPos = (int) (startY + (height * 2) + 30 + (p.getPieces().get(k - 1).getId() * 30) + space * 2 + space / 4);
+                                } else {
+                                    xPos = (int) ((currentXPiece - textWidth / 2) + width / 2);
+                                    yPos = (int) (((currentStartY + (k - 1) * 30) - (space / 2)));
+                                }
+                                g.drawString(pLeft, xPos, yPos);
                             }
 
                         }
@@ -193,21 +191,23 @@ public class BoardView extends JPanel  {
 
         g.setColor(Variables.OUT_OF_PLAY_SPACE_COLOR);
         //out of Play space
-        dummySpace= new Polygon(new int[]{startX+width*16,startX+width*17,startX+width*17,startX+width*16 },
-                new int[]{startY,startY ,startY+height*2 +space ,startY+height*2+space},
+        dummySpace = new Polygon(new int[]{startX + width * 16, startX + width * 17, startX + width * 17, startX + width * 16},
+                new int[]{startY, startY, startY + height * 2 + space, startY + height * 2 + space},
                 4);
-        visSpaces[26]=dummySpace;
+        visSpaces[26] = dummySpace;
         g.fillPolygon(dummySpace);
 
 
-        if(this.getMouseListeners().length==0){
-            this.addMouseListener(new InputHandler(visSpaces,visPieces, this));
-
+        if (this.getMouseListeners().length == 0) {
+            this.addMouseListener(new InputHandler(visSpaces, visPieces, this));
         }
         // draw the line in the middle        
-        int lineX = (startX +  (13-7) * (width + space) -space) + space/2;
-        g.fillRect(lineX, startY, 5, (startY+height*2+space)-startY);
+        int lineX = (startX + (13 - 7) * (width + space) - space) + space / 2;
+        g.fillRect(lineX, startY, 5, (startY + height * 2 + space) - startY);
         g.setColor(Color.BLUE);
+
+        gameLoop.process();
+
 
     }
 

@@ -5,6 +5,7 @@ import World.Board;
 import World.Space;
 
 
+import javax.swing.*;
 import java.awt.*;
 
 import java.awt.event.MouseEvent;
@@ -26,14 +27,14 @@ public class InputHandler implements MouseListener {
         visSpaces = s;
         board = bv.board;
         this.bv = bv;
-        currentPlayer = board.getLoop().getCurrentPlayer();
+        currentPlayer = board.getGameLoop().getCurrentPlayer();
 
     }
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
        // ensure the current piece and player match
-        boolean z = getValidPiece(mouseEvent, board.getLoop().getCurrentPlayer());
+        boolean z = getValidPiece(mouseEvent, board.getGameLoop().getCurrentPlayer());
         if (!z && !selected) {
             System.out.println("INCORRECT PIECE, cannot be moved");
             return;
@@ -43,9 +44,9 @@ public class InputHandler implements MouseListener {
         if (!selected) {
             //if nothing is selected
             //check the empty space first
-            if(board.getLoop().eatenSpaceHasPieces() &&(k!=0 ||k!=25) ){
+            if(board.getGameLoop().eatenSpaceHasPieces() &&(k!=0 ||k!=25) ){
                 selected=true;
-                spaceRecord= board.getLoop().getSlainSpace();
+                spaceRecord= board.getGameLoop().getSlainSpace();
                 highlightValidSpaces(spaceRecord);
                 System.out.println("Space selected "+k);
                 System.out.println("Player must move pieces out of slain space");
@@ -67,7 +68,6 @@ public class InputHandler implements MouseListener {
             board.playerMove(spaceRecord, k);
             selected = false;
             bv.repaint();
-
         }
 
     }
