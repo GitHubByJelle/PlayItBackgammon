@@ -4,11 +4,10 @@ import World.*;
 import javax.swing.*;
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.Timer;
 
 
-
-
-public class BotA {
+public class BotA extends Player.Bot{
 
 //    assume board is structured in list from 1-25
 //    standard start position
@@ -18,32 +17,37 @@ public class BotA {
     //TODO Optimize selection out of ValidMoves using GA
 
     //False is white and True is red
-    public boolean profile;
-    public double[] weightsarr;
-    public Board B;
+    public boolean profile;//only if u want both players to b bot
+    public double[] weightsarr={1,1,1,1,1};
+  //  public Board B;
+    public BotA(int id) {
+        super(id);
+    }
 
     public static void main(String[] args) {
         Board b= new Board();
-        b.setPlayers("Human", "Human");
+        b.setPlayers("BotA", "BotA");
         b.createBotLoop();
-//        System.out.println(b);
-        double[] weightsarr = {1,2,1,4,23490};
-        BotA bot = new BotA(false, weightsarr, b);
+
+    //    double[] weightsarr = {1,1,1,1,1};
+      //  BotA bot = new BotA(false, weightsarr, b);
 //        System.out.println(bot.pipCount(b));
         System.out.println(b.toString());
 //        b.getValidMoves(b.getSpaces()[5]);
 //        bot.getAllValidMoves(b);
 //        System.out.println(bot.GetHighestSubSpace(b.getSpaces()[6], b, b));
-        System.out.println(bot.SingleGameLoop());
+//       bot.GameLoop();
+
         System.out.println(b.toString());
 
     }
 
-    public BotA(boolean profile, double[] weightsarr, Board b){
-        this.profile = profile;
-        this.weightsarr = weightsarr;
-        this.B = b;
-    }
+//
+//    public BotA(boolean profile, double[] weightsarr, Board b){
+//        this.profile = profile;
+//        this.weightsarr = weightsarr;
+//        this.B = b;
+//    }
 
     public double EvaluationFunc(){
         return this.OtherPiecesSlain()*weightsarr[0] + this.pipCount()*weightsarr[1] + this.DoneScore()*weightsarr[2] + this.DoneBoardScore()*weightsarr[3] + this.piecesAlone()*weightsarr[4];
@@ -60,6 +64,7 @@ public class BotA {
             //System.out.println(this.B.toString());
         }
     }
+
     //returns 0 if W lost, 1 if W won
     public int SingleGameLoop(){
         while(!this.B.checkWinCondition()){
@@ -102,7 +107,6 @@ public class BotA {
             for (int i = 0; i < all_selected.size(); i++) {
                 if(all_selected.get(i).getPieces().size()>0) {
                     pieceID = all_selected.get(i).getPieces().get(0).getId();
-
                 }
 //                System.out.println("Selected movesblablabl");
 //                System.out.println(all_selected.get(i).getId());
@@ -113,11 +117,13 @@ public class BotA {
                 this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
             }
             int index = argmax(value_moves);
-//            System.out.println("MOVES CHOSEN");
-//            System.out.println(value_moves[index]);
-//            System.out.println(all_selected.get(index).getId());
-//            System.out.println(all_highest_moves.get(index).getId());
-            B.BotMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
+            System.out.println("MOVES CHOSEN");
+            System.out.println(value_moves[index]);
+            System.out.println(all_selected.get(index).getId());
+            System.out.println(all_highest_moves.get(index).getId());
+            B.forceHomeCheck();
+            B.playerMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
+
         }
         else{
             for(Integer inter: this.B.getDie().getCurRoll()){
@@ -125,9 +131,10 @@ public class BotA {
             }
         }
     }
+
     public ArrayList<Space> GetAllSelectedSpaces(){
         ArrayList returnSpaces = new ArrayList<Space>();
-        if(profile) {
+        if(id==1) {
             if(this.B.getSpaces()[25].getSize() > 0){
                 returnSpaces.add(this.B.getSpaces()[25]);
                 return returnSpaces;
@@ -135,8 +142,9 @@ public class BotA {
             for (Space space : this.B.getSpaces()) {
                 if (space.getSize() != 0) {
                     if (space.getPieces().get(0).getId() == 1) {
-//                        System.out.println(this.B.getValidMoves(space).size());
-//                        System.out.println(space.getId());
+
+                        System.out.println(Arrays.toString(this.B.getValidMoves(space).toArray()));
+                        System.out.println(space.getId());
                         if(this.B.getValidMoves(space).size()>0) {
                             returnSpaces.add(space);
                         }
@@ -192,7 +200,7 @@ public class BotA {
     // Calculate the total number of points that the bot must move his pieces to bring them home
     // Negative
     public double pipCount(){
-        if(this.profile) {
+        if(id==1) {
             double pip = 0;
             for (int i = 1; i <= 25; i++) {
                 for (Piece piece : this.B.getSpaces()[i].getPieces()) {
@@ -220,7 +228,7 @@ public class BotA {
     // How many pieces are finished, assuming finished position is at 0.
     // Positive
     public double DoneScore(){
-        if(this.profile) {
+        if(id==1) {
             double numberPieces = 0;
             for (int i = 0; i < 25; i++) {
                 for (Piece piece : this.B.getSpaces()[i].getPieces()) {
@@ -245,7 +253,7 @@ public class BotA {
     // How many pieces are in the last board
     // Positive
     public double DoneBoardScore(){
-        if(this.profile) {
+        if(id==1) {
             double score = 0;
             for (int i = 1; i < 7; i++) {
                 if (this.B.getSpaces()[i].getSize() > 0 && this.B.getSpaces()[i].getPieces().get(0).getId() == 1) {
@@ -266,7 +274,7 @@ public class BotA {
     // How many pieces of your own board are alone
     // Negative
     public double piecesAlone(){
-        if(this.profile) {
+        if(id==1) {
             double alone = 0;
             for (int i = 0; i < 25; i++) {
                 if (this.B.getSpaces()[i].getSize() == 1 && this.B.getSpaces()[i].getPieces().get(0).getId() == 1) {
@@ -284,6 +292,8 @@ public class BotA {
             return -alone;
         }
     }
+
+
     static int argmax(double[] weights) {
         if (weights == null)
             return -1;
@@ -298,5 +308,18 @@ public class BotA {
             }
         return maxindex;
     }
+
+    @Override
+    public void executeTurn()  {
+        ExecuteNextMove();
+        B.getGameLoop().repaintBV();
+        pauseBot();
+    }
+
+    @Override
+    public String getName() {
+        return "BotA";
+    }
+
 
 }

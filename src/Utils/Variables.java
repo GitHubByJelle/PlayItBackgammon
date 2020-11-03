@@ -25,15 +25,11 @@ public final class Variables {
     public static final Color GAME_BACKGROUND_COLOR = new Color(213, 165, 117);
 
 
-
+    public static final String HUMAN = "Human";
+    public static final String BOTA = "BotA";
+    public static final String SIMPLEBOT="SimpleBot";
     //fornow its gonna be like this, later we can change it to store AI objects @ali
-    public static final Player[] PLAYERS= {new Player.Human(-1)};
-    public static String[] GET_PLAYER_TYPES(){
-        String[] p= new String[PLAYERS.length];
-        for(int i=0;i<p.length;i++){
-            p[i]=PLAYERS[i].getName();
-        }
-        return p;
-    }
+    public static final String[] PLAYERS= {HUMAN, BOTA, SIMPLEBOT};
+
 
 }
