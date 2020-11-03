@@ -102,7 +102,6 @@ public class Die {
     }
 
     public void setDieTo(ArrayList<int[]> i) {
-        DieList.clear();
         DieList=i;
     }
 }
