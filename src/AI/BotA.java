@@ -89,7 +89,6 @@ public class BotA extends Player.Bot{
             for (int i = 0; i < all_selected.size(); i++) {
                 if(all_selected.get(i).getPieces().size()>0) {
                     pieceID = all_selected.get(i).getPieces().get(0).getId();
-
                 }
                 this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
                 all_selected_2d = GetAllSelectedSpaces();
@@ -100,7 +99,6 @@ public class BotA extends Player.Bot{
                     for (int j = 0; j < all_selected_2d.size(); j++) {
                         if(all_selected_2d.get(j).getPieces().size()>0) {
                             pieceID = all_selected_2d.get(j).getPieces().get(0).getId();
-
                         }
                         this.B.playerMoveNoCheck(all_selected_2d.get(j).getId(), all_highest_moves_2d.get(j).getId(), pieceID);
                         value_moves_2d[j] = EvaluationFunc();
@@ -115,7 +113,8 @@ public class BotA extends Player.Bot{
                 this.B.getGameLoop().SwitchPlayer();
             }
             int index = argmin(maxarr);
-            B.BotMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
+            B.forceHomeCheck();
+            B.playerMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
             System.out.println(this.getId());
         }
         else{

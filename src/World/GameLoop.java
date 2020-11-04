@@ -131,7 +131,6 @@ public class GameLoop {
     }
 
     public void changeTurn(){
-
         if (getCurrentPlayer().getId() == 0) {
             setCurrentPlayer(board.getPlayer2());
         } else {

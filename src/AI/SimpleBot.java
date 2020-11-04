@@ -30,17 +30,21 @@ public class SimpleBot extends Player.Bot{
     private void turnChoice(){
         ArrayList<Space> possFrom = getPossibleFrom();
         ArrayList<Space[]> possMoves= getPossibleMoves(possFrom);
+        //[FROM,TO] for all moves in possFrom
         int index=0;
         if(possMoves.size()==0)
             requestPassTurn();
-        else
-            while(!B.playerMove(possMoves.get(index)[0].getId(),possMoves.get(index)[1].getId())){
-                if(index>possMoves.size()-1){
-                    requestPassTurn();
-                }
+        else {
+            while (!B.playerMove(possMoves.get(index)[0].getId(), possMoves.get(index)[1].getId())) {
                 ++index;
+                if (index > possMoves.size() - 1) {
+                    requestPassTurn();
+                    return ;
+                }
+
             }
-        printSelectedMove(possMoves.get(index)[0].getId(),possMoves.get(index)[1].getId());
+        }
+       // printSelectedMove(possMoves.get(index)[0].getId(), possMoves.get(index)[1].getId());
     }
 
 
