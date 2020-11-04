@@ -36,7 +36,6 @@ public class BotA {
 
 //        System.out.println(bot.pipCount(b));
 //        System.out.println(b.toString());
-        Board bro;
         int count = 0;
         for(int i = 0; i<1000; i++){
 //            System.out.println(i);
