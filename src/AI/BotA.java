@@ -11,10 +11,9 @@ public class BotA extends Player.Bot{
 
 //    assume board is structured in list from 1-25
 //    standard start position
-    //TODO Make gameloop for Bot to train/game in
-    //TODO wait for Double moves
-    //TODO Use profiles in bot to make player 1 think 1 move ahead and player 2 2 or 3 moves ahead. Using winning as evolution for bot
-    //TODO Optimize selection out of ValidMoves using GA
+    //TODO Move Look Ahead Fix
+    //TODO GA
+
 
     //0 is white and 1 is red
     public double[] weightsarr={1,1,1,1,1};
@@ -83,6 +82,8 @@ public class BotA extends Player.Bot{
         double[] value_moves_2d;
         int pieceID =0;
         double average = 0;
+        int[] copydie = this.B.getDie().getCurRoll();
+
         double[] maxarr = new double[all_highest_moves.size()];
 
         if(all_highest_moves.size()>0) {
@@ -95,7 +96,8 @@ public class BotA extends Player.Bot{
                 all_selected_2d = GetAllSelectedSpaces();
                 all_highest_moves_2d = GetHighestMoves(all_selected_2d);
                 value_moves_2d = new double[all_selected_2d.size()];
-                this.B.getGameLoop().SwitchPlayer();
+//                this.B.getGameLoop().SwitchPlayer();
+
                 if(all_highest_moves_2d.size()>0) {
                     for (int j = 0; j < all_selected_2d.size(); j++) {
                         if(all_selected_2d.get(j).getPieces().size()>0) {
@@ -114,9 +116,8 @@ public class BotA extends Player.Bot{
                 this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
                 this.B.getGameLoop().SwitchPlayer();
             }
-            int index = argmin(maxarr);
+            int index = argmax(maxarr);
             B.BotMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
-            System.out.println(this.getId());
         }
         else{
             for(Integer inter: this.B.getDie().getCurRoll()){
@@ -396,7 +397,7 @@ public class BotA extends Player.Bot{
     public void executeTurn()  {
         this.B.checkAllPiecesHome();
         if(this.getId() == 1){
-            this.ExecuteDeeperMove();
+            this.ExecuteNextMove();
         }
         else{
             this.ExecuteNextMove();
