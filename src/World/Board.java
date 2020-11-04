@@ -3,6 +3,7 @@ package World;
 
 
 import AI.BotA;
+import AI.PrimeBlitzingBot;
 import AI.SimpleBot;
 import Utils.Variables;
 
@@ -308,6 +309,14 @@ public class Board {
         }
         if(two.equals(Variables.SIMPLEBOT)){
             player2= new SimpleBot(1);
+            player2.setBoard(this);
+        }
+        if(one.equals(Variables.BP)){
+            player1= new PrimeBlitzingBot(0);
+            player1.setBoard(this);
+        }
+        if(two.equals(Variables.BP)){
+            player2= new PrimeBlitzingBot(1);
             player2.setBoard(this);
         }
 
