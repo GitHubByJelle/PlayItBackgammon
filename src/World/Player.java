@@ -82,20 +82,12 @@ public abstract class Player {
 
     public static class Bot extends Player{
         //things common to all bots
-        private Player bot;
         public Board B;
-        public boolean pausing =true;
-        public Bot(int id, Player k) {
-            super(id);
-            this.bot=k;
-        }
-
+        public boolean pausing =false;
         public Bot(int id){
             super(id);
         }
-        public void setBot(Player k){
-            bot=k;
-        }
+
         @Override
         public void executeTurn()  {
            // bot.executeTurn();
@@ -126,7 +118,7 @@ public abstract class Player {
 
         @Override
         public String getName() {
-            return bot.getName();
+            return "";
         }
 
 
