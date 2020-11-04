@@ -20,6 +20,11 @@ public abstract class Player {
     public int getPiecesInPlay(){
         return piecesInPlay;
     }
+    public void resetPlayer(){
+        piecesInPlay=15;
+        piecesOutOfPlay=0;
+        piecesSlain=0;
+    }
 
     public int getPiecesOutOfPlay(){
         return piecesOutOfPlay;
