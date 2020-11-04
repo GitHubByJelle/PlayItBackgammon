@@ -103,4 +103,8 @@ public class Die {
         removeUsedRoll(max);
 
     }
+
+    public void setDieTo(ArrayList<int[]> i) {
+        DieList=i;
+    }
 }
