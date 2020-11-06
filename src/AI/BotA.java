@@ -115,7 +115,7 @@ public class BotA extends Player.Bot{
             int index = argmin(maxarr);
             B.forceHomeCheck();
             B.playerMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
-            System.out.println(this.getId());
+            //System.out.println(this.getId());
         }
         else{
             for(Integer inter: this.B.getDie().getCurRoll()){
@@ -123,6 +123,122 @@ public class BotA extends Player.Bot{
             }
         }
     }
+
+    public void ExecuteDeeperMove2(){
+        // Making the first move of Layer 1
+        int pieceID = 0;
+        ArrayList<int[]> MovesMade = new ArrayList<>();
+        ArrayList<Space> all_selected = GetAllSelectedSpaces(); // All the spaces that can make a valid move
+        ArrayList<Board> boardsLayerOneF = new ArrayList<>();
+        for (int i = 0; i < all_selected.size(); i++){
+            ArrayList<Space> valid_moves = this.B.getValidMoves(all_selected.get(i));
+            for (int j = 0; j < valid_moves.size(); j++) {
+//                System.out.print(space.getId());
+//                System.out.print(" -> ");
+//                System.out.print(move.getId());
+//                System.out.println();
+                int[] move = {all_selected.get(i).getId(),valid_moves.get(j).getId()};
+                if (!MovesMade.contains(move)){
+                    MovesMade.add(move);
+                    if(all_selected.get(i).getPieces().size()>0) {
+                        pieceID = all_selected.get(i).getPieces().get(0).getId();
+                    }
+                    this.B.playerMoveNoCheck(move[0], move[1], pieceID);
+                    boardsLayerOneF.add(this.B.clone()); // TODO TRY TO COPY
+                    boardsLayerOneF.get(boardsLayerOneF.size()-1).getDie().removeUsedRoll(move[1]-move[0]);
+                    this.B.playerMoveNoCheck(move[1], move[0], pieceID);
+                }
+            }
+        }
+
+        // Make second move of layer one
+        ArrayList<Board> boardsLayerOneS = new ArrayList<>();
+        for (Board board : boardsLayerOneF){
+            pieceID = 0;
+            MovesMade.clear();
+            all_selected = GetAllSelectedSpaces(board); // All the spaces that can make a valid move
+            for (int i = 0; i < all_selected.size(); i++){
+                ArrayList<Space> valid_moves = board.getValidMoves(all_selected.get(i));
+                for (int j = 0; j < valid_moves.size(); j++) {
+//                System.out.print(space.getId());
+//                System.out.print(" -> ");
+//                System.out.print(move.getId());
+//                System.out.println();
+                    int[] move = {all_selected.get(i).getId(),valid_moves.get(j).getId()};
+                    if (!MovesMade.contains(move)){
+                        MovesMade.add(move);
+                        if(all_selected.get(i).getPieces().size()>0) {
+                            pieceID = all_selected.get(i).getPieces().get(0).getId();
+                        }
+                        board.playerMoveNoCheck(move[0], move[1], pieceID);
+                        boardsLayerOneS.add(board.clone()); // TODO TRY TO COPY ?????
+                        boardsLayerOneS.get(boardsLayerOneS.size()-1).getDie().removeUsedRoll(move[1]-move[0]);
+                        board.playerMoveNoCheck(move[1], move[0], pieceID);
+                    }
+                }
+            }
+        }
+
+        // For layer 2, to the exact same for every board in boardsLayerOneS as we did to this.B.
+        // This will give a lot of boards. Determine the best possible board for the bot.
+    }
+
+    public void ExecuteDeeperMove3(){
+        ArrayList<Board> boardsLayerOne = GetAllPossibleBoards(this.B);
+
+        ArrayList<Board> boardsLayerTwo = new ArrayList<>();
+        for (Board board: boardsLayerOne){
+            board.getGameLoop().SwitchPlayer();
+            for (Board layertwoboard : GetAllPossibleBoards(board)){
+                boardsLayerTwo.add(layertwoboard);
+            }
+        }
+
+        // Get best board for player. Minimax? -> And execute best move.
+    }
+
+    public ArrayList<Board> GetAllPossibleBoards(Board board){
+        ArrayList<Board> boards = new ArrayList<>();
+        if (board.getDie().getCurRoll().length == 2){
+            ArrayList<Board> singlemoveboards = GetAllPossibleBoards(board);
+            for (Board singlemoveboard : singlemoveboards){
+                //boards.add(GetAllPossibleBoards(singlemoveboard)); // TODO ???? // Lines below a solution?
+                for (Board doublemoveboard : GetAllPossibleBoards(singlemoveboard)){
+                    boards.add(doublemoveboard);
+                }
+            }
+        }
+        else if (board.getDie().getCurRoll().length == 1){
+            int pieceID = 0;
+            ArrayList<int[]> MovesMade = new ArrayList<>();
+            ArrayList<Space> all_selected = GetAllSelectedSpaces(board); // All the spaces that can make a valid move
+            for (int i = 0; i < all_selected.size(); i++){
+                ArrayList<Space> valid_moves = board.getValidMoves(all_selected.get(i));
+                for (int j = 0; j < valid_moves.size(); j++) {
+//                System.out.print(space.getId());
+//                System.out.print(" -> ");
+//                System.out.print(move.getId());
+//                System.out.println();
+                    int[] move = {all_selected.get(i).getId(),valid_moves.get(j).getId()};
+                    if (!MovesMade.contains(move)){
+                        MovesMade.add(move);
+                        if(all_selected.get(i).getPieces().size()>0) {
+                            pieceID = all_selected.get(i).getPieces().get(0).getId();
+                        }
+                        board.playerMoveNoCheck(move[0], move[1], pieceID);
+                        boards.add(board.clone()); // TODO TRY TO COPY ?????
+                        boards.get(boards.size()-1).getDie().removeUsedRoll(move[1]-move[0]);
+                        board.playerMoveNoCheck(move[1], move[0], pieceID);
+                    }
+                }
+            }
+            return boards;
+        }
+        else {
+            return boards;
+        }
+    }
+
     public void ExecuteNextMove(){
         ArrayList<Space> all_selected = GetAllSelectedSpaces();
         ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
@@ -146,6 +262,42 @@ public class BotA extends Player.Bot{
             for(Integer inter: this.B.getDie().getCurRoll()){
                 this.B.getDie().removeUsedRoll(inter);
             }
+        }
+    }
+
+    public ArrayList<Space> GetAllSelectedSpaces(Board board){
+        ArrayList returnSpaces = new ArrayList<Space>();
+        if(board.getGameLoop().getCurrentPlayer().getId() == 1) {
+            if(board.getSpaces()[25].getSize() > 0){
+                returnSpaces.add(board.getSpaces()[25]);
+                return returnSpaces;
+            }
+            for (Space space : board.getSpaces()) {
+                if (space.getSize() != 0) {
+                    if (space.getPieces().get(0).getId() == 1) {
+                        if(board.getValidMoves(space).size()>0) {
+                            returnSpaces.add(space);
+                        }
+                    }
+                }
+            }
+            return returnSpaces;
+        } else
+        {
+            if(board.getSpaces()[0].getSize() > 0){
+                returnSpaces.add(board.getSpaces()[0]);
+                return returnSpaces;
+            }
+            for (Space space : board.getSpaces()) {
+                if (space.getSize() != 0) {
+                    if (space.getPieces().get(0).getId() == 0) {
+                        if(board.getValidMoves(space).size()>0) {
+                            returnSpaces.add(space);
+                        }
+                    }
+                }
+            }
+            return returnSpaces;
         }
     }
 
@@ -184,6 +336,7 @@ public class BotA extends Player.Bot{
             return returnSpaces;
         }
     }
+
     public Space GetHighestSubSpace(Space selected, ArrayList<Space> moves){
         double[] valuemoves = new double[moves.size()];
         int pieceID = 0;
@@ -395,7 +548,9 @@ public class BotA extends Player.Bot{
     public void executeTurn()  {
         this.B.checkAllPiecesHome();
         if(this.getId() == 1){
-            this.ExecuteDeeperMove();
+            //this.ExecuteDeeperMove();
+            this.ExecuteDeeperMove2();
+            this.ExecuteNextMove();
         }
         else{
             this.ExecuteNextMove();
