@@ -257,6 +257,11 @@ public class Board {
             return true;
 
         } else {
+            this.getDie().printCurRoll();
+            System.out.println("to: " + to + "from: " + from);
+            System.out.println( validityCheck(spaces[from], spaces[to]));
+            System.out.println(poss.contains(spaces[to]));
+            System.out.println(this.toString());
             System.out.println("Move invalid");
             return false;
         }
@@ -422,11 +427,11 @@ public class Board {
             gameLoop.checkEaten(to);
 
         } else {
-            System.out.println(to);
-            System.out.println(from);
-            System.out.println( validityCheck(spaces[from], spaces[to]));
-            System.out.println(poss.contains(spaces[to]));
-            System.out.println(this.toString());
+//            System.out.println(to);
+//            System.out.println(from);
+//            System.out.println( validityCheck(spaces[from], spaces[to]));
+//            System.out.println(poss.contains(spaces[to]));
+//            System.out.println(this.toString());
             System.out.println("Move invalid");
         }
     }

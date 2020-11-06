@@ -11,7 +11,7 @@ public class BotTestingGround {
     public static int counter = 0;
     static double[] weightsarr = {1,1,1,1,1};
     static Board b;
-    static double[] diffweightsarr = {1,1,1,1,2};
+    static double[] diffweightsarr = {1,1,1,1,1};
 
     public static void main(String []args){
         b= new Board();
@@ -29,12 +29,12 @@ public class BotTestingGround {
         b.createBotLoop();
         //testMultipleTimes(one,two);
         //testWithSameGivenRoll( i);
-        testWithRandomDie();
+        testMultipleTimes(one,two);
 
     }
 
     public static void testMultipleTimes(Player.Bot one, Player.Bot two ){
-        for(int i = 0; i<1000; i++){
+        for(int i = 0; i<10; i++){
             b = new Board();
             one.resetPlayer();
             two.resetPlayer();
@@ -50,9 +50,9 @@ public class BotTestingGround {
         b.getDie().generateDie();
         b.getDie().getNextRoll();
         while(!b.checkWinCondition()){
-            System.out.println(b);
+//            System.out.println(b);
             b.getGameLoop().process();
-            System.out.println(Arrays.toString(b.getDie().getCurRoll()));
+//            System.out.println(Arrays.toString(b.getDie().getCurRoll()));
         }
 
         giveWinner( b);
@@ -71,10 +71,10 @@ public class BotTestingGround {
 
     private static void giveWinner(Board b){
         if(b.getPlayer1().getPiecesOutOfPlay()==15){
-            //System.out.println("ONE WINS"+b.getPlayer1().getName());
+//            System.out.println("ONE WINS"+b.getPlayer1().getName());
             counter++;
         }else if(b.getPlayer2().getPiecesOutOfPlay()==15) {
-            //System.out.println("TWO WINS"+b.getPlayer2().getName());
+//            System.out.println("TWO WINS"+b.getPlayer2().getName());
         }else{
             //System.out.println("Question Epic Life decisions");
         }

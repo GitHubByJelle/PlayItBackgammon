@@ -14,7 +14,7 @@ public class Individual implements Comparable<Individual>{
     private double[] enemyWeightGenome = new double[GENOME_LENGTH];
 
     private double fitness;
-    private final int SIZE_OF_INDIVIDUAL = 1000;
+    private final int SIZE_OF_INDIVIDUAL = 100;
     //default constructor for the beginning
     public Individual(){
         for (int i = 0; i < GENOME_LENGTH; i++){

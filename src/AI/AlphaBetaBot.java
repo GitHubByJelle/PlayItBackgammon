@@ -1,4 +1,4 @@
-package src.AI;
+package AI;
 
 
 import World.Board;
