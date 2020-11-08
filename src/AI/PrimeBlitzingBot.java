@@ -42,6 +42,7 @@ public class PrimeBlitzingBot extends Player.Bot{
         }else{
             System.out.println("Question Life Decisions & the purpose of humans; pt2/?");//imbeingreallybleakheresorrynotsorryxd
         }
+
         B.playerMove(bestMove[0].getId(),bestMove[1].getId());
     }
 
@@ -62,7 +63,7 @@ public class PrimeBlitzingBot extends Player.Bot{
             //A
         }else{
             //B
-            res= evaluatePossPrimingMoves(currentHomeSpace,currentNumWalls,possibleMoves);
+            res= evaluatePossPrimingMoves(currentHomeSpace,currentNumWalls,possibleMoves, wallSize);
         }
             //check the home space %
                 //count number of walls already there
@@ -72,15 +73,59 @@ public class PrimeBlitzingBot extends Player.Bot{
         return res;
     }
 
-    private Space[] evaluatePossPrimingMoves(int[][] currentHomeSpace, int currentNumWalls, ArrayList<Space[]> possibleMoves) {
+    private Space[] evaluatePossPrimingMoves(int[][] currentHomeSpace, int currentNumWalls, ArrayList<Space[]> possibleMoves, int wallSize) {
         Space[] res=new Space[2];
+        int newNumWall =0;
         //go thru the possible moves,
             //see if any of them would change the number of pieces in home spaces
             //need to decide on what to do with half walls
             //choose move that makes the most addition of walls(and half walls(?))
             //return that move
-
+        for(int i=0;i<possibleMoves.size();i++){
+            simulateMove(currentHomeSpace,possibleMoves.get(i));
+            newNumWall=0;
+            if(id==0) {
+                //if the TO space is in home
+                //if the FROM space is in Home
+                if (possibleMoves.get(i)[1].getId()>18 || possibleMoves.get(i)[0].getId()>18){
+                    newNumWall=countWalls(currentHomeSpace,wallSize);
+                }
+            }else{
+                //same but for other side of board
+                if (possibleMoves.get(i)[1].getId()<7 ||possibleMoves.get(i)[0].getId()<7){
+                    newNumWall=countWalls(currentHomeSpace,wallSize);
+                }
+            }
+            if(newNumWall>=currentNumWalls){
+                return possibleMoves.get(i);
+            }
+            unDoMoveSim(currentHomeSpace,possibleMoves.get(i));
+        }
         return res;
+    }
+
+    private void simulateMove(int[][] home, Space[] move) {
+        for(int i=0;i<home.length;i++){
+            if(home[i][0]==move[0].getId()){
+                //FROM space is in home
+                --home[i][1];
+            }else if(home[i][0]==move[1].getId()){
+                //TO space is in home
+                ++home[i][1];
+            }
+        }
+    }
+
+    private void unDoMoveSim(int[][] home, Space[] move) {
+        for(int i=0;i<home.length;i++){
+            if(home[i][0]==move[0].getId()){
+                //FROM space is in home
+                ++home[i][1];
+            }else if(home[i][0]==move[1].getId()){
+                //TO space is in home
+                --home[i][1];
+            }
+        }
     }
 
     private int countWalls(int[][] currentHomeSpace, int wallSize) {
