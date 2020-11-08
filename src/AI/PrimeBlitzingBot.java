@@ -29,7 +29,7 @@ public class PrimeBlitzingBot extends Player.Bot{
         ArrayList<Space[]> possibleMoves = getPossibleMoves(getPossibleFrom());
         Space[] bestMove = possibleMoves.get(0);//move selected
         //make a priming move(Alaa's)
-        Space[] bestPrimingMove = makePrimingMove(possibleMoves);
+        Space[] bestPrimingMove = choosePrimingMove(possibleMoves);
         //make Blitzing move(Adaia's)
             //notes for adaia,
                 //try to return a Space[] of size 2 [from,to]
@@ -53,7 +53,7 @@ public class PrimeBlitzingBot extends Player.Bot{
 
 
 //______________________________________________________________________________________________________________________
-    private Space[] makePrimingMove(ArrayList<Space[]> possibleMoves){
+    private Space[] choosePrimingMove(ArrayList<Space[]> possibleMoves){
         int wallSize=2;
         int numWalls=3;
         Space[] res= new Space[2];//array of a [from,to] space
