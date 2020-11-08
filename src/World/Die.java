@@ -35,8 +35,27 @@ public class Die {
         }
         return DieList.get(pointer);
     }
-    public int[] seeNextRoll(){
-        return DieList.get(pointer+1);
+    public void seeNextRoll(){
+        pointer++;
+    }
+    public void goRollBack(){
+        pointer--;
+    }
+    public void deleteNumber(int num){
+        for(int i = 0; i<this.getCurRoll().length; i++){
+            if(this.getCurRoll()[i]==num){
+                this.getCurRoll()[i] = 0;
+                break;
+            }
+        }
+    }
+    public void addNumber(int num){
+        for(int i = 0; i<this.getCurRoll().length; i++){
+            if(this.getCurRoll()[i]==0){
+                this.getCurRoll()[i] = num;
+                break;
+            }
+        }
     }
 
     public int[] getCurRoll(){

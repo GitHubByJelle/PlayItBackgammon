@@ -1,10 +1,10 @@
-package src.AI;
+package AI;
 
 
-import src.World.Board;
-import src.World.Piece;
-import src.World.Player;
-import src.World.Space;
+import World.Board;
+import World.Piece;
+import World.Player;
+import World.Space;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
