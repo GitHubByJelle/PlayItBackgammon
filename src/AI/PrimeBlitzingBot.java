@@ -35,9 +35,6 @@ public class PrimeBlitzingBot extends Player.Bot{
                 //try to return a Space[] of size 2 [from,to]
 
 
-
-
-
         //here would be where we decide whether to use B move or P move
         if(!moveIsEmpty(bestPrimingMove)) {
             System.out.println("primingMove selected");
@@ -53,6 +50,8 @@ public class PrimeBlitzingBot extends Player.Bot{
         return m[0]==null || m[1]==null;
     }
 
+
+//______________________________________________________________________________________________________________________
     private Space[] makePrimingMove(ArrayList<Space[]> possibleMoves){
         int wallSize=2;
         int numWalls=3;
@@ -63,22 +62,23 @@ public class PrimeBlitzingBot extends Player.Bot{
             //A
         }else{
             //B
-            res= evaluatePossPrimingMove(currentHomeSpace,currentNumWalls,possibleMoves);
+            res= evaluatePossPrimingMoves(currentHomeSpace,currentNumWalls,possibleMoves);
         }
-
             //check the home space %
                 //count number of walls already there
                     //A:if we have desired number then break and let it decide other move
                     //B:else we should evaluate the moves and the walls each move could make and decide which move to carry out based on that
 
-
-
-
         return res;
     }
 
-    private Space[] evaluatePossPrimingMove(int[][] currentHomeSpace, int currentNumWalls, ArrayList<Space[]> possibleMoves) {
+    private Space[] evaluatePossPrimingMoves(int[][] currentHomeSpace, int currentNumWalls, ArrayList<Space[]> possibleMoves) {
         Space[] res=new Space[2];
+        //go thru the possible moves,
+            //see if any of them would change the number of pieces in home spaces
+            //need to decide on what to do with half walls
+            //choose move that makes the most addition of walls(and half walls(?))
+            //return that move
 
         return res;
     }
