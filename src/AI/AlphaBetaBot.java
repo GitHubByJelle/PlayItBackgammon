@@ -56,6 +56,7 @@ public class AlphaBetaBot extends Player.Bot {
     public void makeMove(int from, int to) {
         this.B.BotMove(from, to);
         System.out.println(this.B);
+        System.out.println("Make move successfully");
     }
 
     public void undoMove(boolean didKill, boolean didOut, int from, int to, int id) {
