@@ -1,8 +1,8 @@
-package src.AI;
+package AI;
 
-import src.World.Board;
-import src.World.Player;
-import src.World.Space;
+import World.Board;
+import World.Player;
+import World.Space;
 
 import java.util.ArrayList;
 import java.util.Arrays;
