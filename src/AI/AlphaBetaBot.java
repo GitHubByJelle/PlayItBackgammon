@@ -12,13 +12,18 @@ import java.util.Arrays;
 
 public class AlphaBetaBot extends Player.Bot {
 
+
+
+
     public AlphaBetaBot(Board board) {
         super(0);
         setBoard(board);
-
+        System.out.println("Test tostring");
+        System.out.println(this.B);
+        System.out.println("-------------------------------------------------");
     }
 
-    public void getAllPossibleMoves() {
+    public void getBestPossibleMoves() {
         Space[] allSpaces = this.B.getSpaces();
         System.out.println(Arrays.toString(this.B.getDie().getCurRoll()));
         int max = 0;
@@ -28,32 +33,47 @@ public class AlphaBetaBot extends Player.Bot {
             if (space.getSize() > 0) {
                 if (space.getPieces().get(0).getId() == this.id) {
                     ArrayList<Space> validMoves = this.B.getValidMoves(space);
-                    System.out.println("What the fuck is going on: " + validMoves);
-                    System.out.println("Size " + validMoves.size());
                     if (validMoves.size() > 0) {
                         if (validMoves.get(0).getId() == validMoves.get(1).getId()) {
                         } else {
                             for (Space v : validMoves) {
-                                System.out.println("Why print 2: " + validMoves.size());
                                 int score = 0;
-                                score = evaluationFunction(space,v);
+                                score = evaluationFunction(space, v);
                                 if (score >= max) {
                                     max = score;
                                     maxFrom = space.getId();
                                     maxTo = v.getId();
                                 }
-                                System.out.println("Move to: " + v.getId() + " for " + score);
                             }
                         }
                     }
-                    System.out.println("Valid moves: ");
-                    System.out.println("From:  " + space.getId() + " To: " + validMoves);
-                    System.out.println("-----------------------------");
                 }
             }
         }
-        System.out.println("Best Possible Move Is: " + maxFrom + " to " + maxTo + " for " + max);
+        makeMove(maxFrom, maxTo);
+    }
 
+    public void makeMove(int from, int to) {
+        this.B.BotMove(from, to);
+        System.out.println(this.B);
+    }
+
+    public void undoMove(boolean didKill, boolean didOut, int from, int to, int id) {
+        makeMove(to, from);
+        if (didKill) {
+            if (id == 0) {
+                makeMove(0,to);
+            } else {
+                makeMove(25,to);
+            }
+        }
+        if (didOut) {
+            if (id == 0) {
+
+            } else {
+
+            }
+        }
     }
 
     public int evaluationFunction(Space from, Space to) {
@@ -90,6 +110,20 @@ public class AlphaBetaBot extends Player.Bot {
     }
 
     public int isGoingToBeEaten(Space from, Space to) {
+        if (to.getSize() <= 1) {
+            if (someWhatSafe()) {
+                return -1;
+            } else {
+                return -4;
+            }
+        }
         return 1;
     }
+
+    private boolean someWhatSafe() {
+        // Check around for enemies, if no enemies nearby, its somewhat safe
+        return false;
+    }
+
+
 }
