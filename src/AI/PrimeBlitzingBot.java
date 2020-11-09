@@ -1,5 +1,6 @@
 package AI;
 
+import World.Piece;
 import World.Player;
 import World.Space;
 import java.util.ArrayList;
@@ -31,8 +32,7 @@ public class PrimeBlitzingBot extends Player.Bot{
         //make a priming move(Alaa's)
         Space[] bestPrimingMove = choosePrimingMove(possibleMoves);
         //make Blitzing move(Adaia's)
-            //notes for adaia,
-                //try to return a Space[] of size 2 [from,to]
+        Space[] betsBlitzingMove= chooseBlitzingMove(possibleMoves); //try to return a Space[] of size 2 [from,to]
 
 
         //here would be where we decide whether to use B move or P move
@@ -101,7 +101,7 @@ public class PrimeBlitzingBot extends Player.Bot{
             }
             unDoMoveSim(currentHomeSpace,possibleMoves.get(i));
         }
-        return res;
+        return res; //You don't assign any value to res in this method
     }
 
     private void simulateMove(int[][] home, Space[] move) {
@@ -163,9 +163,65 @@ public class PrimeBlitzingBot extends Player.Bot{
 
 
 //_________________________________________________________________________________________________________________________
-    private void blitzing(){
+    private Space[] chooseBlitzingMove(ArrayList<Space[]> possibleMoves){
+        int distanceFromBeginning=12;
+        Space[] res= new Space[2];
+        Piece p;
+        for (int i=0; i<possibleMoves.size(); i++){
+            p = possibleMoves.get(i)[1].getPieces().get(0);
+            if(possibleMoves.get(i)[1].isEmpty() || possibleMoves.get(i)[1].getPieces().size()>1 || possibleMoves.get(i)[1].getPieces().get(0).getId()==id){
+                i++;
+            }
+            else {
 
+                if (id == 0) {
+                    if (possibleMoves.get(i)[1].getId()<distanceFromBeginning){
+                        simulateBlitzMove(possibleMoves.get(i), res);
+                    }
+                    else{
+                        playBasic(possibleMoves, res);
+                    }
+                }
+                else {
+                      if (possibleMoves.get(i)[1].getId()>distanceFromBeginning){
+                          simulateBlitzMove(possibleMoves.get(i), res);
+                      }
+                      else{
+                          playBasic(possibleMoves, res);
+                      }
+                }
+                unDoBlitzMoveSim(possibleMoves.get(i), p);
+            }
+        }
+        return res;
     }
+
+    private void playBasic(ArrayList<Space[]> possibleMoves, Space[] res) {
+        for(int i=0; i<possibleMoves.size();i++){
+            if (possibleMoves.get(i)[1].getPieces().get(0).getId()==id ){
+                res[0]=possibleMoves.get(i)[0];
+                res[1]=possibleMoves.get(i)[1];
+            }
+        }
+    }
+
+
+    private void simulateBlitzMove(Space[] move, Space[] res) {
+
+        int index= move[1].getId();
+        B.moveToEatenSpace(index);
+        res[0]=move[0];
+        res[1]=move[1];
+    }
+
+    private void unDoBlitzMoveSim(Space[] move, Piece p) {
+        int index= move[1].getId();
+        B.moveBackFromEatenSpace(index,p );
+    }
+
+
+
+
 
     
 }

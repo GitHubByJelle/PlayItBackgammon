@@ -357,6 +357,13 @@ public class Board {
             spaces[k].movePiece(spaces[25]);
     }
 
+    public void moveBackFromEatenSpace(int k, Piece p){
+        if(p.getId()==player1.getId())
+            spaces[0].movePiece(spaces[k]);
+        else
+            spaces[25].movePiece(spaces[k]);
+    }
+
     public void moveOutOfPlay(int k){
         spaces[k].movePiece(outOfPlay);
     }
