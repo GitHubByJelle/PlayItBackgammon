@@ -255,27 +255,27 @@ public class BotA extends Player.Bot{
                     pieceID = all_selected.get(i).getPieces().get(all_selected.get(i).getPieces().size()-1).getId();
                 }
                 validroll = getValidRoll(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
-                if(Math.abs(validroll)>6){
-                    System.out.println();
-                    getValidRoll2(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
-                    System.out.println("validroll");
-                    System.out.println(validroll);
-                    this.B.getDie().printCurRoll();
-                    System.out.println(this.B);
-                }
+//                if(!isInArray(this.B.getDie().getCurRoll(), validroll)){
+//                    System.out.println();
+//                    getValidRoll2(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
+//                    System.out.println("validroll");
+//                    System.out.println(validroll);
+//                    this.B.getDie().printCurRoll();
+//                    System.out.println(this.B);
+//                }
                 this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
 
                 this.B.getDie().deleteNumber(validroll);
-                if(deepnessconstr < 3) {
+                if(deepnessconstr > 0) {
                     if(diceCopyEmpty(this.B.getDie().getCurRoll())){
                         this.B.getGameLoop().SwitchPlayer();
                         this.B.getDie().seeNextRoll();
-                        bestmove = GetBestMove(deepnessconstr+1);
+                        bestmove = GetBestMove(deepnessconstr-1);
                         this.B.getGameLoop().SwitchPlayer();
                         this.B.getDie().goRollBack();
-                        value_moves[i] = -1*bestmove[2];
+                        value_moves[i] = -bestmove[2];
                     } else{
-                        bestmove = GetBestMove(deepnessconstr+1);
+                        bestmove = GetBestMove(deepnessconstr-1);
                         value_moves[i] = bestmove[2];
 
                     }
@@ -290,6 +290,9 @@ public class BotA extends Player.Bot{
                 this.B.getDie().addNumber(validroll);
 
             }
+//            System.out.println(Arrays.toString(value_moves));
+//            System.out.println(this.B.getGameLoop().getCurrentPlayer().getId());
+
             int index = argmax(value_moves);
             double[] returnlist = {all_selected.get(index).getId(), all_highest_moves.get(index).getId(), value_moves[index]};
             return returnlist;
@@ -300,32 +303,28 @@ public class BotA extends Player.Bot{
         }
     }
     public int getValidRoll(int from, int to, int pieceID){
-        if(to==26 && pieceID == 0){
+        if(this.B.getDie().getCurRoll().length == 1 ){
+            return this.B.getDie().getCurRoll()[0];
+        }
+        else if(to==26 && pieceID == 0){
+            for(Integer i: this.B.getDie().getCurRoll()){
+                if(i >= to - from - 1){
+                    return i;
+                }
+            }
+            System.out.println("Shouldn't be here");
             return to - from - 1;
         } else if(to == 26 && pieceID == 1){
+            for(Integer i: this.B.getDie().getCurRoll()){
+                if(i <= to - from - 26){
+                    return i;
+                }
+            }
+            System.out.println("Shouldn't be here");
             return to-from-26;
         } else{
             return to - from;
         }
-    }
-    public int getValidRoll2(int from, int to, int pieceID){
-        if(to==26 && pieceID == 0){
-            System.out.println("if");
-            System.out.println(to - from - 1);
-            return to - from - 1;
-        } else if(to == 26 && pieceID == 1){
-            System.out.println("elif");
-            System.out.println(pieceID);
-            System.out.println(to);
-            System.out.println(from);
-            System.out.println(to-from-26);
-            return to-from-26;
-        } else{
-            System.out.println("else");
-            System.out.println(to-from);
-            return to - from;
-        }
-
     }
     public boolean diceCopyEmpty(int[] dicecopy){
         for(Integer inte: dicecopy){
@@ -336,7 +335,7 @@ public class BotA extends Player.Bot{
         return true;
     }
     public void ExecuteNextMove2(){
-        double[] move = GetBestMove(0);
+        double[] move = GetBestMove(4);
         B.forceHomeCheck();
         if(move[0]==0 && move[1]==0){
             for(Integer inter: this.B.getDie().getCurRoll()){

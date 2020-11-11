@@ -14,7 +14,7 @@ public class Die {
         //force the first roll to be smth u r testing for
       //  DieList.add(new int[]{1,2});
         Random rn = new Random();
-        for(int i=0;i<150;i++){
+        for(int i=0;i<500;i++){
             roll1 = rn.nextInt(6) + 1;
             roll2 = rn.nextInt(6) + 1;
             int[] list = new int[2];
@@ -42,20 +42,30 @@ public class Die {
         pointer--;
     }
     public void deleteNumber(int num){
-        for(int i = 0; i<this.getCurRoll().length; i++){
-            if(this.getCurRoll()[i]==num){
-                this.getCurRoll()[i] = 0;
-                break;
+        boolean checker = true;
+        int i = 0;
+        int[] newarr = new int[this.getCurRoll().length-1];
+        for(Integer roll : this.getCurRoll()){
+            if(roll == num && checker){
+                checker = false;
+            } else {
+                newarr[i]= roll;
+                i++;
             }
         }
+        this.setCurRoll(newarr);
     }
     public void addNumber(int num){
+        int[] newarr = new int[this.getCurRoll().length+1];
         for(int i = 0; i<this.getCurRoll().length; i++){
-            if(this.getCurRoll()[i]==0){
-                this.getCurRoll()[i] = num;
-                break;
-            }
+            newarr[i] = this.getCurRoll()[i];
         }
+        newarr[this.getCurRoll().length] = num;
+        this.setCurRoll(newarr);
+    }
+    public void setCurRoll(int[] arr){
+        this.DieList.add(pointer, arr);
+        this.DieList.remove(pointer + 1);
     }
 
     public int[] getCurRoll(){

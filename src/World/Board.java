@@ -46,6 +46,7 @@ public class Board {
 
    //     testboard A
 //
+//       addPieces(18,1,1);
 
 //       addPieces(1,3,1);
 //       addPieces(5,3,1);
@@ -258,7 +259,7 @@ public class Board {
 
         } else {
             this.getDie().printCurRoll();
-            System.out.println("to: " + to + "from: " + from);
+            System.out.println("from: " + from + "  to: " + to);
             System.out.println( validityCheck(spaces[from], spaces[to]));
             System.out.println(poss.contains(spaces[to]));
             System.out.println(this.toString());

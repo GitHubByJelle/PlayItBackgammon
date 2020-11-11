@@ -27,15 +27,14 @@ public class BotTestingGround {
         two.pausing=false;
         b.setPlayers(one,two);
         b.createBotLoop();
-        //testMultipleTimes(one,two);
-        //testWithSameGivenRoll( i);
         testMultipleTimes(one,two);
 
     }
 
     public static void testMultipleTimes(Player.Bot one, Player.Bot two ){
-        for(int i = 0; i<10; i++){
+        for(int i = 0; i<100; i++){
             b = new Board();
+
             one.resetPlayer();
             two.resetPlayer();
             b.setPlayers(one,two);
