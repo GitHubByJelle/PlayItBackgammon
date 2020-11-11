@@ -13,7 +13,10 @@ public class AlphaBetaBot extends Player.Bot {
 
 
 
-
+    private  final double HEURISTIC_COEFFICIENT = .055;
+    private  final int DEFAULT_DEPTH = 3;
+    private final Player opponent;
+    private int initialDepth = 0;
     public AlphaBetaBot(Board board) {
         super(0);
         setBoard(board);
