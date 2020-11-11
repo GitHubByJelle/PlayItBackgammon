@@ -39,7 +39,11 @@ public class PrimeBlitzingBot extends Player.Bot{
         if(!moveIsEmpty(bestPrimingMove)) {
             System.out.println("primingMove selected");
             bestMove = bestPrimingMove;
+        }else if(!moveIsEmpty(betsBlitzingMove)){
+            System.out.println("blitzingMove selected");
+            bestMove =betsBlitzingMove;
         }else{
+            requestPassTurn();
             System.out.println("Question Life Decisions & the purpose of humans; pt2/?");//imbeingreallybleakheresorrynotsorryxd
         }
 
@@ -69,6 +73,7 @@ public class PrimeBlitzingBot extends Player.Bot{
                 //count number of walls already there
                     //A:if we have desired number then break and let it decide other move
                     //B:else we should evaluate the moves and the walls each move could make and decide which move to carry out based on that
+        //discourage half walls
 
         return res;
     }
