@@ -1,11 +1,13 @@
-package AI;
+package src.AI;
 
-import World.Board;
-import World.Player;
-import World.Space;
+import src.World.Board;
+import src.World.Die;
+import src.World.Player;
+import src.World.Space;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class AlphaBetaBot extends Player.Bot {
 
@@ -122,6 +124,34 @@ public class AlphaBetaBot extends Player.Bot {
         // Check around for enemies, if no enemies nearby, its somewhat safe
         return false;
     }
+    private static double min(double... values) {
+        double min = Double.MAX_VALUE;
+        for (double value : values) {
+            if (value < min)
+                min = value;
+        }
+        return min;
+    }
 
+    private static double max(double... values) {
+        double max = -Double.MAX_VALUE;
+        for (double value : values) {
+            if (value > max)
+                max = value;
+        }
+        return max;
+    }
+
+    private static double weightedAverage(List<Double> values,Die die) {
+        double weightedSum = 0.;
+        double coefficientSum = 0.;
+        int i = 0;
+        for (Double value : values) {
+            double coefficient = die.probability();
+            weightedSum += value * coefficient;
+            coefficientSum += coefficient;
+        }
+        return weightedSum / coefficientSum;
+    }
 
 }
