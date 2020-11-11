@@ -27,8 +27,9 @@ public class PrimeBlitzingBot extends Player.Bot{
 
     private void moveChoice(){
         //get the possible moves we can make
-        ArrayList<Space[]> possibleMoves = getPossibleMoves(getPossibleFrom());
-        Space[] bestMove = possibleMoves.get(0);//move selected
+        ArrayList<Space> possFrom =getPossibleFrom();
+        ArrayList<Space[]> possibleMoves = getPossibleMoves(possFrom);
+        Space[] bestMove;//move selected
         //make a priming move(Alaa's)
         Space[] bestPrimingMove = choosePrimingMove(possibleMoves);
         //make Blitzing move(Adaia's)
@@ -43,8 +44,20 @@ public class PrimeBlitzingBot extends Player.Bot{
             System.out.println("blitzingMove selected");
             bestMove =betsBlitzingMove;
         }else{
-            requestPassTurn();
-            System.out.println("Question Life Decisions & the purpose of humans; pt2/?");//imbeingreallybleakheresorrynotsorryxd
+            int index=0;
+            if(possibleMoves.size()==0)
+                requestPassTurn();
+            else {
+                while (!B.playerMove(possibleMoves.get(index)[0].getId(), possibleMoves.get(index)[1].getId())) {
+                    ++index;
+                    if (index > possibleMoves.size() - 1) {
+                        requestPassTurn();
+                        return ;
+                    }
+
+                }
+            }
+            return ;
         }
 
         B.playerMove(bestMove[0].getId(),bestMove[1].getId());
