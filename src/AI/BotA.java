@@ -245,13 +245,27 @@ public class BotA extends Player.Bot{
         double[] value_moves = new double[all_selected.size()];
         double[] bestmove;
         int pieceID =0;
+        int validroll;
+//        Die diceListCopy = this.B.getDie();
+//        int[] diceCopy = diceCopy(this.B.getDie().getCurRoll());
+//        this.B.setDice()
         if(all_highest_moves.size()>0) {
             for (int i = 0; i < all_selected.size(); i++) {
                 if(all_selected.get(i).getPieces().size()>0) {
-                    pieceID = all_selected.get(i).getPieces().get(0).getId();
+                    pieceID = all_selected.get(i).getPieces().get(all_selected.get(i).getPieces().size()-1).getId();
+                }
+                validroll = getValidRoll(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
+                if(Math.abs(validroll)>6){
+                    System.out.println();
+                    getValidRoll2(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
+                    System.out.println("validroll");
+                    System.out.println(validroll);
+                    this.B.getDie().printCurRoll();
+                    System.out.println(this.B);
                 }
                 this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
-                this.B.getDie().deleteNumber(all_highest_moves.get(i).getId()-all_selected.get(i).getId());
+
+                this.B.getDie().deleteNumber(validroll);
                 if(deepnessconstr < 3) {
                     if(diceCopyEmpty(this.B.getDie().getCurRoll())){
                         this.B.getGameLoop().SwitchPlayer();
@@ -273,7 +287,7 @@ public class BotA extends Player.Bot{
 //                System.out.println(value_moves[i]);
 
                 this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
-                this.B.getDie().addNumber(all_highest_moves.get(i).getId()-all_selected.get(i).getId());
+                this.B.getDie().addNumber(validroll);
 
             }
             int index = argmax(value_moves);
@@ -284,6 +298,34 @@ public class BotA extends Player.Bot{
         else{
             return new double[3];
         }
+    }
+    public int getValidRoll(int from, int to, int pieceID){
+        if(to==26 && pieceID == 0){
+            return to - from - 1;
+        } else if(to == 26 && pieceID == 1){
+            return to-from-26;
+        } else{
+            return to - from;
+        }
+    }
+    public int getValidRoll2(int from, int to, int pieceID){
+        if(to==26 && pieceID == 0){
+            System.out.println("if");
+            System.out.println(to - from - 1);
+            return to - from - 1;
+        } else if(to == 26 && pieceID == 1){
+            System.out.println("elif");
+            System.out.println(pieceID);
+            System.out.println(to);
+            System.out.println(from);
+            System.out.println(to-from-26);
+            return to-from-26;
+        } else{
+            System.out.println("else");
+            System.out.println(to-from);
+            return to - from;
+        }
+
     }
     public boolean diceCopyEmpty(int[] dicecopy){
         for(Integer inte: dicecopy){
@@ -616,6 +658,14 @@ public class BotA extends Player.Bot{
         for(int i = 0; i<arr.length; i++){
             this.weightsarr[i] = arr[i];
         }
+    }
+    public boolean isInArray(int[] arr, int a){
+        for (int element : arr) {
+            if (element == a) {
+                return true;
+            }
+        }
+        return false;
     }
     @Override
     public void executeTurn()  {

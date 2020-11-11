@@ -435,6 +435,10 @@ public class Board {
             System.out.println("Move invalid");
         }
     }
+    public void setDice(Die die){
+        this.die = die;
+    }
+
     public GameLoop getGameLoop(){
         return this.gameLoop;
     }
