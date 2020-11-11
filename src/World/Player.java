@@ -83,7 +83,7 @@ public abstract class Player {
     public static class Bot extends Player{
         //things common to all bots
         public Board B;
-        public boolean pausing =false;
+        public boolean pausing =true;
         public Bot(int id){
             super(id);
         }
