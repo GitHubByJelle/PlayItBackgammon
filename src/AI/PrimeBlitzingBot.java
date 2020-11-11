@@ -27,8 +27,9 @@ public class PrimeBlitzingBot extends Player.Bot{
 
     private void moveChoice(){
         //get the possible moves we can make
-        ArrayList<Space[]> possibleMoves = getPossibleMoves(getPossibleFrom());
-        Space[] bestMove = possibleMoves.get(0);//move selected
+        ArrayList<Space> possFrom =getPossibleFrom();
+        ArrayList<Space[]> possibleMoves = getPossibleMoves(possFrom);
+        Space[] bestMove;//move selected
         //make a priming move(Alaa's)
         Space[] bestPrimingMove = choosePrimingMove(possibleMoves);
         //make Blitzing move(Adaia's)
@@ -39,8 +40,24 @@ public class PrimeBlitzingBot extends Player.Bot{
         if(!moveIsEmpty(bestPrimingMove)) {
             System.out.println("primingMove selected");
             bestMove = bestPrimingMove;
+        }else if(!moveIsEmpty(betsBlitzingMove)){
+            System.out.println("blitzingMove selected");
+            bestMove =betsBlitzingMove;
         }else{
-            System.out.println("Question Life Decisions & the purpose of humans; pt2/?");//imbeingreallybleakheresorrynotsorryxd
+            int index=0;
+            if(possibleMoves.size()==0)
+                requestPassTurn();
+            else {
+                while (!B.playerMove(possibleMoves.get(index)[0].getId(), possibleMoves.get(index)[1].getId())) {
+                    ++index;
+                    if (index > possibleMoves.size() - 1) {
+                        requestPassTurn();
+                        return ;
+                    }
+
+                }
+            }
+            return ;
         }
 
         B.playerMove(bestMove[0].getId(),bestMove[1].getId());
@@ -69,6 +86,7 @@ public class PrimeBlitzingBot extends Player.Bot{
                 //count number of walls already there
                     //A:if we have desired number then break and let it decide other move
                     //B:else we should evaluate the moves and the walls each move could make and decide which move to carry out based on that
+        //discourage half walls
 
         return res;
     }
