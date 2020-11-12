@@ -28,6 +28,8 @@ public class AlphaBetaBot extends Player.Bot {
         System.out.println("-------------------------------------------------");
     }
 
+    // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
+    // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
     private static void alpha_beta_pruning(Space s, Die die){
       die.generateDie();
       int diceRoll1 = die.getDieList[0];
@@ -35,10 +37,12 @@ public class AlphaBetaBot extends Player.Bot {
       int to_ID = minMove(s, diceRoll1, diceRoll2, Integer.MAXIMUM, Integer.MINIMUM, initialDepth)[1];
       makeMove(s.getID, to_ID);
     }
-
+    //FUNCTION OF MAX MOVE
+    // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
+    // @RETURN A DOUBLE ARRAY CONTAINING MAXIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
     private static double[] maxMove(Space currentSpace, int diceRoll1, int diceRoll2, double alpha, double beta, int depth){
       if(depth == DEFAULT_DEPTH){
-        return currentSpace.util();
+        return new double[]{evaluationFunction(currentSpace, currentSpace)/18, currentSpace.getID()};
       }
       Arraylist<Space> stateArray= getAllSpaces(currentSpace, diceRoll1, diceRoll2);
       double max_util = Integer.MINIMUM;
@@ -52,11 +56,12 @@ public class AlphaBetaBot extends Player.Bot {
       }
       return new double[]{max_util, to.getID()};
     }
-
-
+    //FUNCTION OF MIN MOVE
+    // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
+    // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
     private static double minMove(Space currentSpace, int diceRoll1, int diceRoll2, double alpha, double beta, int initialDepth){
       if(depth == DEFAULT_DEPTH){
-        return currentState.util();
+        return new double[]{evaluationFunction(currentSpace, currentSpace)/18, currentSpace.getID()};
       }
       Arraylist<Space> stateArray= getAllSpaces(currentSpace, diceRoll1, diceRoll2);
       double min_util = Integer.MINIMUM;
@@ -68,8 +73,9 @@ public class AlphaBetaBot extends Player.Bot {
       }
       return min_util;
     }
-
-
+    // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
+    // @PARAM: SPACE S, PLAYER INDEX(O REPRESENTS MIN, 1 REPRESENTS MAX), CURRENT VALUE OF ALPHA, CURRENT VALUE OF BETA, CURRENT DEPTH
+    //@RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
     private static double expectiMaxMin(Space s, int player, double alpha, double beta, int depth){
       double expectiValue = 0;
       int count = 0;
