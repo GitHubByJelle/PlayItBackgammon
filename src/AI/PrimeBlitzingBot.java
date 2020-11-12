@@ -3,6 +3,8 @@ package AI;
 import World.Piece;
 import World.Player;
 import World.Space;
+
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class PrimeBlitzingBot extends Player.Bot{
@@ -29,38 +31,50 @@ public class PrimeBlitzingBot extends Player.Bot{
         //get the possible moves we can make
         ArrayList<Space> possFrom =getPossibleFrom();
         ArrayList<Space[]> possibleMoves = getPossibleMoves(possFrom);
-        Space[] bestMove;//move selected
-        //make a priming move(Alaa's)
-        Space[] bestPrimingMove = choosePrimingMove(possibleMoves);
-        //make Blitzing move(Adaia's)
-        Space[] betsBlitzingMove= chooseBlitzingMove(possibleMoves); //try to return a Space[] of size 2 [from,to]
-
-
-        //here would be where we decide whether to use B move or P move
-        if(!moveIsEmpty(bestPrimingMove)) {
-            System.out.println("primingMove selected");
-            bestMove = bestPrimingMove;
-        }else if(!moveIsEmpty(betsBlitzingMove)){
-            System.out.println("blitzingMove selected");
-            bestMove =betsBlitzingMove;
-        }else{
-            int index=0;
-            if(possibleMoves.size()==0)
-                requestPassTurn();
-            else {
-                while (!B.playerMove(possibleMoves.get(index)[0].getId(), possibleMoves.get(index)[1].getId())) {
-                    ++index;
-                    if (index > possibleMoves.size() - 1) {
-                        requestPassTurn();
-                        return ;
-                    }
-
+        Space[] bestMove = new Space[2];//move selected
+        if(possFrom.contains(B.getSpaces()[B.getGameLoop().getSlainSpace()])) {
+            for(int i=0;i< possibleMoves.size();i++)
+                if(possibleMoves.get(i)[0].getId()==B.getGameLoop().getSlainSpace()) {
+                    System.out.println("Piece revived");
+                    bestMove[0]=possibleMoves.get(i)[0];
+                    bestMove[1]=possibleMoves.get(i)[1];
+                    break;
                 }
-            }
-            return ;
-        }
+        }else{
+            //make a priming move(Alaa's)
+            Space[] bestPrimingMove = choosePrimingMove(possibleMoves);
+            //make Blitzing move(Adaia's)
+           // Space[] betsBlitzingMove = chooseBlitzingMove(possibleMoves); //try to return a Space[] of size 2 [from,to]
 
-        B.playerMove(bestMove[0].getId(),bestMove[1].getId());
+
+            //here would be where we decide whether to use B move or P move
+            if (!moveIsEmpty(bestPrimingMove)) {
+                System.out.println("primingMove selected"+ bestPrimingMove[0].getId()+" "+bestPrimingMove[1].getId());
+                bestMove = bestPrimingMove;
+//            } else if (!moveIsEmpty(betsBlitzingMove)) {
+//                System.out.println("blitzingMove selected");
+//                bestMove = betsBlitzingMove;
+            } else {
+                int index = 0;
+                if (possibleMoves.size() == 0)
+                    requestPassTurn();
+                else {
+                    while (!B.playerMove(possibleMoves.get(index)[0].getId(), possibleMoves.get(index)[1].getId())) {
+                        ++index;
+                        if (index > possibleMoves.size() - 1) {
+                            requestPassTurn();
+                            return;
+                        }
+
+                    }
+                }
+                return;
+            }
+        }
+        if(!moveIsEmpty(bestMove))
+            B.playerMove(bestMove[0].getId(),bestMove[1].getId());
+        else
+            requestPassTurn();
     }
 
     //returns whether any part of the move ==null(ie it was never set to a value
@@ -76,18 +90,9 @@ public class PrimeBlitzingBot extends Player.Bot{
         Space[] res= new Space[2];//array of a [from,to] space
         int [][] currentHomeSpace= currentHome();
         int currentNumWalls = countWalls(currentHomeSpace, wallSize);
-        if(currentNumWalls>=numWalls){
-            //A
-        }else{
-            //B
+        if(currentNumWalls<numWalls){
             res= evaluatePossPrimingMoves(currentHomeSpace,currentNumWalls,possibleMoves, wallSize);
         }
-            //check the home space %
-                //count number of walls already there
-                    //A:if we have desired number then break and let it decide other move
-                    //B:else we should evaluate the moves and the walls each move could make and decide which move to carry out based on that
-        //discourage half walls
-
         return res;
     }
 
@@ -96,7 +101,7 @@ public class PrimeBlitzingBot extends Player.Bot{
         int newNumWall =0;
         //go thru the possible moves,
             //see if any of them would change the number of pieces in home spaces
-            //need to decide on what to do with half walls
+            //need to decide on what to do with half walls-discourage
             //choose move that makes the most addition of walls(and half walls(?))
             //return that move
         for(int i=0;i<possibleMoves.size();i++){
@@ -157,7 +162,7 @@ public class PrimeBlitzingBot extends Player.Bot{
     }
 
     private int[][] currentHome(){
-        int[][] homeSpaces= new int[6][2];//per space, [id,number of this player's pieces]
+        int[][] homeSpaces= new int[6][2];//per space, [id,number of this player's pieces] {{6,5},{5,0},{4,0}{3,0},{2,0},{1,2}}
         int spaceIndex=0;
         if(id==0){
             for(int i=19;i<=24;i++){
