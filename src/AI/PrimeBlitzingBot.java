@@ -8,9 +8,22 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class PrimeBlitzingBot extends Player.Bot{
+    int primeMovesCounter=0;
+    int blitzMoveCounter=0;
+    int turnsPassedCounter=0;
+    int otherMovesCounter=0;
+    private boolean blitz=true;
+    private boolean prime= true;
+
 
     public PrimeBlitzingBot(int id) {
         super(id);
+    }
+
+    public PrimeBlitzingBot(int id,boolean blitzing, boolean prime){
+        super(id);
+        this.blitz=blitzing;
+        this.prime=prime;
     }
 
     @Override
@@ -37,43 +50,55 @@ public class PrimeBlitzingBot extends Player.Bot{
                     System.out.println("Piece revived");
                     bestMove[0]=possibleMoves.get(i)[0];
                     bestMove[1]=possibleMoves.get(i)[1];
+                    ++otherMovesCounter;
                     break;
                 }
         }else{
+            Space[] bestPrimingMove= new Space[2];
+            Space[] bestBlitzingMove= new Space[2];
             //make a priming move(Alaa's)
-            Space[] bestPrimingMove = choosePrimingMove(possibleMoves);
+            if(prime)
+                bestPrimingMove = choosePrimingMove(possibleMoves);
             //make Blitzing move(Adaia's)
-           // Space[] betsBlitzingMove = chooseBlitzingMove(possibleMoves); //try to return a Space[] of size 2 [from,to]
+            if(blitz)
+                bestBlitzingMove = chooseBlitzingMove(possibleMoves); //try to return a Space[] of size 2 [from,to]
 
 
             //here would be where we decide whether to use B move or P move
-            if (!moveIsEmpty(bestPrimingMove)) {
+            if (prime && !moveIsEmpty(bestPrimingMove)) {
                 System.out.println("primingMove selected"+ bestPrimingMove[0].getId()+" "+bestPrimingMove[1].getId());
                 bestMove = bestPrimingMove;
-//            } else if (!moveIsEmpty(betsBlitzingMove)) {
-//                System.out.println("blitzingMove selected");
-//                bestMove = betsBlitzingMove;
+                ++primeMovesCounter;
+            } else if (blitz && !moveIsEmpty(bestBlitzingMove)) {
+                System.out.println("blitzingMove selected"+ bestBlitzingMove[0].getId()+" "+bestBlitzingMove[1].getId());
+                bestMove = bestBlitzingMove;
+                ++blitzMoveCounter;
             } else {
                 int index = 0;
-                if (possibleMoves.size() == 0)
+                if (possibleMoves.size() == 0) {
                     requestPassTurn();
-                else {
+                    ++turnsPassedCounter;
+                }else {
                     while (!B.playerMove(possibleMoves.get(index)[0].getId(), possibleMoves.get(index)[1].getId())) {
                         ++index;
                         if (index > possibleMoves.size() - 1) {
                             requestPassTurn();
+                            ++turnsPassedCounter;
                             return;
                         }
 
                     }
+                    ++otherMovesCounter;
                 }
                 return;
             }
         }
         if(!moveIsEmpty(bestMove))
             B.playerMove(bestMove[0].getId(),bestMove[1].getId());
-        else
+        else {
             requestPassTurn();
+            ++turnsPassedCounter;
+        }
     }
 
     //returns whether any part of the move ==null(ie it was never set to a value
@@ -89,8 +114,8 @@ public class PrimeBlitzingBot extends Player.Bot{
         Space[] res= new Space[2];//array of a [from,to] space
         int [][] currentHomeSpace= currentHome();
         int currentNumWalls = countWalls(currentHomeSpace, wallSize);
-        if(currentNumWalls<numWalls){
-            res= evaluatePossPrimingMoves(currentHomeSpace,currentNumWalls,possibleMoves, wallSize);
+        if(currentNumWalls<numWalls) {
+            res = evaluatePossPrimingMoves(currentHomeSpace, numWalls, possibleMoves, wallSize);
         }
         return res;
     }
@@ -172,7 +197,7 @@ public class PrimeBlitzingBot extends Player.Bot{
                 ++spaceIndex;
             }
         }else{
-            for(int i=1;i<=6;i++){
+            for(int i=6;i>=1;i--){
                 homeSpaces[spaceIndex]= new int[]{i, 0};
                 if(!B.getSpaces()[i].isEmpty() && B.getSpaces()[i].getPieces().get(0).getId()==id){
                     homeSpaces[spaceIndex][1]=B.getSpaces()[i].getSize();
@@ -187,31 +212,25 @@ public class PrimeBlitzingBot extends Player.Bot{
 //_________________________________________________________________________________________________________________________
     private Space[] chooseBlitzingMove(ArrayList<Space[]> possibleMoves){
         Space[] res= new Space[2];
-        Piece p;
-        for (int i=0; i<possibleMoves.size(); i++){
-
-            if(possibleMoves.get(i)[1].isEmpty() || possibleMoves.get(i)[1].getPieces().size()>1 ){
+        for (int i=0; i<possibleMoves.size(); i++){//1->24
+            if(possibleMoves.get(i)[1].isEmpty() || possibleMoves.get(i)[1].getPieces().size()>1 ){//to space is empty or more pieces than we can eat
                 i++;
             }
             else {
-                p = possibleMoves.get(i)[1].getPieces().get(0);
-                if (id == 0) {
-                    if (possibleMoves.get(i)[1].getPieces().get(0).getId()==1){
-                        simulateBlitzMove(possibleMoves.get(i));
+                if (id == 0) {//first player: last possible eat move
+                    if (possibleMoves.get(i)[1].getPieces().get(0).getId()==1){//to space is occupied by other player
                         res[0]=possibleMoves.get(i)[0];
                         res[1]=possibleMoves.get(i)[1];
-                        //unDoBlitzMoveSim(possibleMoves.get(i), p);
                     }
                     else{
                         i++;
                     }
                 }
-                else {
+                else {//second player; first possible eat move
                       if (possibleMoves.get(i)[1].getPieces().get(0).getId()==0){
-                          simulateBlitzMove(possibleMoves.get(i));
                           res[0]=possibleMoves.get(i)[0];
                           res[1]=possibleMoves.get(i)[1];
-                         // unDoBlitzMoveSim(possibleMoves.get(i), p);
+                          break;
                       }
                       else{
                           i++;
@@ -224,6 +243,7 @@ public class PrimeBlitzingBot extends Player.Bot{
     }
 
     private void simulateBlitzMove(Space[] move) {
+        System.out.println(move[0]+ " "+move[1]);
         int index= move[1].getId();
         B.moveToEatenSpace(index);
 
@@ -235,8 +255,15 @@ public class PrimeBlitzingBot extends Player.Bot{
     }
 
 
+//_____________________________________________________________________________________________________________________
 
-
+    public void printSummary(){
+        System.out.println("Player #: "+id+
+        "\nPrimeingMoves: "+primeMovesCounter
+        +"\nBlitzingMoves: "+blitzMoveCounter
+        +"\nTurnsPassed: "+turnsPassedCounter
+        +"\notherMoves: "+otherMovesCounter);
+    }
 
     
 }
