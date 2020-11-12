@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Board {
     private Space[] spaces;
-    private World.Die die;
+    private Die die;
     private Space outOfPlay;
 
     private World.Player player1;
