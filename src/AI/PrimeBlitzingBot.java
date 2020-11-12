@@ -14,16 +14,24 @@ public class PrimeBlitzingBot extends Player.Bot{
     int otherMovesCounter=0;
     private boolean blitz=true;
     private boolean prime= true;
+    private double prob=0;
 
 
     public PrimeBlitzingBot(int id) {
         super(id);
     }
 
+    public int getPrimeMovesCounter(){return primeMovesCounter;}
+    public int getBlitzMoveCounter(){return blitzMoveCounter;}
+
     public PrimeBlitzingBot(int id,boolean blitzing, boolean prime){
         super(id);
         this.blitz=blitzing;
         this.prime=prime;
+    }
+    public PrimeBlitzingBot(int id, double prob){
+        super(id);
+        this.prob=prob;
     }
 
     @Override
@@ -44,7 +52,7 @@ public class PrimeBlitzingBot extends Player.Bot{
         ArrayList<Space> possFrom =getPossibleFrom();
         ArrayList<Space[]> possibleMoves = getPossibleMoves(possFrom);
         Space[] bestMove = new Space[2];//move selected
-        if(possFrom.contains(B.getSpaces()[B.getGameLoop().getSlainSpace()])) {
+        if(possFrom.contains(B.getSpaces()[B.getGameLoop().getSlainSpace()])) {//force move piece out of slain space
             for(int i=0;i< possibleMoves.size();i++)
                 if(possibleMoves.get(i)[0].getId()==B.getGameLoop().getSlainSpace()) {
                     System.out.println("Piece revived");
@@ -64,12 +72,14 @@ public class PrimeBlitzingBot extends Player.Bot{
                 bestBlitzingMove = chooseBlitzingMove(possibleMoves); //try to return a Space[] of size 2 [from,to]
 
 
+
+
             //here would be where we decide whether to use B move or P move
             if (prime && !moveIsEmpty(bestPrimingMove)) {
                 System.out.println("primingMove selected"+ bestPrimingMove[0].getId()+" "+bestPrimingMove[1].getId());
                 bestMove = bestPrimingMove;
                 ++primeMovesCounter;
-            } else if (blitz && !moveIsEmpty(bestBlitzingMove)) {
+            } else if (blitz && !moveIsEmpty(bestBlitzingMove)&& OtherPlayerHasSlainPieces()) {
                 System.out.println("blitzingMove selected"+ bestBlitzingMove[0].getId()+" "+bestBlitzingMove[1].getId());
                 bestMove = bestBlitzingMove;
                 ++blitzMoveCounter;
@@ -99,6 +109,11 @@ public class PrimeBlitzingBot extends Player.Bot{
             requestPassTurn();
             ++turnsPassedCounter;
         }
+    }
+
+    private boolean OtherPlayerHasSlainPieces() {
+        double r= Math.random();
+        return r>prob;
     }
 
     //returns whether any part of the move ==null(ie it was never set to a value
@@ -242,18 +257,6 @@ public class PrimeBlitzingBot extends Player.Bot{
         return res;
     }
 
-    private void simulateBlitzMove(Space[] move) {
-        System.out.println(move[0]+ " "+move[1]);
-        int index= move[1].getId();
-        B.moveToEatenSpace(index);
-
-    }
-
-    private void unDoBlitzMoveSim(Space[] move, Piece p) {
-        int index= move[1].getId();
-        B.moveBackFromEatenSpace(index,p );
-    }
-
 
 //_____________________________________________________________________________________________________________________
 
@@ -263,6 +266,13 @@ public class PrimeBlitzingBot extends Player.Bot{
         +"\nBlitzingMoves: "+blitzMoveCounter
         +"\nTurnsPassed: "+turnsPassedCounter
         +"\notherMoves: "+otherMovesCounter);
+    }
+
+    public void resetCounters(){
+         primeMovesCounter=0;
+         blitzMoveCounter=0;
+         turnsPassedCounter=0;
+         otherMovesCounter=0;
     }
 
     
