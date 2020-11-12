@@ -17,6 +17,9 @@ public class AlphaBetaBot extends Player.Bot {
     private  final int DEFAULT_DEPTH = 3;
     private final Player opponent;
     private int initialDepth = 0;
+    // private double UPPERBOUND;
+    // private double LOWERBOUND;
+
     public AlphaBetaBot(Board board) {
         super(0);
         setBoard(board);
@@ -24,6 +27,80 @@ public class AlphaBetaBot extends Player.Bot {
         System.out.println(this.B);
         System.out.println("-------------------------------------------------");
     }
+
+    private static void alpha_beta_pruning(Space s, Die die){
+      die.generateDie();
+      int diceRoll1 = die.getDieList[0];
+      int diceRoll2 = die.getDieList[1];
+      int to_ID = minMove(s, diceRoll1, diceRoll2, Integer.MAXIMUM, Integer.MINIMUM, initialDepth)[1];
+      makeMove(s.getID, to_ID);
+    }
+
+    private static double[] maxMove(Space currentSpace, int diceRoll1, int diceRoll2, double alpha, double beta, int depth){
+      if(depth == DEFAULT_DEPTH){
+        return currentSpace.util();
+      }
+      Arraylist<Space> stateArray= getAllSpaces(currentSpace, diceRoll1, diceRoll2);
+      double max_util = Integer.MINIMUM;
+      Space to = null;
+      for(Space s : stateArray){
+        if(alpha < expectiMaxMin(s, 0, alpha, beta, depth-1)){
+          max_util = expectiMaxMin(s, 0, alpha, beta, depth-1);
+          alpha = max_util;
+          to = s;
+        }
+      }
+      return new double[]{max_util, to.getID()};
+    }
+
+
+    private static double minMove(Space currentSpace, int diceRoll1, int diceRoll2, double alpha, double beta, int initialDepth){
+      if(depth == DEFAULT_DEPTH){
+        return currentState.util();
+      }
+      Arraylist<Space> stateArray= getAllSpaces(currentSpace, diceRoll1, diceRoll2);
+      double min_util = Integer.MINIMUM;
+      for(Space s : stateArray){
+        if(beta > expectiMaxMin(s, 0, alpha, beta, depth-1)){
+          min_util = expectiMaxMin(s, 0, alpha, beta, depth-1);
+          beta = min_util;
+        }
+      }
+      return min_util;
+    }
+
+
+    private static double expectiMaxMin(Space s, int player, double alpha, double beta, int depth){
+      double expectiValue = 0;
+      int count = 0;
+
+      if(player == 0){
+        for(int i=1;i<=6; i++){
+          for(int j=i+1; j<=6; j++){
+            if(expectiValue + (beta + (14-count)*UPPERBOUND)<alpha){
+              return expectiValue;
+            }
+            double value = minMove(s, i, j, alpha, beta, depth)[0];
+            expectiValue += value/18;
+            count ++;
+          }
+        }
+      }
+      else if(player == 1){
+        for(int i=1;i<=6; i++){
+          for(int j=i+1; j<=6; j++){
+            if(expectiValue + (beta + (14-count)*LOWERBOUND)>beta){
+              return expectiValue;
+            }
+            double value = maxMove(s, i, j, alpha, beta, depth)[0];
+            expectiValue += value/18;
+            count++;
+          }
+        }
+      }
+      return expectiValue;
+    }
+
 
     public void getBestPossibleMoves() {
         Space[] allSpaces = this.B.getSpaces();
