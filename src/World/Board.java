@@ -443,6 +443,30 @@ public class Board {
             System.out.println("Move invalid");
         }
     }
+     public void botMove(Move move){
+        if(isGoingToEat(move.from,move.to,move.playerId)){
+            move.isKill = true;
+        }
+        if(isGoingOut(move.from,move.to,move.playerId)){
+            move.isMoveOut = true;
+        }
+        BotMove(move.from, move.to);
+
+    }
+    private boolean isGoingToEat(int from, int to, int id){
+        if(this.getSpaces()[to].getSize() == 1){
+            if (this.getSpaces()[to].getPieces().get(0).getId() != id){
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean isGoingOut(int from, int to, int id){
+        if(this.getSpaces()[to].getSize() == 26 ){
+                return true;
+        }
+        return false;
+    }
     public void setDice(Die die){
         this.die = die;
     }
