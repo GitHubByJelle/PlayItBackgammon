@@ -44,7 +44,7 @@ public class Board {
         addPieces(24, 2, 1);
 
 
-   //     testboard A
+//     testboard A
 //
 //       addPieces(18,1,1);
 
@@ -62,7 +62,7 @@ public class Board {
         outOfPlay = new Space(26);
 
         //to correct for is home values of the pieces
-       forceHomeCheck();
+        forceHomeCheck();
     }
 
     public void forceHomeCheck(){
@@ -72,20 +72,11 @@ public class Board {
             }
         }
     }
-
-
-    public void createLoop(JFrame frame){
-        gameLoop= new GameLoop(this, frame);
-    }
-    public void createBotLoop(){
-        gameLoop= new GameLoop(this);
-    }
     //methods for board creation
     private void addPieces(int spaceIndex, int num, int colorId) {
         for (int i = 0; i < num; i++)
             spaces[spaceIndex].getPieces().add(new World.Piece(colorId));
     }
-
     private void createSpaces() {
         int x = 0;
         for (int i = 0; i < spaces.length; i++) {
@@ -93,21 +84,7 @@ public class Board {
         }
     }
 
-
-    public String toString() {
-        String res = String.format("%2d  %15s | %15s  %2d\n", 0, spaces[0], spaces[25], (25));
-        for (int i = 1; i <= 12; i++) {
-            res += String.format("%2d  %15s | %15s  %2d\n", i, spaces[i], spaces[25 - i], (25 - i));
-        }
-
-        return res;
-
-    }
-
-    public Space[] getSpaces() {
-        return spaces;
-    }
-
+    //validity checks
     public ArrayList<Space> getValidMoves(Space selected) {
 
         ArrayList<Space> res = new ArrayList<Space>();
@@ -127,7 +104,7 @@ public class Board {
 
             } else {
                 //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
-                if (allPiecesHome(selected.getPieces().get(0).getId())) {
+                if (!selected.isEmpty() &&allPiecesHome(selected.getPieces().get(0).getId())) {
 
                     if (selected.getId()>6) {
                         for (int j = 24; j > 18; j--) {
@@ -188,11 +165,8 @@ public class Board {
                 }
             }
         }
-
         return res;
-
     }
-
 
 
     private boolean allPiecesHome(int pieceID) {
@@ -209,12 +183,11 @@ public class Board {
         return true;
     }
 
-
     //check if the target space is empty or if it has pieces of the same color, or if it has 1 piece of the opposite color
     public boolean validityCheck(Space selected, Space target) {
-        return target.isEmpty() || //if the target space is empty
+        return !selected.isEmpty() &&(target.isEmpty() || //if the target space is empty
                 piecesOfSameColor(selected, target) || //if the space has pieces of the same color
-                pieceCanBeEaten(selected, target); //target has one piece and its color doesnt match
+                pieceCanBeEaten(selected, target)); //target has one piece and its color doesnt match
     }
 
     private boolean piecesOfSameColor(Space selected, Space target) {
@@ -281,18 +254,20 @@ public class Board {
         }
     }
 
-    public Die getDie() {
-        return die;
+    //1 liners
+    public Space[] getSpaces() {
+        return spaces;
     }
+    public void setDice(Die die){ this.die = die; }
+    public GameLoop getGameLoop(){ return this.gameLoop; }
+    public Die getDie() { return die; }
+    public boolean checkWinCondition() { return player1.getPiecesOutOfPlay()==15 ||player2.getPiecesOutOfPlay()==15; }
+    public void createLoop(JFrame frame){ gameLoop= new GameLoop(this, frame); }
+    public void createBotLoop(){ gameLoop= new GameLoop(this); }
+    public Player getPlayer1(){return player1;}
+    public Player getPlayer2(){return player2;}
 
-
-
-
-    public boolean checkWinCondition() {
-        return player1.getPiecesOutOfPlay()==15 ||player2.getPiecesOutOfPlay()==15;
-    }
-
-
+    //players setup
     public  void setPlayers(String one, String two){
 
         if(one.equals(Variables.HUMAN)){
@@ -338,16 +313,13 @@ public class Board {
 //            }
 //        }
     }
-
-
     public void setPlayers(Player one, Player two){
         player1=one;
         player1.setBoard(this);
         player2=two;
         player2.setBoard(this);
     }
-   public Player getPlayer1(){return player1;}
-   public Player getPlayer2(){return player2;}
+
 
 
     public void moveToEatenSpace(int k){
@@ -443,6 +415,7 @@ public class Board {
             System.out.println("Move invalid");
         }
     }
+
      public void botMove(Move move){
         if(isGoingToEat(move.from,move.to,move.playerId)){
             move.isKill = true;
@@ -467,12 +440,17 @@ public class Board {
         }
         return false;
     }
-    public void setDice(Die die){
-        this.die = die;
-    }
 
-    public GameLoop getGameLoop(){
-        return this.gameLoop;
+
+    @Override
+    public String toString() {
+        String res = String.format("%2d  %15s | %15s  %2d\n", 0, spaces[0], spaces[25], (25));
+        for (int i = 1; i <= 12; i++) {
+            res += String.format("%2d  %15s | %15s  %2d\n", i, spaces[i], spaces[25 - i], (25 - i));
+        }
+
+        return res;
+
     }
 
 }
