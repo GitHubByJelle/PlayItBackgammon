@@ -14,6 +14,7 @@ public class PrimeBlitzingBot extends Player.Bot{
     private boolean prime= true;
     private double prob=0;
     int secondPMove=0;
+    int iwannadie=0;
     Space[] nextMove = new Space[2];
 
 
@@ -21,7 +22,7 @@ public class PrimeBlitzingBot extends Player.Bot{
         super(id);
     }
 
-    public int getPrimeMovesCounter(){return secondPMove;}
+    public int getPrimeMovesCounter(){return iwannadie;}
     public int getBlitzMoveCounter(){return blitzMoveCounter;}
 
     public PrimeBlitzingBot(int id,boolean blitzing, boolean prime){
@@ -295,18 +296,46 @@ public class PrimeBlitzingBot extends Player.Bot{
         int numWalls=4;
         int currentNumWalls= countWalls(boardrep,wallSize);
         int skip =possMoves.indexOf(lastMove);
+        int dummy=-1;
         ArrayList<Space[]> notincludingcur = new ArrayList<>();
 
         for(int i=0;i<possMoves.size();i++){
             if(i!=skip)
                 notincludingcur.add(possMoves.get(i));
         }
+        for(int i=0;i<boardrep.length;i++){
+            dummy= possibleProtection(notincludingcur, boardrep,i );
+            if( boardrep[i][1]==1 && dummy!=-1){
+                ++iwannadie;
+                nextMove=possMoves.get(dummy);
+                return;
+            }
+        }
+
         if(currentNumWalls<numWalls) {
             nextMove = evaluatePossPrimingMoves(boardrep, numWalls, notincludingcur, wallSize);
         }
 
     }
 
+    private int possibleProtection( ArrayList<Space[]> possMoves , int [][]board ,int index) {//{id,numpieces}  {from,to}
+        int []curSpace= board[index];
+        for(int i=0;i<possMoves.size();i++){
+
+            //move diff piece to not be alone
+            if(possMoves.get(i)[1].getId()==curSpace[0] && board[possMoves.get(i)[1].getId()-1][1] >1 ){
+                return i;
+            }
+
+            //move this piece to not b alone
+            if(possMoves.get(i)[0].getId()==curSpace[0] && board[possMoves.get(i)[0].getId()-1][1] >=1 ){
+                return i;
+            }
+
+        }
+
+        return -1;
+    }
 
 
 //_____________________________________________________________________________________________________________________
@@ -325,6 +354,7 @@ public class PrimeBlitzingBot extends Player.Bot{
          turnsPassedCounter=0;
          otherMovesCounter=0;
          secondPMove=0;
+         iwannadie=0;
     }
 
     
