@@ -1,4 +1,4 @@
-
+package AI;
 
 public class Move {
     // Class represents a move
