@@ -2,10 +2,7 @@ package World;
 
 
 
-import AI.BotA;
-import AI.Move;
-import AI.PrimeBlitzingBot;
-import AI.SimpleBot;
+import AI.*;
 import Utils.Variables;
 
 import javax.swing.*;
@@ -299,6 +296,15 @@ public class Board {
         }
         if(two.equals(Variables.BP)){
             player2= new PrimeBlitzingBot(1);
+            player2.setBoard(this);
+        }
+
+        if(one.equals(Variables.PBE)){
+            player1= new PBE(0);
+            player1.setBoard(this);
+        }
+        if(two.equals(Variables.PBE)){
+            player2= new PBE(1);
             player2.setBoard(this);
         }
 
