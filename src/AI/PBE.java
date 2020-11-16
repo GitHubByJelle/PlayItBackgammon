@@ -1,6 +1,5 @@
 package AI;
 
-import World.Board;
 import World.Player;
 import World.Space;
 
@@ -11,7 +10,7 @@ public class PBE extends Player.Bot{
 
 
     private boolean eaten=false;
-    final double [] weights=new double[]{2,-.2,1};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces}
+    final double [] weights=new double[]{2,-.2,1,-1};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces, high stacks(>5)}
 
     public PBE(int id) {
         super(id);
@@ -70,7 +69,8 @@ public class PBE extends Player.Bot{
         int numWalls = countWalls(home, 2);
         int singles = countSingles(currentBoard);
         int eatenOpp= countEatenOpp(currentBoard);
-        double currentScore = evaluate(numWalls,singles,eatenOpp);
+        int highStacks= countHighStacks(home);
+        double currentScore = evaluate(numWalls,singles,eatenOpp, highStacks);
         int indexBest =-1;
 
 
@@ -83,7 +83,8 @@ public class PBE extends Player.Bot{
             numWalls = countWalls(home, 2);
             singles = countSingles(currentBoard);
             eatenOpp= countEatenOpp(currentBoard);
-            scores[i]= evaluate(numWalls,singles,eatenOpp);
+            highStacks= countHighStacks(home);
+            scores[i]= evaluate(numWalls,singles,eatenOpp, highStacks);
             unDoMoveSim(currentBoard, possibleMoves.get(i));
         //    System.out.println(Arrays.deepToString(currentBoard).replace("], ", "]\n").replace("[[", "[").replace("]]", "]"));
 
@@ -102,6 +103,21 @@ public class PBE extends Player.Bot{
         }
 
 
+        return res;
+    }
+
+    private int countHighStacks(int[][] home) {
+        int res =0;
+        int totalPieces=0;
+        for(int i=0;i<home.length; i++){
+            if(home[i][1]>5){
+                ++res;
+            }
+            totalPieces+=home[i][1];
+        }
+        if(totalPieces==15){
+            res=0;
+        }
         return res;
     }
 
@@ -234,8 +250,8 @@ public class PBE extends Player.Bot{
     }
 
 
-    private double evaluate(int numWalls, int singles,int eatenOpp){
-        return weights[0]*numWalls+weights[1]*singles+ weights[2]*eatenOpp;
+    private double evaluate(int numWalls, int singles,int eatenOpp, int highStacks){
+        return weights[0]*numWalls+weights[1]*singles+ weights[2]*eatenOpp + weights[3]*highStacks;
     }
 
 }
