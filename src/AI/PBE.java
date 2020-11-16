@@ -10,7 +10,7 @@ public class PBE extends Player.Bot{
 
 
     private boolean eaten=false;
-    final double [] weights=new double[]{2,-.2,1,-1};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces, high stacks(>5)}
+    final double [] weights=new double[]{2,-.2,1,-1};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces, high stacks(>=4) in home space,}
 
     public PBE(int id) {
         super(id);
@@ -110,7 +110,7 @@ public class PBE extends Player.Bot{
         int res =0;
         int totalPieces=0;
         for(int i=0;i<home.length; i++){
-            if(home[i][1]>5){
+            if(home[i][1]>=4){
                 ++res;
             }
             totalPieces+=home[i][1];
@@ -138,18 +138,12 @@ public class PBE extends Player.Bot{
         int spaceIndex=0;
         if(id==0){
             for(int i=19;i<=24;i++){
-                homeSpaces[spaceIndex]= new int[]{i, 0};
-                if(!B.getSpaces()[i].isEmpty() && B.getSpaces()[i].getPieces().get(0).getId()==id){
-                    homeSpaces[spaceIndex][1]=B.getSpaces()[i].getSize();
-                }
+                homeSpaces[spaceIndex]= new int[]{i, currentBoard[i-1][1]};
                 ++spaceIndex;
             }
         }else{
             for(int i=6;i>=1;i--){
-                homeSpaces[spaceIndex]= new int[]{i, 0};
-                if(!B.getSpaces()[i].isEmpty() && B.getSpaces()[i].getPieces().get(0).getId()==id){
-                    homeSpaces[spaceIndex][1]=B.getSpaces()[i].getSize();
-                }
+                homeSpaces[spaceIndex]= new int[]{i, currentBoard[i-1][1]};
                 ++spaceIndex;
             }
         }
