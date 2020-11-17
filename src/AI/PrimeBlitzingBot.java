@@ -12,10 +12,14 @@ public class PrimeBlitzingBot extends Player.Bot{
     int otherMovesCounter=0;
     private boolean blitz=true;
     private boolean prime= true;
+    private boolean protect=true;
     private double prob=0;
     int secondPMove=0;
     int iwannadie=0;
     Space[] nextMove = new Space[2];
+
+
+    final int [] weights=new int[]{1,-1,1};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces}
 
 
     public PrimeBlitzingBot(int id) {
@@ -37,7 +41,7 @@ public class PrimeBlitzingBot extends Player.Bot{
 
     @Override
     public String getName() {
-        return "PrimeBlitzingBot";
+        return "PB";
     }
 
     @Override
@@ -129,10 +133,7 @@ public class PrimeBlitzingBot extends Player.Bot{
         return bestMove[0].getId()==nextMove[0].getId() &&bestMove[1].getId()==nextMove[1].getId();
     }
 
-    private boolean OtherPlayerHasSlainPieces() {
-        double r= Math.random();
-        return r>prob;
-    }
+
 
     //returns whether any part of the move ==null(ie it was never set to a value
     private boolean moveIsEmpty(Space[] m) {
@@ -284,7 +285,7 @@ public class PrimeBlitzingBot extends Player.Bot{
 
             }
         }
-        if(!moveIsEmpty(res))
+        if(protect&&!moveIsEmpty(res))
             chooseNextMove(res, possibleMoves);
         return res;
     }
@@ -338,7 +339,12 @@ public class PrimeBlitzingBot extends Player.Bot{
     }
 
 
-//_____________________________________________________________________________________________________________________
+//_____________________________________________________________________________________________________________________ALTERNATE
+
+    //{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces}
+
+
+//______________________________________________________________________________________________________________________________
 
     public void printSummary(){
         System.out.println("Player #: "+id+

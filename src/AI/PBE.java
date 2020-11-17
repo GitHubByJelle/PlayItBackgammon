@@ -10,7 +10,7 @@ public class PBE extends Player.Bot{
 
 
     private boolean eaten=false;
-    final double [] weights=new double[]{2,-.2,1,-1};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces, high stacks(>=4) in home space,}
+    final double [] weights=new double[]{2,-.2,1.5,-1};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces, high stacks(>=4) in home space,}
 
     public PBE(int id) {
         super(id);
@@ -18,7 +18,7 @@ public class PBE extends Player.Bot{
 
     @Override
     public String getName() {
-        return "PBE";
+        return "PrimeBlitzingBot";
     }
 
     @Override
@@ -164,6 +164,9 @@ public class PBE extends Player.Bot{
         for( int i=0;i<currentBoard.length;i++){
             res+=currentBoard[i][2];
         }
+        Player opp;
+        if(id==0)opp=B.getPlayer2();else opp=B.getPlayer1();
+
         return 15-res;
     }
 

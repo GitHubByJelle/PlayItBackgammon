@@ -291,22 +291,14 @@ public class Board {
             player2.setBoard(this);
         }
         if(one.equals(Variables.BP)){
-            player1= new PrimeBlitzingBot(0);
-            player1.setBoard(this);
-        }
-        if(two.equals(Variables.BP)){
-            player2= new PrimeBlitzingBot(1);
-            player2.setBoard(this);
-        }
-
-        if(one.equals(Variables.PBE)){
             player1= new PBE(0);
             player1.setBoard(this);
         }
-        if(two.equals(Variables.PBE)){
+        if(two.equals(Variables.BP)){
             player2= new PBE(1);
             player2.setBoard(this);
         }
+
 
 //        if(player1==null ||player2==null) {
 //            for (int i = 1; i < Utils.Variables.GET_PLAYER_TYPES().length; i++) {
