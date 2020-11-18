@@ -98,7 +98,7 @@ public abstract class Player {
         public void pauseBot(){
             if(pausing){
                 try{
-                    Thread.sleep((2000));
+                    Thread.sleep((100));
                 }catch(InterruptedException e){
                     System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 }

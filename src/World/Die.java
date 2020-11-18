@@ -132,7 +132,9 @@ public class Die {
         removeUsedRoll(max);
 
     }
-
+    public double probability() {
+        return getCurRoll()[0] == getCurRoll()[1] ? 1 / 36. : 1 / 18.;
+    }
     public void setDieTo(ArrayList<int[]> i) {
         DieList=i;
     }
