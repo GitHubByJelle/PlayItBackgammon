@@ -17,7 +17,7 @@ public class BotA extends Player.Bot{
     //TODO Optimize selection out of ValidMoves using GA
 
     //0 is white and 1 is red
-    public double[] weightsarr={1,1,1,1,1};
+    public double[] weightsarr = {0.050914388250086436, 0.33732050175877887, 1.0142824733423634, 0.4777561576493374, 0.12457212766619793};
     public BotA(int id) {
         super(id);
     }
@@ -244,6 +244,7 @@ public class BotA extends Player.Bot{
         ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
         double[] value_moves = new double[all_selected.size()];
         double[] bestmove;
+        boolean eatMove = false;
         int pieceID =0;
         int validroll;
 //        Die diceListCopy = this.B.getDie();
@@ -263,7 +264,14 @@ public class BotA extends Player.Bot{
 //                    this.B.getDie().printCurRoll();
 //                    System.out.println(this.B);
 //                }
+                if(all_highest_moves.get(i).getPieces().size() == 1 && this.B.getGameLoop().getCurrentPlayer().getId() != all_highest_moves.get(i).getPieces().get(0).getId()){
+                    eatMove = true;
+                }
                 this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
+                if(eatMove) {
+                    this.B.getGameLoop().checkEaten(all_highest_moves.get(i).getId());
+                }
+
 
                 this.B.getDie().deleteNumber(validroll);
                 if(deepnessconstr > 0) {
@@ -287,6 +295,12 @@ public class BotA extends Player.Bot{
 //                System.out.println(value_moves[i]);
 
                 this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
+                if(eatMove){
+                    this.B.getGameLoop().SwitchPlayer();
+                    this.B.moveBackFromEatenSpaceID(all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
+                    this.B.getGameLoop().getCurrentPlayer().revivePiece();
+                    this.B.getGameLoop().SwitchPlayer();
+                }
                 this.B.getDie().addNumber(validroll);
 
             }
@@ -334,8 +348,8 @@ public class BotA extends Player.Bot{
         }
         return true;
     }
-    public void ExecuteNextMove2(){
-        double[] move = GetBestMove(4);
+    public void ExecuteNextMove2(int deepness){
+        double[] move = GetBestMove(deepness);
         B.forceHomeCheck();
         if(move[0]==0 && move[1]==0){
             for(Integer inter: this.B.getDie().getCurRoll()){
@@ -671,7 +685,7 @@ public class BotA extends Player.Bot{
         if(this.getId() == 1){
             //this.ExecuteDeeperMove();
 //            this.ExecuteDeeperMove2();
-            this.ExecuteNextMove2();
+            this.ExecuteNextMove2(4);
         }
         else{
             this.ExecuteNextMove();

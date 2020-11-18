@@ -65,6 +65,7 @@ public class Board {
        forceHomeCheck();
     }
 
+
     public void forceHomeCheck(){
         for (int i = 0; i < spaces.length; i++) {
             for (int a = 0; a < spaces[i].getPieces().size(); a++) {
@@ -360,6 +361,12 @@ public class Board {
 
     public void moveBackFromEatenSpace(int k, Piece p){
         if(p.getId()==player1.getId())
+            spaces[0].movePiece(spaces[k]);
+        else
+            spaces[25].movePiece(spaces[k]);
+    }
+    public void moveBackFromEatenSpaceID(int k, int p){
+        if(p==player1.getId())
             spaces[0].movePiece(spaces[k]);
         else
             spaces[25].movePiece(spaces[k]);

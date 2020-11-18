@@ -10,7 +10,7 @@ public class Evolution {
         Random r = new Random();
         //used to start population from genome
         //use by insert "new Individual(a)" inside the first population brackets
-        //double[] a = {0.14400302308720325, 0.8065860539235684, 0.7319919880164117, 0.05116324173757514, 0.028888676945782454};
+        //double[] a = {0.050914388250086436, 0.33732050175877887, 1.0142824733423634, 0.4777561576493374, 0.12457212766619793};
         Population population = new Population();
         System.out.println("This is Generation " + n++  +  " :");
         System.out.println("With Weights array:" );
