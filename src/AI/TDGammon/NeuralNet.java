@@ -65,6 +65,7 @@ public class NeuralNet {
     public static float sumGradient(int leftIndex , int rightIndex ){
         float sum=0;
         Layer current= layer[leftIndex];
+        return sum;
     }
 
 
