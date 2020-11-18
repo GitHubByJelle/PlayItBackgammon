@@ -5,7 +5,7 @@ import World.Space;
 
 import java.util.ArrayList;
 
-public class PrimeBlitzingBot extends Player.Bot{
+public class ZX extends Player.Bot{
     int primeMovesCounter=0;
     int blitzMoveCounter=0;
     int turnsPassedCounter=0;
@@ -22,19 +22,19 @@ public class PrimeBlitzingBot extends Player.Bot{
     final int [] weights=new int[]{1,-1,1};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces}
 
 
-    public PrimeBlitzingBot(int id) {
+    public ZX(int id) {
         super(id);
     }
 
     public int getPrimeMovesCounter(){return iwannadie;}
     public int getBlitzMoveCounter(){return blitzMoveCounter;}
 
-    public PrimeBlitzingBot(int id,boolean blitzing, boolean prime){
+    public ZX(int id, boolean blitzing, boolean prime){
         super(id);
         this.blitz=blitzing;
         this.prime=prime;
     }
-    public PrimeBlitzingBot(int id, double prob){
+    public ZX(int id, double prob){
         super(id);
         this.prob=prob;
     }

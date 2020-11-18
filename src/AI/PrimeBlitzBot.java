@@ -6,15 +6,22 @@ import World.Space;
 import java.util.ArrayList;
 
 
-public class PBE extends Player.Bot{
+public class PrimeBlitzBot extends Player.Bot{
 
 
     private boolean eaten=false;
-    final double [] weights=new double[]{2,-.2,1.5,-1};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces, high stacks(>=4) in home space,}
+    double [] weights=new double[]{2,-.2,1.5,-1.5};//{number of this player's walls, number of this player's single pieces, number of opponent eaten pieces, high stacks(>=4) in home space}
 
-    public PBE(int id) {
+    public PrimeBlitzBot(int id) {
         super(id);
     }
+
+    public PrimeBlitzBot(int id, double[] w) {
+        super(id);
+        this.weights=w;
+    }
+    public double[] getW(){return weights;}
+
 
     @Override
     public String getName() {
@@ -25,7 +32,7 @@ public class PBE extends Player.Bot{
     public void executeTurn() {
         B.getGameLoop().repaintBV();
         moveChoice();
-       pauseBot();
+        pauseBot();
         B.getGameLoop().repaintBV();
     }
 
@@ -37,7 +44,7 @@ public class PBE extends Player.Bot{
         if (possFrom.contains(B.getSpaces()[B.getGameLoop().getSlainSpace()])) {//force move piece out of slain space
             for (int i = 0; i < possibleMoves.size(); i++) {
                 if (possibleMoves.get(i)[0].getId() == B.getGameLoop().getSlainSpace()) {
-                    System.out.println("Piece revived");
+                    //System.out.println("Piece revived");
                     bestMove[0] = possibleMoves.get(i)[0];
                     bestMove[1] = possibleMoves.get(i)[1];
                     break;
@@ -49,9 +56,9 @@ public class PBE extends Player.Bot{
 
         if(!moveIsEmpty(bestMove)) {
             B.playerMove(bestMove[0].getId(), bestMove[1].getId());
-            System.out.println(bestMove[0].getId()+"," +bestMove[1].getId());
+            //System.out.println(bestMove[0].getId()+"," +bestMove[1].getId());
         }else {
-            System.out.println("PASS");
+           // System.out.println("PASS");
             requestPassTurn();
         }
 
@@ -167,7 +174,7 @@ public class PBE extends Player.Bot{
         Player opp;
         if(id==0)opp=B.getPlayer2();else opp=B.getPlayer1();
 
-        return 15-res;
+        return 15-res-opp.getPiecesOutOfPlay();
     }
 
     private int countSingles(int[][] currentBoard) {
