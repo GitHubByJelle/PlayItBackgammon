@@ -17,7 +17,7 @@ public class BotA extends Player.Bot{
     //TODO Optimize selection out of ValidMoves using GA
 
     //0 is white and 1 is red
-    public double[] weightsarr = {0.050914388250086436, 0.33732050175877887, 1.0142824733423634, 0.4777561576493374, 0.12457212766619793};
+    public double[] weightsarr = {0.6540529562402766, 0.0039018447683845103, 0.3638194467066273, 0.2929106394696771, 0.07849703551040255};
     public BotA(int id) {
         super(id);
     }
@@ -35,27 +35,27 @@ public class BotA extends Player.Bot{
             this.ExecuteNextMove();
         }
     }
-    public void TwoDeepLoop(){
-        while (this.B.getDie().getCurRoll().length > 0) {
-            this.B.checkAllPiecesHome();
-            this.ExecuteDeeperMove();
-        }
-    }
+//    public void TwoDeepLoop(){
+//        while (this.B.getDie().getCurRoll().length > 0) {
+//            this.B.checkAllPiecesHome();
+//            this.ExecuteDeeperMove();
+//        }
+//    }
 
-    //returns 0 if W lost, 1 if W won
-    public int SingleGameLoop(){
-        while(!this.B.checkWinCondition()){
-            if(this.B.getGameLoop().getCurrentPlayer().getId() == 1){
-                this.TwoDeepLoop();
-            }else{
-                this.PlayerLoop();
-
-            } }
-        if(this.B.getGameLoop().getCurrentPlayer().getId() == 0){
-            return 0;
-        }
-        return 1;
-    }
+//    //returns 0 if W lost, 1 if W won
+//    public int SingleGameLoop(){
+//        while(!this.B.checkWinCondition()){
+//            if(this.B.getGameLoop().getCurrentPlayer().getId() == 1){
+//                this.TwoDeepLoop();
+//            }else{
+//                this.PlayerLoop();
+//
+//            } }
+//        if(this.B.getGameLoop().getCurrentPlayer().getId() == 0){
+//            return 0;
+//        }
+//        return 1;
+//    }
 
 
     public ArrayList<Space> GetHighestMoves(ArrayList<Space> selected_spaces){
@@ -73,57 +73,57 @@ public class BotA extends Player.Bot{
         return moves;
     }
 
-    public void ExecuteDeeperMove(){
-        ArrayList<Space> all_selected = GetAllSelectedSpaces();
-        ArrayList<Space> all_selected_2d;
-
-        ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
-        ArrayList<Space> all_highest_moves_2d;
-
-        double[] value_moves = new double[all_selected.size()];
-        double[] value_moves_2d;
-        int pieceID =0;
-        double average = 0;
-        double[] maxarr = new double[all_highest_moves.size()];
-
-        if(all_highest_moves.size()>0) {
-            for (int i = 0; i < all_selected.size(); i++) {
-                if(all_selected.get(i).getPieces().size()>0) {
-                    pieceID = all_selected.get(i).getPieces().get(0).getId();
-                }
-                this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
-                all_selected_2d = GetAllSelectedSpaces();
-                all_highest_moves_2d = GetHighestMoves(all_selected_2d);
-                value_moves_2d = new double[all_selected_2d.size()];
-                this.B.getGameLoop().SwitchPlayer();
-                if(all_highest_moves_2d.size()>0) {
-                    for (int j = 0; j < all_selected_2d.size(); j++) {
-                        if(all_selected_2d.get(j).getPieces().size()>0) {
-                            pieceID = all_selected_2d.get(j).getPieces().get(0).getId();
-                        }
-                        this.B.playerMoveNoCheck(all_selected_2d.get(j).getId(), all_highest_moves_2d.get(j).getId(), pieceID);
-                        value_moves_2d[j] = EvaluationFunc();
-                        this.B.playerMoveNoCheck(all_highest_moves_2d.get(j).getId(), all_selected_2d.get(j).getId(), pieceID);
-                    }
-                    maxarr[i] = max(value_moves_2d);
-                }
-                else{
-                    maxarr[i] = 0;
-                }
-                this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
-                this.B.getGameLoop().SwitchPlayer();
-            }
-            int index = argmin(maxarr);
-            B.forceHomeCheck();
-            B.playerMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
-            //System.out.println(this.getId());
-        }
-        else{
-            for(Integer inter: this.B.getDie().getCurRoll()){
-                this.B.getDie().removeUsedRoll(inter);
-            }
-        }
-    }
+//    public void ExecuteDeeperMove(){
+//        ArrayList<Space> all_selected = GetAllSelectedSpaces();
+//        ArrayList<Space> all_selected_2d;
+//
+//        ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
+//        ArrayList<Space> all_highest_moves_2d;
+//
+//        double[] value_moves = new double[all_selected.size()];
+//        double[] value_moves_2d;
+//        int pieceID =0;
+//        double average = 0;
+//        double[] maxarr = new double[all_highest_moves.size()];
+//
+//        if(all_highest_moves.size()>0) {
+//            for (int i = 0; i < all_selected.size(); i++) {
+//                if(all_selected.get(i).getPieces().size()>0) {
+//                    pieceID = all_selected.get(i).getPieces().get(0).getId();
+//                }
+//                this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
+//                all_selected_2d = GetAllSelectedSpaces();
+//                all_highest_moves_2d = GetHighestMoves(all_selected_2d);
+//                value_moves_2d = new double[all_selected_2d.size()];
+//                this.B.getGameLoop().SwitchPlayer();
+//                if(all_highest_moves_2d.size()>0) {
+//                    for (int j = 0; j < all_selected_2d.size(); j++) {
+//                        if(all_selected_2d.get(j).getPieces().size()>0) {
+//                            pieceID = all_selected_2d.get(j).getPieces().get(0).getId();
+//                        }
+//                        this.B.playerMoveNoCheck(all_selected_2d.get(j).getId(), all_highest_moves_2d.get(j).getId(), pieceID);
+//                        value_moves_2d[j] = EvaluationFunc();
+//                        this.B.playerMoveNoCheck(all_highest_moves_2d.get(j).getId(), all_selected_2d.get(j).getId(), pieceID);
+//                    }
+//                    maxarr[i] = max(value_moves_2d);
+//                }
+//                else{
+//                    maxarr[i] = 0;
+//                }
+//                this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
+//                this.B.getGameLoop().SwitchPlayer();
+//            }
+//            int index = argmin(maxarr);
+//            B.forceHomeCheck();
+//            B.playerMove(all_selected.get(index).getId(), all_highest_moves.get(index).getId());
+//            //System.out.println(this.getId());
+//        }
+//        else{
+//            for(Integer inter: this.B.getDie().getCurRoll()){
+//                this.B.getDie().removeUsedRoll(inter);
+//            }
+//        }
+//    }
 
 //    public void ExecuteDeeperMove2(){
 //        // Making the first move of Layer 1
@@ -247,31 +247,22 @@ public class BotA extends Player.Bot{
         boolean eatMove = false;
         int pieceID =0;
         int validroll;
-//        Die diceListCopy = this.B.getDie();
-//        int[] diceCopy = diceCopy(this.B.getDie().getCurRoll());
-//        this.B.setDice()
         if(all_highest_moves.size()>0) {
             for (int i = 0; i < all_selected.size(); i++) {
                 if(all_selected.get(i).getPieces().size()>0) {
                     pieceID = all_selected.get(i).getPieces().get(all_selected.get(i).getPieces().size()-1).getId();
                 }
                 validroll = getValidRoll(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
-//                if(!isInArray(this.B.getDie().getCurRoll(), validroll)){
-//                    System.out.println();
-//                    getValidRoll2(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
-//                    System.out.println("validroll");
-//                    System.out.println(validroll);
-//                    this.B.getDie().printCurRoll();
-//                    System.out.println(this.B);
-//                }
-                if(all_highest_moves.get(i).getPieces().size() == 1 && this.B.getGameLoop().getCurrentPlayer().getId() != all_highest_moves.get(i).getPieces().get(0).getId()){
+                if(all_highest_moves.get(i).getPieces().size() == 1 && this.B.getGameLoop().getCurrentPlayer().getId() != all_highest_moves.get(i).getPieces().get(0).getId() && all_highest_moves.get(i).getId() != 26){
                     eatMove = true;
+                } else {
+                    eatMove = false;
                 }
+
                 this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
                 if(eatMove) {
                     this.B.getGameLoop().checkEaten(all_highest_moves.get(i).getId());
                 }
-
 
                 this.B.getDie().deleteNumber(validroll);
                 if(deepnessconstr > 0) {
@@ -281,7 +272,7 @@ public class BotA extends Player.Bot{
                         bestmove = GetBestMove(deepnessconstr-1);
                         this.B.getGameLoop().SwitchPlayer();
                         this.B.getDie().goRollBack();
-                        value_moves[i] = -bestmove[2];
+                        value_moves[i] = bestmove[2]; //TODO change such that bot returns worst case scenario as value
                     } else{
                         bestmove = GetBestMove(deepnessconstr-1);
                         value_moves[i] = bestmove[2];
@@ -291,9 +282,6 @@ public class BotA extends Player.Bot{
                     value_moves[i] = EvaluationFunc();
 
                 }
-//                System.out.println("Deepness: " + deepnessconstr);
-//                System.out.println(value_moves[i]);
-
                 this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
                 if(eatMove){
                     this.B.getGameLoop().SwitchPlayer();
@@ -304,10 +292,13 @@ public class BotA extends Player.Bot{
                 this.B.getDie().addNumber(validroll);
 
             }
-//            System.out.println(Arrays.toString(value_moves));
-//            System.out.println(this.B.getGameLoop().getCurrentPlayer().getId());
+            int index = 99;
+            if(this.B.getGameLoop().getCurrentPlayer().getId() == 1){
+                index = argmax(value_moves);
+            } else{
+                index = argmin(value_moves);
 
-            int index = argmax(value_moves);
+            }
             double[] returnlist = {all_selected.get(index).getId(), all_highest_moves.get(index).getId(), value_moves[index]};
             return returnlist;
 
@@ -377,9 +368,9 @@ public class BotA extends Player.Bot{
                 if(all_selected.get(i).getPieces().size()>0) {
                     pieceID = all_selected.get(i).getPieces().get(0).getId();
                 }
-                this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
+                this.B.playerMoveNoCheckBot(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
                 value_moves[i] = EvaluationFunc();
-                this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
+                this.B.playerMoveNoCheckBot(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
             }
             int index = argmax(value_moves);
             B.forceHomeCheck();
@@ -472,9 +463,9 @@ public class BotA extends Player.Bot{
             if(selected.getPieces().size()>0) {
                 pieceID = selected.getPieces().get(0).getId();
             }
-            this.B.playerMoveNoCheck(selected.getId(), moves.get(i).getId(), pieceID);
+            this.B.playerMoveNoCheckBot(selected.getId(), moves.get(i).getId(), pieceID);
             valuemoves[i] = EvaluationFunc();
-            this.B.playerMoveNoCheck(moves.get(i).getId(), selected.getId(), pieceID);
+            this.B.playerMoveNoCheckBot(moves.get(i).getId(), selected.getId(), pieceID);
         }
         return moves.get(argmax(valuemoves));
     }
@@ -497,24 +488,24 @@ public class BotA extends Player.Bot{
             for (int i = 1; i <= 25; i++) {
                 for (Piece piece : this.B.getSpaces()[i].getPieces()) {
                     if (piece.getId() == 1) {
-                        pip += i;
+                        pip += Math.pow(i,2);
                     }
                 }
             }
             if(this.B.getSpaces()[0].getSize() > 0 && this.B.getSpaces()[0].getPieces().get(0).getId() == 1){
                 pip += this.B.getSpaces()[0].getSize()*24;
             }
-            return -pip;
+            return - pip;
         } else {
             double pip = 0;
             for (int i = 0; i < 25; i++) {
                 for (Piece piece : this.B.getSpaces()[i].getPieces()) {
                     if (piece.getId() == 0) {
-                        pip += 25 - i;
+                        pip += Math.pow(25 - i,2);
                     }
                 }
             }
-            return -pip;
+            return - pip;
         }
     }
     // How many pieces are finished, assuming finished position is at 0.
@@ -685,10 +676,10 @@ public class BotA extends Player.Bot{
         if(this.getId() == 1){
             //this.ExecuteDeeperMove();
 //            this.ExecuteDeeperMove2();
-            this.ExecuteNextMove2(4);
+            this.ExecuteNextMove2(2);
         }
         else{
-            this.ExecuteNextMove();
+            this.ExecuteNextMove2(1);
         }
         B.getGameLoop().repaintBV();
 //        pauseBot();

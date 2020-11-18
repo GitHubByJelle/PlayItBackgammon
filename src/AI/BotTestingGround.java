@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class BotTestingGround {
     private static ArrayList<int[]> i= new ArrayList<int[]>();
     public static int counter = 0;
-    static double[] weightsarr = {0.050914388250086436, 0.33732050175877887, 1.0142824733423634, 0.4777561576493374, 0.12457212766619793};
+    static double[] weightsarr = {1,1,1,1,1};
     static Board b;
     static double[] diffweightsarr = {1,1,1,1,1};
 
@@ -21,10 +21,10 @@ public class BotTestingGround {
 //        for(int k=0;k<l.length;k++){
 //            i.add(l[k]);
 //        }
-        Player.Bot one= new PrimeBlitzingBot(0);
-        Player.Bot two = new PrimeBlitzingBot(1);
-//        Player.Bot one= new BotA(0,weightsarr);
-//        Player.Bot two = new BotA(1,diffweightsarr);
+//        Player.Bot one= new PrimeBlitzingBot(0);
+//        Player.Bot two = new PrimeBlitzingBot(1);
+        Player.Bot one= new BotA(0,weightsarr);
+        Player.Bot two = new BotA(1,diffweightsarr);
         one.pausing=false;
         two.pausing=false;
         b.setPlayers(one,two);
@@ -34,7 +34,7 @@ public class BotTestingGround {
     }
 
     public static void testMultipleTimes(Player.Bot one, Player.Bot two ){
-        for(int i = 0; i<1000; i++){
+        for(int i = 0; i<100; i++){
             b = new Board();
 
             one.resetPlayer();
@@ -42,7 +42,7 @@ public class BotTestingGround {
             b.setPlayers(one,two);
             b.createBotLoop();
             testWithRandomDie();
-            System.out.println(b);
+//            System.out.println(b);
         }
         System.out.println(counter);
     }

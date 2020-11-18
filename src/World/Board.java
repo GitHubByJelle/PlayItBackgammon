@@ -249,6 +249,16 @@ public class Board {
             spaces[to].getPieces().add(new Piece(pieceID));
 
         } else{
+            spaces[from].movePiece(spaces[to]);
+        }
+    }
+    public void playerMoveNoCheckBot(int from, int to, int pieceID){
+        if(to>=26){
+            spaces[from].getPieces().remove(0);
+        }else if(from==26){
+            spaces[to].getPieces().add(new Piece(pieceID));
+
+        } else{
             spaces[from].moveBotPiece(spaces[to]);
         }
     }
@@ -445,6 +455,22 @@ public class Board {
                 return true;
         }
         return false;
+    }
+    public boolean isValidBoard(){
+        for (Space space : this.getSpaces()){
+            if (space.getSize() > 0){
+                for (int i = 0; i < space.getSize()-1; i++){
+                    for (int j = i+1; j < space.getSize(); j++){
+                        if (space.getPieces().get(i).getId() != space.getPieces().get(j).getId()){
+                            System.out.println(this.toString());
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
 
