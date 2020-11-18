@@ -291,11 +291,11 @@ public class Board {
             player2.setBoard(this);
         }
         if(one.equals(Variables.BP)){
-            player1= new PBE(0);
+            player1= new PrimeBlitzBot(0);
             player1.setBoard(this);
         }
         if(two.equals(Variables.BP)){
-            player2= new PBE(1);
+            player2= new PrimeBlitzBot(1);
             player2.setBoard(this);
         }
 
