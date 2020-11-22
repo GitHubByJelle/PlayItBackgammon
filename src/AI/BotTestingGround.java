@@ -21,6 +21,8 @@ public class BotTestingGround {
 //        for(int k=0;k<l.length;k++){
 //            i.add(l[k]);
 //        }
+//        Player.Bot one= new PrimeBlitzingBot(0);
+//        Player.Bot two = new PrimeBlitzingBot(1);
         Player.Bot one= new BotA(0,weightsarr);
         Player.Bot two = new BotA(1,diffweightsarr);
         one.pausing=false;
@@ -40,6 +42,7 @@ public class BotTestingGround {
             b.setPlayers(one,two);
             b.createBotLoop();
             testWithRandomDie();
+//            System.out.println(b);
         }
         System.out.println(counter);
     }
