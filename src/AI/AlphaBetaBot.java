@@ -19,6 +19,7 @@ public class AlphaBetaBot extends Player.Bot {
     private final AlphaBetaBot opponent;
     private int initialDepth = 0;
     private int DEFAULT_DEPTH = 3;
+
     public AlphaBetaBot(Board board) {
         super(0);
         setBoard(board);
@@ -55,6 +56,7 @@ public class AlphaBetaBot extends Player.Bot {
       }
       return new double[]{max_util, to.getID()};
     }
+
     //FUNCTION OF MIN MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
@@ -72,6 +74,7 @@ public class AlphaBetaBot extends Player.Bot {
       }
       return new double[]{min_util, to.getID()};
     }
+
     // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
     // @PARAM: SPACE S, PLAYER INDEX(O REPRESENTS MIN, 1 REPRESENTS MAX), CURRENT VALUE OF ALPHA, CURRENT VALUE OF BETA, CURRENT DEPTH
     //@RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
@@ -87,7 +90,7 @@ public class AlphaBetaBot extends Player.Bot {
             // }
             double value = minMove(s, i, j, alpha, beta, depth)[0];
             expectiValue += value/18;
-            count ++;
+            // count ++;
           }
         }
       }
@@ -99,7 +102,7 @@ public class AlphaBetaBot extends Player.Bot {
             // }
             double value = maxMove(s, i, j, alpha, beta, depth)[0];
             expectiValue += value/18;
-            count++;
+            // count++;
           }
         }
       }
