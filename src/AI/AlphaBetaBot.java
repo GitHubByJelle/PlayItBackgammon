@@ -18,7 +18,7 @@ public class AlphaBetaBot extends Player.Bot {
     List<Move> possibleMoves = new ArrayList<>();
     private final AlphaBetaBot opponent;
     private int initialDepth = 0;
-
+    private int DEFAULT_DEPTH = 3;
     public AlphaBetaBot(Board board) {
         super(0);
         setBoard(board);
@@ -33,8 +33,8 @@ public class AlphaBetaBot extends Player.Bot {
       die.generateDie();
       int diceRoll1 = die.getDieList[0];
       int diceRoll2 = die.getDieList[1];
-      int to_ID = minMove(s, diceRoll1, diceRoll2, Integer.MAXIMUM, Integer.MINIMUM, initialDepth)[1];
-      makeMove(s.getID, to_ID);
+      int to_ID = maxMove(s, diceRoll1, diceRoll2, Integer.MINIMUM, Integer.MAXIMUM, initialDepth)[1];
+      makeMove(s.getID(), to_ID);
     }
     //FUNCTION OF MAX MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
