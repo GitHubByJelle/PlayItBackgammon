@@ -48,8 +48,8 @@ public class AlphaBetaBot extends Player.Bot {
       double max_util = Integer.MINIMUM;
       Space to = null;
       for(Space s : stateArray){
-        if(alpha < expectiMaxMin(s, 0, alpha, beta, depth-1)){
-          max_util = expectiMaxMin(s, 0, alpha, beta, depth-1);
+        if(alpha < expectiMaxMin(s, 0, alpha, beta, depth-1, 0)){
+          max_util = expectiMaxMin(s, 0, alpha, beta, depth-1, 0);
           alpha = max_util;
           to = s;
         }
@@ -67,8 +67,8 @@ public class AlphaBetaBot extends Player.Bot {
       Arraylist<Space> stateArray= getAllSpaces(currentSpace, diceRoll1, diceRoll2);
       double min_util = Integer.MINIMUM;
       for(Space s : stateArray){
-        if(beta > expectiMaxMin(s, 0, alpha, beta, depth-1)){
-          min_util = expectiMaxMin(s, 0, alpha, beta, depth-1);
+        if(beta > expectiMaxMin(s, 0, alpha, beta, depth-1, 1)){
+          min_util = expectiMaxMin(s, 0, alpha, beta, depth-1, 1);
           beta = min_util;
         }
       }
@@ -78,7 +78,7 @@ public class AlphaBetaBot extends Player.Bot {
     // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
     // @PARAM: SPACE S, PLAYER INDEX(O REPRESENTS MIN, 1 REPRESENTS MAX), CURRENT VALUE OF ALPHA, CURRENT VALUE OF BETA, CURRENT DEPTH
     //@RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
-    private static double expectiMaxMin(Space s, int player, double alpha, double beta, int depth){
+    private static double expectiMaxMin(Space s, int player, double alpha, double beta, int depth, int player){
       double expectiValue = 0;
       int count = 0;
 
