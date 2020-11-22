@@ -1,4 +1,4 @@
-/* package src.AI;
+package src.AI;
 
 import src.World.Board;
 import src.World.Die;
@@ -183,7 +183,7 @@ public class AlphaBetaBot extends Player.Bot {
                 if (depth == 0) { // at the root, get the heuristic value
                     result = heuristicValue(currentNodeIndex - 1);
                 } else {
-                    int[][] dice = DIES_COMBINATION; // For all dies combination,calculate the heuristic value with weight for that die combination to happen, get the state that is most likely to happen, 
+                    int[][] dice = DIES_COMBINATION; // For all dies combination,calculate the heuristic value with weight for that die combination to happen, get the state that is most likely to happen,
                     List<Double> values = new ArrayList<>();
                     for (int i = 0; i < dice.length; i += 2) {
 
@@ -337,6 +337,3 @@ public class AlphaBetaBot extends Player.Bot {
         }
     }
 }
-
-
- */
