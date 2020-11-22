@@ -59,7 +59,7 @@ public class AlphaBetaBot extends Player.Bot {
     //FUNCTION OF MIN MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private static double minMove(Space currentSpace, int diceRoll1, int diceRoll2, double alpha, double beta, int initialDepth){
+    private static double[] minMove(Space currentSpace, int diceRoll1, int diceRoll2, double alpha, double beta, int initialDepth){
       if(depth == DEFAULT_DEPTH){
         return new double[]{evaluationFunction(currentSpace, currentSpace)/18, currentSpace.getID()};
       }
@@ -71,7 +71,7 @@ public class AlphaBetaBot extends Player.Bot {
           beta = min_util;
         }
       }
-      return min_util;
+      return new double[]{min_util, to.getID()};
     }
     // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
     // @PARAM: SPACE S, PLAYER INDEX(O REPRESENTS MIN, 1 REPRESENTS MAX), CURRENT VALUE OF ALPHA, CURRENT VALUE OF BETA, CURRENT DEPTH
@@ -83,9 +83,9 @@ public class AlphaBetaBot extends Player.Bot {
       if(player == 0){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
-            if(expectiValue + (beta + (14-count)*UPPERBOUND)<alpha){
-              return expectiValue;
-            }
+            // if(expectiValue + (beta + (14-count)*UPPERBOUND)<alpha){
+            //   return expectiValue;
+            // }
             double value = minMove(s, i, j, alpha, beta, depth)[0];
             expectiValue += value/18;
             count ++;
@@ -95,9 +95,9 @@ public class AlphaBetaBot extends Player.Bot {
       else if(player == 1){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
-            if(expectiValue + (beta + (14-count)*LOWERBOUND)>beta){
-              return expectiValue;
-            }
+            // if(expectiValue + (beta + (14-count)*LOWERBOUND)>beta){
+            //   return expectiValue;
+            // }
             double value = maxMove(s, i, j, alpha, beta, depth)[0];
             expectiValue += value/18;
             count++;
