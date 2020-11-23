@@ -5,6 +5,7 @@ import World.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class BotTestingGround {
     private static ArrayList<int[]> i= new ArrayList<int[]>();
@@ -29,12 +30,58 @@ public class BotTestingGround {
         two.pausing=false;
         b.setPlayers(one,two);
         b.createBotLoop();
+        System.out.println("Serial For-loop:");
+        long time = System.nanoTime();
         testMultipleTimes(one,two);
+        time = System.nanoTime() - time;
+        System.out.printf("Time[ms]: %8.4f\n",time/1000000.);
+
+        System.out.println("\nStreams: ");
+        time = System.nanoTime();
+        int Wins = IntStream.range(0,10).map((int i) -> PlayOneGame(one,two)).sum();
+
+        time = System.nanoTime() - time;
+        System.out.println("Wins: "+Wins);
+        System.out.printf("Time[ms]: %8.4f\n",time/1000000.);
+
+        System.out.println("\nStreams Parallel: ");
+        time = System.nanoTime();
+        IntStream s = IntStream.range(0,10).parallel().map((int i) -> PlayOneGame(one,two));
+
+        time = System.nanoTime() - time;
+        System.out.println("Wins: "+Wins);
+        System.out.printf("Time[ms]: %8.4f\n",time/1000000.);
+
+        s.forEach(System.out::println);
+    }
+
+    public static int PlayOneGame(Player.Bot one, Player.Bot two){
+        b = new Board();
+
+        one.resetPlayer();
+        two.resetPlayer();
+        b.setPlayers(one,two);
+        b.createBotLoop();
+
+        b.getDie().getDieList().clear();
+        b.getDie().generateDie();
+        b.getDie().getNextRoll();
+
+        while(!b.checkWinCondition()) {
+            b.getGameLoop().process();
+        }
+
+        System.out.println("We done!");
+
+        if(b.getPlayer1().getPiecesOutOfPlay()==15)
+            return 1;
+        else
+            return 0;
 
     }
 
     public static void testMultipleTimes(Player.Bot one, Player.Bot two ){
-        for(int i = 0; i<100; i++){
+        for(int i = 0; i<10; i++){
             b = new Board();
 
             one.resetPlayer();
