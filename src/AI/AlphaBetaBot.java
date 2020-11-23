@@ -44,10 +44,10 @@ public class AlphaBetaBot extends Player.Bot {
       if(depth == DEFAULT_DEPTH){
         return new double[]{evaluationFunction(currentSpace, currentSpace)/18, currentSpace.getID()};
       }
-      Arraylist<Space> stateArray= getAllSpaces(currentSpace, diceRoll1, diceRoll2);
+      Arraylist<Space[]> stateArray= super.getPossibleMoves(new ArrayList<Space>{currentSpace});
       double max_util = Integer.MINIMUM;
       Space to = null;
-      for(Space s : stateArray){
+      for(Space s : stateArray[0]){
         if(alpha < expectiMaxMin(s, 0, alpha, beta, depth-1, 0)){
           max_util = expectiMaxMin(s, 0, alpha, beta, depth-1, 0);
           alpha = max_util;
@@ -64,9 +64,9 @@ public class AlphaBetaBot extends Player.Bot {
       if(depth == DEFAULT_DEPTH){
         return new double[]{evaluationFunction(currentSpace, currentSpace)/18, currentSpace.getID()};
       }
-      Arraylist<Space> stateArray= getAllSpaces(currentSpace, diceRoll1, diceRoll2);
+      Arraylist<Space[]> stateArray= super.getPossibleMoves(new ArrayList<Space>{currentSpace});
       double min_util = Integer.MINIMUM;
-      for(Space s : stateArray){
+      for(Space s : stateArray[0]){
         if(beta > expectiMaxMin(s, 0, alpha, beta, depth-1, 1)){
           min_util = expectiMaxMin(s, 0, alpha, beta, depth-1, 1);
           beta = min_util;
