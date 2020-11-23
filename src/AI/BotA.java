@@ -17,7 +17,7 @@ public class BotA extends Player.Bot{
     //TODO Optimize selection out of ValidMoves using GA
 
     //0 is white and 1 is red
-    public double[] weightsarr = {0.6540529562402766, 0.0039018447683845103, 0.3638194467066273, 0.2929106394696771, 0.07849703551040255};
+    public double[] weightsarr = {0.27492492486083797, 0.7603447308733254, 0.6324866448907414, 0.18347935996872392, 0.3290528252791358};
     public BotA(int id) {
         super(id);
     }
@@ -239,7 +239,10 @@ public class BotA extends Player.Bot{
 //            return boards;
 //        }
 //    }
-    public double[] GetBestMove(int deepnessconstr){
+
+    //TODO Alpha Beta Pruning
+    //TODO Multithreading
+    public double[] GetBestMove(int deepnessconstr, boolean player){
         ArrayList<Space> all_selected = GetAllSelectedSpaces();
         ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
         double[] value_moves = new double[all_selected.size()];
@@ -269,12 +272,12 @@ public class BotA extends Player.Bot{
                     if(diceCopyEmpty(this.B.getDie().getCurRoll())){
                         this.B.getGameLoop().SwitchPlayer();
                         this.B.getDie().seeNextRoll();
-                        bestmove = GetBestMove(deepnessconstr-1);
+                        bestmove = GetBestMove(deepnessconstr-1, player);
                         this.B.getGameLoop().SwitchPlayer();
                         this.B.getDie().goRollBack();
-                        value_moves[i] = bestmove[2]; //TODO change such that bot returns worst case scenario as value
+                        value_moves[i] = bestmove[2];
                     } else{
-                        bestmove = GetBestMove(deepnessconstr-1);
+                        bestmove = GetBestMove(deepnessconstr-1, player);
                         value_moves[i] = bestmove[2];
 
                     }
@@ -293,7 +296,7 @@ public class BotA extends Player.Bot{
 
             }
             int index = 99;
-            if(this.B.getGameLoop().getCurrentPlayer().getId() == 1){
+            if(this.B.getGameLoop().getCurrentPlayer().getId() == (player ? 1 : 0)){
                 index = argmax(value_moves);
             } else{
                 index = argmin(value_moves);
@@ -339,8 +342,8 @@ public class BotA extends Player.Bot{
         }
         return true;
     }
-    public void ExecuteNextMove2(int deepness){
-        double[] move = GetBestMove(deepness);
+    public void ExecuteNextMove2(int deepness, boolean player){
+        double[] move = GetBestMove(deepness, player);
         B.forceHomeCheck();
         if(move[0]==0 && move[1]==0){
             for(Integer inter: this.B.getDie().getCurRoll()){
@@ -676,10 +679,10 @@ public class BotA extends Player.Bot{
         if(this.getId() == 1){
             //this.ExecuteDeeperMove();
 //            this.ExecuteDeeperMove2();
-            this.ExecuteNextMove2(2);
+            this.ExecuteNextMove2(2, true);
         }
         else{
-            this.ExecuteNextMove2(1);
+            this.ExecuteNextMove2(4, false);
         }
         B.getGameLoop().repaintBV();
 //        pauseBot();

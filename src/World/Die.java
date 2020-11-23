@@ -14,7 +14,7 @@ public class Die {
         //force the first roll to be smth u r testing for
       //  DieList.add(new int[]{1,2});
         Random rn = new Random();
-        for(int i=0;i<500;i++){
+        for(int i=0;i<5000;i++){
             roll1 = rn.nextInt(6) + 1;
             roll2 = rn.nextInt(6) + 1;
             int[] list = new int[2];

@@ -8,9 +8,9 @@ public class Population{
     //Values
     Random r = new Random();
     ArrayList<Individual> poolOfIndividuals = new ArrayList<Individual>();
-    private final int POOL_SIZE = 50;
-    private final double mutationrate = 0.5;
-    private double similarityrate = 0.2;
+    private final int POOL_SIZE = 40;
+    private final double mutationrate = 0.3;
+    private double similarityrate = 0.25;
 
     // Default Constructor
     public Population() {
