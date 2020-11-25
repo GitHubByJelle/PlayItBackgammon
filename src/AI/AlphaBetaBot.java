@@ -1,4 +1,4 @@
-/* package src.AI;
+package src.AI;
 
 import src.World.Board;
 import src.World.Die;
@@ -18,6 +18,7 @@ public class AlphaBetaBot extends Player.Bot {
     List<Move> possibleMoves = new ArrayList<>();
     private final AlphaBetaBot opponent;
     private int initialDepth = 0;
+    private int DEFAULT_DEPTH = 3;
 
     public AlphaBetaBot(Board board) {
         super(0);
@@ -33,8 +34,8 @@ public class AlphaBetaBot extends Player.Bot {
       die.generateDie();
       int diceRoll1 = die.getDieList[0];
       int diceRoll2 = die.getDieList[1];
-      int to_ID = minMove(s, diceRoll1, diceRoll2, Integer.MAXIMUM, Integer.MINIMUM, initialDepth)[1];
-      makeMove(s.getID, to_ID);
+      int to_ID = maxMove(s, diceRoll1, diceRoll2, Integer.MINIMUM, Integer.MAXIMUM, initialDepth)[1];
+      makeMove(s.getID(), to_ID);
     }
     //FUNCTION OF MAX MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
@@ -43,63 +44,65 @@ public class AlphaBetaBot extends Player.Bot {
       if(depth == DEFAULT_DEPTH){
         return new double[]{evaluationFunction(currentSpace, currentSpace)/18, currentSpace.getID()};
       }
-      Arraylist<Space> stateArray= getAllSpaces(currentSpace, diceRoll1, diceRoll2);
+      Arraylist<Space[]> stateArray= super.getPossibleMoves(new ArrayList<Space>{currentSpace});
       double max_util = Integer.MINIMUM;
       Space to = null;
-      for(Space s : stateArray){
-        if(alpha < expectiMaxMin(s, 0, alpha, beta, depth-1)){
-          max_util = expectiMaxMin(s, 0, alpha, beta, depth-1);
+      for(Space s : stateArray[0]){
+        if(alpha < expectiMaxMin(s, 0, alpha, beta, depth-1, 0)){
+          max_util = expectiMaxMin(s, 0, alpha, beta, depth-1, 0);
           alpha = max_util;
           to = s;
         }
       }
       return new double[]{max_util, to.getID()};
     }
+
     //FUNCTION OF MIN MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private static double minMove(Space currentSpace, int diceRoll1, int diceRoll2, double alpha, double beta, int initialDepth){
+    private static double[] minMove(Space currentSpace, int diceRoll1, int diceRoll2, double alpha, double beta, int initialDepth){
       if(depth == DEFAULT_DEPTH){
         return new double[]{evaluationFunction(currentSpace, currentSpace)/18, currentSpace.getID()};
       }
-      Arraylist<Space> stateArray= getAllSpaces(currentSpace, diceRoll1, diceRoll2);
+      Arraylist<Space[]> stateArray= super.getPossibleMoves(new ArrayList<Space>{currentSpace});
       double min_util = Integer.MINIMUM;
-      for(Space s : stateArray){
-        if(beta > expectiMaxMin(s, 0, alpha, beta, depth-1)){
-          min_util = expectiMaxMin(s, 0, alpha, beta, depth-1);
+      for(Space s : stateArray[0]){
+        if(beta > expectiMaxMin(s, 0, alpha, beta, depth-1, 1)){
+          min_util = expectiMaxMin(s, 0, alpha, beta, depth-1, 1);
           beta = min_util;
         }
       }
-      return min_util;
+      return new double[]{min_util, to.getID()};
     }
+
     // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
     // @PARAM: SPACE S, PLAYER INDEX(O REPRESENTS MIN, 1 REPRESENTS MAX), CURRENT VALUE OF ALPHA, CURRENT VALUE OF BETA, CURRENT DEPTH
     //@RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
-    private static double expectiMaxMin(Space s, int player, double alpha, double beta, int depth){
+    private static double expectiMaxMin(Space s, int player, double alpha, double beta, int depth, int player){
       double expectiValue = 0;
       int count = 0;
 
       if(player == 0){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
-            if(expectiValue + (beta + (14-count)*UPPERBOUND)<alpha){
-              return expectiValue;
-            }
+            // if(expectiValue + (beta + (14-count)*UPPERBOUND)<alpha){
+            //   return expectiValue;
+            // }
             double value = minMove(s, i, j, alpha, beta, depth)[0];
             expectiValue += value/18;
-            count ++;
+            // count ++;
           }
         }
       }
       else if(player == 1){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
-            if(expectiValue + (beta + (14-count)*LOWERBOUND)>beta){
-              return expectiValue;
-            }
+            // if(expectiValue + (beta + (14-count)*LOWERBOUND)>beta){
+            //   return expectiValue;
+            // }
             double value = maxMove(s, i, j, alpha, beta, depth)[0];
             expectiValue += value/18;
-            count++;
+            // count++;
           }
         }
       }
@@ -183,7 +186,7 @@ public class AlphaBetaBot extends Player.Bot {
                 if (depth == 0) { // at the root, get the heuristic value
                     result = heuristicValue(currentNodeIndex - 1);
                 } else {
-                    int[][] dice = DIES_COMBINATION; // For all dies combination,calculate the heuristic value with weight for that die combination to happen, get the state that is most likely to happen, 
+                    int[][] dice = DIES_COMBINATION; // For all dies combination,calculate the heuristic value with weight for that die combination to happen, get the state that is most likely to happen,
                     List<Double> values = new ArrayList<>();
                     for (int i = 0; i < dice.length; i += 2) {
 
@@ -337,6 +340,3 @@ public class AlphaBetaBot extends Player.Bot {
         }
     }
 }
-
-
- */
