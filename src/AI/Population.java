@@ -8,7 +8,7 @@ public class Population{
     //Values
     Random r = new Random();
     ArrayList<Individual> poolOfIndividuals = new ArrayList<Individual>();
-    private final int POOL_SIZE = 40;
+    private final int POOL_SIZE = 20;
     private final double mutationrate = 0.3;
     private double similarityrate = 0.25;
 
@@ -18,38 +18,6 @@ public class Population{
             this.poolOfIndividuals.add(new Individual());
         }
     }
-/*
-    public Population(Population previousPopulation){
-
-        //tournament selection
-        Individual tempInd;
-        for(int i = 0; i < 0.4 * POOL_SIZE; i++) {
-            ArrayList<Individual> best2 = previousPopulation.getRandomBest2();
-            if (r.nextDouble() < mutationrate){
-                tempInd = new Individual (new Individual(best2.get(0),best2.get(1)));
-            } else {
-                tempInd = new Individual(best2.get(0),best2.get(1));
-            }
-                previousPopulation.poolOfIndividuals.add(tempInd);
-        }
-        //this.poolOfIndividuals.add(previousPopulation.getFittest());
-
-        Collections.sort(previousPopulation.poolOfIndividuals);
-        for(int i = 0; i < POOL_SIZE*0.5; i++){
-            previousPopulation.poolOfIndividuals.remove(0);
-        }
-
-        while(this.poolOfIndividuals.size() < POOL_SIZE){
-           previousPopulation.poolOfIndividuals.add(new Individual());
-       }
-
-        this.poolOfIndividuals = previousPopulation.poolOfIndividuals;
-
-    }
-
- */
-
-
     // Constructor
     public Population(Individual bestgenome) {
         this.poolOfIndividuals.add(bestgenome);

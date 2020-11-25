@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class BotTestingGround {
     private static ArrayList<int[]> i= new ArrayList<int[]>();
     public static int counter = 0;
-    static double[] weightsarr = {1,1,1,1,1};
+    static double[] weightsarr = {0.5572496840622174, 0.6564290279969202, 0.728965249865199, 0.6425858985646018, 0.5246025450781864};
     static Board b;
     static double[] diffweightsarr = {1,1,1,1,1};
 
@@ -29,7 +29,9 @@ public class BotTestingGround {
         two.pausing=false;
         b.setPlayers(one,two);
         b.createBotLoop();
+        long a = System.nanoTime();
         testMultipleTimes(one,two);
+        System.out.println((System.nanoTime()-a)/1000000000.);
 
     }
 

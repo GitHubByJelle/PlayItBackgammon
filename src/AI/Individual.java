@@ -6,12 +6,19 @@ import World.Player;
 
 import java.util.Random;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
+
 public class Individual implements Comparable<Individual>{
     //values
     Random r = new Random();
     private final int GENOME_LENGTH = 5;
     private double[] weightGenome = new double[GENOME_LENGTH];
     private double[] enemyWeightGenome = new double[GENOME_LENGTH];
+    private double d;
 
     private double fitness;
     private final int SIZE_OF_INDIVIDUAL = 100;
@@ -77,12 +84,43 @@ public class Individual implements Comparable<Individual>{
         this.fitness = individualAvg();
     }
     public double[] getEnemyWeightGenome(){return this.enemyWeightGenome;}
-    public double individualAvg(){
-        double d = 0;
-        Board b;
-        Player.Bot one= new BotA(0, this.weightGenome);
-        Player.Bot two = new BotA(1, this.enemyWeightGenome);
-        for(int i = 0; i<SIZE_OF_INDIVIDUAL; i++){
+//    public double individualAvg(){
+//        this.d = 0;
+//        Board b;
+//        Player.Bot one= new BotA(0, this.weightGenome);
+//        Player.Bot two = new BotA(1, this.enemyWeightGenome);
+//        for(int i = 0; i<SIZE_OF_INDIVIDUAL; i++){
+//            one.pausing=false;
+//            two.pausing=false;
+//            b = new Board();
+//            one.resetPlayer();
+//            two.resetPlayer();
+//            b.setPlayers(one,two);
+//            b.createBotLoop();
+//
+//            b.getDie().getDieList().clear();
+//            b.getDie().generateDie();
+//            b.getDie().getNextRoll();
+//            while(!b.checkWinCondition()){
+//                b.getGameLoop().process();
+//            }
+//            if(b.getPlayer1().getPiecesOutOfPlay()==15){
+//                this.d++;
+//            }else if(b.getPlayer2().getPiecesOutOfPlay()==15) {
+//            }else{
+//                System.out.println("Question Epic Life decisions");
+//            }
+//
+//
+//        }
+//        return this.d/SIZE_OF_INDIVIDUAL;
+//    }
+public double individualAvg() {
+    Runnable task = () -> {
+        try{
+            Board b;
+            Player.Bot one= new BotA(0, this.weightGenome);
+            Player.Bot two = new BotA(1, this.enemyWeightGenome);
             one.pausing=false;
             two.pausing=false;
             b = new Board();
@@ -98,16 +136,32 @@ public class Individual implements Comparable<Individual>{
                 b.getGameLoop().process();
             }
             if(b.getPlayer1().getPiecesOutOfPlay()==15){
-                d++;
+                synchronized ("string") {
+                    this.d++;
+//                    System.out.println("What the Game sees: " + this.d);
+
+                }
             }else if(b.getPlayer2().getPiecesOutOfPlay()==15) {
             }else{
                 System.out.println("Question Epic Life decisions");
             }
-
-
+        } catch(Exception e){
+            e.printStackTrace();
         }
-        return d/SIZE_OF_INDIVIDUAL;
+    };
+    this.d = 0;
+    ExecutorService ex = Executors.newFixedThreadPool(5);
+
+    IntStream.range(0,SIZE_OF_INDIVIDUAL).forEach(item -> ex.execute(task));
+    ex.shutdown();
+    try {
+        ex.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
+//    System.out.println("What the Ind sees: " + a);
+    return this.d/SIZE_OF_INDIVIDUAL;
+}
 
 
     @Override
@@ -121,5 +175,5 @@ public class Individual implements Comparable<Individual>{
         }
         return comp;
     }
-
+    
 }

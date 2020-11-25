@@ -241,8 +241,7 @@ public class BotA extends Player.Bot{
 //    }
 
     //TODO Alpha Beta Pruning
-    //TODO Multithreading
-    public double[] GetBestMove(int deepnessconstr, boolean player){
+    public double[] GetBestMoveCheat(int deepnessconstr, boolean player){
         ArrayList<Space> all_selected = GetAllSelectedSpaces();
         ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
         double[] value_moves = new double[all_selected.size()];
@@ -310,6 +309,58 @@ public class BotA extends Player.Bot{
             return new double[3];
         }
     }
+    public double[] GetBestMove(int deepnessconstr, boolean player){
+        ArrayList<Space> all_selected = GetAllSelectedSpaces();
+        ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
+        double[] value_moves = new double[all_selected.size()];
+        double[] bestmove;
+        boolean eatMove = false;
+        int pieceID =0;
+        int validroll;
+        if(all_highest_moves.size()>0) {
+            for (int i = 0; i < all_selected.size(); i++) {
+                if(all_selected.get(i).getPieces().size()>0) {
+                    pieceID = all_selected.get(i).getPieces().get(all_selected.get(i).getPieces().size()-1).getId();
+                }
+                validroll = getValidRoll(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
+                if(all_highest_moves.get(i).getPieces().size() == 1 && this.B.getGameLoop().getCurrentPlayer().getId() != all_highest_moves.get(i).getPieces().get(0).getId() && all_highest_moves.get(i).getId() != 26){
+                    eatMove = true;
+                } else {
+                    eatMove = false;
+                }
+
+                this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
+                if(eatMove) {
+                    this.B.getGameLoop().checkEaten(all_highest_moves.get(i).getId());
+                }
+
+                this.B.getDie().deleteNumber(validroll);
+                if(deepnessconstr > 0 && !diceCopyEmpty(this.B.getDie().getCurRoll())) {
+                    bestmove = GetBestMove(deepnessconstr-1, player);
+                    value_moves[i] = bestmove[2];
+                }else{
+                    value_moves[i] = EvaluationFunc();
+
+                }
+                this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
+                if(eatMove){
+                    this.B.getGameLoop().SwitchPlayer();
+                    this.B.moveBackFromEatenSpaceID(all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
+                    this.B.getGameLoop().getCurrentPlayer().revivePiece();
+                    this.B.getGameLoop().SwitchPlayer();
+                }
+                this.B.getDie().addNumber(validroll);
+
+            }
+            int index = argmax(value_moves);
+            double[] returnlist = {all_selected.get(index).getId(), all_highest_moves.get(index).getId(), value_moves[index]};
+            return returnlist;
+
+        }
+        else{
+            return new double[3];
+        }
+    }
     public int getValidRoll(int from, int to, int pieceID){
         if(this.B.getDie().getCurRoll().length == 1 ){
             return this.B.getDie().getCurRoll()[0];
@@ -341,6 +392,17 @@ public class BotA extends Player.Bot{
             }
         }
         return true;
+    }
+    public void ExecuteNextMove2Cheat(int deepness, boolean player){
+        double[] move = GetBestMoveCheat(deepness, player);
+        B.forceHomeCheck();
+        if(move[0]==0 && move[1]==0){
+            for(Integer inter: this.B.getDie().getCurRoll()){
+                this.B.getDie().removeUsedRoll(inter);
+            }
+        } else{
+            B.playerMove((int) move[0], (int) move[1]);
+        }
     }
     public void ExecuteNextMove2(int deepness, boolean player){
         double[] move = GetBestMove(deepness, player);
@@ -679,7 +741,7 @@ public class BotA extends Player.Bot{
         if(this.getId() == 1){
             //this.ExecuteDeeperMove();
 //            this.ExecuteDeeperMove2();
-            this.ExecuteNextMove2(2, true);
+            this.ExecuteNextMove2Cheat(4, true);
         }
         else{
             this.ExecuteNextMove2(4, false);
