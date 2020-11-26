@@ -13,7 +13,7 @@ public class MathUtils {
     }
 
     //ReLu function
-    private float reLu(float x) {
+    public static float reLu(float x) {
         if (x >= 0.0)
             return x;
         else
@@ -21,26 +21,28 @@ public class MathUtils {
     }
 
     //Sigmoid function
-public static float sigmoid(float x){
+    public static float sigmoid(float x){
         return (float) (1/(1+Math.pow(Math.E, -x)));
-}
+    }
 
     //Derivative of the sigmoid
-public static float sigmoidDerivative(float x){
+    public static float sigmoidDerivative(float x){
         return sigmoid(x)*(1-sigmoid(x));
-}
-   //Squared error (used for back-prop)
+    }
+
+    //Squared error (used for back-prop)
     public static float squaredError(float output, float target){
         return (float) (0.5*Math.pow(2,(target-output)));
     }
 
     //Overall error rate
-    public static float gsumSquaredError(float[] outputs, float[] targets){
+    public static float sumSquaredError(float[] outputs, float[] targets){
         float sum=0;
         for(int i=0; i<outputs.length; i++){
             sum+= squaredError(outputs[i], targets[i]);
         }
-        return sum;
+        return sum/outputs.length;
     }
+
 
 }
