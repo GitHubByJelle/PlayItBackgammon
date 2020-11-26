@@ -14,10 +14,7 @@ public class MathUtils {
 
     //ReLu function
     public static float reLu(float x) {
-        if (x >= 0.0)
-            return x;
-        else
-            return (float) (0.01 * x);
+        return (float) Math.max(0,x);
     }
 
     //Sigmoid function
@@ -41,7 +38,7 @@ public class MathUtils {
         for(int i=0; i<outputs.length; i++){
             sum+= squaredError(outputs[i], targets[i]);
         }
-        return sum/outputs.length;
+        return sum;
     }
 
 

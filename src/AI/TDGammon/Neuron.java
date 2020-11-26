@@ -1,13 +1,14 @@
 package AI.TDGammon;
 
 public class Neuron {
-
+    //only there to set the bounds of the weights
     static float minWeight;
     static float maxWeight;
 
+    //Parameters of a neuron
     float[] weights;
-    float[] weightsCache;
-    float value=0;
+    float[] weightsCache; //to store the updated weights without changing the previous ones (only useful for the backward propagation
+    float value=0; //Value of the neuron initialized to 0 at the beginning
     float gradient;
     float bias;
 

@@ -20,6 +20,14 @@ public class NeuralNet {
         createTrainingData();
         trainData(20, 0.05f);
 
+        for(int i=0; i<dataSet.length; i++){
+            System.out.println("Input " +Arrays.toString( dataSet[i].inputData)+" Output " +Arrays.toString(dataSet[i].expectedOutput));
+        }
+        for(int i=0; i<layer.length; i++) {
+            for (int j = 0; j < layer[i].neuron.length; j++) {
+                System.out.println("weight= " + Arrays.toString(layer[i].neuron[j].weights));
+            }
+        }
     }
 
     public static void forwardProp(float[] input){
@@ -94,7 +102,7 @@ public class NeuralNet {
     private static void trainData( int epoch, float learningRate){
         for(int i=0; i<epoch; i++){
             for(int j=0; j<dataSet.length; j++){
-                forwardProp(dataSet[j].data);
+                forwardProp(dataSet[j].inputData);
                 backwardProp(learningRate, dataSet[j]);
             }
         }
