@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AlphaBetaBot extends Player.Bot {
-    private Move[] final_move = new Move[2];
+    private Move final_move = null;
     private double[] moveQuality;
 
     char[] ACTION_DEPTH = {'a', 'p', 'i', 'p'};
@@ -33,8 +33,7 @@ public class AlphaBetaBot extends Player.Bot {
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
     private static void alpha_beta_pruning_result(int diceRoll1, int diceRoll2){
       minMove(diceRoll1, diceRoll2, Integer.MINIMUM, Integer.MAXIMUM, initialDepth)[1];
-      makeMove(final_move[0]);
-      makeMove(final_move[1]);
+      makeMove(final_move);
     }
     //FUNCTION OF MAX MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
@@ -48,33 +47,27 @@ public class AlphaBetaBot extends Player.Bot {
       opponent.generatePossibleMoves(); //generate all the moves for the bot
       moves = opponent.getAllPossibleMoves(); //get the list of all possible moves
       double max_util = Integer.MINIMUM; //a variable to keep track of the min util value
-      Move[] chosen_moves = new Moves[2]; //array to store 2 valid moves
+      Move chosen_moves = null; //array to store valid move
       // for all pairs of moves, calculate the expectiMaxMin value and apply alpha_beta pruning
-      for(int i=0; i<possibleMoves.size();i++){
-        if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(j).to)==diceRoll1 ||
-           Math.abs(possibleMoves.get(i).from-possibleMoves.get(j).to)==diceRoll2){
-             chosen_moves[0] = possibleMoves.get(i);
-        }
-        for(int j=i+1; j<possibleMoves.size();j++)
-          if(Math.abs(possibleMoves.get(j).from-possibleMoves.get(j).to)==diceRoll1 ||
-             Math.abs(possibleMoves.get(j).from-possibleMoves.get(j).to)==diceRoll2){
-               chosen_moves[1] = possibleMoves.get(j);
+      if(moves.length()==0)
+        requestPassTurn();
+      else{
+        for(int i=0; i<possibleMoves.size();i++){
+          if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(j).to)==diceRoll1 ||
+             Math.abs(possibleMoves.get(i).from-possibleMoves.get(j).to)==diceRoll2){
+               chosen_moves = possibleMoves.get(i);
           }
-        }
-        makeMove(chosen_moves[0]);
-        makeMove(chosen_moves[1]);
-        //apply alpha beta pruning and update the max_util value
-        if(alpha < expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
-          max_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
-          alpha = max_util;
-          final_move[0] = chosen_moves[0];
-          final_move[1] = chosen_moves[1];
-          undoMove(chosen_moves[0]);
-          undoMove(chosen_moves[1]);
-        }
-        else{
-          undoMove(chosen_moves[0]);
-          undoMove(chosen_moves[1]);
+          makeMove(chosen_moves);
+          //apply alpha beta pruning and update the max_util value
+          if(alpha < expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
+            max_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
+            alpha = max_util;
+            final_move = chosen_moves;
+            undoMove(chosen_moves);
+          }
+          else{
+            undoMove(chosen_moves);
+          }
         }
       }
       return max_util;
@@ -92,33 +85,27 @@ public class AlphaBetaBot extends Player.Bot {
       opponent.generatePossibleMoves(); //generate all the moves for the bot
       moves = opponent.getAllPossibleMoves(); //get the list of all possible moves
       double min_util = Integer.MINIMUM; //a variable to keep track of the min util value
-      Move[] chosen_moves = new Moves[2]; //array to store 2 valid moves
+      Move chosen_moves = null; //array to store 2 valid moves
       // for all pairs of moves, calculate the expectiMaxMin value and apply alpha_beta pruning
-      for(int i=0; i<possibleMoves.size();i++){
-        if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(j).to)==diceRoll1 ||
-           Math.abs(possibleMoves.get(i).from-possibleMoves.get(j).to)==diceRoll2){
-             chosen_moves[0] = possibleMoves.get(i);
-        }
-        for(int j=i+1; j<possibleMoves.size();j++)
-          if(Math.abs(possibleMoves.get(j).from-possibleMoves.get(j).to)==diceRoll1 ||
-             Math.abs(possibleMoves.get(j).from-possibleMoves.get(j).to)==diceRoll2){
-               chosen_moves[1] = possibleMoves.get(j);
+      if(moves.length()==0)
+        requestPassTurn()
+      else{
+        for(int i=0; i<possibleMoves.size();i++){
+          if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(j).to)==diceRoll1 ||
+             Math.abs(possibleMoves.get(i).from-possibleMoves.get(j).to)==diceRoll2){
+               chosen_moves = possibleMoves.get(i);
           }
-        }
-        makeMove(chosen_moves[0]);
-        makeMove(chosen_moves[1]);
-        //apply alpha beta pruning and update the max_util value
-        if(beta > expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
-          min_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
-          beta = min_util;
-          final_move[0] = chosen_moves[0];
-          final_move[1] = chosen_moves[1];
-          undoMove(chosen_moves[0]);
-          undoMove(chosen_moves[1]);
-        }
-        else{
-          undoMove(chosen_moves[0]);
-          undoMove(chosen_moves[1]);
+          makeMove(chosen_moves);
+          //apply alpha beta pruning and update the max_util value
+          if(beta > expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
+            min_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
+            beta = min_util;
+            final_move = chosen_moves;
+            undoMove(chosen_moves);
+          }
+          else{
+            undoMove(chosen_moves);
+          }
         }
       }
       return min_util;
