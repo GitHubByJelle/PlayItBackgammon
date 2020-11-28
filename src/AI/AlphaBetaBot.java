@@ -267,6 +267,11 @@ public class AlphaBetaBot extends Player.Bot {
         }
     }
 
+    //TODO evaluation function to elavualte the current board state
+    public double evaluationFunction(){
+
+    }
+
     public int evaluationFunction(Space from, Space to) {
         int score = 0;
         score += isGoingToKill(from, to);
