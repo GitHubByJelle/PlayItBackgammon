@@ -252,7 +252,7 @@ public class AlphaBetaBot extends Player.Bot {
         }
     }
 
-    //evaluation function to elavualte the current board state
+    //evaluation function to evaluate the current board state
     public double evaluationFunction(){
       int ownPiecesOnBoard = this.B.getAllPiecesOnBoard(0);
       int ownPiecesAtHome = this.B.getAllPiecesAtHome(0);
