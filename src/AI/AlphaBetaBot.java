@@ -35,6 +35,7 @@ public class AlphaBetaBot extends Player.Bot {
       minMove(diceRoll1, diceRoll2, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
       makeMove(final_move);
     }
+    
     //FUNCTION OF MAX MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MAXIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
@@ -114,7 +115,7 @@ public class AlphaBetaBot extends Player.Bot {
       double expectiValue = 0;
 
       // if it is human's turn
-      if(player == 1){
+      if(player == 0){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
             double value = minMove(i, j, alpha, beta, depth);
@@ -124,7 +125,7 @@ public class AlphaBetaBot extends Player.Bot {
       }
 
       // if it is robot's turn
-      else if(player == 0){
+      else if(player == 1){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
             double value = maxMove(i, j, alpha, beta, depth);
