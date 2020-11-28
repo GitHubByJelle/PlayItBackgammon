@@ -31,7 +31,7 @@ public class AlphaBetaBot extends Player.Bot {
 
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
-    private static void alpha_beta_pruning_bot(int diceRoll1, int diceRoll2){
+    private static void alpha_beta_pruning_result(int diceRoll1, int diceRoll2){
       minMove(diceRoll1, diceRoll2, Integer.MINIMUM, Integer.MAXIMUM, initialDepth)[1];
       makeMove(final_move[0]);
       makeMove(final_move[1]);
