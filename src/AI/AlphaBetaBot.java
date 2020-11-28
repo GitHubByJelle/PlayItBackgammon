@@ -87,7 +87,7 @@ public class AlphaBetaBot extends Player.Bot {
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
         //TODO evaluation function needed
-        return -1*evaluationFunction();
+        return evaluationFunction();
       }
       opponent.generatePossibleMoves(); //generate all the moves for the bot
       moves = opponent.getAllPossibleMoves(); //get the list of all possible moves
