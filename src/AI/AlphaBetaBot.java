@@ -21,13 +21,13 @@ public class AlphaBetaBot extends Player.Bot {
     private static int initialDepth = 0;
     private static int DEFAULT_DEPTH = 3;
 
-//    public AlphaBetaBot(Board board) {
-//        super(0);
-//        setBoard(board);
-//        System.out.println("Test tostring");
-//        System.out.println(this.B);
-//        System.out.println("-------------------------------------------------");
-//    }
+    public AlphaBetaBot(Board board) {
+        super(0);
+        setBoard(board);
+        System.out.println("Test tostring");
+        System.out.println(this.B);
+        System.out.println("-------------------------------------------------");
+    }
 
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
