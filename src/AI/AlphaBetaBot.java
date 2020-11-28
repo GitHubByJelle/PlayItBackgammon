@@ -42,7 +42,7 @@ public class AlphaBetaBot extends Player.Bot {
     private static double maxMove(int diceRoll, double alpha, double beta, int depth){
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
-        //TODO
+        //TODO evaluation function needed
         return evaluationFunction(this.B);
       }
       opponent.generatePossibleMoves(); //generate all the moves for the bot
@@ -85,7 +85,7 @@ public class AlphaBetaBot extends Player.Bot {
     private static double minMove(int diceRoll1, int diceRoll2, double alpha, double beta, int depth){
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
-        //TODO
+        //TODO evaluation function needed
         return evaluationFunction(this.B);
       }
       opponent.generatePossibleMoves(); //generate all the moves for the bot
