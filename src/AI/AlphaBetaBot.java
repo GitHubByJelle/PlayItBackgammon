@@ -119,7 +119,7 @@ public class AlphaBetaBot extends Player.Bot {
       if(player == 0){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
-            double value = minMove(i, j, alpha, beta, depth);
+            double value = minMove(i, alpha, beta, depth)+minMove(j, alpha, beta, depth);
             expectiValue += value/18;
           }
         }
@@ -128,7 +128,7 @@ public class AlphaBetaBot extends Player.Bot {
       else if(player == 1){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
-            double value = maxMove(i, j, alpha, beta, depth);
+            double value = maxMove(i, alpha, beta, depth)+maxMove(j, alpha, beta, depth);
             expectiValue += value/18;
           }
         }
