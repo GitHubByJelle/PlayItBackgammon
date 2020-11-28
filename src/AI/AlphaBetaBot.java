@@ -41,7 +41,6 @@ public class AlphaBetaBot extends Player.Bot {
     private double maxMove(int diceRoll1, int diceRoll2, double alpha, double beta, int depth){
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
-        //TODO evaluation function needed
         return evaluationFunction();
       }
       opponent.generatePossibleMoves(); //generate all the moves for the bot
