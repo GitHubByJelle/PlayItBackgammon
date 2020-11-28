@@ -55,19 +55,19 @@ public class AlphaBetaBot extends Player.Bot {
         requestPassTurn();
       else{
         for(int i=0; i<possibleMoves.size();i++){
-          if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(i).to)==diceRoll){
+          if(possibleMoves.get(i).from-possibleMoves.get(i).to==-1*diceRoll){
                chosen_moves = possibleMoves.get(i);
           }
-          makeMove(chosen_moves);
+          opponent.makeMove(chosen_moves);
           //apply alpha beta pruning and update the max_util value
           if(alpha < expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
             max_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
             alpha = max_util;
             final_move = chosen_moves;
-            undoMove(chosen_moves);
+            opponent.undoMove(chosen_moves);
           }
           else{
-            undoMove(chosen_moves);
+        	  opponent.undoMove(chosen_moves);
           }
         }
       }
@@ -91,7 +91,7 @@ public class AlphaBetaBot extends Player.Bot {
         requestPassTurn();
       else{
         for(int i=0; i<possibleMoves.size();i++){
-          if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(i).to)==diceRoll){
+          if(possibleMoves.get(i).from-possibleMoves.get(i).to==diceRoll){
                chosen_moves = possibleMoves.get(i);
           }
           makeMove(chosen_moves);
@@ -255,13 +255,13 @@ public class AlphaBetaBot extends Player.Bot {
 
     //evaluation function to evaluate the current board state
     public double evaluationFunction(){
-      int ownPiecesOnBoard = this.B.getAllPiecesOnBoard(0);
-      int ownPiecesAtHome = this.B.getAllPiecesAtHome(0);
-
-      int opponentPiecesOnBoard = this.B.getAllPiecesOnBoard(1);
-      int opponentPiecesAtHome = this.B.getAllPiecesAtHome(1);
-
-      return (ownPiecesOnBoard + ownPiecesAtHome - opponentPiecesOnBoard - opponentPiecesAtHome);
+//      int ownPiecesOnBoard = this.B.getAllPiecesOnBoard(0);
+//      int ownPiecesAtHome = this.B.getAllPiecesAtHome(0);
+//
+//      int opponentPiecesOnBoard = this.B.getAllPiecesOnBoard(1);
+//      int opponentPiecesAtHome = this.B.getAllPiecesAtHome(1);
+//
+//      return (ownPiecesOnBoard + ownPiecesAtHome - opponentPiecesOnBoard - opponentPiecesAtHome);
     }
 
     public int evaluationFunction(Space from, Space to) {
