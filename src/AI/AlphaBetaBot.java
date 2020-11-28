@@ -113,7 +113,6 @@ public class AlphaBetaBot extends Player.Bot {
     //@RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
     private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, int player){
       double expectiValue = 0;
-
       // if it is robot's turn
       if(player == 0){
         for(int i=1;i<=6; i++){
@@ -123,7 +122,6 @@ public class AlphaBetaBot extends Player.Bot {
           }
         }
       }
-
       // if it is human's turn
       else if(player == 1){
         for(int i=1;i<=6; i++){
