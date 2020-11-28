@@ -32,14 +32,16 @@ public class AlphaBetaBot extends Player.Bot {
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
     private void alpha_beta_pruning_result(int diceRoll1, int diceRoll2){
-      minMove(diceRoll1, diceRoll2, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
+      minMove(diceRoll1, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
+      makeMove(final_move);
+      minMove(diceRoll2, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
       makeMove(final_move);
     }
     
     //FUNCTION OF MAX MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MAXIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private double maxMove(int diceRoll1, int diceRoll2, double alpha, double beta, int depth){
+    private double maxMove(int diceRoll, double alpha, double beta, int depth){
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
         return evaluationFunction();
@@ -53,7 +55,7 @@ public class AlphaBetaBot extends Player.Bot {
         requestPassTurn();
       else{
         for(int i=0; i<possibleMoves.size();i++){
-          if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(i).to)==diceRoll1){
+          if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(i).to)==diceRoll){
                chosen_moves = possibleMoves.get(i);
           }
           makeMove(chosen_moves);
@@ -75,7 +77,7 @@ public class AlphaBetaBot extends Player.Bot {
     //FUNCTION OF MIN MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private double minMove(int diceRoll1, int diceRoll2, double alpha, double beta, int depth){
+    private double minMove(int diceRoll, double alpha, double beta, int depth){
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
         return evaluationFunction();
@@ -89,7 +91,7 @@ public class AlphaBetaBot extends Player.Bot {
         requestPassTurn();
       else{
         for(int i=0; i<possibleMoves.size();i++){
-          if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(i).to)==diceRoll1){
+          if(Math.abs(possibleMoves.get(i).from-possibleMoves.get(i).to)==diceRoll){
                chosen_moves = possibleMoves.get(i);
           }
           makeMove(chosen_moves);
