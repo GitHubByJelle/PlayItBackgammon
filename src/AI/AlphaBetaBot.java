@@ -17,7 +17,7 @@ public class AlphaBetaBot extends Player.Bot {
     private int[][] DIES_COMBINATION = new int[21][2];
 
     List<Move> possibleMoves = new ArrayList<>();
-    private final AlphaBetaBot opponent = (AlphaBetaBot) new Player.Bot(1);
+    private final AlphaBetaBot opponent = (AlphaBetaBot) new Player.Bot(1); //human player opponent
     private static int initialDepth = 0;
     private static int DEFAULT_DEPTH = 3;
 
