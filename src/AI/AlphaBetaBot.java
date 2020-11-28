@@ -39,7 +39,7 @@ public class AlphaBetaBot extends Player.Bot {
     //FUNCTION OF MAX MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MAXIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private static double maxMove(int diceRoll, double alpha, double beta, int depth){
+    private static double maxMove(int diceRoll, int diceRoll2, double alpha, double beta, int depth){
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
         //TODO evaluation function needed
@@ -63,6 +63,7 @@ public class AlphaBetaBot extends Player.Bot {
         }
         makeMove(chosen_moves[0]);
         makeMove(chosen_moves[1]);
+        //apply alpha beta pruning and update the max_util value
         if(alpha < expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
           max_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
           alpha = max_util;
@@ -86,7 +87,7 @@ public class AlphaBetaBot extends Player.Bot {
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
         //TODO evaluation function needed
-        return evaluationFunction(this.B);
+        return -1*evaluationFunction();
       }
       opponent.generatePossibleMoves(); //generate all the moves for the bot
       moves = opponent.getAllPossibleMoves(); //get the list of all possible moves
@@ -106,6 +107,7 @@ public class AlphaBetaBot extends Player.Bot {
         }
         makeMove(chosen_moves[0]);
         makeMove(chosen_moves[1]);
+        //apply alpha beta pruning and update the max_util value
         if(beta > expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
           min_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
           beta = min_util;
@@ -267,9 +269,15 @@ public class AlphaBetaBot extends Player.Bot {
         }
     }
 
-    //TODO evaluation function to elavualte the current board state
+    //evaluation function to elavualte the current board state
     public double evaluationFunction(){
+      int ownPiecesOnBoard = this.B.getAllPiecesOnBoard(0);
+      int ownPiecesAtHome = this.B.getAllPiecesAtHome(0);
 
+      int opponentPiecesOnBoard = this.B.getAllPiecesOnBoard(1);
+      int opponentPiecesAtHome = this.B.getAllPiecesAtHome(1);
+
+      return (ownPiecesOnBoard + ownPiecesAtHome - opponentPiecesOnBoard - opponentPiecesAtHome);
     }
 
     public int evaluationFunction(Space from, Space to) {
