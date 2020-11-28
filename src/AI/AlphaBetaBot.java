@@ -227,12 +227,12 @@ public class AlphaBetaBot extends Player.Bot {
     }
 
     public void makeMove(Move move) {
-        this.B.botMove(move.from, move.to);
+        this.B.BotMove(move.from, move.to);
 
     }
 
     public void makeMove(int from, int to) {
-        this.B.botMove(from, to);
+        this.B.BotMove(from, to);
 
     }
 
