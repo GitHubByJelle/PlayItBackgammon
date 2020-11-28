@@ -93,8 +93,8 @@ public class AlphaBetaBot extends Player.Bot {
           }
           makeMove(chosen_moves);
           //apply alpha beta pruning and update the max_util value
-          if(beta > expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
-            min_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
+          if(beta > expectiMaxMin_alpha_beta(alpha, beta, depth-1, 0)){
+            min_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 0);
             beta = min_util;
             final_move = chosen_moves;
             undoMove(chosen_moves);
@@ -114,7 +114,7 @@ public class AlphaBetaBot extends Player.Bot {
       double expectiValue = 0;
 
       // if it is human's turn
-      if(player == 0){
+      if(player == 1){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
             double value = minMove(i, j, alpha, beta, depth);
@@ -124,7 +124,7 @@ public class AlphaBetaBot extends Player.Bot {
       }
 
       // if it is robot's turn
-      else if(player == 1){
+      else if(player == 0){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
             double value = maxMove(i, j, alpha, beta, depth);
