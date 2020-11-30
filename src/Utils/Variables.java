@@ -29,9 +29,10 @@ public final class Variables {
     public static final String BOTA = "BotA";
     public static final String SIMPLEBOT="SimpleBot";
     public static final String BP="PrimeBlitzingBot";
+    public static final String ABB="AlphBetaBot";
 
     //fornow its gonna be like this, later we can change it to store AI objects @ali
-    public static final String[] PLAYERS= {HUMAN, BOTA, SIMPLEBOT,BP};
+    public static final String[] PLAYERS= {HUMAN, BOTA, SIMPLEBOT,BP,ABB};
 
 
 }
