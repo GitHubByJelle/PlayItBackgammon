@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AlphaBetaBot extends Player.Bot {
-    private static Move[] final_move = new Move[2];
+    private static Move final_move = null;
     public double[] evaluator = {0.54984985, 1.52068946, 1.26497329, 0.36695872, 0.65810565};
     private double[] moveQuality;
 
@@ -19,7 +19,7 @@ public class AlphaBetaBot extends Player.Bot {
     private int[][] DIES_COMBINATION = new int[21][2];
 
     List<Move> possibleMoves = new ArrayList<>();
-    private final AlphaBetaBot opponent = null;
+    private AlphaBetaBot opponent = null;
     private static int initialDepth = 0;
     private static int DEFAULT_DEPTH = 1;
 
@@ -28,6 +28,10 @@ public class AlphaBetaBot extends Player.Bot {
         System.out.println("Test tostring");
         System.out.println(this.B);
         System.out.println("-------------------------------------------------");
+    }
+    
+    public void setOpponent(AlphaBetaBot opponent) {
+    	this.opponent = opponent;
     }
     
     @Override
@@ -49,126 +53,103 @@ public class AlphaBetaBot extends Player.Bot {
     private void alpha_beta_pruning_result(){
     	if(this.id == 0) {  
     		double expecMinMax = 0;
-    		ArrayList<Move> moves = generateMoves(0);
+    		ArrayList<Move> moves = generateMoves2();
     		System.out.println(moves.size());
-    		for(Move move1: moves) {
-    			for(Move move2: moves) {
-    				if(((move1.from == move2.from) && (this.B.getSpaces()[move1.from].getPieces().size()<=1))
-    						||((move1.to == move2.to) && (this.B.getSpaces()[move1.to].getPieces().size()>3))){}
-    				double util = 
-    						maxMove(move1, move2, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
-    				if(expecMinMax<util) {
-    					expecMinMax = util;
-    					final_move[0] = move1;
-    					final_move[1] = move2;
-    				}
-    			}
+    		for(Move move: moves) {
+				double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+				if (expecMinMax < util) {
+					expecMinMax = util;
+					final_move = move;
+				}
     		}
-    		makeMove(final_move[0]);
-    		makeMove(final_move[1]);
+    		makeMove(final_move);
     	}
     	else {
     		double expecMinMax = 0;
-    		ArrayList<Move> moves = generateMoves(0);
-    		for(Move move1: moves) {
-    			for(Move move2: moves) {
-    				if(((move1.from == move2.from) && (this.B.getSpaces()[move1.from].getPieces().size()<=1))
-    						||((move1.to == move2.to) && (this.B.getSpaces()[move1.to].getPieces().size()>3))){}
-    				double util = 
-    						minMove(move1, move2, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
-    				if(util<expecMinMax) {
-    					expecMinMax = util;
-    					final_move[0] = move1;
-    					final_move[1] = move2;
-    				}
-    			}
+    		ArrayList<Move> moves = generateMoves2();
+    		for(Move move: moves) {
+				double util = minMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+				if (util < expecMinMax) {
+					expecMinMax = util;
+					final_move = move;
+				}
     		}
-    		makeMove(final_move[0]);
-    		makeMove(final_move[1]);
+    		makeMove(final_move);
     	}
     }
     
     //FUNCTION OF MAX MOVE
     // @PARAM: TWO MOVES, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MAXIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private double maxMove(Move move1, Move move2, double alpha, double beta, int depth){
+    private double maxMove(Move move, double alpha, double beta, int depth, AlphaBetaBot player){
 		if (depth == DEFAULT_DEPTH) {
 			return EvaluationFunction();
 		}
 		double max_util = 0;
-		makeMove(move1);
-		makeMove(move2);
+		player.makeMove(move);
 		for (int i = 0; i < 15; i++) {
-			double util = expectiMaxMin_alpha_beta(alpha, beta, depth - 1, 1);
+			double util = expectiMaxMin_alpha_beta(alpha, beta, depth - 1, opponent);
 			if (alpha < util) {
 				max_util = util / 18;
 				alpha = max_util;
 			}
 		}
-		undoMove(move1);
-		undoMove(move2);
+		player.undoMove(move);
 		return max_util;
     }
 
     //FUNCTION OF MIN MOVE
     // @PARAM: TWO MOVES, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private double minMove(Move move1, Move move2, double alpha, double beta, int depth){
+    private double minMove(Move move, double alpha, double beta, int depth, AlphaBetaBot player){
 		if (depth == DEFAULT_DEPTH) {
 			return EvaluationFunction();
 		}
 		double min_util = 0;
-		makeMove(move1);
-		makeMove(move2);
+		player.makeMove(move);
 		for (int i = 0; i < 15; i++) {
-			double util = expectiMaxMin_alpha_beta(alpha, beta, depth - 1, 0);
+			double util = expectiMaxMin_alpha_beta(alpha, beta, depth - 1, opponent);
 			if (beta > util) {
 				min_util = util;
 				beta = min_util/18;
 			}
 		}
-		undoMove(move1);
-		undoMove(move2);
+		player.undoMove(move);
 		return min_util;
     }
 
     // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
     // @PARAM: PLAYER INDEX(1 REPRESENTS MIN, 0 REPRESENTS MAX), CURRENT VALUE OF ALPHA, CURRENT VALUE OF BETA, CURRENT DEPTH
     // @RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
-    private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, int player){
+    private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, AlphaBetaBot player){
     	double expectiValue = 0;
+    	ArrayList<Move> moves = player.generateMoves2();
     	// if it is min's turn
-    	if(player == 1){
-    		ArrayList<Move> moves = generateMoves(1);
+    	if(player.id == 1){
     		double min = Integer.MAX_VALUE;
-    	  	for(Move move1: moves){
-    	  	  	for(Move move2: moves){
-    	  	  		min = Math.min(min, minMove(move1,move2, alpha, beta, depth));
-    	  	  	}
-    	  	}
+			for (Move move : moves) {
+				min = Math.min(min, minMove(move, alpha, beta, depth, player.opponent));
+			}
     	  	expectiValue = min;
     	}
     	// if it is max's turn
-    	else if(player == 0){
-    		ArrayList<Move> moves = generateMoves(1);
+    	else if(player.id == 0){
     		double max = Integer.MIN_VALUE;
-    		for(Move move1: moves){
-    			for(Move move2: moves){
-    				max = Math.max(max, minMove(move1,move2, alpha, beta, depth));
-    			}
-    		}
+			for (Move move : moves) {
+				max = Math.max(max, minMove(move, alpha, beta, depth, player.opponent));
+			}
     		expectiValue = max;
     	}
     	return expectiValue;
     }
 
     //another version
-    public ArrayList<Move> generateMoves(int id) {
+    public ArrayList<Move> generateMoves2() {
     	ArrayList<Move> possible_moves = new ArrayList<>();
         Space[] allSpaces = this.B.getSpaces();
         for (Space space : allSpaces) {
             if (space.getSize() > 0) {
-                if (space.getPieces().get(0).getId() == id) {
+                if (space.getPieces().get(0).getId() == this.id) {
                     ArrayList<Space> validMoves = this.B.getValidMoves(space);
                     if (validMoves.size() > 0) {
                         if (validMoves.get(0).getId() == validMoves.get(1).getId()) {
