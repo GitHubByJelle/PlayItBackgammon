@@ -21,9 +21,8 @@ public class AlphaBetaBot extends Player.Bot {
     private static int initialDepth = 0;
     private static int DEFAULT_DEPTH = 1;
 
-    public AlphaBetaBot(int id, Board board) {
+    public AlphaBetaBot(int id) {
         super(id);
-        setBoard(board);
         System.out.println("Test tostring");
         System.out.println(this.B);
         System.out.println("-------------------------------------------------");
@@ -49,6 +48,7 @@ public class AlphaBetaBot extends Player.Bot {
     	if(this.id == 0) {  
     		double expecMinMax = 0;
     		ArrayList<Move> moves = generateMoves(0);
+    		System.out.println(moves.size());
     		for(Move move1: moves) {
     			for(Move move2: moves) {
     				double util = 
@@ -164,7 +164,7 @@ public class AlphaBetaBot extends Player.Bot {
             if (space.getSize() > 0) {
                 if (space.getPieces().get(0).getId() == id) {
                     ArrayList<Space> validMoves = this.B.getValidMoves(space);
-                    if (validMoves.size() > 0) {
+                    if (validMoves.size() > 1) {
                         if (validMoves.get(0).getId() != validMoves.get(1).getId()) {
                         } else {
                             for (Space v : validMoves) {
