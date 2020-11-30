@@ -53,6 +53,8 @@ public class AlphaBetaBot extends Player.Bot {
     		System.out.println(moves.size());
     		for(Move move1: moves) {
     			for(Move move2: moves) {
+    				if(((move1.from == move2.from) && (this.B.getSpaces()[move1.from].getPieces().size()<=1))
+    						||((move1.to == move2.to) && (this.B.getSpaces()[move1.to].getPieces().size()>3))){}
     				double util = 
     						maxMove(move1, move2, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
     				if(expecMinMax<util) {
@@ -70,6 +72,8 @@ public class AlphaBetaBot extends Player.Bot {
     		ArrayList<Move> moves = generateMoves(0);
     		for(Move move1: moves) {
     			for(Move move2: moves) {
+    				if(((move1.from == move2.from) && (this.B.getSpaces()[move1.from].getPieces().size()<=1))
+    						||((move1.to == move2.to) && (this.B.getSpaces()[move1.to].getPieces().size()>3))){}
     				double util = 
     						minMove(move1, move2, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
     				if(util<expecMinMax) {
