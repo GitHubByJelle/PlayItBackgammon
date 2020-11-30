@@ -23,22 +23,22 @@ public class BotTestingGround {
 //        }
 //        Player.Bot one= new PrimeBlitzingBot(0);
 //        Player.Bot two = new PrimeBlitzingBot(1);
-//        Player.Bot one= new BotA(0,weightsarr);
-//        Player.Bot two = new BotA(1,diffweightsarr);
-//        one.pausing=false;
-//        two.pausing=false;
-//        b.setPlayers(one,two);
-//        b.createBotLoop();
-//        long a = System.nanoTime();
-//        testMultipleTimes(one,two);
-//        System.out.println((System.nanoTime()-a)/1000000000.);
-      Player.Bot one = new AlphaBetaBot(0, b);
-      Player.Bot two = new AlphaBetaBot(1, b);
-      one.pausing = false;
-      two.pausing = false;
-      b.setPlayers(one, two);
-      b.createBotLoop();
-      testMultipleTimes(one,two);
+        Player.Bot one= new BotA(0,weightsarr);
+        Player.Bot two = new BotA(1,diffweightsarr);
+        one.pausing=false;
+        two.pausing=false;
+        b.setPlayers(one,two);
+        b.createBotLoop();
+        long a = System.nanoTime();
+        testMultipleTimes(one,two);
+        System.out.println((System.nanoTime()-a)/1000000000.);
+//      Player.Bot one = new AlphaBetaBot(0, b);
+//      Player.Bot two = new AlphaBetaBot(1, b);
+//      one.pausing = false;
+//      two.pausing = false;
+//      b.setPlayers(one, two);
+//      b.createBotLoop();
+//      testMultipleTimes(one,two);
 
     }
 
