@@ -291,17 +291,6 @@ public class AlphaBetaBot extends Player.Bot {
         }
     }
 
-    //evaluation function to evaluate the current board state
-    public double evaluationFunction(){
-      int ownPiecesOnBoard = this.B.getAllPiecesOnBoard(0);
-      int ownPiecesAtHome = this.B.getAllPiecesAtHome(0);
-
-      int opponentPiecesOnBoard = this.B.getAllPiecesOnBoard(1);
-      int opponentPiecesAtHome = this.B.getAllPiecesAtHome(1);
-
-      return (ownPiecesOnBoard + ownPiecesAtHome - opponentPiecesOnBoard - opponentPiecesAtHome);
-  }
-
     public int evaluationFunction(Space from, Space to) {
         int score = 0;
         score += isGoingToKill(from, to);
