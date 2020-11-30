@@ -2,6 +2,7 @@ package AI;
 
 import World.Board;
 import World.Die;
+import World.Piece;
 import World.Player;
 import World.Space;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 public class AlphaBetaBot extends Player.Bot {
     private static Move[] final_move = new Move[2];
+    public double[] evaluator = {0.54984985, 1.52068946, 1.26497329, 0.36695872, 0.65810565};
     private double[] moveQuality;
 
     char[] ACTION_DEPTH = {'a', 'p', 'i', 'p'};
@@ -83,19 +85,19 @@ public class AlphaBetaBot extends Player.Bot {
     }
     
     //FUNCTION OF MAX MOVE
-    // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
+    // @PARAM: TWO MOVES, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MAXIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
     private double maxMove(Move move1, Move move2, double alpha, double beta, int depth){
 		if (depth == DEFAULT_DEPTH) {
-			return 100;
-//        	return evaluationFunction();
+			return EvaluationFunction();
 		}
 		double max_util = 0;
 		makeMove(move1);
 		makeMove(move2);
 		for (int i = 0; i < 15; i++) {
-			if (alpha < expectiMaxMin_alpha_beta(alpha, beta, depth - 1, 1)) {
-				max_util = expectiMaxMin_alpha_beta(alpha, beta, depth - 1, 1) / 18;
+			double util = expectiMaxMin_alpha_beta(alpha, beta, depth - 1, 1);
+			if (alpha < util) {
+				max_util = util / 18;
 				alpha = max_util;
 			}
 		}
@@ -105,20 +107,20 @@ public class AlphaBetaBot extends Player.Bot {
     }
 
     //FUNCTION OF MIN MOVE
-    // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
+    // @PARAM: TWO MOVES, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
     private double minMove(Move move1, Move move2, double alpha, double beta, int depth){
 		if (depth == DEFAULT_DEPTH) {
-			return 100;
-//        	return evaluationFunction();
+			return EvaluationFunction();
 		}
 		double min_util = 0;
 		makeMove(move1);
 		makeMove(move2);
 		for (int i = 0; i < 15; i++) {
-			if (beta > expectiMaxMin_alpha_beta(alpha, beta, depth - 1, 0)) {
-				min_util = expectiMaxMin_alpha_beta(alpha, beta, depth - 1, 0) / 18;
-				beta = min_util;
+			double util = expectiMaxMin_alpha_beta(alpha, beta, depth - 1, 0);
+			if (beta > util) {
+				min_util = util;
+				beta = min_util/18;
 			}
 		}
 		undoMove(move1);
@@ -127,8 +129,8 @@ public class AlphaBetaBot extends Player.Bot {
     }
 
     // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
-    // @PARAM: SPACE S, PLAYER INDEX(O REPRESENTS MIN, 1 REPRESENTS MAX), CURRENT VALUE OF ALPHA, CURRENT VALUE OF BETA, CURRENT DEPTH
-    //@RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
+    // @PARAM: PLAYER INDEX(1 REPRESENTS MIN, 0 REPRESENTS MAX), CURRENT VALUE OF ALPHA, CURRENT VALUE OF BETA, CURRENT DEPTH
+    // @RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
     private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, int player){
     	double expectiValue = 0;
     	// if it is min's turn
@@ -164,8 +166,8 @@ public class AlphaBetaBot extends Player.Bot {
             if (space.getSize() > 0) {
                 if (space.getPieces().get(0).getId() == id) {
                     ArrayList<Space> validMoves = this.B.getValidMoves(space);
-                    if (validMoves.size() > 1) {
-                        if (validMoves.get(0).getId() != validMoves.get(1).getId()) {
+                    if (validMoves.size() > 0) {
+                        if (validMoves.get(0).getId() == validMoves.get(1).getId()) {
                         } else {
                             for (Space v : validMoves) {
                                 int score = 0;
@@ -407,6 +409,107 @@ public class AlphaBetaBot extends Player.Bot {
                 int[] die = {i, j};
                 DIES_COMBINATION[index++] = die;
             }
+        }
+    }
+    
+    // evaluation function to evaluate the whole board status
+    public double EvaluationFunction(){
+        return this.OtherPiecesSlain()*evaluator[0] + this.pipCount()*evaluator[1] + this.DoneScore()*evaluator[2] + 
+        		this.DoneBoardScore()*evaluator[3] + this.piecesAlone()*evaluator[4];
+    }
+    public double OtherPiecesSlain(){
+        for(Space space : this.B.getSpaces()){
+               if(space.getSize()==2 && (space.getPieces().get(0).getId() + space.getPieces().get(1).getId()) == 1 ){
+                   return 1;
+               }
+        }
+        return 0;
+    }
+    public double pipCount(){
+        if(this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
+            double pip = 0;
+            for (int i = 1; i <= 25; i++) {
+                for (Piece piece : this.B.getSpaces()[i].getPieces()) {
+                    if (piece.getId() == 1) {
+                        pip += Math.pow(i,2);
+                    }
+                }
+            }
+            if(this.B.getSpaces()[0].getSize() > 0 && this.B.getSpaces()[0].getPieces().get(0).getId() == 1){
+                pip += this.B.getSpaces()[0].getSize()*24;
+            }
+            return - pip;
+        } else {
+            double pip = 0;
+            for (int i = 0; i < 25; i++) {
+                for (Piece piece : this.B.getSpaces()[i].getPieces()) {
+                    if (piece.getId() == 0) {
+                        pip += Math.pow(25 - i,2);
+                    }
+                }
+            }
+            return - pip;
+        }
+    }
+    public double DoneScore(){
+        if(this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
+            double numberPieces = 0;
+            for (int i = 0; i < 25; i++) {
+                for (Piece piece : this.B.getSpaces()[i].getPieces()) {
+                    if (piece.getId() == 1) {
+                        numberPieces++;
+                    }
+                }
+            }
+            return 15 - numberPieces;
+        } else {
+            double numberPieces = 0;
+            for (int i = 0; i < 25; i++) {
+                for (Piece piece : this.B.getSpaces()[i].getPieces()) {
+                    if (piece.getId() == 0) {
+                        numberPieces++;
+                    }
+                }
+            }
+            return 15 - numberPieces;
+        }
+    }
+    public double DoneBoardScore(){
+        if(this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
+            double score = 0;
+            for (int i = 1; i < 7; i++) {
+                if (this.B.getSpaces()[i].getSize() > 0 && this.B.getSpaces()[i].getPieces().get(0).getId() == 1) {
+                    score =+ this.B.getSpaces()[i].getSize();
+                }
+            }
+            return score;
+        } else {
+            double score = 0;
+            for (int i = 19; i < 25; i++) {
+                if (this.B.getSpaces()[i].getSize() > 0 && this.B.getSpaces()[i].getPieces().get(0).getId() == 0) {
+                    score =+ this.B.getSpaces()[i].getSize();
+                }
+            }
+            return score;
+        }
+    }
+    public double piecesAlone(){
+        if(this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
+            double alone = 0;
+            for (int i = 0; i < 25; i++) {
+                if (this.B.getSpaces()[i].getSize() == 1 && this.B.getSpaces()[i].getPieces().get(0).getId() == 1) {
+                    alone++;
+                }
+            }
+            return -alone;
+        } else {
+            double alone = 0;
+            for (int i = 0; i < 25; i++) {
+                if (this.B.getSpaces()[i].getSize() == 1 && this.B.getSpaces()[i].getPieces().get(0).getId() == 0) {
+                    alone++;
+                }
+            }
+            return -alone;
         }
     }
 }
