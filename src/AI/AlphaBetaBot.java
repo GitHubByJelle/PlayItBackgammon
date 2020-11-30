@@ -17,57 +17,79 @@ public class AlphaBetaBot extends Player.Bot {
     private int[][] DIES_COMBINATION = new int[21][2];
 
     List<Move> possibleMoves = new ArrayList<>();
-    private final AlphaBetaBot opponent = (AlphaBetaBot) new Player.Bot(1); //human player opponent
+    private final AlphaBetaBot opponent = null;
     private static int initialDepth = 0;
-    private static int DEFAULT_DEPTH = 3;
+    private static int DEFAULT_DEPTH = 1;
 
-    public AlphaBetaBot(Board board) {
-        super(0);
+    public AlphaBetaBot(int id, Board board) {
+        super(id);
         setBoard(board);
         System.out.println("Test tostring");
         System.out.println(this.B);
         System.out.println("-------------------------------------------------");
     }
+    
+    @Override
+    public String getName() {
+        return "AlphBetaBot";
+    }
+    
+    @Override
+    public void executeTurn() {
+        B.getGameLoop().repaintBV();
+        alpha_beta_pruning_result();
+        pauseBot();
+        B.getGameLoop().repaintBV();
+
+    }
 
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
-    private void alpha_beta_pruning_result(int diceRoll1, int diceRoll2){
-      minMove(diceRoll1, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
-      makeMove(final_move);
-      minMove(diceRoll2, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
-      makeMove(final_move);
+    private void alpha_beta_pruning_result(){
+    	if(this.id == 0) {  
+    		maxMove(Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
+    		makeMove(final_move);
+    		maxMove(Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
+    		makeMove(final_move);
+    	}
+    	else {
+    		minMove(Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
+    		makeMove(final_move);
+  	      	minMove(Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
+  	      	makeMove(final_move);
+    	}
     }
     
     //FUNCTION OF MAX MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MAXIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private double maxMove(int diceRoll, double alpha, double beta, int depth){
+    private double maxMove(double alpha, double beta, int depth){
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
-        return evaluationFunction();
+    	  return 100;
+//        return evaluationFunction();
       }
-      opponent.generatePossibleMoves(); //generate all the moves for human player
-      List<Move> moves = opponent.getAllPossibleMoves(); //get the list of all possible moves
+      generatePossibleMoves(0); //generate all the moves for opponent player
+      List<Move> moves = getAllPossibleMoves(); //get the list of all possible moves
       double max_util = Integer.MIN_VALUE; //a variable to keep track of the min util value
       Move chosen_moves = null; //array to store valid move
       // for all pairs of moves, calculate the expectiMaxMin value and apply alpha_beta pruning
       if(moves.size()==0)
         requestPassTurn();
       else{
-        for(int i=0; i<possibleMoves.size();i++){
-          if(possibleMoves.get(i).from-possibleMoves.get(i).to==-1*diceRoll){
-               chosen_moves = possibleMoves.get(i);
-          }
-          opponent.makeMove(chosen_moves);
+        for(int i=0; i<moves.size();i++){
+          chosen_moves = moves.get(i);
+          System.out.println(chosen_moves);
+          makeMove(chosen_moves);
           //apply alpha beta pruning and update the max_util value
-          if(alpha < expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
-            max_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
+          if(alpha < expectiMaxMin_alpha_beta(alpha, beta, depth-1, 0)){
+            max_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 0);
             alpha = max_util;
             final_move = chosen_moves;
-            opponent.undoMove(chosen_moves);
+            undoMove(chosen_moves);
           }
           else{
-        	  opponent.undoMove(chosen_moves);
+        	  undoMove(chosen_moves);
           }
         }
       }
@@ -77,12 +99,13 @@ public class AlphaBetaBot extends Player.Bot {
     //FUNCTION OF MIN MOVE
     // @PARAM: CURRENT SPACE, FIRST DICE ROLL, SECOND DICE ROLL, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private double minMove(int diceRoll, double alpha, double beta, int depth){
+    private double minMove(double alpha, double beta, int depth){
       // if reaching the maximum depth, return the score of the current board state
       if(depth == DEFAULT_DEPTH){
-        return evaluationFunction();
+    	  return 100;
+//        return evaluationFunction();
       }
-      generatePossibleMoves(); //generate all the moves for the bot
+      generatePossibleMoves(1); //generate all the moves for the bot
       List<Move> moves = getAllPossibleMoves(); //get the list of all possible moves
       double min_util = Integer.MIN_VALUE; //a variable to keep track of the min util value
       Move chosen_moves = null; //array to store 2 valid moves
@@ -91,13 +114,11 @@ public class AlphaBetaBot extends Player.Bot {
         requestPassTurn();
       else{
         for(int i=0; i<possibleMoves.size();i++){
-          if(possibleMoves.get(i).from-possibleMoves.get(i).to==diceRoll){
-               chosen_moves = possibleMoves.get(i);
-          }
+          chosen_moves = possibleMoves.get(i);
           makeMove(chosen_moves);
           //apply alpha beta pruning and update the max_util value
-          if(beta > expectiMaxMin_alpha_beta(alpha, beta, depth-1, 0)){
-            min_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 0);
+          if(beta > expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1)){
+            min_util = expectiMaxMin_alpha_beta(alpha, beta, depth-1, 1);
             beta = min_util;
             final_move = chosen_moves;
             undoMove(chosen_moves);
@@ -115,20 +136,20 @@ public class AlphaBetaBot extends Player.Bot {
     //@RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
     private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, int player){
       double expectiValue = 0;
-      // if it is robot's turn
-      if(player == 0){
+      // if it is min's turn
+      if(player == 1){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
-            double value = minMove(i, alpha, beta, depth)+minMove(j, alpha, beta, depth);
+            double value = minMove(alpha, beta, depth)+minMove(alpha, beta, depth);
             expectiValue += value/18;
           }
         }
       }
-      // if it is human's turn
-      else if(player == 1){
+      // if it is max's turn
+      else if(player == 0){
         for(int i=1;i<=6; i++){
           for(int j=i+1; j<=6; j++){
-            double value = maxMove(i, alpha, beta, depth)+maxMove(j, alpha, beta, depth);
+            double value = maxMove(alpha, beta, depth)+maxMove(alpha, beta, depth);
             expectiValue += value/18;
           }
         }
@@ -136,7 +157,28 @@ public class AlphaBetaBot extends Player.Bot {
       return expectiValue;
     }
 
-
+    //another version
+    public void generateMoves(int id) {
+        Space[] allSpaces = this.B.getSpaces();
+        for (Space space : allSpaces) {
+            if (space.getSize() > 0) {
+                if (space.getPieces().get(0).getId() == id) {
+                    ArrayList<Space> validMoves = this.B.getValidMoves(space);
+                    if (validMoves.size() > 0) {
+                        if (validMoves.get(0).getId() != validMoves.get(1).getId()) {
+                        } else {
+                            for (Space v : validMoves) {
+                                int score = 0;
+                                score = evaluationFunction(space, v);
+                                Move move = new Move(space.getId(), v.getId(), score);
+                                possibleMoves.add(move);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public void generateMoves() {
         Space[] allSpaces = this.B.getSpaces();
@@ -255,14 +297,14 @@ public class AlphaBetaBot extends Player.Bot {
 
     //evaluation function to evaluate the current board state
     public double evaluationFunction(){
-//      int ownPiecesOnBoard = this.B.getAllPiecesOnBoard(0);
-//      int ownPiecesAtHome = this.B.getAllPiecesAtHome(0);
-//
-//      int opponentPiecesOnBoard = this.B.getAllPiecesOnBoard(1);
-//      int opponentPiecesAtHome = this.B.getAllPiecesAtHome(1);
-//
-//      return (ownPiecesOnBoard + ownPiecesAtHome - opponentPiecesOnBoard - opponentPiecesAtHome);
-    }
+      int ownPiecesOnBoard = this.B.getAllPiecesOnBoard(0);
+      int ownPiecesAtHome = this.B.getAllPiecesAtHome(0);
+
+      int opponentPiecesOnBoard = this.B.getAllPiecesOnBoard(1);
+      int opponentPiecesAtHome = this.B.getAllPiecesAtHome(1);
+
+      return (ownPiecesOnBoard + ownPiecesAtHome - opponentPiecesOnBoard - opponentPiecesAtHome);
+  }
 
     public int evaluationFunction(Space from, Space to) {
         int score = 0;
@@ -343,6 +385,12 @@ public class AlphaBetaBot extends Player.Bot {
         return weightedSum / coefficientSum;
     }
 
+    //another version
+    public void generatePossibleMoves(int id) {
+        possibleMoves = new ArrayList<>();
+        generateMoves(id);
+    }
+    
     public void generatePossibleMoves() {
         possibleMoves = new ArrayList<>();
         generateMoves();
