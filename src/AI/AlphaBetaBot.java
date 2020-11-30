@@ -75,7 +75,7 @@ public class AlphaBetaBot extends Player.Bot {
       else{
         for(int i=0; i<moves.size();i++){
           chosen_moves = moves.get(i);
-          System.out.println(chosen_moves);
+//          System.out.println(chosen_moves);
           makeMove(chosen_moves);
           //apply alpha beta pruning and update the max_util value
           if(alpha < expectiMaxMin_alpha_beta(alpha, beta, depth-1, 0)){
