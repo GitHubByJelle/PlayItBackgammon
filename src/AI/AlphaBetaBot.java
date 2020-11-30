@@ -49,14 +49,10 @@ public class AlphaBetaBot extends Player.Bot {
     	if(this.id == 0) {  
     		maxMove(Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
     		makeMove(final_move);
-    		maxMove(Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
-    		makeMove(final_move);
     	}
     	else {
     		minMove(Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
     		makeMove(final_move);
-  	      	minMove(Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth);
-  	      	makeMove(final_move);
     	}
     }
     
