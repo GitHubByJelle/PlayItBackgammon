@@ -32,13 +32,12 @@ public class BotTestingGround {
         long a = System.nanoTime();
         testMultipleTimes(one,two);
         System.out.println((System.nanoTime()-a)/1000000000.);
-//      Player.Bot one = new AlphaBetaBot(0, b);
-//      Player.Bot two = new AlphaBetaBot(1, b);
+//      AlphaBetaBot one = new AlphaBetaBot(0);
+//      Player.Bot two = new AlphaBetaBot(1);
 //      one.pausing = false;
 //      two.pausing = false;
 //      b.setPlayers(one, two);
-//      b.createBotLoop();
-//      testMultipleTimes(one,two);
+
 
     }
 
