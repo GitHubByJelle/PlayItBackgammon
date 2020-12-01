@@ -14,8 +14,8 @@ public class ABbot extends Player.Bot{
 	List<Move> possibleMoves = new ArrayList<>();
     private ABbot opponent = null;
     private static int initialDepth = 0;
-    private static int DEFAULT_DEPTH = 3;
-    
+    private static int DEFAULT_DEPTH = 5;
+    private static int count = 0;
     public ABbot(Board board, int id) {
         super(id);
         setBoard(board);
@@ -48,6 +48,7 @@ public class ABbot extends Player.Bot{
     		for(int i=0; i<2; i++) {
 	    		double expecMinMax = Integer.MIN_VALUE;
 	    		ArrayList<Move> moves = generateMoves2();
+//	    		System.out.println(moves);
 	    		for(Move move: moves) {
 					double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
 					if (expecMinMax < util) {
@@ -57,6 +58,7 @@ public class ABbot extends Player.Bot{
 	    		}
 	    		makeMove(final_move);
     		}
+    		System.out.println(count);
     	}
     	else if(this.id==1){
     		for(int i=0; i<2;i++) {
@@ -76,7 +78,10 @@ public class ABbot extends Player.Bot{
     
     //FUNCTION OF MAX MOVE
    private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
-		if (depth == DEFAULT_DEPTH) {
+	   count++;
+	   if(move.from>=26 || move.to>=26)
+			return Integer.MIN_VALUE;
+	   if (depth == DEFAULT_DEPTH) {
 			return EvaluationFunction();
 		}
 		double max_util = Integer.MIN_VALUE;
@@ -94,12 +99,14 @@ public class ABbot extends Player.Bot{
 
     //FUNCTION OF MIN MOVE
     private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
-		if (depth == DEFAULT_DEPTH) {
+		count++;
+		if(move.from>=26 || move.to>=26)
+			return Integer.MAX_VALUE;
+    	if (depth == DEFAULT_DEPTH) {
 			return EvaluationFunction();
 		}
 		double min_util = Integer.MAX_VALUE;
 		player.makeMove(move);
-		
 		for (int i = 0; i < 15; i++) {
 			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
 			if (beta > util) {
