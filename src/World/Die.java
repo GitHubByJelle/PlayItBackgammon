@@ -72,6 +72,9 @@ public class Die {
         return DieList.get(pointer);
     }
 
+    public int getPointer() {
+    	return pointer;
+    }
     public List getDieList(){
         return DieList;
     }
