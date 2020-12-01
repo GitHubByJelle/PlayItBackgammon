@@ -118,7 +118,7 @@ public class ABbot extends Player.Bot{
     private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player){
     	double expectiValue = 0;
     	ArrayList<Move> moves = player.generateMoves2();
-    	System.out.println(moves);
+//    	System.out.println(moves);
     	if(moves.size()!=0) {
 	    	// if it is min's turn
 	    	if(player.id == 1){
