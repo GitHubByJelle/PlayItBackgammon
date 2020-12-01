@@ -76,9 +76,7 @@ public class ABbot extends Player.Bot{
     }
     
     //FUNCTION OF MAX MOVE
-    // @PARAM: ONE MOVE, ALPHA, BETA, AND CURRENT DEPTH
-    // @RETURN A DOUBLE ARRAY CONTAINING MAXIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
-    private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
+   private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
 		if (depth == DEFAULT_DEPTH) {
 			return EvaluationFunction();
 		}
@@ -96,8 +94,6 @@ public class ABbot extends Player.Bot{
     }
 
     //FUNCTION OF MIN MOVE
-    // @PARAM: ONE MOVES, ALPHA, BETA, AND CURRENT DEPTH
-    // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
     private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
 		if (depth == DEFAULT_DEPTH) {
 			return EvaluationFunction();
@@ -117,8 +113,6 @@ public class ABbot extends Player.Bot{
     }
 
     // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
-    // @PARAM: PLAYER INDEX(1 REPRESENTS MIN, 0 REPRESENTS MAX), CURRENT VALUE OF ALPHA, CURRENT VALUE OF BETA, CURRENT DEPTH
-    // @RETURN  A DOUBLE VALUE REPRESENTING THE EXPECIMINMAX VALUE
     private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player){
     	double expectiValue = 0;
     	ArrayList<Move> moves = player.generateMoves2();
