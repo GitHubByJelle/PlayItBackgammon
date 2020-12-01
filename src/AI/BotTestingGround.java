@@ -23,20 +23,27 @@ public class BotTestingGround {
 //        }
 //        Player.Bot one= new PrimeBlitzingBot(0);
 //        Player.Bot two = new PrimeBlitzingBot(1);
-        Player.Bot one= new BotA(0,weightsarr);
-        Player.Bot two = new BotA(1,diffweightsarr);
-        one.pausing=false;
-        two.pausing=false;
-        b.setPlayers(one,two);
-        b.createBotLoop();
+//        Player.Bot one= new BotA(0,weightsarr);
+//        Player.Bot two = new BotA(1,diffweightsarr);
+//        one.pausing=false;
+//        two.pausing=false;
+//        b.setPlayers(one,two);
+//        b.createBotLoop();
+//        long a = System.nanoTime();
+//        testMultipleTimes(one,two);
+//        System.out.println((System.nanoTime()-a)/1000000000.);
+        ABbot one = new ABbot(b,0);
+        ABbot two = new ABbot(b,1);
+        one.setOpponent(two);
+        two.setOpponent(one);
+	    one.pausing = false;
+	    two.pausing = false;
+	    b.setPlayers(one, two);
+	    b.createBotLoop();
         long a = System.nanoTime();
-        testMultipleTimes(one,two);
+        System.out.println("Depth of 5: ");
+        one.alpha_beta_pruning_result();
         System.out.println((System.nanoTime()-a)/1000000000.);
-//      AlphaBetaBot one = new AlphaBetaBot(0);
-//      Player.Bot two = new AlphaBetaBot(1);
-//      one.pausing = false;
-//      two.pausing = false;
-//      b.setPlayers(one, two);
 
 
     }
