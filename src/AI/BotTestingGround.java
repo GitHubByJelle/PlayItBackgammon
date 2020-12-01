@@ -41,7 +41,7 @@ public class BotTestingGround {
 	    b.setPlayers(one, two);
 	    b.createBotLoop();
         long a = System.nanoTime();
-        System.out.println("Depth of 5: ");
+        System.out.println("Depth of 3: ");
         one.alpha_beta_pruning_result();
         System.out.println((System.nanoTime()-a)/1000000000.);
 
