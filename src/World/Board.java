@@ -428,7 +428,7 @@ public class Board {
 //            System.out.println( validityCheck(spaces[from], spaces[to]));
 //            System.out.println(poss.contains(spaces[to]));
 //            System.out.println(this.toString());
-            System.out.println("Move invalid");
+//            System.out.println("Move invalid");
         }
     }
 
