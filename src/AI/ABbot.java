@@ -1,6 +1,7 @@
 package AI;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import World.Board;
@@ -9,12 +10,12 @@ import World.Player;
 import World.Space;
 
 public class ABbot extends Player.Bot{
-	private static Move final_move = null;
-	public double[] evaluator = {0.54984985, 1.52068946, 1.26497329, 0.36695872, 0.65810565};
+	private static ArrayList<Move> final_moves = new ArrayList<>();
+	public double[] evaluator = {0.27492492486083797, 0.7603447308733254, 0.6324866448907414, 0.18347935996872392, 0.3290528252791358};
 	List<Move> possibleMoves = new ArrayList<>();
     private ABbot opponent = null;
     private static int initialDepth = 0;
-    private static int MAX_DEPTH = 3;
+    private static int MAX_DEPTH = 1;
     public static int count = 0;
     public ABbot(int id) {
         super(id);
@@ -46,19 +47,28 @@ public class ABbot extends Player.Bot{
     	if(this.id == 0) {  
 			double expecMinMax = Integer.MIN_VALUE;
 			ArrayList<Move> moves = generateMoves2();
-			for (Move move : moves) {
-				double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
-				if (expecMinMax < util) {
-					expecMinMax = util;
-					final_move = move;
-				}	
+			for(int i=0; i<2; i++) {
+				Move final_move = null;
+				expecMinMax = Integer.MIN_VALUE;
+				Collections.shuffle(moves);
+				for (Move move : moves) {
+					double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+					if (expecMinMax < util) {
+						expecMinMax = util;
+						final_move = move;
+					}	
+				}
+				final_moves.add(final_move);
 			}
-			makeMove(final_move);
     	}
+    	
     	else if(this.id==1){
+    		double expecMinMax = Integer.MAX_VALUE;
     		for(int i=0; i<2;i++) {
-	    		double expecMinMax = Integer.MAX_VALUE;
+    			Move final_move = null;
+    			expecMinMax = Integer.MAX_VALUE;
 	    		ArrayList<Move> moves = generateMoves2();
+	    		Collections.shuffle(moves);
 	    		for(Move move: moves) {
 					double util = minMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
 					if (util < expecMinMax) {
@@ -66,22 +76,23 @@ public class ABbot extends Player.Bot{
 						final_move = move;
 					}
 	    		}
-	    		makeMove(final_move);
+	    		final_moves.add(final_move);
     		}
     	}
+//    	System.out.println(final_moves);
     }
     
     //FUNCTION OF MAX MOVE
    private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
 	   count++;
 	   if (depth == MAX_DEPTH) {
-			return EvaluationFunction();
+			return EvaluationFunction(player);
 		}
 		double max_util = Integer.MIN_VALUE;
 		player.B.BotMove(move.from, move.to);
 //		for (int i = 0; i < 15; i++) {
 			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
-			if (alpha < util) {
+			if (alpha < util/18) {
 				max_util = util / 18;
 				alpha = max_util;
 			}
@@ -94,15 +105,15 @@ public class ABbot extends Player.Bot{
     private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
     	count++;
     	if (depth == MAX_DEPTH) {
-			return EvaluationFunction();
+			return EvaluationFunction(player);
 		}
 		double min_util = Integer.MAX_VALUE;
 		player.B.BotMove(move.from, move.to);
 //		for (int i = 0; i < 15; i++) {
 			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
-			if (beta > util) {
-				min_util = util;
-				beta = min_util/18;
+			if (beta > util/18) {
+				min_util = util/18;
+				beta = min_util;
 			}
 //		}
 		player.undoMove(move);
@@ -113,6 +124,7 @@ public class ABbot extends Player.Bot{
     private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player){
     	double expectiValue = 0;
     	ArrayList<Move> moves = player.generateMoves2();
+    	Collections.shuffle(moves);
     	if(moves.size()!=0) {
 	    	// if it is min's turn
 	    	if(player.id == 1){
@@ -188,9 +200,13 @@ public class ABbot extends Player.Bot{
 
     
  // evaluation function to evaluate the whole board status
-    public double EvaluationFunction(){
-        return this.OtherPiecesSlain()*evaluator[0] + this.pipCount()*evaluator[1] + this.DoneScore()*evaluator[2] + 
-        		this.DoneBoardScore()*evaluator[3] + this.piecesAlone()*evaluator[4];
+    public double EvaluationFunction(ABbot player){
+    	if(player.id==1)
+    		return (this.OtherPiecesSlain()*evaluator[0] + this.pipCount()*evaluator[1] + this.DoneScore()*evaluator[2] + 
+            		this.DoneBoardScore()*evaluator[3] + this.piecesAlone()*evaluator[4]);
+    	else
+    		return -1*(this.OtherPiecesSlain()*evaluator[0] + this.pipCount()*evaluator[1] + this.DoneScore()*evaluator[2] + 
+            		this.DoneBoardScore()*evaluator[3] + this.piecesAlone()*evaluator[4]);
     }
     public double OtherPiecesSlain(){
         for(Space space : this.B.getSpaces()){
