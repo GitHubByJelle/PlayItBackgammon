@@ -308,7 +308,15 @@ public class Board {
             player2= new PrimeBlitzBot(1);
             player2.setBoard(this);
         }
-
+        
+        if(one.equals(Variables.ABB)){
+            player1= new ABbot(0);
+            player1.setBoard(this);
+        }
+        if(two.equals(Variables.ABB)){
+            player2= new ABbot(1);
+            player2.setBoard(this);
+        }
 
 //        if(player1==null ||player2==null) {
 //            for (int i = 1; i < Utils.Variables.GET_PLAYER_TYPES().length; i++) {
