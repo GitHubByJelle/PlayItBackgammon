@@ -14,8 +14,8 @@ public class ABbot extends Player.Bot{
 	List<Move> possibleMoves = new ArrayList<>();
     private ABbot opponent = null;
     private static int initialDepth = 0;
-    private static int DEFAULT_DEPTH = 3;
-    private static int count = 0;
+    private static int MAX_DEPTH = 3;
+    public static int count = 0;
     public ABbot(Board board, int id) {
         super(id);
         setBoard(board);
@@ -58,7 +58,7 @@ public class ABbot extends Player.Bot{
 	    		}
 	    		makeMove(final_move);
     		}
-    		System.out.println(this.B);
+    		System.out.println(count);
     	}
     	else if(this.id==1){
     		for(int i=0; i<2;i++) {
@@ -79,37 +79,37 @@ public class ABbot extends Player.Bot{
     //FUNCTION OF MAX MOVE
    private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
 	   count++;
-	   if (depth == DEFAULT_DEPTH) {
+	   if (depth == MAX_DEPTH) {
 			return EvaluationFunction();
 		}
 		double max_util = Integer.MIN_VALUE;
 		player.B.BotMove(move.from, move.to);
-		for (int i = 0; i < 15; i++) {
+//		for (int i = 0; i < 15; i++) {
 			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
 			if (alpha < util) {
 				max_util = util / 18;
 				alpha = max_util;
 			}
-		}
+//		}
 		player.undoMove(move);
 		return max_util;
     }
 
     //FUNCTION OF MIN MOVE
     private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
-		count++;
-    	if (depth == DEFAULT_DEPTH) {
+    	count++;
+    	if (depth == MAX_DEPTH) {
 			return EvaluationFunction();
 		}
 		double min_util = Integer.MAX_VALUE;
 		player.B.BotMove(move.from, move.to);
-		for (int i = 0; i < 15; i++) {
+//		for (int i = 0; i < 15; i++) {
 			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
 			if (beta > util) {
 				min_util = util;
 				beta = min_util/18;
 			}
-		}
+//		}
 		player.undoMove(move);
 		return min_util;
     }
@@ -118,6 +118,7 @@ public class ABbot extends Player.Bot{
     private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player){
     	double expectiValue = 0;
     	ArrayList<Move> moves = player.generateMoves2();
+    	System.out.println(moves);
     	if(moves.size()!=0) {
 	    	// if it is min's turn
 	    	if(player.id == 1){
