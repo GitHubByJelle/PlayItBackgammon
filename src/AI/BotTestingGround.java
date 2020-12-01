@@ -32,8 +32,8 @@ public class BotTestingGround {
 //        long a = System.nanoTime();
 //        testMultipleTimes(one,two);
 //        System.out.println((System.nanoTime()-a)/1000000000.);
-        ABbot one = new ABbot(b,0);
-        ABbot two = new ABbot(b,1);
+        ABbot one = new ABbot(0);
+        ABbot two = new ABbot(1);
         one.setOpponent(two);
         two.setOpponent(one);
 	    one.pausing = false;
