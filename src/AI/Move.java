@@ -15,7 +15,7 @@ public class Move {
         this.playerId = playerId;
     }
 
-    public Move(int from, int to, double score) {
+    public Move(int from, int to,int playerId, double score) {
         this.from = from;
         this.to = to;
         this.score = score;
@@ -27,5 +27,15 @@ public class Move {
 
     public void setIsMoveOut(boolean isMoveOut) {
         this.isMoveOut = isMoveOut;
+    }
+
+
+    @Override
+    public String toString() {
+        return "This move: move piece from: " + from + " to " + to +" of player: " + playerId;
+    }
+
+    public double getScore() {
+        return this.score;
     }
 }
