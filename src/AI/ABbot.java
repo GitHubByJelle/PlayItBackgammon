@@ -44,6 +44,7 @@ public class ABbot extends Player.Bot{
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
     public void alpha_beta_pruning_result(){
+    	//TODO plug in diceRolls
     	if(this.id == 0) {  
     		for(int i=0; i<2; i++) {
 	    		double expecMinMax = Integer.MIN_VALUE;
