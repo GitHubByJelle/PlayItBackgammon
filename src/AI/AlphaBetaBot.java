@@ -23,12 +23,14 @@ public class AlphaBetaBot extends Player.Bot {
     private static int initialDepth = 0;
     private static int DEFAULT_DEPTH = 1;
 
-    public AlphaBetaBot(int id) {
+    public AlphaBetaBot(Board board, int id) {
         super(id);
+        setBoard(board);
         System.out.println("Test tostring");
         System.out.println(this.B);
         System.out.println("-------------------------------------------------");
     }
+
     
     public void setOpponent(AlphaBetaBot opponent) {
     	this.opponent = opponent;
@@ -50,7 +52,7 @@ public class AlphaBetaBot extends Player.Bot {
 
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
-    private void alpha_beta_pruning_result(){
+    void alpha_beta_pruning_result(){
     	if(this.id == 0) {  
     		double expecMinMax = 0;
     		ArrayList<Move> moves = generateMoves2();
@@ -169,25 +171,28 @@ public class AlphaBetaBot extends Player.Bot {
     }
 
     public void generateMoves() {
-        Space[] allSpaces = this.B.getSpaces();
-        for (Space space : allSpaces) {
+        World.Space[] allSpaces = this.B.getSpaces();
+        System.out.println("Die is : " + Arrays.toString(this.B.getDie().getCurRoll()));
+        for (World.Space space : allSpaces) {
             if (space.getSize() > 0) {
                 if (space.getPieces().get(0).getId() == this.id) {
-                    ArrayList<Space> validMoves = this.B.getValidMoves(space);
+                    ArrayList<World.Space> validMoves = this.B.getValidMoves(space,this);
                     if (validMoves.size() > 0) {
-                        if (validMoves.get(0).getId() == validMoves.get(1).getId()) {
-                        } else {
-                            for (Space v : validMoves) {
-                                int score = 0;
-                                score = evaluationFunction(space, v);
-                                Move move = new Move(space.getId(), v.getId(), score);
-                                possibleMoves.add(move);
-                            }
+                        Turn turn = new Turn();
+                        for (World.Space v : validMoves) {
+                            int score = 0;
+                            score = evaluationFunction(space, v);
+                            Move move = new Move(space.getId(), v.getId(), this.id,score);
+                            possibleMoves.add(move);
+                            turn.setMoves(move);
                         }
+                        turns.add(turn);
+
                     }
                 }
             }
         }
+        setMoveQuality();
     }
 
     private double expectiminimax(int depth, int currentNodeIndex) {
