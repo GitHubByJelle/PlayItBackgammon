@@ -14,14 +14,14 @@ public class ABbot extends Player.Bot{
 	List<Move> possibleMoves = new ArrayList<>();
     private ABbot opponent = null;
     private static int initialDepth = 0;
-    private static int DEFAULT_DEPTH = 5;
+    private static int DEFAULT_DEPTH = 3;
     private static int count = 0;
     public ABbot(Board board, int id) {
         super(id);
         setBoard(board);
-        System.out.println("Test tostring");
-        System.out.println(this.B);
-        System.out.println("-------------------------------------------------");
+//        System.out.println("Test tostring");
+//        System.out.println(this.B);
+//        System.out.println("-------------------------------------------------");
     }
     public void setOpponent(ABbot opponent) {
     	this.opponent = opponent;
@@ -44,7 +44,6 @@ public class ABbot extends Player.Bot{
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
     public void alpha_beta_pruning_result(){
-    	//TODO plug in diceRolls
     	if(this.id == 0) {  
     		for(int i=0; i<2; i++) {
 	    		double expecMinMax = Integer.MIN_VALUE;
@@ -59,7 +58,7 @@ public class ABbot extends Player.Bot{
 	    		}
 	    		makeMove(final_move);
     		}
-    		System.out.println(count);
+    		System.out.println(this.B);
     	}
     	else if(this.id==1){
     		for(int i=0; i<2;i++) {
@@ -80,13 +79,11 @@ public class ABbot extends Player.Bot{
     //FUNCTION OF MAX MOVE
    private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
 	   count++;
-	   if(move.from>=26 || move.to>=26)
-			return Integer.MIN_VALUE;
 	   if (depth == DEFAULT_DEPTH) {
 			return EvaluationFunction();
 		}
 		double max_util = Integer.MIN_VALUE;
-		player.makeMove(move);
+		player.B.BotMove(move.from, move.to);
 		for (int i = 0; i < 15; i++) {
 			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
 			if (alpha < util) {
@@ -101,13 +98,11 @@ public class ABbot extends Player.Bot{
     //FUNCTION OF MIN MOVE
     private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
 		count++;
-		if(move.from>=26 || move.to>=26)
-			return Integer.MAX_VALUE;
     	if (depth == DEFAULT_DEPTH) {
 			return EvaluationFunction();
 		}
 		double min_util = Integer.MAX_VALUE;
-		player.makeMove(move);
+		player.B.BotMove(move.from, move.to);
 		for (int i = 0; i < 15; i++) {
 			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
 			if (beta > util) {
@@ -164,7 +159,7 @@ public class ABbot extends Player.Bot{
     }
     
     public void makeMove(Move move) {
-        this.B.botMove(move);
+        this.B.BotMove(move.from, move.to);
 
     }
 
