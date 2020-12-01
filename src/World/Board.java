@@ -30,7 +30,7 @@ public class Board {
         createSpaces();
 
         //actuall board
-
+//
         addPieces(1, 2, 0);
         addPieces(6, 5, 1);
         addPieces(8, 3, 1);
@@ -44,19 +44,19 @@ public class Board {
 
 //     testboard A
 //
-       addPieces(18,1,1);
-
-       addPieces(1,3,1);
-       addPieces(5,3,1);
-       addPieces(4,3,1);
-       addPieces(3,3,1);
-       addPieces(2,3,1);
-
-       addPieces(24,3,0);
-       addPieces(20,3,0);
-       addPieces(21,3,0);
-       addPieces(22,3,0);
-       addPieces(23,3,0);
+//       addPieces(18,1,1);
+//
+//       addPieces(1,3,1);
+//       addPieces(5,3,1);
+//       addPieces(4,3,1);
+//       addPieces(3,3,1);
+//       addPieces(2,3,1);
+//
+//       addPieces(24,3,0);
+//       addPieces(20,3,0);
+//       addPieces(21,3,0);
+//       addPieces(22,3,0);
+//       addPieces(23,3,0);
         outOfPlay = new Space(26);
 
         //to correct for is home values of the pieces
@@ -85,12 +85,11 @@ public class Board {
 
     //validity checks
     public ArrayList<Space> getValidMoves(Space selected) {
-
+    	
         ArrayList<Space> res = new ArrayList<Space>();
 
         Space target;
         int[] roll = die.getCurRoll();
-
         int bigger=0;
         int smaller=0;
 
