@@ -45,7 +45,7 @@ public class Board {
 //     testboard A
 //
 //       addPieces(18,1,1);
-
+//
 //       addPieces(1,3,1);
 //       addPieces(5,3,1);
 //       addPieces(4,3,1);
@@ -432,16 +432,44 @@ public class Board {
         }
     }
 
-     public void botMove(Move move){
-        if(isGoingToEat(move.from,move.to,move.playerId)){
-            move.isKill = true;
-        }
-        if(isGoingOut(move.from,move.to,move.playerId)){
-            move.isMoveOut = true;
-        }
-        BotMove(move.from, move.to);
+	public void botMove(Move move) {
+		// int id = gameLoop.getCurrentPlayer().getId();
+		if (isGoingToEat(move.from, move.to, move.playerId)) {
+			move.isKill = true;
+		}
+		if (isGoingOut(move.from, move.to, move.playerId)) {
+			move.isMoveOut = true;
+		}
+		int from = move.from;
+		int to = move.to;
+		int id = move.playerId;
+		if (to < 26) {
+			if (spaces[from].getSize() >= 1) {
+				spaces[from].movePiece(spaces[to]);
+				this.checkEaten(to, id);
+			}
+		}
 
+	}
+    
+    public void checkEaten(int k,int id) {
+        World.Space s = getSpaces()[k];
+        if (s.getSize() == 2)
+            if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
+                this.moveToEatenSpace(k,id);
+
+
+            }
     }
+    
+    public void moveToEatenSpace(int k,int id) {
+        World.Piece p = spaces[k].getPieces().get(0);
+        if (p.getId() ==id)
+            spaces[k].movePiece(spaces[0]);
+        else
+            spaces[k].movePiece(spaces[25]);
+    }
+    
     private boolean isGoingToEat(int from, int to, int id){
         if(this.getSpaces()[to].getSize() == 1){
             if (this.getSpaces()[to].getPieces().get(0).getId() != id){
