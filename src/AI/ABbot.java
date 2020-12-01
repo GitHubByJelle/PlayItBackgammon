@@ -76,7 +76,7 @@ public class ABbot extends Player.Bot{
     }
     
     //FUNCTION OF MAX MOVE
-    // @PARAM: TWO MOVES, ALPHA, BETA, AND CURRENT DEPTH
+    // @PARAM: ONE MOVE, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MAXIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
     private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
 		if (depth == DEFAULT_DEPTH) {
@@ -96,7 +96,7 @@ public class ABbot extends Player.Bot{
     }
 
     //FUNCTION OF MIN MOVE
-    // @PARAM: TWO MOVES, ALPHA, BETA, AND CURRENT DEPTH
+    // @PARAM: ONE MOVES, ALPHA, BETA, AND CURRENT DEPTH
     // @RETURN A DOUBLE ARRAY CONTAINING MINIMUM UTIL VALUE AND THE ID OF THE SPACE TO WHICH IT SHOULD MOVE TO
     private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
 		if (depth == DEFAULT_DEPTH) {
