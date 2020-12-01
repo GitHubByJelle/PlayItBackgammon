@@ -5,11 +5,15 @@ import World.Board;
 public class AlphaBetaTesting {
 	public static void main(String[] args) {
         Board b = new Board();
-        AlphaBetaBot alphaBetaBot = new AlphaBetaBot(b,0);
-        AlphaBetaBot opponent = new AlphaBetaBot(b,1);
+        ABbot alphaBetaBot = new ABbot(b,0);
+        ABbot opponent = new ABbot(b,1);
         alphaBetaBot.setOpponent(opponent);
         opponent.setOpponent(alphaBetaBot);
+        b.setPlayers(alphaBetaBot, opponent);
+        b.createBotLoop();
+        long a = System.nanoTime();
         alphaBetaBot.alpha_beta_pruning_result();
+        System.out.println((System.nanoTime()-a)/1000000000.);
 //        System.out.println("Calling from main:"  + move);
 //
 //        alphaBetaBot.makeMove(move);
