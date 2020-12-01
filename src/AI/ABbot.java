@@ -16,9 +16,8 @@ public class ABbot extends Player.Bot{
     private static int initialDepth = 0;
     private static int MAX_DEPTH = 3;
     public static int count = 0;
-    public ABbot(Board board, int id) {
+    public ABbot(int id) {
         super(id);
-        setBoard(board);
 //        System.out.println("Test tostring");
 //        System.out.println(this.B);
 //        System.out.println("-------------------------------------------------");
@@ -45,20 +44,16 @@ public class ABbot extends Player.Bot{
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
     public void alpha_beta_pruning_result(){
     	if(this.id == 0) {  
-    		for(int i=0; i<2; i++) {
-	    		double expecMinMax = Integer.MIN_VALUE;
-	    		ArrayList<Move> moves = generateMoves2();
-//	    		System.out.println(moves);
-	    		for(Move move: moves) {
-					double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
-					if (expecMinMax < util) {
-						expecMinMax = util;
-						final_move = move;
-					}
-	    		}
-	    		makeMove(final_move);
-    		}
-    		System.out.println(count);
+			double expecMinMax = Integer.MIN_VALUE;
+			ArrayList<Move> moves = generateMoves2();
+			for (Move move : moves) {
+				double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+				if (expecMinMax < util) {
+					expecMinMax = util;
+					final_move = move;
+				}	
+			}
+			makeMove(final_move);
     	}
     	else if(this.id==1){
     		for(int i=0; i<2;i++) {
@@ -118,7 +113,6 @@ public class ABbot extends Player.Bot{
     private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player){
     	double expectiValue = 0;
     	ArrayList<Move> moves = player.generateMoves2();
-//    	System.out.println(moves);
     	if(moves.size()!=0) {
 	    	// if it is min's turn
 	    	if(player.id == 1){
@@ -137,6 +131,7 @@ public class ABbot extends Player.Bot{
 	    		expectiValue = max;
 	    	}
     	}
+    	
     	return expectiValue;
     }
     
