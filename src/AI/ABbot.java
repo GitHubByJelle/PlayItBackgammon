@@ -41,201 +41,201 @@ public class ABbot extends Player.Bot{
 
     }
     
-    private void alpha_beta_pruning_result() {
-		double expectAB;
-		if(this.id == 0)
-			expectAB = Integer.MIN_VALUE;
-		else
-			expectAB =  Integer.MAX_VALUE;
-		ArrayList<Move> possibleMoves = generateMoves2();
-		if(possibleMoves.size()==0) {
-			this.requestPassTurn();
-		}
-		for(int move1=0; move1<possibleMoves.size(); move1++) {
-			this.B.BotMove(possibleMoves.get(move1).from, possibleMoves.get(move1).to);
-			for(int move2=move1+1; move2<possibleMoves.size() && move1!=move2; move2++) {
-				this.B.BotMove(possibleMoves.get(move2).from, possibleMoves.get(move2).to);
-				double value = expect_alpha_beta(initialDepth+1, Integer.MIN_VALUE, Integer.MAX_VALUE, this.opponent);
-				if(this.id == 0) {
-					if(value > expectAB) {
-						expectAB = value;
-						final_moves = new ArrayList<>();
-						final_moves.add(0,possibleMoves.get(move1));
-						final_moves.add(1,possibleMoves.get(move1));
-					}
-				}
-				else {
-					if(value < expectAB) {
-						expectAB = value;
-						final_moves = new ArrayList<>();
-						final_moves.add(0,possibleMoves.get(move1));
-						final_moves.add(1,possibleMoves.get(move1));
-					}
-				}
-				this.undoMove(possibleMoves.get(move2));
-			}
-			this.undoMove(possibleMoves.get(move1));
-		}
-	}
-	
-	private double expect_alpha_beta(int depth, double alpha, double beta, ABbot player) {
-		if (depth == MAX_DEPTH) {
-			return EvaluationFunction();
-		}
-		double expectMinMax = 0.0;
-		double util = 0.0;
-		if(player.id == 0)
-			util = Integer.MIN_VALUE;
-		else
-			util = Integer.MAX_VALUE;
-			
-		ArrayList<Move> possibleMoves = player.generateMoves2();
-		if(possibleMoves.size()==0) {
-			player.requestPassTurn();
-		}
-		for(int move1=0; move1<possibleMoves.size(); move1++) {
-			player.B.BotMove(possibleMoves.get(move1).from, possibleMoves.get(move1).to);
-			for(int move2=0; move2<possibleMoves.size() && move1!=move2; move2++) {
-				player.B.BotMove(possibleMoves.get(move2).from, possibleMoves.get(move2).to);
-				if (player.id == 0) {
-					double value = expect_alpha_beta(depth + 1, alpha, beta, player.opponent);
-					if(value > util) {
-						util = value;
-						alpha = util;
-					}
-				} 
-				else {
-					double value = expect_alpha_beta(depth + 1, alpha, beta, player.opponent);
-					if(value < util) {
-						util = value;
-						beta = util;
-					}
-				}
-				if(beta-alpha <= 0.00001) 
-					return beta;
-				player.undoMove(possibleMoves.get(move2));
-			}
-			player.undoMove(possibleMoves.get(move1));
-			expectMinMax += 1/18 * util;
-		}
-		return expectMinMax;
-	}
-
-//    // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
-//    // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
-//    public void alpha_beta_pruning_result(){
-//    	if(this.id == 0) {  
-//    		final_moves = new ArrayList<>();
-//			double expecMinMax = Integer.MIN_VALUE;
-//			ArrayList<Move> moves = generateMoves2();
-//			if(moves.size()==0)
-//				this.requestPassTurn();
-//			for(int i=0; i<2; i++) {
-//				Move final_move = null;
-//				expecMinMax = Integer.MIN_VALUE;
-//				Collections.shuffle(moves);
-//				for (Move move : moves) {
-//					double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
-//					if (expecMinMax < util) {
-//						expecMinMax = util;
-//						final_move = move;
-//					}	
-//				}
-//				final_moves.add(final_move);
-//			}
-//    	}
-//    	
-//    	else if(this.id==1){
-//    		final_moves = new ArrayList<>();
-//    		double expecMinMax = Integer.MAX_VALUE;
-//			Move final_move = null;
-//			expecMinMax = Integer.MAX_VALUE;
-//			ArrayList<Move> moves = generateMoves2();
-//			Collections.shuffle(moves);
-//			if (moves.size() == 0)
-//				this.requestPassTurn();
-//			for(int i=0; i<2; i++) {
-//				for (Move move : moves) {
-//					double util = minMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
-//					if (util < expecMinMax) {
-//						expecMinMax = util;
-//						final_move = move;
+//    private void alpha_beta_pruning_result() {
+//		double expectAB;
+//		if(this.id == 0)
+//			expectAB = Integer.MIN_VALUE;
+//		else
+//			expectAB =  Integer.MAX_VALUE;
+//		ArrayList<Move> possibleMoves = generateMoves2();
+//		if(possibleMoves.size()==0) {
+//			this.requestPassTurn();
+//		}
+//		for(int move1=0; move1<possibleMoves.size(); move1++) {
+//			this.B.BotMove(possibleMoves.get(move1).from, possibleMoves.get(move1).to);
+//			for(int move2=move1+1; move2<possibleMoves.size() && move1!=move2; move2++) {
+//				this.B.BotMove(possibleMoves.get(move2).from, possibleMoves.get(move2).to);
+//				double value = expect_alpha_beta(initialDepth+1, Integer.MIN_VALUE, Integer.MAX_VALUE, this.opponent);
+//				if(this.id == 0) {
+//					if(value > expectAB) {
+//						expectAB = value;
+//						final_moves = new ArrayList<>();
+//						final_moves.add(0,possibleMoves.get(move1));
+//						final_moves.add(1,possibleMoves.get(move1));
 //					}
 //				}
-//				final_moves.add(final_move);
+//				else {
+//					if(value < expectAB) {
+//						expectAB = value;
+//						final_moves = new ArrayList<>();
+//						final_moves.add(0,possibleMoves.get(move1));
+//						final_moves.add(1,possibleMoves.get(move1));
+//					}
+//				}
+//				this.undoMove(possibleMoves.get(move2));
 //			}
-//    	}
-//    }
-//    
-//    //FUNCTION OF MAX MOVE
-//   private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
-//	   if(move==null)
-//		   player.requestPassTurn();
-//	   if (depth == MAX_DEPTH) {
+//			this.undoMove(possibleMoves.get(move1));
+//		}
+//	}
+//	
+//	private double expect_alpha_beta(int depth, double alpha, double beta, ABbot player) {
+//		if (depth == MAX_DEPTH) {
 //			return EvaluationFunction();
 //		}
-//		double max_util = Integer.MIN_VALUE;
-//		player.B.BotMove(move.from, move.to);
-//		for (int i = 0; i < 14; i++) {
-//			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
-//			System.out.println(1);
-//			if (alpha < util/18) {
-//				alpha = max_util;
-//				max_util += util / 18;
-//			}
+//		double expectMinMax = 0.0;
+//		double util = 0.0;
+//		if(player.id == 0)
+//			util = Integer.MIN_VALUE;
+//		else
+//			util = Integer.MAX_VALUE;
+//			
+//		ArrayList<Move> possibleMoves = player.generateMoves2();
+//		if(possibleMoves.size()==0) {
+//			player.requestPassTurn();
 //		}
-//		player.undoMove(move);
-//		return max_util;
-//    }
-//
-//    //FUNCTION OF MIN MOVE
-//    private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
-//    	if(move==null)
-//    		player.requestPassTurn();
-//    	if (depth == MAX_DEPTH) {
-//			return EvaluationFunction();
-//		}
-//		double min_util = Integer.MAX_VALUE;
-//		player.B.BotMove(move.from, move.to);
-//		for (int i = 0; i < 14; i++) {
-//			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
-//			if (beta > util/18) {
-//				beta = min_util;
-//				min_util += util/18;
-//			}
-//		}
-//		player.undoMove(move);
-//		return min_util;
-//    }
-//
-//    // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
-//    private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player){
-//    	if(beta-alpha <= 0.00001) 
-//    		return beta;
-//    	double expectiValue = 0;
-//    	ArrayList<Move> moves = player.generateMoves2();
-//    	Collections.shuffle(moves);
-//    	if(moves.size()!=0) {
-//	    	// if it is min's turn
-//	    	if(player.id == 1){
-//	    		double min = Integer.MAX_VALUE;
-//				for (Move move : moves) {
-//					min = Math.min(min, minMove(move, alpha, beta, depth, player));
+//		for(int move1=0; move1<possibleMoves.size(); move1++) {
+//			player.B.BotMove(possibleMoves.get(move1).from, possibleMoves.get(move1).to);
+//			for(int move2=0; move2<possibleMoves.size() && move1!=move2; move2++) {
+//				player.B.BotMove(possibleMoves.get(move2).from, possibleMoves.get(move2).to);
+//				if (player.id == 0) {
+//					double value = expect_alpha_beta(depth + 1, alpha, beta, player.opponent);
+//					if(value > util) {
+//						util = value;
+//						alpha = util;
+//					}
+//				} 
+//				else {
+//					double value = expect_alpha_beta(depth + 1, alpha, beta, player.opponent);
+//					if(value < util) {
+//						util = value;
+//						beta = util;
+//					}
 //				}
-//	    	  	expectiValue = min;
-//	    	}
-//	    	// if it is max's turn
-//	    	else if(player.id == 0){
-//	    		double max = Integer.MIN_VALUE;
-//				for (Move move : moves) {
-//					max = Math.max(max, maxMove(move, alpha, beta, depth, player));
-//				}
-//	    		expectiValue = max;
-//	    	}
-//    	}
-//    	
-//    	return expectiValue;
-//    }
+//				if(beta-alpha <= 0.00001) 
+//					return beta;
+//				player.undoMove(possibleMoves.get(move2));
+//			}
+//			player.undoMove(possibleMoves.get(move1));
+//			expectMinMax += 1/18 * util;
+//		}
+//		return expectMinMax;
+//	}
+
+    // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
+    // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
+    public void alpha_beta_pruning_result(){
+    	if(this.id == 0) {  
+    		final_moves = new ArrayList<>();
+			double expecMinMax = Integer.MIN_VALUE;
+			ArrayList<Move> moves = generateMoves2();
+			if(moves.size()==0)
+				this.requestPassTurn();
+			for(int i=0; i<2; i++) {
+				Move final_move = null;
+				expecMinMax = Integer.MIN_VALUE;
+				Collections.shuffle(moves);
+				for (Move move : moves) {
+					double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+					if (expecMinMax < util) {
+						expecMinMax = util;
+						final_move = move;
+					}	
+				}
+				final_moves.add(final_move);
+			}
+    	}
+    	
+    	else if(this.id==1){
+    		final_moves = new ArrayList<>();
+    		double expecMinMax = Integer.MAX_VALUE;
+			Move final_move = null;
+			expecMinMax = Integer.MAX_VALUE;
+			ArrayList<Move> moves = generateMoves2();
+			Collections.shuffle(moves);
+			if (moves.size() == 0)
+				this.requestPassTurn();
+			for(int i=0; i<2; i++) {
+				for (Move move : moves) {
+					double util = minMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+					if (util < expecMinMax) {
+						expecMinMax = util;
+						final_move = move;
+					}
+				}
+				final_moves.add(final_move);
+			}
+    	}
+    }
+    
+    //FUNCTION OF MAX MOVE
+   private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
+	   if(move==null)
+		   player.requestPassTurn();
+	   if (depth == MAX_DEPTH) {
+			return EvaluationFunction();
+		}
+		double max_util = Integer.MIN_VALUE;
+		player.B.BotMove(move.from, move.to);
+		for (int i = 0; i < 14; i++) {
+			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
+			System.out.println(1);
+			if (alpha < util/18) {
+				alpha = max_util;
+				max_util += util / 18;
+			}
+		}
+		player.undoMove(move);
+		return max_util;
+    }
+
+    //FUNCTION OF MIN MOVE
+    private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
+    	if(move==null)
+    		player.requestPassTurn();
+    	if (depth == MAX_DEPTH) {
+			return EvaluationFunction();
+		}
+		double min_util = Integer.MAX_VALUE;
+		player.B.BotMove(move.from, move.to);
+		for (int i = 0; i < 14; i++) {
+			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
+			if (beta > util/18) {
+				beta = min_util;
+				min_util += util/18;
+			}
+		}
+		player.undoMove(move);
+		return min_util;
+    }
+
+    // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
+    private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player){
+    	if(beta-alpha <= 0.00001) 
+    		return beta;
+    	double expectiValue = 0;
+    	ArrayList<Move> moves = player.generateMoves2();
+    	Collections.shuffle(moves);
+    	if(moves.size()!=0) {
+	    	// if it is min's turn
+	    	if(player.id == 1){
+	    		double min = Integer.MAX_VALUE;
+				for (Move move : moves) {
+					min = Math.min(min, minMove(move, alpha, beta, depth, player));
+				}
+	    	  	expectiValue = min;
+	    	}
+	    	// if it is max's turn
+	    	else if(player.id == 0){
+	    		double max = Integer.MIN_VALUE;
+				for (Move move : moves) {
+					max = Math.max(max, maxMove(move, alpha, beta, depth, player));
+				}
+	    		expectiValue = max;
+	    	}
+    	}
+    	
+    	return expectiValue;
+    }
     
     public ArrayList<Move> generateMoves2() {
     	ArrayList<Move> possible_moves = new ArrayList<>();
