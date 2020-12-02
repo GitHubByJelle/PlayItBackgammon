@@ -10,7 +10,7 @@ import World.Player;
 import World.Space;
 
 public class ABbot extends Player.Bot{
-	private static ArrayList<Move> final_moves = new ArrayList<>();
+	private ArrayList<Move> final_moves = new ArrayList<>();
 	public double[] evaluator = {0.27492492486083797, 0.7603447308733254, 0.6324866448907414, 0.18347935996872392, 0.3290528252791358};
 	List<Move> possibleMoves = new ArrayList<>();
     private ABbot opponent = null;
