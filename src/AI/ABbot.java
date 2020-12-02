@@ -15,7 +15,7 @@ public class ABbot extends Player.Bot{
 	List<Move> possibleMoves = new ArrayList<>();
     private ABbot opponent = null;
     private static int initialDepth = 0;
-    private static int MAX_DEPTH = 1;
+    private static int MAX_DEPTH = 3;
     public static int count = 0;
     public ABbot(int id) {
         super(id);
