@@ -47,6 +47,8 @@ public class ABbot extends Player.Bot{
     	if(this.id == 0) {  
 			double expecMinMax = Integer.MIN_VALUE;
 			ArrayList<Move> moves = generateMoves2();
+			if(moves.size()==0)
+				this.requestPassTurn();
 			for(int i=0; i<2; i++) {
 				Move final_move = null;
 				expecMinMax = Integer.MIN_VALUE;
@@ -64,10 +66,12 @@ public class ABbot extends Player.Bot{
     	
     	else if(this.id==1){
     		double expecMinMax = Integer.MAX_VALUE;
-    		for(int i=0; i<2;i++) {
+
     			Move final_move = null;
     			expecMinMax = Integer.MAX_VALUE;
 	    		ArrayList<Move> moves = generateMoves2();
+	    		if(moves.size()==0)
+					this.requestPassTurn();
 	    		Collections.shuffle(moves);
 	    		for(Move move: moves) {
 					double util = minMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
@@ -76,15 +80,14 @@ public class ABbot extends Player.Bot{
 						final_move = move;
 					}
 	    		}
-	    		final_moves.add(final_move);
-    		}
+	    		final_moves.add(final_move);	
     	}
-//    	System.out.println(final_moves);
     }
     
     //FUNCTION OF MAX MOVE
    private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
-	   count++;
+	   if(move==null)
+		   player.requestPassTurn();
 	   if (depth == MAX_DEPTH) {
 			return EvaluationFunction(player);
 		}
@@ -103,12 +106,14 @@ public class ABbot extends Player.Bot{
 
     //FUNCTION OF MIN MOVE
     private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
-    	count++;
+    	if(move==null)
+    		player.requestPassTurn();
     	if (depth == MAX_DEPTH) {
 			return EvaluationFunction(player);
 		}
 		double min_util = Integer.MAX_VALUE;
 		player.B.BotMove(move.from, move.to);
+		
 //		for (int i = 0; i < 15; i++) {
 			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
 			if (beta > util/18) {
@@ -201,12 +206,9 @@ public class ABbot extends Player.Bot{
     
  // evaluation function to evaluate the whole board status
     public double EvaluationFunction(ABbot player){
-    	if(player.id==1)
-    		return (this.OtherPiecesSlain()*evaluator[0] + this.pipCount()*evaluator[1] + this.DoneScore()*evaluator[2] + 
-            		this.DoneBoardScore()*evaluator[3] + this.piecesAlone()*evaluator[4]);
-    	else
-    		return -1*(this.OtherPiecesSlain()*evaluator[0] + this.pipCount()*evaluator[1] + this.DoneScore()*evaluator[2] + 
-            		this.DoneBoardScore()*evaluator[3] + this.piecesAlone()*evaluator[4]);
+		return (this.OtherPiecesSlain() * evaluator[0] + this.pipCount() * evaluator[1]
+				+ this.DoneScore() * evaluator[2] + this.DoneBoardScore() * evaluator[3]
+				+ this.piecesAlone() * evaluator[4]);
     }
     public double OtherPiecesSlain(){
         for(Space space : this.B.getSpaces()){
