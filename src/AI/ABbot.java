@@ -15,7 +15,7 @@ public class ABbot extends Player.Bot{
 	List<Move> possibleMoves = new ArrayList<>();
     private ABbot opponent = null;
     private static int initialDepth = 0;
-    private static int MAX_DEPTH = 3;
+    private static int MAX_DEPTH = 15;
     public static int count = 0;
     public ABbot(int id) {
         super(id);
@@ -178,7 +178,6 @@ public class ABbot extends Player.Bot{
 		player.B.BotMove(move.from, move.to);
 		for (int i = 0; i < 14; i++) {
 			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
-			System.out.println(1);
 			if (alpha < util/18) {
 				alpha = max_util;
 				max_util += util / 18;
