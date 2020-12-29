@@ -287,11 +287,11 @@ public class Board {
         if(two.equals(Variables.HUMAN)){
             player2= new Player.Human(1);
         }
-        if(one.equals(Variables.BOTA)){
+        if(one.equals(Variables.TMM)){
             player1= new TMM(0);
             player1.setBoard(this);
         }
-        if(two.equals(Variables.BOTA)){
+        if(two.equals(Variables.TMM)){
             player2= new TMM(1);
             player2.setBoard(this);
         }
