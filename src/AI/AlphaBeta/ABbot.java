@@ -1,10 +1,9 @@
-package AI;
+package AI.AlphaBeta;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import World.Board;
 import World.Piece;
 import World.Player;
 import World.Space;

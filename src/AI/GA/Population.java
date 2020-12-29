@@ -1,4 +1,6 @@
-package AI;
+package AI.GA;
+
+import AI.GA.Individual;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,12 +1,10 @@
-package AI;
+package AI.GA;
 
 
 import World.Board;
 import World.Player;
 
 import java.util.Random;
-import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -119,8 +117,8 @@ public double individualAvg() {
     Runnable task = () -> {
         try{
             Board b;
-            Player.Bot one= new BotA(0, this.weightGenome);
-            Player.Bot two = new BotA(1, this.enemyWeightGenome);
+            Player.Bot one= new TMM(0, this.weightGenome);
+            Player.Bot two = new TMM(1, this.enemyWeightGenome);
             one.pausing=false;
             two.pausing=false;
             b = new Board();

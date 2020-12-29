@@ -3,6 +3,9 @@ package World;
 
 
 import AI.*;
+import AI.AlphaBeta.ABbot;
+import AI.AlphaBeta.Move;
+import AI.GA.TMM;
 import Utils.Variables;
 
 import javax.swing.*;
@@ -285,11 +288,11 @@ public class Board {
             player2= new Player.Human(1);
         }
         if(one.equals(Variables.BOTA)){
-            player1= new BotA(0);
+            player1= new TMM(0);
             player1.setBoard(this);
         }
         if(two.equals(Variables.BOTA)){
-            player2= new BotA(1);
+            player2= new TMM(1);
             player2.setBoard(this);
         }
         if(one.equals(Variables.SIMPLEBOT)){

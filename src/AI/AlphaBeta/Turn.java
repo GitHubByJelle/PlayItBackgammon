@@ -1,4 +1,6 @@
-package AI;
+package AI.AlphaBeta;
+
+import AI.AlphaBeta.Move;
 
 public class Turn {
     Move[] moves;

@@ -1,4 +1,4 @@
-package AI;
+package AI.GA;
 import World.*;
 
 import javax.swing.*;
@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.Timer;
 
 
-public class BotA extends Player.Bot{
+public class TMM extends Player.Bot{
 
 //    assume board is structured in list from 1-25
 //    standard start position
@@ -18,10 +18,10 @@ public class BotA extends Player.Bot{
 
     //0 is white and 1 is red
     public double[] weightsarr = {0.27492492486083797, 0.7603447308733254, 0.6324866448907414, 0.18347935996872392, 0.3290528252791358};
-    public BotA(int id) {
+    public TMM(int id) {
         super(id);
     }
-    public BotA(int id, double[] weightsarr) {
+    public TMM(int id, double[] weightsarr) {
         super(id);
         this.weightsarr = weightsarr;
     }

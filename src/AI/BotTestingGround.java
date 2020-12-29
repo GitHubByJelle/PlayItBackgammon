@@ -1,10 +1,10 @@
 package AI;
 
+import AI.AlphaBeta.ABbot;
 import World.Board;
 import World.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class BotTestingGround {
     private static ArrayList<int[]> i= new ArrayList<int[]>();

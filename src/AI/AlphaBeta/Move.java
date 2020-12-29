@@ -1,4 +1,4 @@
-package AI;
+package AI.AlphaBeta;
 
 public class Move {
     // Class represents a move

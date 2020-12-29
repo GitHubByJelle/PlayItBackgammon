@@ -1,8 +1,5 @@
 package Utils;
 
-import AI.BotA;
-import World.Player;
-
 import java.awt.*;
 
 public final class Variables {
@@ -26,13 +23,13 @@ public final class Variables {
 
 
     public static final String HUMAN = "Human";
-    public static final String BOTA = "BotA";
+    public static final String TMM = "TMM";
     public static final String SIMPLEBOT="SimpleBot";
     public static final String BP="PrimeBlitzingBot";
     public static final String ABB="AlphaBetaBot";
 
     //fornow its gonna be like this, later we can change it to store AI objects @ali
-    public static final String[] PLAYERS= {HUMAN, BOTA, SIMPLEBOT,BP,ABB};
+    public static final String[] PLAYERS= {HUMAN, TMM, SIMPLEBOT,BP,ABB};
 
 
 }
