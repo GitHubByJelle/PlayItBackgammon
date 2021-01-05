@@ -29,6 +29,9 @@ public class EasySim {
         printRep();
 
 
+        System.out.println(Arrays.toString(getPossMoves(new int[]{1,2},1,0,rep).toArray()));
+
+
     }
 
     public static void simulateMove(int[][] board, int from, int to) {
@@ -57,6 +60,8 @@ public class EasySim {
             }
         }
     }
+
+
     public static int[][] setBoardRep(Board b){
         boardRep = new int[27][3];//{id,num pieces this player1, num pieces player 2}
         for(int i=0;i<boardRep.length-1;i++){
@@ -89,88 +94,88 @@ public class EasySim {
 
 
 
-//    public static ArrayList<Integer > getPossMoves(int [] dieroll, int selected, int playerID){
-//        ArrayList<Integer> res = new ArrayList<>();
-//
-//        int target;
-//        int bigger=0;
-//        int smaller=0;
-//
-//        for (int i = 0; i < dieroll.length; i++) {
-//            if(selected + dieroll[i] < 25 && selected + dieroll[i] > 0){//check for bounds
-//                target = selected + dieroll[i];
-//                if (validityCheck(selected, target, playerID)) {
-//                    res.add(selected + dieroll[i]);
-//                }
-//
-//            } else {
-//                //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
-//                if (!isEmpty(selected) &&allPiecesHome(playerID)) {
-//
-//                    if (selected>6) {
-//                        for (int j = 24; j > 18; j--) {
-//                            if ( boardRep[j][1] +boardRep[j][2] > 0) {
-//                                bigger = j;
-//                            }
-//                        }
-//
-//                        if (dieroll.length > 1) {
-//                            if ((25 - selected) == dieroll[0] || (25 - selected) == dieroll[1])
-//                                res.add(26);
-//
-//                            else if (selected== bigger && dieroll[0] > (25 - selected) || selected== bigger && dieroll[1] > (25 - selected)) {
-//                                res.add(26);
-//                            }
-//                            else if (selected > bigger && dieroll[0] > (25 - selected) && selected > bigger && dieroll[1] > (25 - selected)) {
-//                                res.remove(26);
-//                            }
-//                        } else {
-//                            if ((25 - selected) == dieroll[0])
-//                                res.add(26);
-//
-//                            else if (selected == bigger && dieroll[0] > (25 - selected)) {
-//                                res.add(26);
-//                            } else if (selected > bigger && dieroll[0] > (25 - selected)) {
-//                                res.remove(26);
-//                            }
-//                        }
-//                    } else {
-//                        for (int j = 1; j < 6; j++) {
-//                            if (boardRep[j][1] +boardRep[j][2] > 0) {
-//                                bigger = j;
-//                            }
-//                        }
-//                        if (dieroll.length > 1) {
-//                            if (selected == Math.abs(dieroll[0]) || selected == Math.abs(dieroll[1]))
-//                                res.add(26);
-//
-//                            else if (selected == bigger && Math.abs(dieroll[0]) > selected|| selected == bigger && Math.abs(dieroll[1]) > selected ) {
-//                                res.add(26);
-//                            }
-//                            else if (selected < bigger && Math.abs(dieroll[0]) > selected&& Math.abs(dieroll[1]) > selected) {
-//                                res.remove(26);
-//                            }
-//                        } else {
-//                            if (selected == Math.abs(dieroll[0]))
-//                                res.add(26);
-//
-//                            else if (selected == bigger && Math.abs(dieroll[0]) > selected) {
-//                                res.add(26);
-//                            }
-//                            else if (selected< bigger && Math.abs(dieroll[0]) > selected) {
-//                                res.remove(26);
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//
-//        return res;
-//    }
-//
+    public static ArrayList<Integer > getPossMoves(int [] dieroll, int selected, int playerID, int [][]boardRep){
+        ArrayList<Integer> res = new ArrayList<>();
+
+        int target;
+        int bigger=0;
+        int smaller=0;
+
+        for (int i = 0; i < dieroll.length; i++) {
+            if(selected + dieroll[i] < 25 && selected + dieroll[i] > 0){//check for bounds
+                target = selected + dieroll[i];
+                if (validityCheck(selected, target, playerID)) {
+                    res.add(selected + dieroll[i]);
+                }
+
+            } else {
+                //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
+                if (!isEmpty(selected) &&allPiecesHome(playerID)) {
+
+                    if (selected>6) {
+                        for (int j = 24; j > 18; j--) {
+                            if ( boardRep[j][1] +boardRep[j][2] > 0) {
+                                bigger = j;
+                            }
+                        }
+
+                        if (dieroll.length > 1) {
+                            if ((25 - selected) == dieroll[0] || (25 - selected) == dieroll[1])
+                                res.add(26);
+
+                            else if (selected== bigger && dieroll[0] > (25 - selected) || selected== bigger && dieroll[1] > (25 - selected)) {
+                                res.add(26);
+                            }
+                            else if (selected > bigger && dieroll[0] > (25 - selected) && selected > bigger && dieroll[1] > (25 - selected)) {
+                                res.remove(26);
+                            }
+                        } else {
+                            if ((25 - selected) == dieroll[0])
+                                res.add(26);
+
+                            else if (selected == bigger && dieroll[0] > (25 - selected)) {
+                                res.add(26);
+                            } else if (selected > bigger && dieroll[0] > (25 - selected)) {
+                                res.remove(26);
+                            }
+                        }
+                    } else {
+                        for (int j = 1; j < 6; j++) {
+                            if (boardRep[j][1] +boardRep[j][2] > 0) {
+                                bigger = j;
+                            }
+                        }
+                        if (dieroll.length > 1) {
+                            if (selected == Math.abs(dieroll[0]) || selected == Math.abs(dieroll[1]))
+                                res.add(26);
+
+                            else if (selected == bigger && Math.abs(dieroll[0]) > selected|| selected == bigger && Math.abs(dieroll[1]) > selected ) {
+                                res.add(26);
+                            }
+                            else if (selected < bigger && Math.abs(dieroll[0]) > selected&& Math.abs(dieroll[1]) > selected) {
+                                res.remove(26);
+                            }
+                        } else {
+                            if (selected == Math.abs(dieroll[0]))
+                                res.add(26);
+
+                            else if (selected == bigger && Math.abs(dieroll[0]) > selected) {
+                                res.add(26);
+                            }
+                            else if (selected< bigger && Math.abs(dieroll[0]) > selected) {
+                                res.remove(26);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return res;
+    }
+
 
 
     public static boolean validityCheck(int selected, int target, int playerID) {
@@ -196,17 +201,24 @@ public class EasySim {
     }
 
 
-//    private boolean allPiecesHome(int id){
-//        for( int i= 1; i<=24; i++){
-//            if(id==0){
-//
-//            }else{
-//                //id 1
-//            }
-//        }
-//
-//        return true;
-//    }
-//
+    private static boolean allPiecesHome(int id){
+        int numPieces=0;
+        if(id==0){
+            // non-home space + out of play space [1-18] +0
+            for(int i=0; i<19;i++){
+                numPieces+=boardRep[i][1];
+            }
+        }else{
+            //id==1
+            // non-home space + out of play space [7-24] +25
+            for(int i=7; i<26;i++){
+                numPieces+=boardRep[i][2];
+            }
+        }
+
+        if(numPieces!=0)return true;
+        else return false;
+    }
+
 
 }
