@@ -321,6 +321,16 @@ public class Board {
             player2.setBoard(this);
         }
 
+        if(one.equals(Variables.RANDOM)){
+            player1= new RandomBot(0);
+            player1.setBoard(this);
+        }
+        if(two.equals(Variables.RANDOM)){
+            player2= new RandomBot(1);
+            player2.setBoard(this);
+        }
+
+
 //        if(player1==null ||player2==null) {
 //            for (int i = 1; i < Utils.Variables.GET_PLAYER_TYPES().length; i++) {
 //                if (one.equals(Utils.Variables.GET_PLAYER_TYPES()[i])) {

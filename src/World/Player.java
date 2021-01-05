@@ -108,7 +108,7 @@ public abstract class Player {
 
         public void requestPassTurn(){
             B.getGameLoop().changeTurn();
-            System.out.println("PASS TURN");
+            //System.out.println("PASS TURN");
         }
 
         @Override
