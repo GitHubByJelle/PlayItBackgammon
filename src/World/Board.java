@@ -67,6 +67,9 @@ public class Board {
     }
 
 
+    public Space getOutOfPlay(){return outOfPlay;}
+
+
     public void forceHomeCheck(){
         for (int i = 0; i < spaces.length; i++) {
             for (int a = 0; a < spaces[i].getPieces().size(); a++) {
