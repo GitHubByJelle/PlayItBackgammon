@@ -48,7 +48,7 @@ public class BotTestingGround {
 
     }
 
-    public static void testMultipleTimes(Player.Bot one, Player.Bot two ){
+    public static void testMultipleTimes(Player.Bot one, Player.Bot two){
         for(int i = 0; i<100; i++){
             b = new Board();
 
@@ -72,7 +72,7 @@ public class BotTestingGround {
 //            System.out.println(Arrays.toString(b.getDie().getCurRoll()));
         }
 
-        giveWinner( b);
+        giveWinner(b);
     }
 
     private static void testWithSameGivenRoll( ArrayList<int[]> i){

@@ -11,11 +11,11 @@ public class TDGdata {
     public static void main(String[] args){
         Board b=new Board();
         TDGdata d= new TDGdata(b);
-        d.print();
+        //d.print();
     }
 
 
-    double [] data= new double[4*27*2];//features
+    float [] data= new float[4*27*2];//features
     public TDGdata(Board b){
         //26 spaces in the board
         Space[]space = b.getSpaces();
@@ -24,7 +24,7 @@ public class TDGdata {
         int pieceCount=0;//(for the out space since in can contain both colors)
 
 
-        System.out.println("Space Length: " + space.length);
+        //System.out.println("Space Length: " + space.length);
 
         //0, 25 are eaten spaces
         //26 is out space
@@ -53,7 +53,7 @@ public class TDGdata {
                         if (space[i].getPieces().size() >= 3)
                             data[s + 2] = 1;
                         if (space[i].getPieces().size() > 3) {
-                            data[s + 3] = (space[i].getPieces().size() - 3) / 2.0;
+                            data[s + 3] = (space[i].getPieces().size() - 3) / 2f;
                           //  System.out.println((space[i].getPieces().size() - 3) / 2.0);
                         }
                     }
@@ -74,7 +74,7 @@ public class TDGdata {
             if (pieceCount >= 3)
                 data[s+2] = 1;
             if (pieceCount >3)
-                data[s+3] = (pieceCount - 3) / 2.0;
+                data[s+3] = (pieceCount - 3) / 2f;
 
 //            System.out.println(i+" "+ s+" "+ data[s] + " " + data[s + 1] + " " + data[s + 2] + " " + data[s + 3]);
 //            System.out.println("Last number of id " + id + " is " + (s+3) + "\n");
