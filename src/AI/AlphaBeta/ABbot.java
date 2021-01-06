@@ -148,7 +148,6 @@ public class ABbot extends Player.Bot{
     		final_moves = new ArrayList<>();
     		double expecMinMax = Integer.MAX_VALUE;
 			Move final_move = null;
-			expecMinMax = Integer.MAX_VALUE;
 			ArrayList<Move> moves = generateMoves2();
 			Collections.shuffle(moves);
 			if (moves.size() == 0)
@@ -251,43 +250,41 @@ public class ABbot extends Player.Bot{
                 }
             }
         }
+        System.out.println(possible_moves);
 		return possible_moves;
     }
     
+
     public void makeMove(Move move) {
-        this.B.BotMove(move.from, move.to);
-
+        this.B.BotMove(move);
     }
-
-    public void makeMove(int from, int to) {
-        this.B.BotMove(from, to);
-
-    }
-    
-    public void makeMove(int from, int to, Move move) {
-        this.B.botMove(move);
-
-    }
-
     public void undoMove(Move move) {
+        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
         boolean didKill = move.isKill;
-        boolean didOut = move.isMoveOut;
-        if (didKill) {
-            if (id == 0) {
-                makeMove(0, move.to, move);
-            } else {
-                makeMove(25, move.to,move);
-            }
+        if(didKill){
+            System.out.println("killed someone");
         }
-        if (didOut) {
-            makeMove(26, move.to,move);
+        int temp = move.to;
+        move.to = move.from;
+        move.from = temp;
+        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
 
-        }
+        this.B.undoBotMove(move);
+//        if (didKill) {
+//            if (this.id == 0) {
+//                Move move1 = new Move(25,temp,1);
+//                makeMove(move1);
+//            } else {
+//                Move move1 = new Move(1,temp,0);
+//                makeMove(move1);
+//            }
+//        }
 //        makeMove(move);
     }
 
-    
- // evaluation function to evaluate the whole board status
+
+
+    // evaluation function to evaluate the whole board status
     public double EvaluationFunction(){
 		return (this.OtherPiecesSlain() * evaluator[0] + this.pipCount() * evaluator[1]
 				+ this.DoneScore() * evaluator[2] + this.DoneBoardScore() * evaluator[3]

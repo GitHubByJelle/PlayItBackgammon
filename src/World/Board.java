@@ -34,16 +34,11 @@ public class Board {
 
         //actuall board
 //
+
         addPieces(1, 2, 0);
-        addPieces(6, 5, 1);
-        addPieces(8, 3, 1);
-        addPieces(12, 5, 0);
-
-        addPieces(13, 5, 1);
-        addPieces(17, 3, 0);
-        addPieces(19, 5, 0);
-        addPieces(24, 2, 1);
-
+        addPieces(2, 1, 1);
+        addPieces(4, 1, 1);
+        addPieces(3, 1, 0);
 
 //     testboard A
 //
@@ -427,6 +422,9 @@ public class Board {
     }
     //Probably temporary but thanks to this function we can work on Evolution until the unknown bug is fixed
     public void BotMove(int from, int to){
+        if(gameLoop == null){
+            System.out.println("VAILON");
+        }
         int id = gameLoop.getCurrentPlayer().getId();
 
         ArrayList<Space> poss = getValidMoves(spaces[from]);
@@ -445,16 +443,46 @@ public class Board {
             spaces[from].movePiece(spaces[to]);
             gameLoop.checkEaten(to);
 
-        } else {
-//            System.out.println(to);
-//            System.out.println(from);
-//            System.out.println( validityCheck(spaces[from], spaces[to]));
-//            System.out.println(poss.contains(spaces[to]));
-//            System.out.println(this.toString());
-//            System.out.println("Move invalid");
         }
     }
+    public void undoBotMove(Move move){
+        int from = move.from;
+        int to = move.to;
+        spaces[from].movePiece(spaces[to]);
+        if(move.isKill){
+            if(move.playerId == 0){
+                spaces[25].movePiece(spaces[from]);
 
+            }else{
+                spaces[0].movePiece(spaces[from]);
+            }
+        }
+    }
+    public void BotMove(Move move){
+
+        int from = move.from;
+        int to = move.to;
+        ArrayList<Space> poss = getValidMoves(spaces[from]);
+        int id = gameLoop.getCurrentPlayer().getId();
+        if(isGoingToEat(move.from,move.to, id)) move.isKill = true;
+        if(to==26) {
+            moveOutOfPlay(from);
+            lastPlays(from,to);
+            move.isMoveOut = true;
+            gameLoop.getCurrentPlayer().pieceOut();
+
+
+        }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
+            if(from==0 ||from==25){
+                gameLoop.getCurrentPlayer().revivePiece();
+            }
+            die.removeUsedRoll(to - from);
+            spaces[from].movePiece(spaces[to]);
+            gameLoop.checkEaten(to);
+        }
+        assert move.playerId == gameLoop.getCurrentPlayer().getId();
+
+    }
 	public void botMove(Move move) {
 		// int id = gameLoop.getCurrentPlayer().getId();
 		if (isGoingToEat(move.from, move.to, move.playerId)) {
@@ -480,8 +508,6 @@ public class Board {
         if (s.getSize() == 2)
             if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
                 this.moveToEatenSpace(k,id);
-
-
             }
     }
     
@@ -494,9 +520,11 @@ public class Board {
     }
     
     private boolean isGoingToEat(int from, int to, int id){
-        if(this.getSpaces()[to].getSize() == 1){
-            if (this.getSpaces()[to].getPieces().get(0).getId() != id){
-                return true;
+        if(to <= 24 && to != 0) {
+            if (this.getSpaces()[to].getSize() == 1) {
+                if (this.getSpaces()[to].getPieces().get(0).getId() != id) {
+                    return true;
+                }
             }
         }
         return false;
