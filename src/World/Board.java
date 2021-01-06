@@ -34,7 +34,7 @@ public class Board {
 
         //actuall board
 //
-
+//        addPieces(24,1,0);
         addPieces(1, 2, 0);
         addPieces(12, 5, 0);
         addPieces(17, 3, 0);
@@ -452,16 +452,26 @@ public class Board {
         }
     }
     public void undoBotMove(Move move){
-        int from = move.from;
-        int to = move.to;
-        spaces[from].movePiece(spaces[to]);
-        if(move.isKill){
-            if(move.playerId == 0){
-                spaces[25].movePiece(spaces[from]);
+        if(move.from < 26) {
+            int from = move.from;
+            int to = move.to;
+//            System.out.println("From: " + from + " to: " + to);
+//            System.out.println(spaces[from] +" abc "+ spaces[to]);
+            if(spaces[from].getSize() > 0) {
+                spaces[from].movePiece(spaces[to]);
+                if (move.isKill) {
+                    if (move.playerId == 0) {
+                        spaces[25].movePiece(spaces[from]);
 
-            }else{
-                spaces[0].movePiece(spaces[from]);
+                    } else {
+                        spaces[0].movePiece(spaces[from]);
+                    }
+                }
             }
+        }else{
+
+            addPieces(move.to,1,move.playerId);
+            gameLoop.getCurrentPlayer().piecesOutOfPlay--;
         }
     }
     public void BotMove(Move move){

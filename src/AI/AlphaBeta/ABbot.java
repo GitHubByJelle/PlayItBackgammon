@@ -8,29 +8,31 @@ import World.Piece;
 import World.Player;
 import World.Space;
 
-public class ABbot extends Player.Bot{
-	private ArrayList<Move> final_moves = new ArrayList<>();
-	public double[] evaluator = {0.27492492486083797, 0.7603447308733254, 0.6324866448907414, 0.18347935996872392, 0.3290528252791358};
-	List<Move> possibleMoves = new ArrayList<>();
+public class ABbot extends Player.Bot {
+    private ArrayList<Move> final_moves = new ArrayList<>();
+    public double[] evaluator = {0.27492492486083797, 0.7603447308733254, 0.6324866448907414, 0.18347935996872392, 0.3290528252791358};
+    List<Move> possibleMoves = new ArrayList<>();
     private ABbot opponent = null;
     private static int initialDepth = 0;
-    private static int MAX_DEPTH = 15;
+    private static int MAX_DEPTH = 3;
     public static int count = 0;
+
     public ABbot(int id) {
         super(id);
 //        System.out.println("Test tostring");
 //        System.out.println(this.B);
 //        System.out.println("-------------------------------------------------");
     }
+
     public void setOpponent(ABbot opponent) {
-    	this.opponent = opponent;
+        this.opponent = opponent;
     }
-    
+
     @Override
     public String getName() {
         return "AlphBetaBot";
     }
-    
+
     @Override
     public void executeTurn() {
         B.getGameLoop().repaintBV();
@@ -39,7 +41,7 @@ public class ABbot extends Player.Bot{
         B.getGameLoop().repaintBV();
 
     }
-    
+
 //    private void alpha_beta_pruning_result() {
 //		double expectAB;
 //		if(this.id == 0)
@@ -122,120 +124,124 @@ public class ABbot extends Player.Bot{
 
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
-    public void alpha_beta_pruning_result(){
-    	if(this.id == 0) {  
-    		final_moves = new ArrayList<>();
-			double expecMinMax = Integer.MIN_VALUE;
-			ArrayList<Move> moves = generateMoves2();
-			if(moves.size()==0)
-				this.requestPassTurn();
-			for(int i=0; i<2; i++) {
-				Move final_move = null;
-				expecMinMax = Integer.MIN_VALUE;
-				Collections.shuffle(moves);
-				for (Move move : moves) {
-					double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
-					if (expecMinMax < util) {
-						expecMinMax = util;
-						final_move = move;
-					}	
-				}
-				final_moves.add(final_move);
-			}
-    	}
-    	
-    	else if(this.id==1){
-    		final_moves = new ArrayList<>();
-    		double expecMinMax = Integer.MAX_VALUE;
-			Move final_move = null;
-			ArrayList<Move> moves = generateMoves2();
-			Collections.shuffle(moves);
-			if (moves.size() == 0)
-				this.requestPassTurn();
-			for(int i=0; i<2; i++) {
-				for (Move move : moves) {
-					double util = minMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
-					if (util < expecMinMax) {
-						expecMinMax = util;
-						final_move = move;
-					}
-				}
-				final_moves.add(final_move);
-			}
-    	}
+    public void alpha_beta_pruning_result() {
+        if (this.id == 0) {
+            final_moves = new ArrayList<>();
+            double expecMinMax = Integer.MIN_VALUE;
+            ArrayList<Move> moves = generateMoves2();
+            if (moves.size() == 0)
+                this.requestPassTurn();
+            for (int i = 0; i < 2; i++) {
+                Move final_move = null;
+                expecMinMax = Integer.MIN_VALUE;
+                Collections.shuffle(moves);
+                for (Move move : moves) {
+                    double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+                    if (expecMinMax < util) {
+                        expecMinMax = util;
+                        final_move = move;
+                    }
+                }
+                final_moves.add(final_move);
+            }
+        } else if (this.id == 1) {
+            final_moves = new ArrayList<>();
+            double expecMinMax = Integer.MAX_VALUE;
+            Move final_move = null;
+            ArrayList<Move> moves = generateMoves2();
+            Collections.shuffle(moves);
+            if (moves.size() == 0)
+                this.requestPassTurn();
+            for (int i = 0; i < 2; i++) {
+                for (Move move : moves) {
+                    double util = minMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+                    if (util < expecMinMax) {
+                        expecMinMax = util;
+                        final_move = move;
+                    }
+                }
+                final_moves.add(final_move);
+            }
+        }
     }
-    
+
     //FUNCTION OF MAX MOVE
-   private double maxMove(Move move, double alpha, double beta, int depth, ABbot player){
-	   if(move==null)
-		   player.requestPassTurn();
-	   if (depth == MAX_DEPTH) {
-			return EvaluationFunction();
-		}
-		double max_util = Integer.MIN_VALUE;
-		player.B.BotMove(move.from, move.to);
-		for (int i = 0; i < 14; i++) {
-			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
-			if (alpha < util/18) {
-				alpha = max_util;
-				max_util += util / 18;
-			}
-		}
-		player.undoMove(move);
-		return max_util;
+    private double maxMove(Move move, double alpha, double beta, int depth, ABbot player) {
+        if (move == null)
+            player.requestPassTurn();
+        if (depth == MAX_DEPTH) {
+            return EvaluationFunction();
+        }
+        double max_util = Integer.MIN_VALUE;
+        player.B.BotMove(move.from, move.to);
+        for (int i = 0; i < 14; i++) {
+            double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
+            if (alpha < util / 18) {
+                alpha = max_util;
+                max_util += util / 18;
+            }
+        }
+        player.undoMove(move);
+        return max_util;
     }
 
     //FUNCTION OF MIN MOVE
-    private double minMove(Move move, double alpha, double beta, int depth, ABbot player){
-    	if(move==null)
-    		player.requestPassTurn();
-    	if (depth == MAX_DEPTH) {
-			return EvaluationFunction();
-		}
-		double min_util = Integer.MAX_VALUE;
-		player.B.BotMove(move.from, move.to);
-		for (int i = 0; i < 14; i++) {
-			double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
-			if (beta > util/18) {
-				beta = min_util;
-				min_util += util/18;
-			}
-		}
-		player.undoMove(move);
-		return min_util;
+    private double minMove(Move move, double alpha, double beta, int depth, ABbot player) {
+        if (move == null) {
+            player.requestPassTurn();
+        }
+        if (depth == MAX_DEPTH) {
+            return EvaluationFunction();
+        }
+        double min_util = Integer.MAX_VALUE;
+        player.B.BotMove(move.from, move.to);
+        for (int i = 0; i < 14; i++) {
+            double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
+            if (beta > util / 18) {
+                beta = min_util;
+                min_util += util / 18;
+            }
+        }
+        player.undoMove(move);
+        return min_util;
     }
 
     // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
-    private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player){
-    	if(beta-alpha <= 0.00001) 
-    		return beta;
-    	double expectiValue = 0;
-    	ArrayList<Move> moves = player.generateMoves2();
-    	Collections.shuffle(moves);
-    	if(moves.size()!=0) {
-	    	// if it is min's turn
-	    	if(player.id == 1){
-	    		double min = Integer.MAX_VALUE;
-				for (Move move : moves) {
-					min = Math.min(min, minMove(move, alpha, beta, depth, player));
-				}
-	    	  	expectiValue = min;
-	    	}
-	    	// if it is max's turn
-	    	else if(player.id == 0){
-	    		double max = Integer.MIN_VALUE;
-				for (Move move : moves) {
-					max = Math.max(max, maxMove(move, alpha, beta, depth, player));
-				}
-	    		expectiValue = max;
-	    	}
-    	}
-    	
-    	return expectiValue;
+    private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player) {
+        if (beta - alpha <= 0.00001)
+            return beta;
+        double expectiValue = 0;
+        ArrayList<Move> moves = player.generateMoves2();
+        Collections.shuffle(moves);
+        if (moves.size() != 0) {
+            // if it is min's turn
+            if (player.id == 1) {
+                double min = Integer.MAX_VALUE;
+
+
+                    for (Move move : moves) {
+                        min = Math.min(min, minMove(move, alpha, beta, depth, player));
+
+                }
+                expectiValue = min;
+            }
+            // if it is max's turn
+            else if (player.id == 0) {
+                double max = Integer.MIN_VALUE;
+                for (Move move : moves) {
+                    max = Math.max(max, maxMove(move, alpha, beta, depth, player));
+                }
+                expectiValue = max;
+            }
+        }else{
+            player.requestPassTurn();
+        }
+
+        return expectiValue;
     }
-    
+
     public ArrayList<Move> generateMoves2() {
-    	ArrayList<Move> possible_moves = new ArrayList<>();
+        ArrayList<Move> possible_moves = new ArrayList<>();
         Space[] allSpaces = this.B.getSpaces();
         for (Space space : allSpaces) {
             if (space.getSize() > 0) {
@@ -250,82 +256,71 @@ public class ABbot extends Player.Bot{
                 }
             }
         }
-        System.out.println(possible_moves);
-		return possible_moves;
+//        System.out.println(possible_moves);
+        return possible_moves;
     }
-    
+
 
     public void makeMove(Move move) {
         this.B.BotMove(move);
     }
+
     public void undoMove(Move move) {
-        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
-        boolean didKill = move.isKill;
-        if(didKill){
-            System.out.println("killed someone");
-        }
+//        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
         int temp = move.to;
         move.to = move.from;
         move.from = temp;
-        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
-
+//        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
         this.B.undoBotMove(move);
-//        if (didKill) {
-//            if (this.id == 0) {
-//                Move move1 = new Move(25,temp,1);
-//                makeMove(move1);
-//            } else {
-//                Move move1 = new Move(1,temp,0);
-//                makeMove(move1);
-//            }
-//        }
-//        makeMove(move);
-    }
 
+    }
 
 
     // evaluation function to evaluate the whole board status
-    public double EvaluationFunction(){
-		return (this.OtherPiecesSlain() * evaluator[0] + this.pipCount() * evaluator[1]
-				+ this.DoneScore() * evaluator[2] + this.DoneBoardScore() * evaluator[3]
-				+ this.piecesAlone() * evaluator[4]);
+    public double EvaluationFunction() {
+        return (this.OtherPiecesSlain() * evaluator[0] + this.pipCount() * evaluator[1]
+                + this.DoneScore() * evaluator[2] + this.DoneBoardScore() * evaluator[3]
+                + this.piecesAlone() * evaluator[4]);
     }
-    public double OtherPiecesSlain(){
-        for(Space space : this.B.getSpaces()){
-               if(space.getSize()==2 && (space.getPieces().get(0).getId() + space.getPieces().get(1).getId()) == 1 ){
-                   return 1;
-               }
+
+    public double OtherPiecesSlain() {
+        for (Space space : this.B.getSpaces()) {
+            if (space.getSize() == 2 && (space.getPieces().get(0).getId() + space.getPieces().get(1).getId()) == 1) {
+                return 1;
+            }
         }
         return 0;
     }
-    public double pipCount(){
-        if(this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
+
+    public double pipCount() {
+        if (this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
             double pip = 0;
             for (int i = 1; i <= 25; i++) {
                 for (Piece piece : this.B.getSpaces()[i].getPieces()) {
                     if (piece.getId() == 1) {
-                        pip += Math.pow(i,2);
+                        pip += Math.pow(i, 2);
                     }
                 }
             }
-            if(this.B.getSpaces()[0].getSize() > 0 && this.B.getSpaces()[0].getPieces().get(0).getId() == 1){
-                pip += this.B.getSpaces()[0].getSize()*24;
+            if (this.B.getSpaces()[0].getSize() > 0 && this.B.getSpaces()[0].getPieces().get(0).getId() == 1) {
+                pip += this.B.getSpaces()[0].getSize() * 24;
             }
-            return - pip;
+            return -pip;
         } else {
             double pip = 0;
             for (int i = 0; i < 25; i++) {
                 for (Piece piece : this.B.getSpaces()[i].getPieces()) {
                     if (piece.getId() == 0) {
-                        pip += Math.pow(25 - i,2);
+                        pip += Math.pow(25 - i, 2);
                     }
                 }
             }
-            return - pip;
+            return -pip;
         }
     }
-    public double DoneScore(){
-        if(this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
+
+    public double DoneScore() {
+        if (this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
             double numberPieces = 0;
             for (int i = 0; i < 25; i++) {
                 for (Piece piece : this.B.getSpaces()[i].getPieces()) {
@@ -347,12 +342,13 @@ public class ABbot extends Player.Bot{
             return 15 - numberPieces;
         }
     }
-    public double DoneBoardScore(){
-        if(this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
+
+    public double DoneBoardScore() {
+        if (this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
             double score = 0;
             for (int i = 1; i < 7; i++) {
                 if (this.B.getSpaces()[i].getSize() > 0 && this.B.getSpaces()[i].getPieces().get(0).getId() == 1) {
-                    score =+ this.B.getSpaces()[i].getSize();
+                    score = +this.B.getSpaces()[i].getSize();
                 }
             }
             return score;
@@ -360,14 +356,15 @@ public class ABbot extends Player.Bot{
             double score = 0;
             for (int i = 19; i < 25; i++) {
                 if (this.B.getSpaces()[i].getSize() > 0 && this.B.getSpaces()[i].getPieces().get(0).getId() == 0) {
-                    score =+ this.B.getSpaces()[i].getSize();
+                    score = +this.B.getSpaces()[i].getSize();
                 }
             }
             return score;
         }
     }
-    public double piecesAlone(){
-        if(this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
+
+    public double piecesAlone() {
+        if (this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
             double alone = 0;
             for (int i = 0; i < 25; i++) {
                 if (this.B.getSpaces()[i].getSize() == 1 && this.B.getSpaces()[i].getPieces().get(0).getId() == 1) {
