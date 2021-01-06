@@ -41,5 +41,11 @@ public class MathUtils {
         return sum;
     }
 
+    public static float dot(float [] a, float []b){
+        float res=0;
+        for (int i = 0; i < a.length; i++)
+            res += a[i] * b[i];
+        return res;
+    }
 
 }
