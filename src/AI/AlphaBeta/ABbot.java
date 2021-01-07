@@ -125,44 +125,48 @@ public class ABbot extends Player.Bot {
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
     public void alpha_beta_pruning_result() {
-        if (this.id == 0) {
-            final_moves = new ArrayList<>();
-            double expecMinMax = Integer.MIN_VALUE;
-            ArrayList<Move> moves = generateMoves2();
-            if (moves.size() == 0)
-                this.requestPassTurn();
-            for (int i = 0; i < 2; i++) {
-                Move final_move = null;
-                expecMinMax = Integer.MIN_VALUE;
-                Collections.shuffle(moves);
-                for (Move move : moves) {
-                    double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
-                    if (expecMinMax < util) {
-                        expecMinMax = util;
-                        final_move = move;
-                    }
-                }
-                final_moves.add(final_move);
-            }
-        } else if (this.id == 1) {
-            final_moves = new ArrayList<>();
-            double expecMinMax = Integer.MAX_VALUE;
-            Move final_move = null;
-            ArrayList<Move> moves = generateMoves2();
-            Collections.shuffle(moves);
-            if (moves.size() == 0)
-                this.requestPassTurn();
-            for (int i = 0; i < 2; i++) {
-                for (Move move : moves) {
-                    double util = minMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
-                    if (util < expecMinMax) {
-                        expecMinMax = util;
-                        final_move = move;
-                    }
-                }
-                final_moves.add(final_move);
-            }
-        }
+    	try {
+	        if (this.id == 0) {
+	            final_moves = new ArrayList<>();
+	            double expecMinMax = Integer.MIN_VALUE;
+	            ArrayList<Move> moves = generateMoves2();
+	            if (moves.size() == 0)
+	                this.requestPassTurn();
+	            for (int i = 0; i < 2; i++) {
+	                Move final_move = null;
+	                expecMinMax = Integer.MIN_VALUE;
+	                Collections.shuffle(moves);
+	                for (Move move : moves) {
+	                    double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+	                    if (expecMinMax < util) {
+	                        expecMinMax = util;
+	                        final_move = move;
+	                    }
+	                }
+	                final_moves.add(final_move);
+	            }
+	        } else if (this.id == 1) {
+	            final_moves = new ArrayList<>();
+	            double expecMinMax = Integer.MAX_VALUE;
+	            Move final_move = null;
+	            ArrayList<Move> moves = generateMoves2();
+	            Collections.shuffle(moves);
+	            if (moves.size() == 0)
+	                this.requestPassTurn();
+	            for (int i = 0; i < 2; i++) {
+	                for (Move move : moves) {
+	                    double util = minMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
+	                    if (util < expecMinMax) {
+	                        expecMinMax = util;
+	                        final_move = move;
+	                    }
+	                }
+	                final_moves.add(final_move);
+	            }
+	        }
+    	}
+    	catch(Exception e)
+    	{}
     }
 
     //FUNCTION OF MAX MOVE
