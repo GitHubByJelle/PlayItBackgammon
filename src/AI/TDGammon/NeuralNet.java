@@ -8,52 +8,51 @@ import World.Board;
 import World.Player;
 
 public class NeuralNet {
+    ArrayList<TrainData> dataSet;
+    Layer[] layer;
 
-    static Layer[] layer;
-    static ArrayList<TrainData> dataSet = new ArrayList<TrainData>();
+    public NeuralNet(ArrayList<TrainData> dataSet){
+        this.dataSet= dataSet;
 
-    public static void main(String[] args) {
-        Neuron.range(-1, 1);
+        //Network for simple functions
+        this.layer= new Layer[5];
+        this.layer[0]= null;
+        this.layer[1]= new Layer(1,16);
+        this.layer[2]= new Layer(16,32);
+        this.layer[3]= new Layer(32,16);
+        this.layer[4]= new Layer(16,1);
 
-        layer= new Layer[5];
-        layer[0]= null;
-        layer[1]= new Layer(4*27*2,16);
-        layer[2]= new Layer(16,32);
-        layer[3]= new Layer(32,16);
-        layer[4]= new Layer(16,4);
 
-        createTrainingData();
-
-        // Using 25 Layers
-//        layer = new Layer[25];
+        //small network for TD-gammon
+//        layer= new Layer[5];
 //        layer[0]= null;
-//        layer[1]= new Layer(dataSet.get(0).getData().length,4*27*2*2);
-//        //System.out.println("Leftie: " + (4*27*2) + " Rightie: " + (4*27*2*2));
-//        int in;
-//        for (in = 2; in < layer.length-1; in++){
-//            layer[in] = new Layer(4*27*2*2 - (in-2) * 16, 4*27*2*2 - (in-1) * 16);
-//            //System.out.println(i + "Leftie: " + (4*27*2*2 - (i-2) * 16) + " Rightie: " + (4*27*2*2 - (i-1) * 16));
-//        }
-//        layer[24] = new Layer(4*27*2*2 - (in-2) * 16,dataSet.get(0).getExpectedOutput().length);
-//        //System.out.println("Leftie: " + (4*27*2*2 - (i-2) * 16) + " Rightie: " + 4);
+//        layer[1]= new Layer(4*27*2,16);
+//        layer[2]= new Layer(16,32);
+//        layer[3]= new Layer(32,16);
+//        layer[4]= new Layer(16,4);
+
+
+        //Big network for TD-gammon
+        // Using 25 Layers
+        /*
+        layer = new Layer[25];
+        layer[0]= null;
+        layer[1]= new Layer(dataSet.get(0).getData().length,4*27*2*2);
+        //System.out.println("Leftie: " + (4*27*2) + " Rightie: " + (4*27*2*2));
+        int in;
+        for (in = 2; in < layer.length-1; in++){
+            layer[in] = new Layer(4*27*2*2 - (in-2) * 16, 4*27*2*2 - (in-1) * 16);
+            //System.out.println(i + "Leftie: " + (4*27*2*2 - (i-2) * 16) + " Rightie: " + (4*27*2*2 - (i-1) * 16));
+        }
+        layer[24] = new Layer(4*27*2*2 - (in-2) * 16,dataSet.get(0).getExpectedOutput().length);
 
         System.out.println(dataSet.size());
-
-        trainData(20, 0.05f);
-
-//        for(int i=0; i<dataSet.size(); i++){
-//            System.out.println("Input " +Arrays.toString( dataSet.get(i).inputData)+" Output " +Arrays.toString(dataSet.get(i).expectedOutput));
-//        }
-        for(int i=0; i<layer.length; i++) {
-            for (int j = 0; j < layer[i].neuron.length; j++) {
-                System.out.println("weight= " + Arrays.toString(layer[i].neuron[j].weights));
-            }
-        }
+         */
     }
 
-    public static void forwardProp(float[] input){
+    public void forwardProp(float[] input){
 
-        layer[0]= new Layer(input);
+        layer[0] = new Layer(input);
 
         for(int i=1; i<layer.length; i++){
             for (int j=0; j<layer[i].neuron.length; j++){
@@ -65,11 +64,10 @@ public class NeuralNet {
                 layer[i].neuron[j].value= MathUtils.sigmoid(sum);
             }
         }
-
     }
 
 
-    public static void backwardProp(float learningRate, float[] ExpectedOutput){
+    void backwardProp(float learningRate, float[] ExpectedOutput){
         int numLayers= layer.length;
         int outLayer= numLayers-1; //index of the last layer
 
@@ -112,36 +110,22 @@ public class NeuralNet {
         }
     }
 
-    private static void createTrainingData() {
-        //int dataSet_size=2000;
-        // Create a whole game
-        Board b = new Board();
-        Player.Bot one= new RandomBot(0);
-        Player.Bot two = new RandomBot(1);
-        one.pausing=false;
-        two.pausing=false;
-        b.setPlayers(one,two);
-        b.createBotLoop();
 
-        // Play a whole game and add to data
-        PlayMultipleTimes(one,two,b,10);
 
-//        for(int i=0; i<dataSet_size; i++){
-//            dataSet[i]=new TrainData(new float[]{i},new float[]{2*i+8});
-//        }
-    }
+    float[] returnOutput(float[] input){
+        int numLayers= layer.length;
+        int outLayer= numLayers-1; //index of the last layer
+        float[] ans= new float[layer[outLayer].neuron.length];
 
-    private static void trainData( int epoch, float learningRate){
-        for(int i=0; i<epoch; i++){
-            for(int j=0; j<dataSet.size(); j++){
-                forwardProp(dataSet.get(j).getData());
-                backwardProp(learningRate, dataSet.get(j).getExpectedOutput());
-            }
+        forwardProp(input);
+        for(int i=0; i<layer[outLayer].neuron.length; i++){
+            ans[i]=layer[outLayer].neuron[i].value;
         }
+        return ans;
     }
 
     //Sum of all gradients connected to a given neuron in a layer
-    public static float sumGradient(int numIndex , int layerIndex ){
+    public float sumGradient(int numIndex , int layerIndex ){
         float sum=0;
         Layer current= layer[layerIndex];
         for(int i=0; i<current.neuron.length; i++){
@@ -151,7 +135,7 @@ public class NeuralNet {
         return sum;
     }
 
-    public static void PlayMultipleTimes(Player.Bot one, Player.Bot two, Board b, int NumberOfGames){
+    public void PlayMultipleTimes(Player.Bot one, Player.Bot two, Board b, int NumberOfGames){
         for(int i = 0; i<NumberOfGames; i++){
             b = new Board();
 
@@ -164,7 +148,7 @@ public class NeuralNet {
         }
     }
 
-    private static void PlayWithRandomDie(Board b){
+    void PlayWithRandomDie(Board b){
         AddData(b);
         b.getDie().getDieList().clear();
         b.getDie().generateDie();
@@ -177,7 +161,7 @@ public class NeuralNet {
         }
     }
 
-    private static float [] giveReward(Board b){
+     float [] giveReward(Board b){
         float [] win= new float[4];//{player 0 win, player 0 gammon, player 1 win, player 1 gammon}
         if(b.getPlayer1().getPiecesOutOfPlay()==15){
             if(b.getPlayer2().getPiecesOutOfPlay()==0){
@@ -195,7 +179,7 @@ public class NeuralNet {
         return win;
     }
 
-    private static void AddData(Board b){
+    void AddData(Board b){
         dataSet.add(new TrainData(new TDGdata(b).data,giveReward(b)));
     }
 }
