@@ -15,27 +15,26 @@ public class NeuralNet {
     public static void main(String[] args) {
         Neuron.range(-1, 1);
 
-        layer= new Layer[5];
-        layer[0]= null;
-        layer[1]= new Layer(4*27*2,16);
-        layer[2]= new Layer(16,32);
-        layer[3]= new Layer(32,16);
-        layer[4]= new Layer(16,4);
+//        layer= new Layer[5];
+//        layer[0]= null;
+//        layer[1]= new Layer(4*27*2,16);
+//        layer[2]= new Layer(16,32);
+//        layer[3]= new Layer(32,16);
+//        layer[4]= new Layer(16,4);
 
         createTrainingData();
 
         // Using 25 Layers
-//        layer = new Layer[25];
-//        layer[0]= null;
-//        layer[1]= new Layer(dataSet.get(0).getData().length,4*27*2*2);
-//        //System.out.println("Leftie: " + (4*27*2) + " Rightie: " + (4*27*2*2));
-//        int in;
-//        for (in = 2; in < layer.length-1; in++){
-//            layer[in] = new Layer(4*27*2*2 - (in-2) * 16, 4*27*2*2 - (in-1) * 16);
-//            //System.out.println(i + "Leftie: " + (4*27*2*2 - (i-2) * 16) + " Rightie: " + (4*27*2*2 - (i-1) * 16));
-//        }
-//        layer[24] = new Layer(4*27*2*2 - (in-2) * 16,dataSet.get(0).getExpectedOutput().length);
-//        //System.out.println("Leftie: " + (4*27*2*2 - (i-2) * 16) + " Rightie: " + 4);
+        layer = new Layer[25];
+        layer[0]= null;
+        layer[1]= new Layer(dataSet.get(0).getData().length,4*27*2*2);
+        //System.out.println("Leftie: " + (4*27*2) + " Rightie: " + (4*27*2*2));
+        int in;
+        for (in = 2; in < layer.length-1; in++){
+            layer[in] = new Layer(4*27*2*2 - (in-2) * 16, 4*27*2*2 - (in-1) * 16);
+            //System.out.println(i + "Leftie: " + (4*27*2*2 - (i-2) * 16) + " Rightie: " + (4*27*2*2 - (i-1) * 16));
+        }
+        layer[24] = new Layer(4*27*2*2 - (in-2) * 16,dataSet.get(0).getExpectedOutput().length);
 
         System.out.println(dataSet.size());
 
@@ -53,7 +52,7 @@ public class NeuralNet {
 
     public static void forwardProp(float[] input){
 
-        layer[0]= new Layer(input);
+        layer[0] = new Layer(input);
 
         for(int i=1; i<layer.length; i++){
             for (int j=0; j<layer[i].neuron.length; j++){
@@ -65,7 +64,6 @@ public class NeuralNet {
                 layer[i].neuron[j].value= MathUtils.sigmoid(sum);
             }
         }
-
     }
 
 
