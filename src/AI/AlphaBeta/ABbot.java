@@ -135,7 +135,7 @@ public class ABbot extends Player.Bot {
 	            for (int i = 0; i < 2; i++) {
 	                Move final_move = null;
 	                expecMinMax = Integer.MIN_VALUE;
-	                Collections.shuffle(moves);
+//	                Collections.shuffle(moves);
 	                for (Move move : moves) {
 	                    double util = maxMove(move, Integer.MIN_VALUE, Integer.MAX_VALUE, initialDepth, this);
 	                    if (expecMinMax < util) {
@@ -150,7 +150,7 @@ public class ABbot extends Player.Bot {
 	            double expecMinMax = Integer.MAX_VALUE;
 	            Move final_move = null;
 	            ArrayList<Move> moves = generateMoves2();
-	            Collections.shuffle(moves);
+//	            Collections.shuffle(moves);
 	            if (moves.size() == 0)
 	                this.requestPassTurn();
 	            for (int i = 0; i < 2; i++) {
