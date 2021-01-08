@@ -284,8 +284,6 @@ public class ABbot extends Player.Bot {
             // if it is min's turn
             if (player.id == 1) {
                 double min = Integer.MAX_VALUE;
-
-
                     for (Move move : moves) {
                         min = Math.min(min, minMove(move, alpha, beta, depth, player));
 
