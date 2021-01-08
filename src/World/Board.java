@@ -594,14 +594,15 @@ public class Board {
                 target = spaces[selected.getId() + roll[i]];
                 if (validityCheck(selected, target)) {
                     res.add(spaces[selected.getId() + roll[i]]);
+                    target.addPiece(dummyPiece);
+
+                    diffroll= getRollWithout(roll, roll[i]);
+                    ArrayList<Space> otherPass = getValidMoves(target, diffroll);
+                    res.addAll(otherPass);
+
+                    target.removePiece(dummyPiece);
                 }
-                target.addPiece(dummyPiece);
 
-                diffroll= getRollWithout(roll, roll[i]);
-                ArrayList<Space> otherPass = getValidMoves(target, diffroll);
-                res.addAll(otherPass);
-
-                target.removePiece(dummyPiece);
 
 
             } else {
