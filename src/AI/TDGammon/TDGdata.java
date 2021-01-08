@@ -15,7 +15,7 @@ public class TDGdata {
     }
 
 
-    float [] data= new float[4*27*2];//features
+    float [] data= new float[4*27*2];//4 features, 27 spaces, 2 players
     public TDGdata(Board b){
         //26 spaces in the board
         Space[]space = b.getSpaces();
