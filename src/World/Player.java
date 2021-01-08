@@ -238,6 +238,9 @@ class DummyMove{
     }
 
     public void setRoll(int [] r){this.roll=r;}
+    private int[] getRoll(){
+        return roll;
+    }
 
     Space []getMove(){
         return move;
@@ -246,7 +249,8 @@ class DummyMove{
     @Override
     public boolean equals(Object other){
         if(this!=null && other!=null && ((DummyMove)other).getMove()[0].getId() ==move[0].getId()
-                && ((DummyMove)other).getMove()[1].getId() == move[1].getId()) {
+                && ((DummyMove)other).getMove()[1].getId() == move[1].getId() && roll[0]==((DummyMove)other).getRoll()[0]
+        && roll[1]==((DummyMove)other).getRoll()[1]) {
             return true;
         }else{
             return false;

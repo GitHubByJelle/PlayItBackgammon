@@ -593,7 +593,7 @@ public class Board {
             if(selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0){//check for bounds
                 target = spaces[selected.getId() + roll[i]];
                 if (validityCheck(selected, target)) {
-                    res.add(spaces[selected.getId() + roll[i]]);
+                    res.add(target);
                     target.addPiece(dummyPiece);
 
                     diffroll= getRollWithout(roll, roll[i]);
