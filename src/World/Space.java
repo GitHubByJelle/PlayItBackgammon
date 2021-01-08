@@ -42,7 +42,7 @@ public class Space {
     public void addPiece(Piece piece){
         this.pieces.add(piece);
     }
-
+    public void removePiece(Piece piece){this.pieces.remove(piece);}
 
     public String toString(){
         String res ="";
@@ -50,6 +50,19 @@ public class Space {
             res +=pieces.get(i);
         }
         return res;
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(this !=null && other !=null && other instanceof Space && ((Space)other).getId()==id &&((Space)other).getSize()==getSize()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    @Override
+    public int hashCode(){
+        return id*pieces.hashCode();
     }
 
     public boolean isEmpty(){
