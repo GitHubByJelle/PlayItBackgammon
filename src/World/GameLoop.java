@@ -119,7 +119,9 @@ public class GameLoop {
         if (board.getDie().getCurRoll().length ==0) {
             changeTurn();
         }else{
-            current.executeTurn();
+            if(current!=null) {
+                current.executeTurn();
+            }
         }
     }
     public void SwitchPlayer(){
@@ -131,6 +133,7 @@ public class GameLoop {
     }
 
     public void changeTurn(){
+        System.out.println("Changing turn");
         if (getCurrentPlayer().getId() == 0) {
             setCurrentPlayer(board.getPlayer2());
         } else {
