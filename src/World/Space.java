@@ -16,11 +16,13 @@ public class Space {
     }
 
     public boolean movePiece(Space to) {
-        Piece p = pieces.get(0);
+        if(pieces.size() > 0) {
+            Piece p = pieces.get(0);
 //        System.out.println("PIECE BEING MOVED:"+p.getId());
-        pieces.remove(p);
-        to.getPieces().add(p);
-        checkHome(p,to.getId());
+            pieces.remove(p);
+            to.getPieces().add(p);
+            checkHome(p, to.getId());
+        }
         return true;
     }
     public boolean moveBotPiece(Space to) {

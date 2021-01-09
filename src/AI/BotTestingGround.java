@@ -38,18 +38,19 @@ public class BotTestingGround {
         two.setOpponent(one);
 	    one.pausing = false;
 	    two.pausing = false;
-	    b.setPlayers(one, two);
+	    SimpleBot three = new SimpleBot(1);
+	    b.setPlayers(one, three);
 	    b.createBotLoop();
         long a = System.nanoTime();
         System.out.println("Depth of 3: ");
         one.alpha_beta_pruning_result();
         System.out.println((System.nanoTime()-a)/1000000000.);
-
+        testMultipleTimes(one,three);
 
     }
 
     public static void testMultipleTimes(Player.Bot one, Player.Bot two){
-        for(int i = 0; i<100; i++){
+        for(int i = 0; i<1; i++){
             b = new Board();
 
             one.resetPlayer();

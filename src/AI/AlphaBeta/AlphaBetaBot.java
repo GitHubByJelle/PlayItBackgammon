@@ -326,15 +326,9 @@ public class AlphaBetaBot extends Player.Bot {
     public Move getBestMove() {
         initialDepth = -1;
         Instant start = Instant.now();
-        System.out.println(Arrays.toString(this.B.getDie().getCurRoll()) + " CAC");
-        System.out.println(Arrays.toString(this.B.getDie().getNextRoll()) + " CAC");
+
         expectiminimax(DEFAULT_DEPTH, 0);
         Instant finish = Instant.now();
-        System.out.println(Arrays.toString(this.B.getDie().getCurRoll()) +  "CAC");
-        System.out.println(Arrays.toString(this.B.getDie().getCurRoll()) +  "CAC");
-        System.out.println(Arrays.toString(this.B.getDie().getCurRoll()) +  "CAC");
-        System.out.println(Arrays.toString(this.B.getDie().getCurRoll()) +  "CAC");
-        System.out.println(Arrays.toString(this.B.getDie().getCurRoll()) +  "CAC");
 
         initialDepth = -1;
         ArrayList<Move> moves = generateMoves2();

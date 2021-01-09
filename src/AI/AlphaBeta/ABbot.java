@@ -453,57 +453,56 @@ public class ABbot extends Player.Bot {
             return 0;
         }
     }
-    public double khaiTrial(int depth, ABbot player) {
-        if(player.id == 1){
-            this.B.getGameLoop().changeTurn();
-        }
-        if (depth == 0) return EvaluationFunction();
-        else {
-            if (player.id == 0) {
-                ArrayList<Move> moves = player.generateMoves2();
-                System.out.println(this.B.getDie().getCurRoll().length);
-                int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
-                System.out.println("Starting ");
-                double maxScore = Integer.MIN_VALUE;
-                Move move = moves.get(0);
-                System.out.println("Executing move: " + move);
-                player.makeMove(move);
-                System.out.println(this.B);
-                moves = player.generateMoves2();
-                if(moves.size() > 0) {
-                    Move m2 = moves.get(0);
-                    System.out.println("Executing move: " + m2);
-                    player.makeMove(m2);
-                    System.out.println(this.B);
-                    maxScore = khaiTrial(depth-1, player.opponent);
-                }
-
-            } else {
-                System.out.println("here come player 1");
-                System.out.println(this.B);
-                ArrayList<Move> moves = player.generateMoves2();
-                System.out.println(this.B.getDie().getCurRoll().length);
-                int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
-                System.out.println("Starting ");
-                double minScore = Integer.MAX_VALUE;
-                Move move = moves.get(0);
-                System.out.println("Executing move: " + move);
-                player.makeMove(move);
-                System.out.println(this.B);
-                moves = generateMoves2();
-                if(moves.size() > 0) {
-                    Move m2 = moves.get(0);
-                    System.out.println("Executing move: " + m2);
-                    player.makeMove(m2);
-                    System.out.println(this.B);
-                    minScore = khaiTrial(depth-1, player.opponent);
-                }
-            }
-            System.out.println("Ending turn");
-            System.out.println(this.B.getDie().getCurRoll().length);
-            this.B.getGameLoop().changeTurn();
-            return 0;
-        }
-
-    }
+//    public double khaiTrial(int depth, ABbot player) {
+//        if(player.id == 1){
+//            this.B.getGameLoop().changeTurn();
+//        }
+//        if (depth == 0) return EvaluationFunction();
+//        else {
+//            if (player.id == 0) {
+//                ArrayList<Move> moves = player.generateMoves2();
+//                System.out.println(this.B.getDie().getCurRoll().length);
+//                int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
+//                System.out.println("Starting ");
+//                double maxScore = Integer.MIN_VALUE;
+//                Move move = moves.get(0);
+//                System.out.println("Executing move: " + move);
+//                player.makeMove(move);
+//                System.out.println(this.B);
+//                moves = player.generateMoves2();
+//                if(moves.size() > 0) {
+//                    Move m2 = moves.get(0);
+//                    System.out.println("Executing move: " + m2);
+//                    player.makeMove(m2);
+//                    System.out.println(this.B);
+//                    maxScore = khaiTrial(depth-1, player.opponent);
+//                }
+//
+//            } else {
+//                System.out.println("here come player 1");
+//                System.out.println(this.B);
+//                ArrayList<Move> moves = player.generateMoves2();
+//                System.out.println(this.B.getDie().getCurRoll().length);
+//                int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
+//                System.out.println("Starting ");
+//                double minScore = Integer.MAX_VALUE;
+//                Move move = moves.get(0);
+//                System.out.println("Executing move: " + move);
+//                player.makeMove(move);
+//                System.out.println(this.B);
+//                moves = generateMoves2();
+//                if(moves.size() > 0) {
+//                    Move m2 = moves.get(0);
+//                    System.out.println("Executing move: " + m2);
+//                    player.makeMove(m2);
+//                    System.out.println(this.B);
+//                    minScore = khaiTrial(depth-1, player.opponent);
+//                }
+//            }
+//            System.out.println("Ending turn");
+//            System.out.println(this.B.getDie().getCurRoll().length);
+//            this.B.getGameLoop().changeTurn();
+//            return 0;
+//        }
+//    }
 }
