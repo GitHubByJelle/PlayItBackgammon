@@ -13,7 +13,7 @@ public class ABbot extends Player.Bot {
     private ArrayList<Move> final_moves = new ArrayList<>();
     public double[] evaluator = {0.27492492486083797, 0.7603447308733254, 0.6324866448907414, 0.18347935996872392, 0.3290528252791358};
     List<Move> possibleMoves = new ArrayList<>();
-    private ABbot opponent = null;
+    private Player.Bot opponent = null;
     private static int initialDepth = 0;
     private static int MAX_DEPTH = 3;
     public static int count = 0;
@@ -23,16 +23,9 @@ public class ABbot extends Player.Bot {
 //        System.out.println("Test tostring");
 //        System.out.println(this.B);
 //        System.out.println("-------------------------------------------------");
-        if(this.opponent != null) {
-            ABbot aBbot = new ABbot(1);
-            aBbot.setBoard(this.B);
-            this.B.setPlayers(this, aBbot);
-            this.setOpponent(aBbot);
-            aBbot.setOpponent(this);
-        }
     }
 
-    public void setOpponent(ABbot opponent) {
+    public void setOpponent(Player.Bot opponent) {
         this.opponent = opponent;
     }
 
@@ -43,10 +36,10 @@ public class ABbot extends Player.Bot {
 
     @Override
     public void executeTurn() {
-//        B.getGameLoop().repaintBV();
-//        alpha_beta_pruning_result();
-//        pauseBot();
-//        B.getGameLoop().repaintBV();
+        B.getGameLoop().repaintBV();
+        alpha_beta_pruning_result();
+        pauseBot();
+        B.getGameLoop().repaintBV();
 
     }
 
@@ -133,13 +126,13 @@ public class ABbot extends Player.Bot {
     // MAIN ALPHA BETA PRUNING METHOD, MOVE IS MADE DUTING THE CALL OF THIS METHOD
     // @PARAM CURRENT SPACE S, AND AN DIE OBJECT
     public void alpha_beta_pruning_result() {
-
+    	try {
 	        if (this.id == 0) {
 	            final_moves = new ArrayList<>();
 	            double expecMinMax = Integer.MIN_VALUE;
 	            ArrayList<Move> moves = generateMoves2();
 	            if (moves.size() == 0)
-	                this.requestPassTurn();
+	                this.requestPassTurn(); 
 	            for (int i = 0; i < 2; i++) {
 	                Move final_move = null;
 	                expecMinMax = Integer.MIN_VALUE;
@@ -172,19 +165,76 @@ public class ABbot extends Player.Bot {
 	                final_moves.add(final_move);
 	            }
 	        }
-
+    	}
+    	catch(Exception e)
+    	{}
     }
+    
+//    public double khaiTrial(int depth, ABbot player) {
+//        if (depth == 0) return EvaluationFunction();
+//        else {
+//            if (player.id == 0) {
+//                ArrayList<Move> moves = player.generateMoves2();
+//                System.out.println(this.B.getDie().getCurRoll().length);
+//                int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
+//                System.out.println("Starting ");
+//                double maxScore = Integer.MIN_VALUE;
+//                for (Move move : moves) {
+//                    System.out.println(move + " going to be executed");
+//                    makeMove(move);
+//                    moves = generateMoves2();
+//                    double score;
+//                    int[] temp1 = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
+//                    for (Move m : moves) {
+//                        System.out.println(m + " going to be executed 222");
+//                        makeMove(m);
+//                        System.out.println(this.B);
+//                        score = khaiTrial(depth - 1, player.opponent);
+//                        this.B.getDie().setCurRoll(temp1);
+//                    }
+//                    System.out.println(Arrays.toString(temp) + " toi met lam roi");
+//                    this.B.getDie().setCurRoll(temp);
+//                }
+//            } else {
+//                this.B.getGameLoop().process();
+//                ArrayList<Move> moves = player.generateMoves2();
+//                System.out.println(this.B.getDie().getNextRoll().length);
+//                int[] temp = Arrays.copyOf(this.B.getDie().getNextRoll(), this.B.getDie().getNextRoll().length);
+//                System.out.println("Starting ");
+//                double minScore = Integer.MAX_VALUE;
+//                for (Move move : moves) {
+//                    System.out.println(move + " going to be executed");
+//                    makeMove(move);
+//                    moves = player.generateMoves2();
+//                    double score;
+//                    int[] temp1 = Arrays.copyOf(this.B.getDie().getNextRoll(), this.B.getDie().getNextRoll().length);
+//                    for (Move m : moves) {
+//                        System.out.println(m + " going to be executed 222");
+//                        makeMove(m);
+//                        System.out.println(this.B);
+//                        score = khaiTrial(depth - 1, player.opponent);
+//                        this.B.getDie().setCurRoll(temp1);
+//                    }
+//                    System.out.println(Arrays.toString(temp) + " toi met lam roi");
+//                    this.B.getDie().setCurRoll(temp);
+//                }
+//            }
+//            System.out.println(this.B.getDie().getCurRoll().length);
+//            return 0;
+//        }
+//    }
+
 
     //FUNCTION OF MAX MOVE
-    private double maxMove(Move move, double alpha, double beta, int depth, ABbot player) {
-        if (move == null) {
+    private double maxMove(Move move, double alpha, double beta, int depth, Player.Bot player2) {
+    	ABbot player = (ABbot)player2;
+        if (move == null)
             player.requestPassTurn();
-            return EvaluationFunction();
-        }
         if (depth == MAX_DEPTH) {
             return EvaluationFunction();
         }
         double max_util = Integer.MIN_VALUE;
+//        int[] temp1 = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
         player.B.BotMove(move.from, move.to);
         for (int i = 0; i < 14; i++) {
             double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
@@ -194,19 +244,21 @@ public class ABbot extends Player.Bot {
             }
         }
         player.undoMove(move);
+//        this.B.getDie().setCurRoll(temp1);
         return max_util;
     }
 
     //FUNCTION OF MIN MOVE
-    private double minMove(Move move, double alpha, double beta, int depth, ABbot player) {
-        if (move == null) {
+    private double minMove(Move move, double alpha, double beta, int depth, Player.Bot player2) {
+    	ABbot player = (ABbot)player2;
+    	if (move == null) {
             player.requestPassTurn();
-            return EvaluationFunction();
         }
         if (depth == MAX_DEPTH) {
             return EvaluationFunction();
         }
         double min_util = Integer.MAX_VALUE;
+//        int[] temp1 = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
         player.B.BotMove(move.from, move.to);
         for (int i = 0; i < 14; i++) {
             double util = expectiMaxMin_alpha_beta(alpha, beta, depth + 1, player.opponent);
@@ -216,26 +268,22 @@ public class ABbot extends Player.Bot {
             }
         }
         player.undoMove(move);
+//        this.B.getDie().setCurRoll(temp1);
         return min_util;
     }
 
     // FUNCTION OF CALCULATING EXPECIMINMAX VALUE
-    private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, ABbot player) {
+    private double expectiMaxMin_alpha_beta(double alpha, double beta, int depth, Player.Bot player2) {
+    	ABbot player = (ABbot)player2;
         if (beta - alpha <= 0.00001)
             return beta;
         double expectiValue = 0;
-        if(player ==null){
-            System.out.println("DCMM");
-        }
         ArrayList<Move> moves = player.generateMoves2();
-
         Collections.shuffle(moves);
         if (moves.size() != 0) {
             // if it is min's turn
             if (player.id == 1) {
                 double min = Integer.MAX_VALUE;
-
-
                     for (Move move : moves) {
                         min = Math.min(min, minMove(move, alpha, beta, depth, player));
 
@@ -273,7 +321,7 @@ public class ABbot extends Player.Bot {
                 }
             }
         }
-        System.out.println(possible_moves);
+//        System.out.println(possible_moves);
         return possible_moves;
     }
 
@@ -399,110 +447,4 @@ public class ABbot extends Player.Bot {
             return -alone;
         }
     }
-
-    public double khaiTrial(int depth, ABbot player) {
-        if (depth == 0) return EvaluationFunction();
-        else {
-            if (player.id == 0) {
-                ArrayList<Move> moves = player.generateMoves2();
-                System.out.println(this.B.getDie().getCurRoll().length);
-                int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
-                System.out.println("Starting ");
-                double maxScore = Integer.MIN_VALUE;
-                for (Move move : moves) {
-                    System.out.println(move + " going to be executed");
-                    makeMove(move);
-                    moves = generateMoves2();
-                    double score;
-                    int[] temp1 = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
-                    for (Move m : moves) {
-                        System.out.println(m + " going to be executed 222");
-                        makeMove(m);
-                        System.out.println(this.B);
-                        score = khaiTrial(depth - 1, player.opponent);
-                        this.B.getDie().setCurRoll(temp1);
-                    }
-                    System.out.println(Arrays.toString(temp) + " toi met lam roi");
-                    this.B.getDie().setCurRoll(temp);
-                }
-            } else {
-                this.B.getGameLoop().process();
-                ArrayList<Move> moves = player.generateMoves2();
-                System.out.println(this.B.getDie().getNextRoll().length);
-                int[] temp = Arrays.copyOf(this.B.getDie().getNextRoll(), this.B.getDie().getNextRoll().length);
-                System.out.println("Starting ");
-                double minScore = Integer.MAX_VALUE;
-                for (Move move : moves) {
-                    System.out.println(move + " going to be executed");
-                    makeMove(move);
-                    moves = player.generateMoves2();
-                    double score;
-                    int[] temp1 = Arrays.copyOf(this.B.getDie().getNextRoll(), this.B.getDie().getNextRoll().length);
-                    for (Move m : moves) {
-                        System.out.println(m + " going to be executed 222");
-                        makeMove(m);
-                        System.out.println(this.B);
-                        score = khaiTrial(depth - 1, player.opponent);
-                        this.B.getDie().setCurRoll(temp1);
-                    }
-                    System.out.println(Arrays.toString(temp) + " toi met lam roi");
-                    this.B.getDie().setCurRoll(temp);
-                }
-            }
-            System.out.println(this.B.getDie().getCurRoll().length);
-            return 0;
-        }
-    }
-//    public double khaiTrial(int depth, ABbot player) {
-//        if(player.id == 1){
-//            this.B.getGameLoop().changeTurn();
-//        }
-//        if (depth == 0) return EvaluationFunction();
-//        else {
-//            if (player.id == 0) {
-//                ArrayList<Move> moves = player.generateMoves2();
-//                System.out.println(this.B.getDie().getCurRoll().length);
-//                int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
-//                System.out.println("Starting ");
-//                double maxScore = Integer.MIN_VALUE;
-//                Move move = moves.get(0);
-//                System.out.println("Executing move: " + move);
-//                player.makeMove(move);
-//                System.out.println(this.B);
-//                moves = player.generateMoves2();
-//                if(moves.size() > 0) {
-//                    Move m2 = moves.get(0);
-//                    System.out.println("Executing move: " + m2);
-//                    player.makeMove(m2);
-//                    System.out.println(this.B);
-//                    maxScore = khaiTrial(depth-1, player.opponent);
-//                }
-//
-//            } else {
-//                System.out.println("here come player 1");
-//                System.out.println(this.B);
-//                ArrayList<Move> moves = player.generateMoves2();
-//                System.out.println(this.B.getDie().getCurRoll().length);
-//                int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(), this.B.getDie().getCurRoll().length);
-//                System.out.println("Starting ");
-//                double minScore = Integer.MAX_VALUE;
-//                Move move = moves.get(0);
-//                System.out.println("Executing move: " + move);
-//                player.makeMove(move);
-//                System.out.println(this.B);
-//                moves = generateMoves2();
-//                if(moves.size() > 0) {
-//                    Move m2 = moves.get(0);
-//                    System.out.println("Executing move: " + m2);
-//                    player.makeMove(m2);
-//                    System.out.println(this.B);
-//                    minScore = khaiTrial(depth-1, player.opponent);
-//                }
-//            }
-//            System.out.println("Ending turn");
-//            System.out.println(this.B.getDie().getCurRoll().length);
-//            this.B.getGameLoop().changeTurn();
-//            return 0;
-//        }
-//    }
 }

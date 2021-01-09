@@ -33,24 +33,39 @@ public class BotTestingGround {
 //        testMultipleTimes(one,two);
 //        System.out.println((System.nanoTime()-a)/1000000000.);
         ABbot one = new ABbot(0);
-        ABbot two = new ABbot(1);
+        PrimeBlitzBot two = new PrimeBlitzBot(1);
         one.setOpponent(two);
-        two.setOpponent(one);
+//        two.setOpponent(one);
 	    one.pausing = false;
 	    two.pausing = false;
-	    SimpleBot three = new SimpleBot(1);
-	    b.setPlayers(one, three);
+	    b.setPlayers(one, two);
 	    b.createBotLoop();
         long a = System.nanoTime();
         System.out.println("Depth of 3: ");
-        one.alpha_beta_pruning_result();
+        testMultipleTimes(one, two);
         System.out.println((System.nanoTime()-a)/1000000000.);
-        testMultipleTimes(one,three);
+        
+//        ABbot one = new ABbot(0);
+//        ABbot two = new ABbot(1);
+//        one.pausing = false;
+//        two.pausing = false;
+//        b.setPlayers(one,two);
+//        one.setBoard(b);
+//	    one.pausing = false;
+//	    two.pausing = false;
+//	    b.createBotLoop();
+//	    one.setOpponent(two);
+//        two.setOpponent(one);
+//        long a = System.nanoTime();
+//        System.out.println("Depth of 3: ");
+//        one.khaiTrial(2, one);
+//        System.out.println((System.nanoTime()-a)/1000000000.);
+
 
     }
 
     public static void testMultipleTimes(Player.Bot one, Player.Bot two){
-        for(int i = 0; i<1; i++){
+        for(int i = 0; i<100; i++){
             b = new Board();
 
             one.resetPlayer();
@@ -58,7 +73,7 @@ public class BotTestingGround {
             b.setPlayers(one,two);
             b.createBotLoop();
             testWithRandomDie();
-//            System.out.println(b);
+            System.out.println(b);
         }
         System.out.println(counter);
     }

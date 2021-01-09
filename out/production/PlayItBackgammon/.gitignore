@@ -9,3 +9,4 @@ out/production/PlayItBackgammon/Main.class
 *.bin
 *.xml
 out/production/PlayItBackgammon/.idea/PlayItBackgammondd.iml
+/bin/
