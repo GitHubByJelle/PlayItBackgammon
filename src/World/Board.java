@@ -670,95 +670,95 @@ public class Board {
 
     }
 
-//    public ArrayList<Space> getValidMoves(Space selected, int[] roll) {
-//
-//        ArrayList<Space> res = new ArrayList<Space>();
-//        final Piece dummyPiece = new Piece(gameLoop.getCurrentPlayer().id);
-//        Space target;
-//        int bigger=0;
-//        int smaller=0;
-//        int[] diffroll;
-//        for (int i = 0; i < roll.length; i++) {
-//            if(selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0){//check for bounds
-//                target = spaces[selected.getId() + roll[i]];
-//                if (validityCheck(selected, target)) {
-//                    res.add(target);
-//                    target.addPiece(dummyPiece);
-//
-//                    diffroll= getRollWithout(roll, roll[i]);
-//                    ArrayList<Space> otherPass = getValidMoves(target, diffroll);
-//                    res.addAll(otherPass);
-//
-//                    target.removePiece(dummyPiece);
-//                }
-//
-//
-//
-//            } else {
-//                //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
-//                if (!selected.isEmpty() &&allPiecesHome(selected.getPieces().get(0).getId())) {
-//
-//                    if (selected.getId()>6) {
-//                        for (int j = 24; j > 18; j--) {
-//                            if (spaces[j].getPieces().size() > 0) {
-//                                bigger = j;
-//                            }
-//                        }
-//
-//                        if (die.getCurRoll().length > 1) {
-//                            if ((25 - selected.getId()) == die.getCurRoll()[0] || (25 - selected.getId()) == die.getCurRoll()[1])
-//                                res.add(outOfPlay);
-//
-//                            else if (selected.getId()== bigger && die.getCurRoll()[0] > (25 - selected.getId()) || selected.getId()== bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
-//                                res.add(outOfPlay);
-//                            }
-//                            else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId()) && selected.getId() > bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
-//                                res.remove(outOfPlay);
-//                            }
-//                        } else {
-//                            if ((25 - selected.getId()) == die.getCurRoll()[0])
-//                                res.add(outOfPlay);
-//
-//                            else if (selected.getId() == bigger && die.getCurRoll()[0] > (25 - selected.getId())) {
-//                                res.add(outOfPlay);
-//                            } else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId())) {
-//                                res.remove(outOfPlay);
-//                            }
-//                        }
-//                    } else {
-//                        for (int j = 1; j < 6; j++) {
-//                            if (spaces[j].getPieces().size() > 0) {
-//                                bigger = j;
-//                            }
-//                        }
-//                        if (die.getCurRoll().length > 1) {
-//                            if (selected.getId() == Math.abs(die.getCurRoll()[0]) || selected.getId() == Math.abs(die.getCurRoll()[1]))
-//                                res.add(outOfPlay);
-//
-//                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() || selected.getId() == bigger && Math.abs(die.getCurRoll()[1]) > selected.getId() ) {
-//                                res.add(outOfPlay);
-//                            }
-//                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() && Math.abs(die.getCurRoll()[1]) > selected.getId()) {
-//                                res.remove(outOfPlay);
-//                            }
-//                        } else {
-//                            if (selected.getId() == Math.abs(die.getCurRoll()[0]))
-//                                res.add(outOfPlay);
-//
-//                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
-//                                res.add(outOfPlay);
-//                            }
-//                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
-//                                res.remove(outOfPlay);
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return res;
-//    }
+    public ArrayList<Space> getDeepValidMoves(Space selected, int[] roll) {
+
+        ArrayList<Space> res = new ArrayList<Space>();
+        final Piece dummyPiece = new Piece(gameLoop.getCurrentPlayer().id);
+        Space target;
+        int bigger=0;
+        int smaller=0;
+        int[] diffroll;
+        for (int i = 0; i < roll.length; i++) {
+            if(selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0){//check for bounds
+                target = spaces[selected.getId() + roll[i]];
+                if (validityCheck(selected, target)) {
+                    res.add(target);
+                    target.addPiece(dummyPiece);
+
+                    diffroll= getRollWithout(roll, roll[i]);
+                    ArrayList<Space> otherPass = getDeepValidMoves(target, diffroll);
+                    res.addAll(otherPass);
+
+                    target.removePiece(dummyPiece);
+                }
+
+
+
+            } else {
+                //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
+                if (!selected.isEmpty() &&allPiecesHome(selected.getPieces().get(0).getId())) {
+
+                    if (selected.getId()>6) {
+                        for (int j = 24; j > 18; j--) {
+                            if (spaces[j].getPieces().size() > 0) {
+                                bigger = j;
+                            }
+                        }
+
+                        if (die.getCurRoll().length > 1) {
+                            if ((25 - selected.getId()) == die.getCurRoll()[0] || (25 - selected.getId()) == die.getCurRoll()[1])
+                                res.add(outOfPlay);
+
+                            else if (selected.getId()== bigger && die.getCurRoll()[0] > (25 - selected.getId()) || selected.getId()== bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
+                                res.add(outOfPlay);
+                            }
+                            else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId()) && selected.getId() > bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
+                                res.remove(outOfPlay);
+                            }
+                        } else {
+                            if ((25 - selected.getId()) == die.getCurRoll()[0])
+                                res.add(outOfPlay);
+
+                            else if (selected.getId() == bigger && die.getCurRoll()[0] > (25 - selected.getId())) {
+                                res.add(outOfPlay);
+                            } else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId())) {
+                                res.remove(outOfPlay);
+                            }
+                        }
+                    } else {
+                        for (int j = 1; j < 6; j++) {
+                            if (spaces[j].getPieces().size() > 0) {
+                                bigger = j;
+                            }
+                        }
+                        if (die.getCurRoll().length > 1) {
+                            if (selected.getId() == Math.abs(die.getCurRoll()[0]) || selected.getId() == Math.abs(die.getCurRoll()[1]))
+                                res.add(outOfPlay);
+
+                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() || selected.getId() == bigger && Math.abs(die.getCurRoll()[1]) > selected.getId() ) {
+                                res.add(outOfPlay);
+                            }
+                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() && Math.abs(die.getCurRoll()[1]) > selected.getId()) {
+                                res.remove(outOfPlay);
+                            }
+                        } else {
+                            if (selected.getId() == Math.abs(die.getCurRoll()[0]))
+                                res.add(outOfPlay);
+
+                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
+                                res.add(outOfPlay);
+                            }
+                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
+                                res.remove(outOfPlay);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
 
     private int[] getRollWithout(int[] roll, int i) {
         int[] res=new int[roll.length-1];

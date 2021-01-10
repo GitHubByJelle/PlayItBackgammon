@@ -234,7 +234,7 @@ public abstract class Player {
             for(int i=0;i<possFrom.size();i++){
                for(int rollIndex=0;rollIndex<possRolls.size();rollIndex++) {
                    curRoll = signCheck(possRolls.get(rollIndex), id);
-                   probMove = B.getValidMoves(possFrom.get(i), curRoll);
+                   probMove = B.getDeepValidMoves(possFrom.get(i), curRoll);
                    for (int a = 0; a < probMove.size(); a++) {
                        newEntry = new DummyMove(possFrom.get(i), probMove.get(a));
                        newEntry.setRoll(curRoll);
