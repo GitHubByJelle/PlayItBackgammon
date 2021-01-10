@@ -10,8 +10,8 @@ public class Evolution {
         Random r = new Random();
         //used to start population from genome
         //use by insert "new Individual(a)" inside the first population brackets
-        //double[] a = {0.050914388250086436, 0.33732050175877887, 1.0142824733423634, 0.4777561576493374, 0.12457212766619793};
-        Population population = new Population();
+        double[] a = {1.5, 0.01, 0.5, 0.5, 0.2,2,1.5};
+        Population population = new Population(new Individual(a));
         System.out.println("This is Generation " + n++  +  " :");
         System.out.println("With Weights array:" );
         System.out.println(Arrays.toString(population.getFittest().getGenome()));

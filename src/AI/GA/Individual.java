@@ -1,6 +1,7 @@
 package AI.GA;
 
 
+import AI.PrimeBlitzBot;
 import World.Board;
 import World.Player;
 
@@ -13,7 +14,7 @@ import java.util.stream.IntStream;
 public class Individual implements Comparable<Individual>{
     //values
     Random r = new Random();
-    private final int GENOME_LENGTH = 5;
+    private final int GENOME_LENGTH = 7;
     private double[] weightGenome = new double[GENOME_LENGTH];
     private double[] enemyWeightGenome = new double[GENOME_LENGTH];
     private double d;
@@ -117,8 +118,8 @@ public double individualAvg() {
     Runnable task = () -> {
         try{
             Board b;
-            Player.Bot one= new TMM(0, this.weightGenome);
-            Player.Bot two = new TMM(1, this.enemyWeightGenome);
+            Player.Bot one= new PrimeBlitzBot(0);
+            Player.Bot two = new TMM(1, this.weightGenome);
             one.pausing=false;
             two.pausing=false;
             b = new Board();
@@ -134,12 +135,17 @@ public double individualAvg() {
                 b.getGameLoop().process();
             }
             if(b.getPlayer1().getPiecesOutOfPlay()==15){
+//                synchronized ("string") {
+//                    this.d++;
+////                    System.out.println("What the Game sees: " + this.d);
+//
+//                }
+            }else if(b.getPlayer2().getPiecesOutOfPlay()==15) {
                 synchronized ("string") {
                     this.d++;
 //                    System.out.println("What the Game sees: " + this.d);
 
                 }
-            }else if(b.getPlayer2().getPiecesOutOfPlay()==15) {
             }else{
                 System.out.println("Question Epic Life decisions");
             }
@@ -148,7 +154,7 @@ public double individualAvg() {
         }
     };
     this.d = 0;
-    ExecutorService ex = Executors.newFixedThreadPool(5);
+    ExecutorService ex = Executors.newFixedThreadPool(3);
 
     IntStream.range(0,SIZE_OF_INDIVIDUAL).forEach(item -> ex.execute(task));
     ex.shutdown();
