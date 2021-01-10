@@ -11,11 +11,6 @@ public class TMM extends Player.Bot{
 
 //    assume board is structured in list from 1-25
 //    standard start position
-    //TODO Make gameloop for Bot to train/game in
-    //TODO wait for Double moves
-    //TODO Use profiles in bot to make player 1 think 1 move ahead and player 2 2 or 3 moves ahead. Using winning as evolution for bot
-    //TODO Optimize selection out of ValidMoves using GA
-
     //0 is white and 1 is red
     public double[] weightsarr = {1.51317561056466, 0.007260608076508351, 0.509931152361962, 0.29851968813689045, 0.2, 2.0, 1.5000000000000004};
     public TMM(int id) {
@@ -88,28 +83,6 @@ public class TMM extends Player.Bot{
         }
         return homeSpaces;
     }
-//    public void TwoDeepLoop(){
-//        while (this.B.getDie().getCurRoll().length > 0) {
-//            this.B.checkAllPiecesHome();
-//            this.ExecuteDeeperMove();
-//        }
-//    }
-
-//    //returns 0 if W lost, 1 if W won
-//    public int SingleGameLoop(){
-//        while(!this.B.checkWinCondition()){
-//            if(this.B.getGameLoop().getCurrentPlayer().getId() == 1){
-//                this.TwoDeepLoop();
-//            }else{
-//                this.PlayerLoop();
-//
-//            } }
-//        if(this.B.getGameLoop().getCurrentPlayer().getId() == 0){
-//            return 0;
-//        }
-//        return 1;
-//    }
-
 
     public ArrayList<Space> GetHighestMoves(ArrayList<Space> selected_spaces){
         ArrayList<Space> moves = new ArrayList<Space>();
@@ -125,76 +98,63 @@ public class TMM extends Player.Bot{
         }
         return moves;
     }
-    //TODO Alpha Beta Pruning
-    public double[] GetBestMoveCheat(int deepnessconstr, boolean player){
-        ArrayList<Space> all_selected = GetAllSelectedSpaces();
-        ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
-        double[] value_moves = new double[all_selected.size()];
-        double[] bestmove;
-        boolean eatMove = false;
-        int pieceID =0;
-        int validroll;
-        if(all_highest_moves.size()>0) {
-            for (int i = 0; i < all_selected.size(); i++) {
-                if(all_selected.get(i).getPieces().size()>0) {
-                    pieceID = all_selected.get(i).getPieces().get(all_selected.get(i).getPieces().size()-1).getId();
-                }
-                validroll = getValidRoll(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
-                if(all_highest_moves.get(i).getPieces().size() == 1 && this.B.getGameLoop().getCurrentPlayer().getId() != all_highest_moves.get(i).getPieces().get(0).getId() && all_highest_moves.get(i).getId() != 26){
-                    eatMove = true;
-                } else {
-                    eatMove = false;
-                }
-
-                this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
-                if(eatMove) {
-                    this.B.getGameLoop().checkEaten(all_highest_moves.get(i).getId());
-                }
-
-                this.B.getDie().deleteNumber(validroll);
-                if(deepnessconstr > 0) {
-                    if(diceCopyEmpty(this.B.getDie().getCurRoll())){
-                        this.B.getGameLoop().SwitchPlayer();
-                        this.B.getDie().seeNextRoll();
-                        bestmove = GetBestMove(deepnessconstr-1);
-                        this.B.getGameLoop().SwitchPlayer();
-                        this.B.getDie().goRollBack();
-                        value_moves[i] = bestmove[2];
-                    } else{
-                        bestmove = GetBestMove(deepnessconstr-1);
-                        value_moves[i] = bestmove[2];
-
-                    }
-                }else{
-                    value_moves[i] = EvaluationFunc();
-
-                }
-                this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
-                if(eatMove){
-                    this.B.getGameLoop().SwitchPlayer();
-                    this.B.moveBackFromEatenSpaceID(all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
-                    this.B.getGameLoop().getCurrentPlayer().revivePiece();
-                    this.B.getGameLoop().SwitchPlayer();
-                }
-                this.B.getDie().addNumber(validroll);
-
-            }
-            int index = 99;
-            if(this.B.getGameLoop().getCurrentPlayer().getId() == (player ? 1 : 0)){
-                index = argmax(value_moves);
-            } else{
-                index = argmin(value_moves);
-
-            }
-            double[] returnlist = {all_selected.get(index).getId(), all_highest_moves.get(index).getId(), value_moves[index]};
-            return returnlist;
-
-        }
-        else{
-            return new double[3];
-        }
-    }
-    public double[] GetBestMove(int deepnessconstr){
+//    public double[] GetBestMoveCheat(){
+//        ArrayList<Space> all_selected = GetAllSelectedSpaces();
+//        ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
+//        double[] value_moves = new double[all_selected.size()];
+//        double[] bestmove;
+//        boolean eatMove = false;
+//        int pieceID =0;
+//        int validroll;
+//        if(all_highest_moves.size()>0) {
+//            for (int i = 0; i < all_selected.size(); i++) {
+//                if(all_selected.get(i).getPieces().size()>0) {
+//                    pieceID = all_selected.get(i).getPieces().get(all_selected.get(i).getPieces().size()-1).getId();
+//                }
+//                validroll = getValidRoll(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
+//                if(all_highest_moves.get(i).getPieces().size() == 1 && this.B.getGameLoop().getCurrentPlayer().getId() != all_highest_moves.get(i).getPieces().get(0).getId() && all_highest_moves.get(i).getId() != 26){
+//                    eatMove = true;
+//                } else {
+//                    eatMove = false;
+//                }
+//                this.B.playerMoveNoCheck(all_selected.get(i).getId(), all_highest_moves.get(i).getId(), pieceID);
+//                if(eatMove) {
+//                    this.B.getGameLoop().checkEaten(all_highest_moves.get(i).getId());
+//                }
+//
+//                this.B.getDie().deleteNumber(validroll);
+//                if(!diceCopyEmpty(this.B.getDie().getCurRoll())) {
+//                    bestmove = GetBestMoveCheat();
+//                    value_moves[i] = bestmove[2];
+//                }else{
+//                    this.B.getGameLoop().SwitchPlayer();
+//                    this.B.getDie().seeNextRoll();
+//                    bestmove = GetBestMove();
+//                    this.B.getGameLoop().SwitchPlayer();
+//                    this.B.getDie().goRollBack();
+//                    value_moves[i] = bestmove[2];
+//
+//                }
+//                this.B.playerMoveNoCheck(all_highest_moves.get(i).getId(), all_selected.get(i).getId(), pieceID);
+//                if(eatMove){
+//                    this.B.getGameLoop().SwitchPlayer();
+//                    this.B.moveBackFromEatenSpaceID(all_highest_moves.get(i).getId(), this.B.getGameLoop().getCurrentPlayer().getId());
+//                    this.B.getGameLoop().getCurrentPlayer().revivePiece();
+//                    this.B.getGameLoop().SwitchPlayer();
+//                }
+//                this.B.getDie().addNumber(validroll);
+//
+//            }
+//            int index = argmax(value_moves);
+//            double[] returnlist = {all_selected.get(index).getId(), all_highest_moves.get(index).getId(), value_moves[index]};
+//            return returnlist;
+//
+//        }
+//        else{
+//            return new double[3];
+//        }
+//    }
+    public double[] GetBestMove(){
         ArrayList<Space> all_selected = GetAllSelectedSpaces();
         ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
         double[] value_moves = new double[all_selected.size()];
@@ -219,8 +179,8 @@ public class TMM extends Player.Bot{
                 }
 
                 this.B.getDie().deleteNumber(validroll);
-                if(deepnessconstr > 0 && !diceCopyEmpty(this.B.getDie().getCurRoll())) {
-                    bestmove = GetBestMove(deepnessconstr-1);
+                if(!diceCopyEmpty(this.B.getDie().getCurRoll())) {
+                    bestmove = GetBestMove();
                     value_moves[i] = bestmove[2];
                 }else{
                     value_moves[i] = EvaluationFunc();
@@ -277,19 +237,8 @@ public class TMM extends Player.Bot{
         }
         return true;
     }
-    public void ExecuteNextMove2Cheat(int deepness, boolean player){
-        double[] move = GetBestMoveCheat(deepness, player);
-        B.forceHomeCheck();
-        if(move[0]==0 && move[1]==0){
-            for(Integer inter: this.B.getDie().getCurRoll()){
-                this.B.getDie().removeUsedRoll(inter);
-            }
-        } else{
-            B.playerMove((int) move[0], (int) move[1]);
-        }
-    }
-    public void ExecuteNextMove2(int deepness){
-        double[] move = GetBestMove(deepness);
+    public void ExecuteNextMove2(){
+        double[] move = GetBestMove();
         B.forceHomeCheck();
         if(move[0]==0 && move[1]==0){
             for(Integer inter: this.B.getDie().getCurRoll()){
@@ -623,16 +572,13 @@ public class TMM extends Player.Bot{
     @Override
     public void executeTurn()  {
         if(this.getId() == 1){
-            //this.ExecuteDeeperMove();
-//            this.ExecuteDeeperMove2();
             this.weightsarr = new double[]{1.6701575815795195, 0.010922843688447176, 0.548225117255872, 0.518327607152693, 0.2, 2.0, 1.5000000000000002};
-            this.ExecuteNextMove2(4);
+            this.ExecuteNextMove2();
         }
         else{
-            this.ExecuteNextMove2(4);
+            this.ExecuteNextMove2();
         }
         B.getGameLoop().repaintBV();
-//        pauseBot();
     }
 
     @Override
