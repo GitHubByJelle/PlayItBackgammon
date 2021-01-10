@@ -16,11 +16,13 @@ public class Space {
     }
 
     public boolean movePiece(Space to) {
-        Piece p = pieces.get(0);
+        if(pieces.size() > 0) {
+            Piece p = pieces.get(0);
 //        System.out.println("PIECE BEING MOVED:"+p.getId());
-        pieces.remove(p);
-        to.getPieces().add(p);
-        checkHome(p,to.getId());
+            pieces.remove(p);
+            to.getPieces().add(p);
+            checkHome(p, to.getId());
+        }
         return true;
     }
     public boolean moveBotPiece(Space to) {
@@ -42,7 +44,7 @@ public class Space {
     public void addPiece(Piece piece){
         this.pieces.add(piece);
     }
-
+    public void removePiece(Piece piece){this.pieces.remove(piece);}
 
     public String toString(){
         String res ="";
@@ -50,6 +52,19 @@ public class Space {
             res +=pieces.get(i);
         }
         return res;
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if(this !=null && other !=null && other instanceof Space && ((Space)other).getId()==id &&((Space)other).getSize()==getSize()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    @Override
+    public int hashCode(){
+        return id*pieces.hashCode();
     }
 
     public boolean isEmpty(){

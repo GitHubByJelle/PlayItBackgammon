@@ -4,6 +4,9 @@ import World.Player;
 import AI.*;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class Variables {
 
@@ -36,6 +39,25 @@ public final class Variables {
 
     //fornow its gonna be like this, later we can change it to store AI objects @ali
     public static final String[] PLAYERS= {HUMAN, TMM, RANDOM, SIMPLEBOT,BP,ABB};
+
+
+    public static final ArrayList<int[]> All_POSS_ROLLS = getPossRolls();
+    private static ArrayList<int[]> getPossRolls(){
+        Set<int[]> res= new HashSet<int[]>();
+        int [] roll;
+        for(int first =1; first<=6; first++){
+            for(int second =1; second<=6; second++){
+                if(second==first)
+                    roll= new int[]{first,first,first,first};
+                else
+                    roll=new int []{first,second};
+
+                res.add(roll);
+            }
+        }
+
+        return new ArrayList<>(res);
+    }
 
 
 
