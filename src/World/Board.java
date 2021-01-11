@@ -4,6 +4,7 @@ package World;
 
 import AI.*;
 import AI.AlphaBeta.ABbot;
+import AI.AlphaBeta.AlphaBetaBot;
 import AI.AlphaBeta.Move;
 import AI.GA.TMM;
 import Utils.Variables;
@@ -405,11 +406,11 @@ public class Board {
         }
         
         if(one.equals(Variables.ABB)){
-            player1= new ABbot(0);
+            player1= new AlphaBetaBot(0);
             player1.setBoard(this);
         }
         if(two.equals(Variables.ABB)){
-            player2= new ABbot(1);
+            player2= new AlphaBetaBot(1);
             player2.setBoard(this);
         }
 
