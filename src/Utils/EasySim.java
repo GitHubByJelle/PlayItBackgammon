@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class EasySim {
-    static int [][] boardRep;//{id, player1 pieces, player2 pieces}
+    static int [][] boardRep;//{id, this player pieces, opponent pieces}
     static boolean eaten=false;
     public static void main(String [] args){
         Board b= new Board();
