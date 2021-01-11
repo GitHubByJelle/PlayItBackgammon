@@ -583,7 +583,7 @@ public class TMM extends Player.Bot{
 
     @Override
     public String getName() {
-        return "BotA";
+        return "TMM";
     }
 
 
