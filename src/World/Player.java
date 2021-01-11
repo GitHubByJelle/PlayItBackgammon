@@ -2,6 +2,7 @@ package World;
 
 import AI.AlphaBeta.Move;
 
+import AI.AlphaBeta.Turn;
 import Utils.Variables;
 
 import java.util.ArrayList;
@@ -282,12 +283,53 @@ public abstract class Player {
 
 
 
+
+        //Methods Alaa is not responsible for__________________________________________
+        public ArrayList<Turn> getValidTurns(){
+            return this.B.getValidTurns(this.B.getDie().getCurRoll(),this.id);
+        }
+        public ArrayList<Turn> getValidTurns(int id){
+            if(id == 0){
+                return this.B.getValidTurns(this.B.getDie().getCurRoll(),this.id);
+            }else{
+                int[] die = Arrays.copyOf(this.B.getDie().getCurRoll(),this.B.getDie().getCurRoll().length);
+                for(int  i = 0; i  < die.length; i++){
+                    die[i] = -die[i];
+                    this.B.getDie().setCurRoll(die);
+                }
+                return this.B.getValidTurns(this.B.getDie().getCurRoll(),this.id);
+
+            }
+        }
+
+        public void makeTurn(Turn turn,int dummy){
+            int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(),this.B.getDie().getCurRoll().length);
+            ArrayList<Move> moves = turn.moves;
+
+            for(Move move: moves){
+                this.B.botMove(move);
+            }
+            this.B.getDie().setCurRoll(temp);
+        }
+        public void unDoTurn(Turn turn) {
+            for(int i = turn.moves.size()-1; i>-1; i--){
+                this.B.undoBotMove(turn.moves.get(i));
+            }
+        }
+        public void unDoTurn(Turn turn,int dummy) {
+            for(int i = turn.moves.size()-1; i>-1; i--){
+                this.B.undoBotMove(turn.moves.get(i));
+            }
+        }
+
+
     }
+    //_______________________________________________________________________________
 
 
 }
 
-
+//this is Alaa's class.
 class DummyMove{
     Space[] move;
     int [] roll;

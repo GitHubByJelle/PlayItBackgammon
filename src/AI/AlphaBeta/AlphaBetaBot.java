@@ -9,10 +9,13 @@ import java.util.logging.Logger;
 import AI.SimpleBot;
 import World.*;
 
+
 public class AlphaBetaBot extends Player.Bot {
     public double[] evaluator = {0.27492492486083797, 0.7603447308733254, 0.6324866448907414, 0.18347935996872392, 0.3290528252791358};
     private int[][] DIES_COMBINATION = new int[21][2];
     int[] currentDie;
+
+
     private enum Node {
         MAX("MAX"), MIN("MIN"), CHANCE("CHANCE");
 
@@ -32,7 +35,7 @@ public class AlphaBetaBot extends Player.Bot {
             Node.MAX, Node.CHANCE, Node.MIN, Node.CHANCE
     };
 
-    private static final int DEFAULT_DEPTH = 1;
+    private static final int DEFAULT_DEPTH = 3;
 
     private double[] moveQuality;
     public  Bot opponent;
@@ -48,10 +51,11 @@ public class AlphaBetaBot extends Player.Bot {
 
         opponent = new SimpleBot(1);
 
-
     }
 
-
+    public void setOpponentBoard(){
+        this.opponent.setBoard(this.B);
+    }
     @Override
     public String getName() {
         return "AlphBetaBot";
@@ -65,9 +69,9 @@ public class AlphaBetaBot extends Player.Bot {
 //        B.getGameLoop().repaintBV();
     }
 
-    private double expectiminimax(int depth, int currentNodeIndex) {
+    public double expectiminimax(int depth, int currentNodeIndex) {
         double result = 0.;
-        List<Move> moves;
+        List<Turn> turns;
 
         if (initialDepth == -1) initialDepth = depth;
 
@@ -75,18 +79,21 @@ public class AlphaBetaBot extends Player.Bot {
         switch (NODES[currentNodeIndex]) {
             case MAX:
                 System.out.println("entering max zone");
-                generateMoves2();
 
-                moves = this.generateMoves2();;
 
-                if (!moves.isEmpty()) {
-                    double[] moveQuality = new double[moves.size()];
+                turns = this.getValidTurns();;
 
-                    for (int i = 0; i < moves.size(); i++) {
-                        System.out.println("Loop through max moves");
-                        makeMove(moves.get(i));
+                if (!turns.isEmpty()) {
+                    double[] moveQuality = new double[turns.size()];
+
+                    for (int i = 0; i < turns.size(); i++) {
+                        makeTurn(turns.get(i),0 );
+                        System.out.println(turns.get(i) + " doing");
+                        System.out.println(this.B);
                         moveQuality[i] = expectiminimax(depth - 1, (currentNodeIndex + 1) % 4);
-                        undoMove(moves.get(i));
+                        unDoTurn(turns.get(i),0);
+                        System.out.println(turns.get(i) + " undoing");
+                        System.out.println(this.B);
 
                     }
 
@@ -101,17 +108,14 @@ public class AlphaBetaBot extends Player.Bot {
                 }
                 break;
             case MIN:
-                System.out.println("Entering min zone");
-                moves = opponent.generateMoves2();
+                turns = opponent.getValidTurns(opponent.id);
+                if (!turns.isEmpty()) {
+                    double[] moveQuality = new double[turns.size()];
 
-                if (!moves.isEmpty()) {
-                    double[] moveQuality = new double[moves.size()];
-
-                    for (int i = 0; i < moves.size(); i++) {
-                        System.out.println("Loop through min moves");
-                        opponent.makeMove(moves.get(i));
+                    for (int i = 0; i < turns.size(); i++) {
+                        opponent.makeTurn(turns.get(i),1);
                         moveQuality[i] = expectiminimax(depth - 1, (currentNodeIndex + 1) % 4);
-                        opponent.undoMove(moves.get(i));
+                        opponent.unDoTurn(turns.get(i),1);
 
                     }
 
@@ -121,7 +125,6 @@ public class AlphaBetaBot extends Player.Bot {
                 }
                 break;
             case CHANCE:
-                System.out.println("Entering chance zone, with depth: " + depth +" and node: " + NODES[currentNodeIndex].toString());
                 // TODO What to do here?
                 if (depth == 0) { // at the root, get the heuristic value
                     result = EvaluationFunction();
@@ -134,7 +137,6 @@ public class AlphaBetaBot extends Player.Bot {
                     for (int i = 0; i < dice.length; i++) {
                         if(NODES[(currentNodeIndex + 1) % 4] == Node.MAX) {
                             int[] currentDie = getCurrentDie();
-                            System.out.println("Current die: " + Arrays.toString(currentDie));
                             this.B.getDie().setCurRoll(currentDie);
                         }else {
                             currentDie = opponent.getDie(i);
@@ -147,8 +149,12 @@ public class AlphaBetaBot extends Player.Bot {
                             opponent.B.getDie().setCurRoll(currentDie);
                         }
                     }
+                    //    System.out.println(values + " values ");
                     result = weightedAverage(values);
-                    System.out.println("Weighted average: " + result);
+                    if(Double.isNaN(result)){
+                        //         System.out.println("Weird");
+                    }
+                    //     System.out.println("Weighted average: " + result);
                 }
                 break;
         }
@@ -187,7 +193,7 @@ public class AlphaBetaBot extends Player.Bot {
         double coefficientSum = 0.;
         int i = 0;
         for (Double value : values) {
-            double coefficient = (double) (1 / 21);
+            double coefficient = 1.0/18.0;
             weightedSum += value * coefficient;
             coefficientSum += coefficient;
         }
@@ -323,16 +329,19 @@ public class AlphaBetaBot extends Player.Bot {
             return -alone;
         }
     }
-    public Move getBestMove() {
+    public Turn getBestMove() {
         initialDepth = -1;
         Instant start = Instant.now();
-
+        ArrayList<Turn> turns1 = this.getValidTurns();
+        System.out.println(turns1 + " dasd ");
         expectiminimax(DEFAULT_DEPTH, 0);
         Instant finish = Instant.now();
 
         initialDepth = -1;
-        ArrayList<Move> moves = generateMoves2();
-        System.out.println(Arrays.toString(moveQuality));
+        ArrayList<Turn> turns = this.getValidTurns();
+        System.out.println(turns + " mama ");
+        System.out.println(Arrays.toString(moveQuality) + " move quality");
+        System.out.println(Arrays.toString(this.B.getDie().getCurRoll()) + " move quality");
         int maxQualityMoveIndex = -1;
         double maxMoveQuality = -Double.MAX_VALUE;
         for (int i = 0; i < moveQuality.length; i++) {
@@ -341,7 +350,70 @@ public class AlphaBetaBot extends Player.Bot {
                 maxQualityMoveIndex = i;
             }
         }
+        System.out.println(turns.size());
+        System.out.println(maxQualityMoveIndex);
+        return maxQualityMoveIndex != -1 ? turns1.get(maxQualityMoveIndex) : null;
+    }
+    public ArrayList<Turn> getValidTurns(){
+        return this.B.getValidTurns(this.B.getDie().getCurRoll(),this.id);
+    }
+    public void makeTurn(Turn turn){
+        int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(),this.B.getDie().getCurRoll().length);
+        ArrayList<Move> moves = turn.moves;
+        for(Move move: moves){
+            System.out.println("B4: " + move);
+            System.out.println(this.B);
+            this.B.botMove(move);
+            System.out.println("After: " + move);
+            System.out.println(this.B);
+        }
+        this.B.getDie().setCurRoll(temp);
+    }
+    public void makeTurn(Turn turn,int dummy){
+        int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(),this.B.getDie().getCurRoll().length);
+        ArrayList<Move> moves = turn.moves;
+        for(Move move: moves){
+            System.out.println("B4: " + move);
+            System.out.println(this.B);
+            this.B.botMove(move,dummy);
+            System.out.println("After: " + move);
+            System.out.println(this.B);
+        }
+        this.B.getDie().setCurRoll(temp);
+    }
+    public void unDoTurn(Turn turn) {
+        for(int i = turn.moves.size()-1; i>-1; i--){
+            this.B.undoBotMove(turn.moves.get(i));
+        }
+    }
+    public void unDoTurn(Turn turn,int dummy) {
+        System.out.println("Come on please");
+        System.out.println("Before undoing: ");
+        System.out.println(this.B);
+        for(int i = turn.moves.size()-1; i>-1; i--){
+            System.out.println("Undoing " + turn);
+            this.B.undoBotMove(turn.moves.get(i),dummy);
+        }
+        System.out.println("After undoing: ");
+        System.out.println(this.B);
+    }
+    //    private ArrayList<Turn> forwardPruning(ArrayList<Turn> turns){
+//
+//    }
+    public void abc(){
+        ArrayList<Turn> turns = getValidTurns();
+        if (!turns.isEmpty()) {
+            double[] moveQuality = new double[turns.size()];
+            for (int i = 0; i < turns.size(); i++) {
+                makeTurn(turns.get(i),0 );
+                System.out.println(turns.get(i) + " doing");
+                System.out.println(this.B);
+                unDoTurn(turns.get(i),0);
+                System.out.println(turns.get(i) + " undoing");
+                System.out.println(this.B);
 
-        return maxQualityMoveIndex != -1 ? moves.get(maxQualityMoveIndex) : null;
+            }
+
+        }
     }
 }

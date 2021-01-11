@@ -6,12 +6,15 @@ import AI.*;
 import AI.AlphaBeta.ABbot;
 import AI.AlphaBeta.AlphaBetaBot;
 import AI.AlphaBeta.Move;
+import AI.AlphaBeta.Turn;
 import AI.GA.TMM;
 import Utils.Variables;
 
 import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class Board {
     private Space[] spaces;
@@ -37,6 +40,17 @@ public class Board {
         //actuall board
 //
 //        addPieces(24,1,0);
+//        addPieces(19, 2, 0);
+//        addPieces(20, 3, 0);
+//        addPieces(21, 2, 0);
+//        addPieces(22, 3, 0);
+//        addPieces(23, 3, 0);
+//        addPieces(24, 2, 0);
+//
+//        addPieces(1, 5, 1);
+//        addPieces(8, 3, 1);
+//        addPieces(13, 5, 1);
+//        addPieces(12, 2, 1);
         addPieces(1, 2, 0);
         addPieces(12, 5, 0);
         addPieces(17, 3, 0);
@@ -46,7 +60,6 @@ public class Board {
         addPieces(8, 3, 1);
         addPieces(13, 5, 1);
         addPieces(24, 2, 1);
-
 
 //     testboard A
 //
@@ -94,7 +107,7 @@ public class Board {
 
     //validity checks
     public ArrayList<Space> getValidMoves(Space selected) {
-    	
+
         ArrayList<Space> res = new ArrayList<Space>();
 
         Space target;
@@ -177,6 +190,8 @@ public class Board {
         }
         return res;
     }
+
+
     public ArrayList<Space> getValidMoves(Space selected, int[] rolls) {
 
         ArrayList<Space> res = new ArrayList<Space>();
@@ -186,7 +201,7 @@ public class Board {
         if(roll.length==0){
             roll = die.getNextRoll();
         }
-        System.out.println("Current die roll: zzzz " + Arrays.toString(roll));
+
         int bigger=0;
         int smaller=0;
 
@@ -404,7 +419,7 @@ public class Board {
             player2= new PrimeBlitzBot(1);
             player2.setBoard(this);
         }
-        
+
         if(one.equals(Variables.ABB)){
             player1= new AlphaBetaBot(0);
             player1.setBoard(this);
@@ -469,40 +484,6 @@ public class Board {
     public void moveOutOfPlay(int k){
         spaces[k].movePiece(outOfPlay);
     }
-    private void doNotAllow(Space space) {
-        space.movePiece(outOfPlay);
-        System.out.println("not allowed, you first need to advance the further pieces");
-    }
-
-    public void lastPlays(int from, int to) {
-        int newFrom= 26-from;
-        if (from > 6) {
-            if (26 - (from + 1) <= 6) {
-                if (die.getCurRoll().length > 1) {
-                    if (26 - (from + 1) == die.getCurRoll()[0] || 26 - (from + 1) == die.getCurRoll()[1])
-                        die.removeUsedRoll(to - (from + 1));
-                    else if (26 - (from + 1) < die.getCurRoll()[0] || 26 - (from + 1) < die.getCurRoll()[1])
-                        die.removeUsedRollOutOfPlay();
-                } else {
-                    if (26 - (from + 1) == die.getCurRoll()[0])
-                        die.removeUsedRoll(to - (from + 1));
-                    else if (26 - (from + 1) < die.getCurRoll()[0])
-                        die.removeUsedRollOutOfPlay();
-                }
-            }
-        } else if (26 - newFrom <= 6)
-            if (die.getCurRoll().length > 1) {
-                if (-(26 - newFrom) == die.getCurRoll()[0] || -(26 - (newFrom)) == die.getCurRoll()[1])
-                    die.removeUsedRoll(-(26 - newFrom));
-                else if (-(26 - newFrom) > die.getCurRoll()[0] || -(26 - newFrom) > die.getCurRoll()[1])
-                    die.removeUsedRollOutOfPlay();
-            } else {
-                if (-(26 - newFrom) == die.getCurRoll()[0])
-                    die.removeUsedRoll(-(26 - newFrom));
-                else if (-(26 - newFrom) > die.getCurRoll()[0])
-                    die.removeUsedRollOutOfPlay();
-            }
-    }
 
     public void checkAllPiecesHome(){
         for(Space space : this.getSpaces()){
@@ -515,109 +496,7 @@ public class Board {
             }
         }
     }
-    //Probably temporary but thanks to this function we can work on Evolution until the unknown bug is fixed
-    public void BotMove(int from, int to){
-        if(gameLoop == null){
-            System.out.println("VAILON");
-        }
-        int id = gameLoop.getCurrentPlayer().getId();
-        if(from < 26) {
-            ArrayList<Space> poss = getValidMoves(spaces[from]);
-            if (to == 26) {
-                moveOutOfPlay(from);
-                lastPlays(from, to);
 
-                gameLoop.getCurrentPlayer().pieceOut();
-
-
-            } else if ((to != from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to])) {
-                if (from == 0 || from == 25) {
-                    gameLoop.getCurrentPlayer().revivePiece();
-                }
-                //die.removeUsedRoll(to - from);
-                spaces[from].movePiece(spaces[to]);
-                gameLoop.checkEaten(to);
-
-            }
-        }
-    }
-    public void undoBotMove(Move move){
-        if(move.from < 26) {
-            int from = move.from;
-            int to = move.to;
-//            System.out.println("From: " + from + " to: " + to);
-//            System.out.println(spaces[from] +" abc "+ spaces[to]);
-            if(spaces[from].getSize() > 0) {
-                spaces[from].movePiece(spaces[to]);
-                if (move.isKill) {
-                    if (move.playerId == 0) {
-                        spaces[25].movePiece(spaces[from]);
-
-                    } else {
-                        spaces[0].movePiece(spaces[from]);
-                    }
-                }
-            }
-        }else{
-
-            addPieces(move.to,1,move.playerId);
-            gameLoop.getCurrentPlayer().piecesOutOfPlay--;
-        }
-    }
-    public void BotMove(Move move){
-
-        int from = move.from;
-        int to = move.to;
-        System.out.println("Going to make move: " + move);
-        ArrayList<Space> poss = getValidMoves(spaces[from]);
-        int id = gameLoop.getCurrentPlayer().getId();
-        if(isGoingToEat(move.from,move.to, id)) move.isKill = true;
-        if(to==26) {
-            moveOutOfPlay(from);
-            lastPlays(from,to);
-            move.isMoveOut = true;
-            gameLoop.getCurrentPlayer().pieceOut();
-
-
-        }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
-            if(from==0 ||from==25){
-                gameLoop.getCurrentPlayer().revivePiece();
-            }
-            die.removeUsedRoll(to - from);
-            spaces[from].movePiece(spaces[to]);
-            gameLoop.checkEaten(to);
-        }
-        assert move.playerId == gameLoop.getCurrentPlayer().getId();
-
-    }
-	public void botMove(Move move) {
-		// int id = gameLoop.getCurrentPlayer().getId();
-		if (isGoingToEat(move.from, move.to, move.playerId)) {
-			move.isKill = true;
-		}
-		if (isGoingOut(move.from, move.to, move.playerId)) {
-			move.isMoveOut = true;
-		}
-		int from = move.from;
-		int to = move.to;
-		int id = move.playerId;
-		if (to < 26) {
-			if (spaces[from].getSize() >= 1) {
-				spaces[from].movePiece(spaces[to]);
-				this.checkEaten(to, id);
-			}
-		}
-
-	}
-    
-    public void checkEaten(int k,int id) {
-        World.Space s = getSpaces()[k];
-        if (s.getSize() == 2)
-            if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
-                this.moveToEatenSpace(k,id);
-            }
-    }
-    
     public void moveToEatenSpace(int k,int id) {
         World.Piece p = spaces[k].getPieces().get(0);
         if (p.getId() ==id)
@@ -625,7 +504,7 @@ public class Board {
         else
             spaces[k].movePiece(spaces[25]);
     }
-    
+
     private boolean isGoingToEat(int from, int to, int id){
         if(to <= 24 && to != 0) {
             if (this.getSpaces()[to].getSize() == 1) {
@@ -637,8 +516,8 @@ public class Board {
         return false;
     }
     private boolean isGoingOut(int from, int to, int id){
-        if(this.getSpaces()[to].getSize() == 26 ){
-                return true;
+        if((from + to) == 26 ){
+            return true;
         }
         return false;
     }
@@ -670,6 +549,7 @@ public class Board {
         return res;
 
     }
+
 
     public ArrayList<Space> getDeepValidMoves(Space selected, int[] roll) {
 
@@ -770,7 +650,7 @@ public class Board {
                     found=true;
                 }else{
                     res[a]=roll[a];
-                   // System.out.println(Arrays.toString(res));
+                    // System.out.println(Arrays.toString(res));
                 }
             }else{
                 //System.out.println(a+" "+found+" "+i+" "+ Arrays.toString(roll)+" "+Arrays.toString(res));
@@ -778,6 +658,333 @@ public class Board {
             }
         }
         return res;
+    }
+
+
+
+
+
+    //Methods that Alaa is not responsible for and has no ide what they do anymore__________________________________________________________________________________________
+
+    //Probably temporary but thanks to this function we can work on Evolution until the unknown bug is fixed
+    public void BotMove(int from, int to){
+        if(gameLoop == null){
+            System.out.println("Null Game Loop");
+        }
+        int id = gameLoop.getCurrentPlayer().getId();
+        if(from < 26) {
+            ArrayList<Space> poss = getValidMoves(spaces[from]);
+            if (to == 26) {
+                moveOutOfPlay(from);
+                lastPlays(from, to);
+
+                gameLoop.getCurrentPlayer().pieceOut();
+
+
+            } else if ((to != from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to])) {
+                if (from == 0 || from == 25) {
+                    gameLoop.getCurrentPlayer().revivePiece();
+                }
+                //die.removeUsedRoll(to - from);
+                spaces[from].movePiece(spaces[to]);
+                gameLoop.checkEaten(to);
+
+            }
+        }
+    }
+    public void undoBotMove(Move move){
+        int from = move.to;
+        int to = move.from;
+        if(from < 26) {
+
+            if(spaces[from].getSize() > 0) {
+                spaces[from].movePiece(spaces[to]);
+                if (move.isKill) {
+                    System.out.println(move + " killing ");
+                    if (move.playerId == 0) {
+                        moveBackFromEatenSpaceID(from,0);
+
+                    } else {
+                        moveBackFromEatenSpaceID(from,1);
+
+                    }
+                }
+            }
+        }else{
+            outOfPlay.movePiece(spaces[to],move.playerId);
+        }
+    }
+    public void undoBotMove(Move move,int dummy){
+        int from = move.to;
+        int to = move.from;
+        if(from < 26) {
+
+
+            if(spaces[from].getSize() > 0) {
+                spaces[from].movePiece(spaces[to]);
+                if (move.isKill) {
+                    if (move.playerId == 0) {
+                        spaces[25].movePiece(spaces[from]);
+
+                    } else {
+                        spaces[0].movePiece(spaces[from]);
+                    }
+                }
+            }
+        }else{
+            outOfPlay.movePiece(spaces[to],move.playerId);
+        }
+    }
+    public void BotMove(Move move){
+
+        int from = move.from;
+        int to = move.to;
+        ArrayList<Space> poss = getValidMoves(spaces[from]);
+        int id = gameLoop.getCurrentPlayer().getId();
+        if(isGoingToEat(move.from,move.to, id)) move.isKill = true;
+        if(to==26) {
+            moveOutOfPlay(from);
+            lastPlays(from,to);
+            move.isMoveOut = true;
+            gameLoop.getCurrentPlayer().pieceOut();
+
+
+        }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
+            if(from==0 ||from==25){
+                gameLoop.getCurrentPlayer().revivePiece();
+            }
+            die.removeUsedRoll(to - from);
+            spaces[from].movePiece(spaces[to]);
+            gameLoop.checkEaten(to);
+        }
+        assert move.playerId == gameLoop.getCurrentPlayer().getId();
+
+    }
+    public void botMove(Move move) {
+        // int id = gameLoop.getCurrentPlayer().getId();
+        if (isGoingToEat(move.from, move.to, move.playerId)) {
+            move.isKill = true;
+        }
+        if (isGoingOut(move.from, move.to, move.playerId)) {
+            move.isMoveOut = true;
+        }
+        int from = move.from;
+        int to = move.to;
+        int id = move.playerId;
+        if (to < 26) {
+            if (spaces[from].getSize() >= 1) {
+                spaces[from].movePiece(spaces[to]);
+                this.checkEaten(to, id,this);
+            }
+            die.removeUsedRoll(to-from);
+        }else{
+            moveOutOfPlay(from); lastPlays(from,to);
+        }
+
+
+
+    }
+    public void botDummyMove(Move move) {
+        // int id = gameLoop.getCurrentPlayer().getId();
+        if (isGoingToEat(move.from, move.to, move.playerId)) {
+            move.isKill = true;
+        }
+        if (isGoingOut(move.from, move.to, move.playerId)) {
+            move.isMoveOut = true;
+        }
+        int from = move.from;
+        int to = move.to;
+        int id = move.playerId;
+        if (to < 26) {
+            if (spaces[from].getSize() >= 1) {
+                spaces[from].movePiece(spaces[to]);
+                this.checkEaten(to, id);
+            }
+        }else{
+            moveOutOfPlay(from);
+        }
+
+
+
+    }
+    public void botMove(Move move,int dummy) {
+        // int id = gameLoop.getCurrentPlayer().getId();
+        if (isGoingToEat(move.from, move.to, move.playerId)) {
+            move.isKill = true;
+        }
+        if (isGoingOut(move.from, move.to, move.playerId)) {
+            move.isMoveOut = true;
+        }
+        int from = move.from;
+        int to = move.to;
+        int id = move.playerId;
+
+        if (to < 26) {
+            if (spaces[from].getSize() >= 1) {
+                spaces[from].movePiece(spaces[to]);
+                System.out.println("Check eaten: " + to + " id: " + id);
+                this.checkEaten(to, id);
+            }
+        }else{
+            moveOutOfPlay(from);
+        }
+
+    }
+    public void checkEaten(int k,int id) {
+        World.Space s = getSpaces()[k];
+        if (s.getSize() == 2)
+            if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
+                System.out.println("Eating: " + k  + " met " + s.getSize());
+                System.out.println("Eating: " + s);
+                this.moveToEatenSpace(k,id);
+            }
+    }
+    public void checkEaten(int k,int id, Board board) {
+
+        World.Space s = getSpaces()[k];
+        if (s.getSize() == 2)
+            if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
+                System.out.println("Eating: " + k  + " met " + s.getSize());
+                System.out.println("Eating: " );
+                System.out.println(board);
+                System.out.println("Eating: " + s);
+                this.moveToEatenSpace(k,id);
+            }
+    }
+    private void doNotAllow(Space space) {
+        space.movePiece(outOfPlay);
+        System.out.println("not allowed, you first need to advance the further pieces");
+    }
+
+    public void lastPlays(int from, int to) {
+        int newFrom= 26-from;
+        if (from > 6) {
+            if (26 - (from + 1) <= 6) {
+                if (die.getCurRoll().length > 1) {
+                    if (26 - (from + 1) == die.getCurRoll()[0] || 26 - (from + 1) == die.getCurRoll()[1])
+                        die.removeUsedRoll(to - (from + 1));
+                    else if (26 - (from + 1) < die.getCurRoll()[0] || 26 - (from + 1) < die.getCurRoll()[1])
+                        die.removeUsedRollOutOfPlay();
+                } else {
+                    if (26 - (from + 1) == die.getCurRoll()[0])
+                        die.removeUsedRoll(to - (from + 1));
+                    else if (26 - (from + 1) < die.getCurRoll()[0])
+                        die.removeUsedRollOutOfPlay();
+                }
+            }
+        } else if (26 - newFrom <= 6)
+            if (die.getCurRoll().length > 1) {
+                if (-(26 - newFrom) == die.getCurRoll()[0] || -(26 - (newFrom)) == die.getCurRoll()[1])
+                    die.removeUsedRoll(-(26 - newFrom));
+                else if (-(26 - newFrom) > die.getCurRoll()[0] || -(26 - newFrom) > die.getCurRoll()[1])
+                    die.removeUsedRollOutOfPlay();
+            } else {
+                if (-(26 - newFrom) == die.getCurRoll()[0])
+                    die.removeUsedRoll(-(26 - newFrom));
+                else if (-(26 - newFrom) > die.getCurRoll()[0])
+                    die.removeUsedRollOutOfPlay();
+            }
+    }
+
+
+    public ArrayList<Move> generateMovesBoard(int playerId) {
+        ArrayList<Move> possible_moves = new ArrayList<>();
+        Space[] allSpaces = getSpaces();
+        for (Space space : allSpaces) {
+            if (space.getSize() > 0) {
+                if (space.getPieces().get(0).getId() == playerId) {
+                    ArrayList<Space> validMoves = getValidMoves(space);
+                    if (validMoves.size() > 0) {
+                        for (Space v : validMoves) {
+                            Move move = new Move(space.getId(), v.getId(), playerId);
+                            possible_moves.add(move);
+                        }
+                    }
+                }
+            }
+        }
+        return possible_moves;
+    }
+    public ArrayList<Turn> getValidTurns(int[] roll, int playerId){
+        ArrayList<Turn> turns = new ArrayList<>();
+        int[] rolls;
+        if(roll[0] == roll[1]){
+            rolls = new int[4];
+            for(int i = 0; i < 4; i++){
+                rolls[i] = roll[0];
+            }
+        }else{
+            rolls = new int[2];
+            rolls[0] = roll[0];
+            rolls[1] = roll[1];
+        }
+        if(rolls.length == 2){
+
+            turns = generateTwo(rolls, playerId);
+        }else if(rolls.length == 4){
+            turns = generateFour(rolls, playerId);
+        }
+        return turns;
+    }
+
+    private ArrayList<Turn> generateFour(int[] rolls, int playerId) {
+        ArrayList<Turn> turns = new ArrayList<>();
+        ArrayList<Move> moves = generateMovesBoard(playerId);
+        int[] previousUsedDice = Arrays.copyOf(rolls,rolls.length);
+        for(Move move: moves){
+            this.getDie().setCurRoll(Arrays.copyOf(previousUsedDice,previousUsedDice.length));
+            Turn t = new Turn();
+            t.addMoves(move);
+            botDummyMove(move);
+            moves = generateMovesBoard(playerId);
+            for (Move m1 : moves){
+                t.addMoves(m1);
+                botDummyMove(m1);
+                moves = generateMovesBoard(playerId);
+                for(Move m2: moves){
+                    t.addMoves(m2);
+                    botDummyMove(m2);
+                    moves = generateMovesBoard(playerId);
+                    for(Move m3: moves){
+                        t.addMoves(m3);
+                        turns.add(t);
+                        break;
+                    }
+                    undoBotMove(m2);
+
+                    break;
+                }
+                undoBotMove(m1);
+
+                break;
+            }
+            undoBotMove(move);
+
+        }
+        this.getDie().setCurRoll(previousUsedDice);
+        return turns;
+    }
+
+    private ArrayList<Turn> generateTwo(int[] rolls, int playerId) {
+        ArrayList<Turn> turns = new ArrayList<>();
+        ArrayList<Move> moves = generateMovesBoard(playerId);
+        for(Move move : moves){
+            int[] previousUsedDice = Arrays.copyOf(this.getDie().getCurRoll(), this.getDie().getCurRoll().length);
+            Turn t = new Turn();
+            t.addMoves(move);
+            botMove(move);
+            moves = generateMovesBoard(playerId);
+            for(Move m : moves){
+                t.addMoves(m);
+                turns.add(t);
+                t= new Turn();
+                t.addMoves(move);
+
+            }
+            this.getDie().setCurRoll(previousUsedDice);
+            undoBotMove(move);
+        }
+        return turns;
     }
 
 }

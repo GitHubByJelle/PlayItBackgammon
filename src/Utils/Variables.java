@@ -37,7 +37,7 @@ public final class Variables {
     public static final String TDG="TD-Gammon";
 
 
-    //fornow its gonna be like this
+    //for now its gonna be like this
     public static final String[] PLAYERS= {HUMAN, TMM, RANDOM, SIMPLEBOT,BP,ABB};
     public static final String[] BOTS= {TMM, RANDOM, SIMPLEBOT,BP,ABB};
 

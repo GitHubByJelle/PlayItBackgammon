@@ -25,17 +25,6 @@ public class Space {
         }
         return true;
     }
-    public boolean moveBotPiece(Space to) {
-        Piece p = pieces.get(0);
-//        System.out.println("PIECE BEING MOVED:"+p.getId());
-        pieces.remove(p);
-        to.getPieces().add(0,p);
-        checkHome(p,to.getId());
-        return true;
-    }
-
-
-
     public ArrayList<Piece> getPieces() {
         return pieces;
     }
@@ -117,5 +106,35 @@ public class Space {
             }
         }
     }
+
+
+    //Methods Alaa is not responsible for___________________________________________________________________
+
+
+
+    public boolean movePiece(Space to, int playerId) {
+        int index = -1;
+        if(pieces.size() > 0) {
+            for(int i = 0 ; i < pieces.size(); i++){
+                if (pieces.get(i).getId() == playerId){
+                    index = i;
+                    break;
+                }
+            }
+        }
+        Piece piece = pieces.get(index);
+        to.getPieces().add(piece);
+        checkHome(piece,to.getId());
+        return true;
+    }
+    public boolean moveBotPiece(Space to) {
+        Piece p = pieces.get(0);
+//        System.out.println("PIECE BEING MOVED:"+p.getId());
+        pieces.remove(p);
+        to.getPieces().add(0,p);
+        checkHome(p,to.getId());
+        return true;
+    }
+
 
 }
