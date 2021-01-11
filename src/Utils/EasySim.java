@@ -19,7 +19,7 @@ public class EasySim {
         c.setBoard(b);
         a.setBoard(b);
         b.setPlayers(a,c);
-        int[][] rep = setBoardRep(b);
+        int[][] rep = setBoardRep(b, 1);
         printRep();
 
         simulateMove(rep,1,2);
@@ -62,16 +62,16 @@ public class EasySim {
     }
 
 
-    public static int[][] setBoardRep(Board b){
-        boardRep = new int[27][3];//{id,num pieces this player1, num pieces player 2}
+    public static int[][] setBoardRep(Board b, int id){
+        boardRep = new int[27][3];//{id,num pieces this player, num pieces opponent}
         for(int i=0;i<boardRep.length-1;i++){
             boardRep[i][0]=b.getSpaces()[i].getId();
-            if(!b.getSpaces()[i].isEmpty() && b.getSpaces()[i].getPieces().get(0).getId()==0)
+            if(!b.getSpaces()[i].isEmpty() && b.getSpaces()[i].getPieces().get(0).getId()==id)
                 boardRep[i][1]=b.getSpaces()[i].getSize();
             else
                 boardRep[i][1]=0;
 
-            if(!b.getSpaces()[i].isEmpty() && b.getSpaces()[i].getPieces().get(0).getId()==1)
+            if(!b.getSpaces()[i].isEmpty() && b.getSpaces()[i].getPieces().get(0).getId()!=id)
                 boardRep[i][2]=b.getSpaces()[i].getSize();
             else
                 boardRep[i][2]=0;
