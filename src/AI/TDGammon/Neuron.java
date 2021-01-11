@@ -25,7 +25,7 @@ public class Neuron {
         this.value=val;
 
         this.weights= null; //not existing yet
-        this.bias=-1; //to change it afterwards
+        this.bias=0.35f; //to change it afterwards
         this.weightsCache= null; //not existing yet
         this.gradient= -1; //to change it afterwards
 

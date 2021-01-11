@@ -2,25 +2,29 @@ package AI.TDGammon;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import AI.RandomBot;
 import World.Board;
 import World.Player;
 
 public class NeuralNet {
-    ArrayList<TrainData> dataSet;
-    Layer[] layer;
+    private ArrayList<TrainData> dataSet;
+    private Layer[] layer;
+    private float lr;
 
-    public NeuralNet(ArrayList<TrainData> dataSet){
+    NeuralNet(ArrayList<TrainData> dataSet, float lr){
+        Neuron.range(-1, 1);
         this.dataSet= dataSet;
+        this.lr = lr;
 
         //Network for simple functions
-        this.layer= new Layer[5];
+        this.layer= new Layer[4];
+
         this.layer[0]= null;
-        this.layer[1]= new Layer(1,16);
-        this.layer[2]= new Layer(16,32);
-        this.layer[3]= new Layer(32,16);
-        this.layer[4]= new Layer(16,1);
+        this.layer[1]= new Layer(10,32);
+        this.layer[2]= new Layer(32,32);
+        this.layer[3]= new Layer(32,1);
 
 
         //small network for TD-gammon
@@ -54,51 +58,83 @@ public class NeuralNet {
 
         layer[0] = new Layer(input);
 
-        for(int i=1; i<layer.length; i++){
+        for(int i=1; i<layer.length-1; i++){
             for (int j=0; j<layer[i].neuron.length; j++){
                 float sum=0;
                 for(int k=0; k<layer[i-1].neuron.length;k++){
                     sum+=(layer[i-1].neuron[k].value)*(layer[i].neuron[j].weights[k]);
                 }
-//                layer[i].neuron[j].value= MathUtils.reLu(sum);
-                layer[i].neuron[j].value= MathUtils.sigmoid(sum);
+                sum += layer[i].neuron[j].bias;
+                layer[i].neuron[j].value= MathUtils.reLu(sum);
+                //layer[i].neuron[j].value= MathUtils.sigmoid(sum);
             }
         }
+        for (int j=0; j<layer[layer.length-1].neuron.length; j++){
+            float sum=0;
+            for(int k=0; k<layer[layer.length-2].neuron.length;k++){
+                sum+=(layer[layer.length-2].neuron[k].value)*(layer[layer.length-1].neuron[j].weights[k]);
+            }
+            sum += layer[layer.length-1].neuron[j].bias;
+            //layer[i].neuron[j].value= MathUtils.reLu(sum);
+            layer[layer.length-1].neuron[j].value= MathUtils.sigmoid(sum);
+        }
+
     }
 
 
-    void backwardProp(float learningRate, float[] ExpectedOutput){
-        int numLayers= layer.length;
-        int outLayer= numLayers-1; //index of the last layer
+    void backwardProp(int data){
+        int outLayer= layer.length-1; //index of the last layer
+
+        float loss=0;
+        for(int i=0; i<layer[outLayer].neuron.length; i++) {
+            float predOutput = layer[outLayer].neuron[i].value;
+            float target = dataSet.get(data).getTarget()[i];
+            loss += MathUtils.crossEntropyLoss(predOutput, target);
+        }
+        loss = -loss/layer[outLayer].neuron.length;
+
+        System.out.println("loss" + loss);
 
         //Update output layer for each output
         for(int i=0; i<layer[outLayer].neuron.length; i++){
-            float predOutput= layer[outLayer].neuron[i].value;
-            float target= ExpectedOutput[i];
-            float derivative= predOutput-target;
-            float delta= derivative*(predOutput*(1-predOutput));
-            layer[outLayer].neuron[i].gradient= delta;
+            float predOutput = layer[outLayer].neuron[i].value;
+
+            float partialDerivative = loss*MathUtils.differenceError(predOutput, dataSet.get(data).getTarget()[0]);
+
+            layer[outLayer].neuron[i].gradient= partialDerivative;
+
             for(int j=0; j<layer[outLayer].neuron[i].weights.length; j++){
-                float previousOutput= layer[outLayer-1].neuron[j].value;
-                float error= delta*previousOutput;
-                layer[outLayer].neuron[i].weightsCache[j]= layer[outLayer].neuron[i].weights[j]- learningRate*error;
+                float previousOutput = layer[outLayer-1].neuron[j].value;
+                float error = partialDerivative*previousOutput;
+                layer[outLayer].neuron[i].weightsCache[j] = layer[outLayer].neuron[i].weights[j]- this.lr
+                        *error;
             }
+
+            //Update bias
+            float biasCorrection = partialDerivative*this.lr;
+            layer[outLayer].neuron[i].bias -= biasCorrection;
         }
 
         //Update all the hidden layers
         for(int i=outLayer-1; i>0; i--){
             //for all the neurons in the layer
             for(int j=0; j<layer[i].neuron.length; j++){
-                float predOutput= layer[i].neuron[j].value;
-                float gradSum= sumGradient(j, i+1);
-                float delta= (gradSum)*(predOutput*(1-predOutput));
-                layer[i].neuron[j].gradient= delta;
+                float predictedOutput = layer[i].neuron[j].value;
+                float gradSum = sumGradient(j, i+1);
+                float derivative = gradSum * MathUtils.differenceError(predictedOutput, dataSet.get(data).getTarget()[0]);
+
+                layer[i].neuron[j].gradient= derivative;
                 //for all weights
                 for(int k=0; k<layer[i].neuron[j].weights.length; k++){
-                    float prevOutput= layer[i-1].neuron[k].value;
-                    float error= delta*prevOutput;
-                    layer[i].neuron[j].weightsCache[k]= layer[i].neuron[j].weights[k] - learningRate*error;
+                    float prevOutput = layer[i-1].neuron[k].value;
+                    float error = derivative*prevOutput;
+
+                    layer[i].neuron[j].weightsCache[k] = layer[i].neuron[j].weights[k] - this.lr*error;
                 }
+
+                //update the bias
+                float biasAdjust = derivative*this.lr;
+                layer[i].neuron[j].bias -= biasAdjust;
             }
         }
 
@@ -110,29 +146,75 @@ public class NeuralNet {
         }
     }
 
-
+    //Sum of all gradients connected to a given neuron in a layer
+    private float sumGradient(int numIndex , int layerIndex ){
+        float sum=0;
+        Layer current= layer[layerIndex];
+        for(int i=0; i<current.neuron.length; i++){
+            Neuron n = current.neuron[i];
+            sum += n.gradient*n.weights[numIndex];
+        }
+        return sum;
+    }
 
     float[] returnOutput(float[] input){
         int numLayers= layer.length;
         int outLayer= numLayers-1; //index of the last layer
         float[] ans= new float[layer[outLayer].neuron.length];
 
-        forwardProp(input);
+        //forwardProp(input);
         for(int i=0; i<layer[outLayer].neuron.length; i++){
             ans[i]=layer[outLayer].neuron[i].value;
         }
         return ans;
     }
 
-    //Sum of all gradients connected to a given neuron in a layer
-    public float sumGradient(int numIndex , int layerIndex ){
-        float sum=0;
-        Layer current= layer[layerIndex];
-        for(int i=0; i<current.neuron.length; i++){
-            Neuron n = current.neuron[i];
-            sum+= n.gradient*n.weights[numIndex];
+    //drops random neurons for a specific training but the neurons are active again for the next one
+    void droupout(){
+
+        float dropoutRate= 0.3f; //Rate of neurons to be zeroed/dropped out of all the neurons of the layer
+
+        float[] neuronsDropped= new float[this.layer.length-1];
+
+        float mult= 1/(1-dropoutRate); //multiplication factor applied to all other neurons to keep the same overall sum
+        float count=0;
+
+        Random rand = new Random();
+
+        for (int i=0; i<this.layer.length-1; i++){
+            neuronsDropped[i]=dropoutRate*this.layer[i].neuron.length;
+            boolean[] dropped= new boolean[this.layer[i].neuron.length];
+
+            //While loop to obtain the desired number of dropped neurons
+            while (count<neuronsDropped[i]){
+                int random_integer = rand.nextInt((this.layer[i].neuron.length-1)); //random neuron index
+                if (!dropped[random_integer]) //if neuron not ye dropped --> drop it (set it to 0)
+                    this.layer[i].neuron[random_integer].value=0;
+                dropped[random_integer]=true;
+                count++;
+            }
+            for(int j=0; j<this.layer[i].neuron.length; j++){
+                if (!dropped[j]) //if the neuron has not been dropped apply the multiplication factor
+                    this.layer[i].neuron[j].value*=mult;
+            }
+
         }
-        return sum;
+    }
+
+    public void setDataSet(ArrayList<TrainData> dataSet) {
+        this.dataSet = dataSet;
+    }
+
+    public ArrayList<TrainData> getDataSet() {
+        return dataSet;
+    }
+
+    public Layer[] getLayer() {
+        return layer;
+    }
+
+    public void setLayer(Layer[] layer) {
+        this.layer = layer;
     }
 
     public void PlayMultipleTimes(Player.Bot one, Player.Bot two, Board b, int NumberOfGames){
@@ -180,7 +262,7 @@ public class NeuralNet {
     }
 
     void AddData(Board b){
-        dataSet.add(new TrainData(new TDGdata(b).data,giveReward(b)));
+        this.dataSet.add(new TrainData(new TDGdata(b).data,giveReward(b)));
     }
 }
 

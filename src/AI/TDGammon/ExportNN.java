@@ -29,7 +29,7 @@ public class ExportNN {
                 System.out.println("Error initializing stream");
             }
 
-            System.out.println(" ===> All networks exported");
+            System.out.println(" ===> network exported");
         }
 }
 

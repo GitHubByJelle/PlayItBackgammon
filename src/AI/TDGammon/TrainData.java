@@ -2,19 +2,19 @@ package AI.TDGammon;
 
 public class TrainData {
 
-    float[] inputData;// input of the data
-    float[] expectedOutput;//Real output
+    float[] inputs;// input of the data
+    float[] targets;//Real output
 
-    public TrainData(float[] data, float[] expectedOutput){
-        this.inputData=data;
-        this.expectedOutput=expectedOutput;
+    public TrainData(float[] data, float[] targets){
+        this.inputs =data;
+        this.targets = targets;
     }
 
     public float[] getData() {
-        return inputData;
+        return inputs;
     }
 
-    public float[] getExpectedOutput() {
-        return expectedOutput;
+    public float[] getTarget() {
+        return targets;
     }
 }
