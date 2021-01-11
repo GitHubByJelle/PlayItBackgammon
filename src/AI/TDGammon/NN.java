@@ -1,5 +1,9 @@
 package AI.TDGammon;
 
+import AI.RandomBot;
+import World.Board;
+import World.Player;
+
 import java.io.*;
 import java.nio.FloatBuffer;
 import java.util.*;
@@ -9,7 +13,7 @@ public class NN {
 
     public static void main(String[] args) throws IOException {
         int epoch = 100;
-        float lr = 0.01f;
+        float lr = 0.05f;
 
         ArrayList<TrainData> dataSet = createTrainingData();
         NeuralNet neuralNet = new NeuralNet(dataSet, lr);
@@ -19,7 +23,7 @@ public class NN {
 
     public static  ArrayList<TrainData> createTrainingData() throws IOException {
         ArrayList<TrainData> dataSet = new ArrayList<>();
-        ArrayList<int []> data = new ArrayList<>();
+   /*     ArrayList<int []> data = new ArrayList<>();
 
         String line = "";
 
@@ -41,14 +45,14 @@ public class NN {
 
             dataSet.add(i, new TrainData(bref, new float[]{data.get(i)[data.get(i).length - 1]}));
         }
-
-//        int dataSet_size = 10;
+*/
+//        int dataSet_size = 100;
 //
 //        Random r = new Random();
 //
-//        for (int i = 0; i < dataSet_size; i++) {
-//            dataSet.add(i, new TrainData(new float[]{i}, new float[]{(float) 3*i}));
-//        }
+//        for (int i = 0; i < dataSet_size; i++)
+//           dataSet.add(i, new TrainData(new float[]{i}, new float[]{(float) 3*i}));
+//       }
 //
 //        Collections.shuffle(dataSet);
 //
@@ -56,8 +60,23 @@ public class NN {
 //        dataSet.add(1, new TrainData(new float[]{0, 1}, new float[]{1}));
 //        dataSet.add(2, new TrainData(new float[]{1, 1}, new float[]{0}));
 //        dataSet.add(3, new TrainData(new float[]{1, 0}, new float[]{1}));
-        return dataSet;
+//        return dataSet;
 
+        // Create a whole game
+        Board b = new Board();
+        Player.Bot one= new RandomBot(0);
+        Player.Bot two = new RandomBot(1);
+        one.pausing=false;
+        two.pausing=false;
+        b.setPlayers(one,two);
+        b.createBotLoop();
+
+        //Play a whole game and add to data
+        NeuralNet.PlayMultipleTimes(one,two,b,10);
+        for(int i=0; i<dataSet.size(); i++){
+            dataSet.set(i, new TrainData(new float[]{i},new float[]{2*i+8}));
+       }
+        return dataSet;
     }
 
     public static void trainData(NeuralNet nn, int epoch) {
@@ -81,12 +100,12 @@ public class NN {
 //                        System.out.println("weight A:" + Arrays.toString(layer[l].neuron[m].weights));
 //                    }
 //                }
-                System.out.println("expectedOut= "+ Arrays.toString(nn.getDataSet().get(data).getTarget()));
+
+            }
+            //System.out.println("expectedOut= "+ Arrays.toString(nn.getDataSet().get(data).getTarget()));
 
             for( int j=0; j<nn.getLayer()[nn.getLayer().length-1].neuron.length; j++) {
                 System.out.println("output= "+ nn.getLayer()[nn.getLayer().length - 1].neuron[j].value); }
-            }
-
 
         }
     }

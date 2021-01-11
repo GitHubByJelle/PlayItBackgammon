@@ -19,12 +19,11 @@ public class NeuralNet {
         this.lr = lr;
 
         //Network for simple functions
-        this.layer= new Layer[4];
+        this.layer= new Layer[3];
 
         this.layer[0]= null;
-        this.layer[1]= new Layer(10,32);
-        this.layer[2]= new Layer(32,32);
-        this.layer[3]= new Layer(32,1);
+        this.layer[1]= new Layer(2,2);
+        this.layer[2]= new Layer(2,1);
 
 
         //small network for TD-gammon
@@ -54,21 +53,21 @@ public class NeuralNet {
          */
     }
 
-    public void forwardProp(float[] input){
+    public void forwardProp(float[] input) {
 
         layer[0] = new Layer(input);
 
-        for(int i=1; i<layer.length-1; i++){
-            for (int j=0; j<layer[i].neuron.length; j++){
-                float sum=0;
-                for(int k=0; k<layer[i-1].neuron.length;k++){
-                    sum+=(layer[i-1].neuron[k].value)*(layer[i].neuron[j].weights[k]);
+        for (int i = 1; i < layer.length; i++) {
+            for (int j = 0; j < layer[i].neuron.length; j++) {
+                float sum = 0;
+                for (int k = 0; k < layer[i - 1].neuron.length; k++) {
+                    sum += (layer[i - 1].neuron[k].value) * (layer[i].neuron[j].weights[k]);
                 }
                 sum += layer[i].neuron[j].bias;
-                layer[i].neuron[j].value= MathUtils.reLu(sum);
-                //layer[i].neuron[j].value= MathUtils.sigmoid(sum);
+                //layer[i].neuron[j].value= MathUtils.reLu(sum);
+                layer[i].neuron[j].value = MathUtils.sigmoid(sum);
             }
-        }
+  /*      }
         for (int j=0; j<layer[layer.length-1].neuron.length; j++){
             float sum=0;
             for(int k=0; k<layer[layer.length-2].neuron.length;k++){
@@ -77,8 +76,9 @@ public class NeuralNet {
             sum += layer[layer.length-1].neuron[j].bias;
             //layer[i].neuron[j].value= MathUtils.reLu(sum);
             layer[layer.length-1].neuron[j].value= MathUtils.sigmoid(sum);
-        }
+        }*/
 
+        }
     }
 
 
@@ -89,7 +89,7 @@ public class NeuralNet {
         for(int i=0; i<layer[outLayer].neuron.length; i++) {
             float predOutput = layer[outLayer].neuron[i].value;
             float target = dataSet.get(data).getTarget()[i];
-            loss += MathUtils.crossEntropyLoss(predOutput, target);
+            loss += MathUtils.squaredError(predOutput, target);
         }
         loss = -loss/layer[outLayer].neuron.length;
 
@@ -99,7 +99,7 @@ public class NeuralNet {
         for(int i=0; i<layer[outLayer].neuron.length; i++){
             float predOutput = layer[outLayer].neuron[i].value;
 
-            float partialDerivative = loss*MathUtils.differenceError(predOutput, dataSet.get(data).getTarget()[0]);
+            float partialDerivative = loss*MathUtils.sigmoidDerivative(predOutput);//, dataSet.get(data).getTarget()[0]);
 
             layer[outLayer].neuron[i].gradient= partialDerivative;
 
@@ -121,7 +121,7 @@ public class NeuralNet {
             for(int j=0; j<layer[i].neuron.length; j++){
                 float predictedOutput = layer[i].neuron[j].value;
                 float gradSum = sumGradient(j, i+1);
-                float derivative = gradSum * MathUtils.differenceError(predictedOutput, dataSet.get(data).getTarget()[0]);
+                float derivative = gradSum * MathUtils.sigmoidDerivative(predictedOutput);//, dataSet.get(data).getTarget()[0]);
 
                 layer[i].neuron[j].gradient= derivative;
                 //for all weights
@@ -162,7 +162,7 @@ public class NeuralNet {
         int outLayer= numLayers-1; //index of the last layer
         float[] ans= new float[layer[outLayer].neuron.length];
 
-        //forwardProp(input);
+        forwardProp(input);
         for(int i=0; i<layer[outLayer].neuron.length; i++){
             ans[i]=layer[outLayer].neuron[i].value;
         }
@@ -217,7 +217,7 @@ public class NeuralNet {
         this.layer = layer;
     }
 
-    public void PlayMultipleTimes(Player.Bot one, Player.Bot two, Board b, int NumberOfGames){
+    public static void PlayMultipleTimes(Player.Bot one, Player.Bot two, Board b, int NumberOfGames){
         for(int i = 0; i<NumberOfGames; i++){
             b = new Board();
 
