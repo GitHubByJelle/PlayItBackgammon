@@ -165,6 +165,8 @@ public abstract class Player {
         }
         protected ArrayList<Space> getPossibleFrom() {
             ArrayList<Space> selection = new ArrayList<>();
+//            System.out.println("Epic");
+//            System.out.println(B.toString());
             Space[] spaces= B.getSpaces();
             if(!spaces[B.getGameLoop().getSlainSpace(id)].isEmpty()){
                 selection.add(spaces[B.getGameLoop().getSlainSpace(id)]);
@@ -204,7 +206,7 @@ public abstract class Player {
                     }
                 }
             }
-            System.out.println(possible_moves);
+            //System.out.println(possible_moves);
             return possible_moves;
         }
 

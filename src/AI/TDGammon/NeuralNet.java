@@ -1,5 +1,6 @@
 package AI.TDGammon;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -13,26 +14,26 @@ public class NeuralNet {
     private Layer[] layer;
     private float lr;
 
-    NeuralNet(ArrayList<TrainData> dataSet, float lr){
+    NeuralNet(float lr){
         Neuron.range(-1, 1);
-        this.dataSet= dataSet;
+        //this.dataSet= dataSet;
         this.lr = lr;
 
         //Network for simple functions
-        this.layer= new Layer[3];
-
-        this.layer[0]= null;
-        this.layer[1]= new Layer(2,2);
-        this.layer[2]= new Layer(2,1);
+//        this.layer= new Layer[3];
+//
+//        this.layer[0]= null;
+//        this.layer[1]= new Layer(2,2);
+//        this.layer[2]= new Layer(2,1);
 
 
         //small network for TD-gammon
-//        layer= new Layer[5];
-//        layer[0]= null;
-//        layer[1]= new Layer(4*27*2,16);
-//        layer[2]= new Layer(16,32);
-//        layer[3]= new Layer(32,16);
-//        layer[4]= new Layer(16,4);
+        layer= new Layer[5];
+        layer[0]= null;
+        layer[1]= new Layer(4*27*2,16);
+        layer[2]= new Layer(16,32);
+        layer[3]= new Layer(32,16);
+        layer[4]= new Layer(16,4);
 
 
         //Big network for TD-gammon
@@ -217,7 +218,7 @@ public class NeuralNet {
         this.layer = layer;
     }
 
-    public static void PlayMultipleTimes(Player.Bot one, Player.Bot two, Board b, int NumberOfGames){
+    public static void PlayMultipleTimes(Player.Bot one, Player.Bot two, Board b, int NumberOfGames, ArrayList<TrainData> dataSet){
         for(int i = 0; i<NumberOfGames; i++){
             b = new Board();
 
@@ -225,25 +226,25 @@ public class NeuralNet {
             two.resetPlayer();
             b.setPlayers(one,two);
             b.createBotLoop();
-            PlayWithRandomDie(b);
+            NeuralNet.PlayWithRandomDie(b, dataSet);
 //            System.out.println(b);
         }
     }
 
-    void PlayWithRandomDie(Board b){
-        AddData(b);
+     static void PlayWithRandomDie(Board b, ArrayList<TrainData> dataSet){
+        AddData(b,dataSet);
         b.getDie().getDieList().clear();
         b.getDie().generateDie();
         b.getDie().getNextRoll();
         while(!b.checkWinCondition()){
 //            System.out.println(b);
             b.getGameLoop().process();
-            AddData(b);
+            AddData(b,dataSet);
 //            System.out.println(Arrays.toString(b.getDie().getCurRoll()));
         }
     }
 
-     float [] giveReward(Board b){
+     static float [] giveReward(Board b){
         float [] win= new float[4];//{player 0 win, player 0 gammon, player 1 win, player 1 gammon}
         if(b.getPlayer1().getPiecesOutOfPlay()==15){
             if(b.getPlayer2().getPiecesOutOfPlay()==0){
@@ -261,8 +262,8 @@ public class NeuralNet {
         return win;
     }
 
-    void AddData(Board b){
-        this.dataSet.add(new TrainData(new TDGdata(b).data,giveReward(b)));
+    static void AddData(Board b, ArrayList<TrainData> dataSet){
+        dataSet.add(new TrainData(new TDGdata(b).data,giveReward(b)));
     }
 }
 

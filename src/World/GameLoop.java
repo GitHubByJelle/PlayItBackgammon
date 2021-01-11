@@ -133,7 +133,7 @@ public class GameLoop {
     }
 
     public void changeTurn(){
-        System.out.println("Changing turn");
+//        System.out.println("Changing turn");
         if (getCurrentPlayer().getId() == 0) {
             setCurrentPlayer(board.getPlayer2());
         } else {

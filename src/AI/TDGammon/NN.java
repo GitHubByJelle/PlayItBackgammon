@@ -16,9 +16,9 @@ public class NN {
         float lr = 0.05f;
 
         ArrayList<TrainData> dataSet = createTrainingData();
-        NeuralNet neuralNet = new NeuralNet(dataSet, lr);
+        NeuralNet neuralNet = new NeuralNet(lr);
 
-        trainData(neuralNet, epoch);
+        trainData(neuralNet, epoch, dataSet);
     }
 
     public static  ArrayList<TrainData> createTrainingData() throws IOException {
@@ -72,18 +72,16 @@ public class NN {
         b.createBotLoop();
 
         //Play a whole game and add to data
-        NeuralNet.PlayMultipleTimes(one,two,b,10);
-        for(int i=0; i<dataSet.size(); i++){
-            dataSet.set(i, new TrainData(new float[]{i},new float[]{2*i+8}));
-       }
+        NeuralNet.PlayMultipleTimes(one,two,b,10, dataSet);
+
         return dataSet;
     }
 
-    public static void trainData(NeuralNet nn, int epoch) {
+    public static void trainData(NeuralNet nn, int epoch, ArrayList<TrainData> dataSet) {
         for (int i = 0; i < epoch; i++) {
-            for (int data = 0; data < nn.getDataSet().size(); data++) {
-                nn.forwardProp(nn.getDataSet().get(data).getData());
-                System.out.println("input= "+ Arrays.toString(nn.getDataSet().get(data).getData()));
+            for (int data = 0; data < dataSet.size(); data++) {
+                nn.forwardProp(dataSet.get(data).getData());
+                System.out.println("input= "+ Arrays.toString(dataSet.get(data).getData()));
 
 //                Layer[] layer = nn.getLayer();
 //                for (int l = 0; l < layer.length; l++) {
@@ -108,6 +106,43 @@ public class NN {
                 System.out.println("output= "+ nn.getLayer()[nn.getLayer().length - 1].neuron[j].value); }
 
         }
+    }
+
+//    public static void trainDataTD(NeuralNet nn, ArrayList<TrainData> dataSet, float alpha, float lambda){
+//        int startK = 0;
+//        float weightChange;
+//        for (int t = 0; t < dataSet.size(); t++){
+//            float[] Yt0 = dataSet.get(t).getTarget();
+//            float[] Yt1 = nn.returnOutput(dataSet.get(t).getData());
+//
+//            float sum = 0;
+//            for (int k = startK; k <= t; k++){
+//                int gradient = 1;
+//                sum += Math.pow(lambda,t-k) * gradient;
+//            }
+//
+//            weightChange = alpha * MinArray(Yt1, Yt0) * sum;
+//
+//            if (ArraySum(Yt0) > 0){
+//                startK = t;
+//            }
+//        }
+//    }
+
+    public static float[] MinArray(float[] A, float[] B){
+        float[] result = new float[A.length];
+        for (int i=0; i < A.length; i++){
+            result[i] = A[i] - B[i];
+        }
+        return result;
+    }
+
+    public static float ArraySum(float[] A){
+        float sum = 0f;
+        for (int i=0; i < A.length; i++){
+            sum += A[i];
+        }
+        return sum;
     }
 
 }

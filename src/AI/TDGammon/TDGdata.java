@@ -45,7 +45,7 @@ public class TDGdata {
                     //the space is not empty
                     //0 id is for white, 1 is for red
                     if (space[i].getPieces().get(0).getId() == id) {
-                        System.out.println(space[i].getPieces().size());
+                        //System.out.println(space[i].getPieces().size());
                         if (space[i].getPieces().size() >= 1)
                             data[s] = 1;
                         if (space[i].getPieces().size() >= 2)
