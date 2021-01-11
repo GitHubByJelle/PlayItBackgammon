@@ -37,8 +37,13 @@ public final class Variables {
     public static final String TDG="TD-Gammon";
 
 
-    //fornow its gonna be like this, later we can change it to store AI objects @ali
+    //fornow its gonna be like this
     public static final String[] PLAYERS= {HUMAN, TMM, RANDOM, SIMPLEBOT,BP,ABB};
+    public static final String[] BOTS= {TMM, RANDOM, SIMPLEBOT,BP,ABB};
+
+    public static String GET_RANDOM_BOT(){
+        return BOTS[ (int)(Math.random() * ((BOTS.length) + 1) )];
+    }
 
 
     public static final ArrayList<int[]> All_POSS_ROLLS = getPossRolls();
