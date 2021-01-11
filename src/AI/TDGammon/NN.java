@@ -108,26 +108,26 @@ public class NN {
         }
     }
 
-//    public static void trainDataTD(NeuralNet nn, ArrayList<TrainData> dataSet, float alpha, float lambda){
-//        int startK = 0;
-//        float weightChange;
-//        for (int t = 0; t < dataSet.size(); t++){
-//            float[] Yt0 = dataSet.get(t).getTarget();
-//            float[] Yt1 = nn.returnOutput(dataSet.get(t).getData());
-//
-//            float sum = 0;
-//            for (int k = startK; k <= t; k++){
-//                int gradient = 1;
-//                sum += Math.pow(lambda,t-k) * gradient;
-//            }
-//
-//            weightChange = alpha * MinArray(Yt1, Yt0) * sum;
-//
-//            if (ArraySum(Yt0) > 0){
-//                startK = t;
-//            }
-//        }
-//    }
+    public static void trainDataTD(NeuralNet nn, ArrayList<TrainData> dataSet, float alpha, float lambda){
+        int startK = 0;
+        float[] weightChange;
+        for (int t = 0; t < dataSet.size(); t++){
+            float[] Yt0 = dataSet.get(t).getTarget();
+            float[] Yt1 = nn.returnOutput(dataSet.get(t).getData());
+
+            float sum = 0;
+            for (int k = startK; k <= t; k++){
+                int gradient = 1; //TODO not correct gradient calculation
+                sum += Math.pow(lambda,t-k) * gradient;
+            }
+            //TODO probably not right way to do it but okay
+            weightChange = ScalarFloatArr(alpha * sum,MinArray(Yt1, Yt0));
+
+            if (ArraySum(Yt0) > 0){
+                startK = t;
+            }
+        }
+    }
 
     public static float[] MinArray(float[] A, float[] B){
         float[] result = new float[A.length];
@@ -135,6 +135,13 @@ public class NN {
             result[i] = A[i] - B[i];
         }
         return result;
+    }
+    public static float[] ScalarFloatArr(float s, float[] a){
+        float[] returnarr = new float[a.length];
+        for(int i = 0; i<a.length; i++){
+            returnarr[i] = a[i]*s;
+        }
+        return returnarr;
     }
 
     public static float ArraySum(float[] A){
