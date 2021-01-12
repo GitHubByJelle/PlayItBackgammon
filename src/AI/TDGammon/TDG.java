@@ -68,7 +68,6 @@ public class TDG extends Player.Bot{
 
                 // Use forward propagation to predict
                 float[] outputNN = this.NN.returnOutput(inputNN.data);
-
                 //Check if the best move
                 if (b.getGameLoop().getCurrentPlayer().getId() == 0) {
                   float currentBestVal = outputNN[0] > outputNN[1]*multiplier ? outputNN[0] : outputNN[1]*multiplier;
