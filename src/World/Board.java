@@ -422,6 +422,8 @@ public class Board {
         if(one.equals(Variables.ABB)){
             player1= new AlphaBetaBot(0);
             player1.setBoard(this);
+            setPlayers(player1, player2);
+            player1.setBoard(this);
         }
         if(two.equals(Variables.ABB)){
             player2= new AlphaBetaBot(1);
@@ -455,6 +457,9 @@ public class Board {
         player1.setBoard(this);
         player2=two;
         player2.setBoard(this);
+        //if(player1.getName() == "AlphBetaBot"){
+            
+        //}
     }
 
 

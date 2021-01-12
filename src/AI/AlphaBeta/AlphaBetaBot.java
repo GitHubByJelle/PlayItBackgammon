@@ -44,12 +44,12 @@ public class AlphaBetaBot extends Player.Bot {
     private boolean logExpectiminimaxTree = false;
 
     public AlphaBetaBot(int id) {
-        super(id);
+        super(id); 
 //        System.out.println("Test tostring");
 //        System.out.println(this.B);
 //        System.out.println("-------------------------------------------------");
 
-        opponent = new SimpleBot(1);
+       // opponent = new SimpleBot(1);
 
     }
 
@@ -63,12 +63,57 @@ public class AlphaBetaBot extends Player.Bot {
 
     @Override
     public void executeTurn() {
-//        B.getGameLoop().repaintBV();
-//        alpha_beta_pruning_result();
-//        pauseBot();
-//        B.getGameLoop().repaintBV();
+        B.getGameLoop().repaintBV();
+        alpha_beta_results();
+        pauseBot();
+        B.getGameLoop().repaintBV();
     }
-
+    public void alpha_beta_results(){
+        
+        if(this.id==0){
+            // Turn turn = getBestMove();
+            // if(turn==null){
+            //     System.out.println();
+            //     System.out.println();
+            //     System.out.println("turn is null");
+            //     System.out.println();
+            //     System.out.println();
+            // }
+            // else{
+            //     System.out.println();
+            //     System.out.println();
+            //     System.out.println("turn is not null");
+            //     System.out.println();
+            //     System.out.println();
+            // }
+            
+            ArrayList<Move> moves = getBestMove().getMoves();
+            System.out.println(moves.size());
+            if(moves.size()==0)
+            {this.requestPassTurn();}
+            else{
+                for(int i=0;i<moves.size();i++){
+                    Move move = moves.get(i);
+                    B.playerMove(move.from,move.to);
+                }
+                this.requestPassTurn();
+            }
+        }
+        else if(this.id==1){
+            ArrayList<Move> moves = getBestMove().getMoves();
+            System.out.println(moves.size());
+            if(moves.size()==0)
+            {this.requestPassTurn();}
+            else{
+                for(int i=0;i<moves.size();i++){
+                    Move move = moves.get(i);
+                    B.playerMove(move.from,move.to);
+                }
+                this.requestPassTurn();
+            }
+        }
+        
+    }
     public double expectiminimax(int depth, int currentNodeIndex) {
         double result = 0.;
         List<Turn> turns;
@@ -215,7 +260,7 @@ public class AlphaBetaBot extends Player.Bot {
                 }
             }
         }
-        System.out.println(possible_moves);
+      //  System.out.println(possible_moves);
         return possible_moves;
     }
 
@@ -333,15 +378,15 @@ public class AlphaBetaBot extends Player.Bot {
         initialDepth = -1;
         Instant start = Instant.now();
         ArrayList<Turn> turns1 = this.getValidTurns();
-        System.out.println(turns1 + " dasd ");
+        //System.out.println(turns1 + " dasd ");
         expectiminimax(DEFAULT_DEPTH, 0);
         Instant finish = Instant.now();
 
         initialDepth = -1;
         ArrayList<Turn> turns = this.getValidTurns();
-        System.out.println(turns + " mama ");
-        System.out.println(Arrays.toString(moveQuality) + " move quality");
-        System.out.println(Arrays.toString(this.B.getDie().getCurRoll()) + " move quality");
+        //System.out.println(turns + " mama ");
+        //System.out.println(Arrays.toString(moveQuality) + " move quality");
+        //System.out.println(Arrays.toString(this.B.getDie().getCurRoll()) + " move quality");
         int maxQualityMoveIndex = -1;
         double maxMoveQuality = -Double.MAX_VALUE;
         for (int i = 0; i < moveQuality.length; i++) {
@@ -350,8 +395,8 @@ public class AlphaBetaBot extends Player.Bot {
                 maxQualityMoveIndex = i;
             }
         }
-        System.out.println(turns.size());
-        System.out.println(maxQualityMoveIndex);
+        //System.out.println(turns.size());
+        //System.out.println(maxQualityMoveIndex);
         return maxQualityMoveIndex != -1 ? turns1.get(maxQualityMoveIndex) : null;
     }
     public ArrayList<Turn> getValidTurns(){
@@ -361,11 +406,11 @@ public class AlphaBetaBot extends Player.Bot {
         int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(),this.B.getDie().getCurRoll().length);
         ArrayList<Move> moves = turn.moves;
         for(Move move: moves){
-            System.out.println("B4: " + move);
-            System.out.println(this.B);
+            //System.out.println("B4: " + move);
+            //System.out.println(this.B);
             this.B.botMove(move);
-            System.out.println("After: " + move);
-            System.out.println(this.B);
+            //System.out.println("After: " + move);
+            //System.out.println(this.B);
         }
         this.B.getDie().setCurRoll(temp);
     }
@@ -373,11 +418,11 @@ public class AlphaBetaBot extends Player.Bot {
         int[] temp = Arrays.copyOf(this.B.getDie().getCurRoll(),this.B.getDie().getCurRoll().length);
         ArrayList<Move> moves = turn.moves;
         for(Move move: moves){
-            System.out.println("B4: " + move);
-            System.out.println(this.B);
+            //System.out.println("B4: " + move);
+            //System.out.println(this.B);
             this.B.botMove(move,dummy);
-            System.out.println("After: " + move);
-            System.out.println(this.B);
+            //System.out.println("After: " + move);
+          //  System.out.println(this.B);
         }
         this.B.getDie().setCurRoll(temp);
     }
@@ -387,15 +432,15 @@ public class AlphaBetaBot extends Player.Bot {
         }
     }
     public void unDoTurn(Turn turn,int dummy) {
-        System.out.println("Come on please");
-        System.out.println("Before undoing: ");
-        System.out.println(this.B);
+       // System.out.println("Come on please");
+       // System.out.println("Before undoing: ");
+       // System.out.println(this.B);
         for(int i = turn.moves.size()-1; i>-1; i--){
-            System.out.println("Undoing " + turn);
+        //    System.out.println("Undoing " + turn);
             this.B.undoBotMove(turn.moves.get(i),dummy);
         }
-        System.out.println("After undoing: ");
-        System.out.println(this.B);
+       // System.out.println("After undoing: ");
+      //  System.out.println(this.B);
     }
     //    private ArrayList<Turn> forwardPruning(ArrayList<Turn> turns){
 //
@@ -406,11 +451,11 @@ public class AlphaBetaBot extends Player.Bot {
             double[] moveQuality = new double[turns.size()];
             for (int i = 0; i < turns.size(); i++) {
                 makeTurn(turns.get(i),0 );
-                System.out.println(turns.get(i) + " doing");
-                System.out.println(this.B);
+              //  System.out.println(turns.get(i) + " doing");
+             //   System.out.println(this.B);
                 unDoTurn(turns.get(i),0);
-                System.out.println(turns.get(i) + " undoing");
-                System.out.println(this.B);
+                //System.out.println(turns.get(i) + " undoing");
+             //   System.out.println(this.B);
 
             }
 

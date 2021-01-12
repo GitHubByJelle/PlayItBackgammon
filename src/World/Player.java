@@ -17,6 +17,8 @@ public abstract class Player {
     public int piecesInPlay;
     public int piecesOutOfPlay;
     public int piecesSlain;//or eaten
+    public Bot opponent;
+
 
 
     Player(int id){
@@ -41,6 +43,10 @@ public abstract class Player {
 
     public int getPiecesSlain(){
         return piecesSlain;
+    }
+ 
+    public void setOpponent(Bot opponent){
+        this.opponent = opponent;
     }
 
     public int getId() {
