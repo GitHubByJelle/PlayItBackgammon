@@ -191,7 +191,6 @@ public class Board {
         return res;
     }
 
-
     public ArrayList<Space> getValidMoves(Space selected, int[] rolls) {
 
         ArrayList<Space> res = new ArrayList<Space>();
@@ -423,6 +422,7 @@ public class Board {
         if(one.equals(Variables.ABB)){
             player1= new AlphaBetaBot(0);
             player1.setBoard(this);
+
         }
         if(two.equals(Variables.ABB)){
             player2= new AlphaBetaBot(1);
@@ -456,6 +456,9 @@ public class Board {
         player1.setBoard(this);
         player2=two;
         player2.setBoard(this);
+        //if(player1.getName() == "AlphBetaBot"){
+            
+        //}
     }
 
 
@@ -505,38 +508,7 @@ public class Board {
             spaces[k].movePiece(spaces[25]);
     }
 
-    private boolean isGoingToEat(int from, int to, int id){
-        if(to <= 24 && to != 0) {
-            if (this.getSpaces()[to].getSize() == 1) {
-                if (this.getSpaces()[to].getPieces().get(0).getId() != id) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    private boolean isGoingOut(int from, int to, int id){
-        if((from + to) == 26 ){
-            return true;
-        }
-        return false;
-    }
-    public boolean isValidBoard(){
-        for (Space space : this.getSpaces()){
-            if (space.getSize() > 0){
-                for (int i = 0; i < space.getSize()-1; i++){
-                    for (int j = i+1; j < space.getSize(); j++){
-                        if (space.getPieces().get(i).getId() != space.getPieces().get(j).getId()){
-                            System.out.println(this.toString());
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
 
-        return true;
-    }
 
 
     @Override
@@ -663,8 +635,7 @@ public class Board {
 
 
 
-
-    //Methods that Alaa is not responsible for and has no ide what they do anymore__________________________________________________________________________________________
+//Methods that Alaa is not responsible for and has no idea what they do anymore__________________________________________________________________________________________
 
     //Probably temporary but thanks to this function we can work on Evolution until the unknown bug is fixed
     public void BotMove(int from, int to){
@@ -700,7 +671,6 @@ public class Board {
             if(spaces[from].getSize() > 0) {
                 spaces[from].movePiece(spaces[to]);
                 if (move.isKill) {
-                    System.out.println(move + " killing ");
                     if (move.playerId == 0) {
                         moveBackFromEatenSpaceID(from,0);
 
@@ -822,7 +792,6 @@ public class Board {
         if (to < 26) {
             if (spaces[from].getSize() >= 1) {
                 spaces[from].movePiece(spaces[to]);
-                System.out.println("Check eaten: " + to + " id: " + id);
                 this.checkEaten(to, id);
             }
         }else{
@@ -834,8 +803,7 @@ public class Board {
         World.Space s = getSpaces()[k];
         if (s.getSize() == 2)
             if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
-                System.out.println("Eating: " + k  + " met " + s.getSize());
-                System.out.println("Eating: " + s);
+
                 this.moveToEatenSpace(k,id);
             }
     }
@@ -844,10 +812,6 @@ public class Board {
         World.Space s = getSpaces()[k];
         if (s.getSize() == 2)
             if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
-                System.out.println("Eating: " + k  + " met " + s.getSize());
-                System.out.println("Eating: " );
-                System.out.println(board);
-                System.out.println("Eating: " + s);
                 this.moveToEatenSpace(k,id);
             }
     }
@@ -985,6 +949,39 @@ public class Board {
             undoBotMove(move);
         }
         return turns;
+    }
+
+    private boolean isGoingToEat(int from, int to, int id){
+        if(to <= 24 && to != 0) {
+            if (this.getSpaces()[to].getSize() == 1) {
+                if (this.getSpaces()[to].getPieces().get(0).getId() != id) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    private boolean isGoingOut(int from, int to, int id){
+        if((from + to) == 26 ){
+            return true;
+        }
+        return false;
+    }
+    public boolean isValidBoard(){
+        for (Space space : this.getSpaces()){
+            if (space.getSize() > 0){
+                for (int i = 0; i < space.getSize()-1; i++){
+                    for (int j = i+1; j < space.getSize(); j++){
+                        if (space.getPieces().get(i).getId() != space.getPieces().get(j).getId()){
+                            System.out.println(this.toString());
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
 }

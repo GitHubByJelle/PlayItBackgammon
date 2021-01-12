@@ -17,7 +17,11 @@ public abstract class Player {
     public int piecesInPlay;
     public int piecesOutOfPlay;
     public int piecesSlain;//or eaten
+    public Bot opponent;
 
+    public void setOpponent(Bot opponent){
+        this.opponent = opponent;
+    }
 
     Player(int id){
         this.id=id;
@@ -191,43 +195,7 @@ public abstract class Player {
             return selection;
 
         }
-        public ArrayList<Move> generateMoves2() {
-            ArrayList<Move> possible_moves = new ArrayList<>();
-            Space[] allSpaces = this.B.getSpaces();
-            for (Space space : allSpaces) {
-                if (space.getSize() > 0) {
-                    if (space.getPieces().get(0).getId() == this.id) {
-                        ArrayList<Space> validMoves = this.B.getValidMoves(space);
-                        if (validMoves.size() > 0) {
-                            for (Space v : validMoves) {
-                                Move move = new Move(space.getId(), v.getId(), this.id);
-                                possible_moves.add(move);
-                            }
-                        }
-                    }
-                }
-            }
-            //System.out.println(possible_moves);
-            return possible_moves;
-        }
 
-        public void makeMove(Move move) {
-            this.B.BotMove(move);
-        }
-
-        public void undoMove(Move move) {
-//        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
-            int temp = move.to;
-            move.to = move.from;
-            move.from = temp;
-//        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
-            this.B.undoBotMove(move);
-
-        }
-
-        public int[] getDie(int i){
-            return DIES_COMBINATION[i];
-        }
         protected ArrayList<Space[]> getProbableMoves(ArrayList<Space> possFrom, int id) {
             Set<DummyMove> res= new HashSet<>();
             int[] curRoll;
@@ -320,6 +288,43 @@ public abstract class Player {
             for(int i = turn.moves.size()-1; i>-1; i--){
                 this.B.undoBotMove(turn.moves.get(i));
             }
+        }
+        public ArrayList<Move> generateMoves2() {
+            ArrayList<Move> possible_moves = new ArrayList<>();
+            Space[] allSpaces = this.B.getSpaces();
+            for (Space space : allSpaces) {
+                if (space.getSize() > 0) {
+                    if (space.getPieces().get(0).getId() == this.id) {
+                        ArrayList<Space> validMoves = this.B.getValidMoves(space);
+                        if (validMoves.size() > 0) {
+                            for (Space v : validMoves) {
+                                Move move = new Move(space.getId(), v.getId(), this.id);
+                                possible_moves.add(move);
+                            }
+                        }
+                    }
+                }
+            }
+            //System.out.println(possible_moves);
+            return possible_moves;
+        }
+
+        public void makeMove(Move move) {
+            this.B.BotMove(move);
+        }
+
+        public void undoMove(Move move) {
+//        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
+            int temp = move.to;
+            move.to = move.from;
+            move.from = temp;
+//        System.out.println("Undo move: from: " + move.from + " to: " + move.to);
+            this.B.undoBotMove(move);
+
+        }
+
+        public int[] getDie(int i){
+            return DIES_COMBINATION[i];
         }
 
 
