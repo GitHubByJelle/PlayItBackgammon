@@ -422,8 +422,7 @@ public class Board {
         if(one.equals(Variables.ABB)){
             player1= new AlphaBetaBot(0);
             player1.setBoard(this);
-            setPlayers(player1, player2);
-            player1.setBoard(this);
+
         }
         if(two.equals(Variables.ABB)){
             player2= new AlphaBetaBot(1);
@@ -672,7 +671,6 @@ public class Board {
             if(spaces[from].getSize() > 0) {
                 spaces[from].movePiece(spaces[to]);
                 if (move.isKill) {
-                    System.out.println(move + " killing ");
                     if (move.playerId == 0) {
                         moveBackFromEatenSpaceID(from,0);
 
@@ -794,7 +792,6 @@ public class Board {
         if (to < 26) {
             if (spaces[from].getSize() >= 1) {
                 spaces[from].movePiece(spaces[to]);
-                System.out.println("Check eaten: " + to + " id: " + id);
                 this.checkEaten(to, id);
             }
         }else{
@@ -806,8 +803,7 @@ public class Board {
         World.Space s = getSpaces()[k];
         if (s.getSize() == 2)
             if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
-                System.out.println("Eating: " + k  + " met " + s.getSize());
-                System.out.println("Eating: " + s);
+
                 this.moveToEatenSpace(k,id);
             }
     }
@@ -816,10 +812,6 @@ public class Board {
         World.Space s = getSpaces()[k];
         if (s.getSize() == 2)
             if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
-                System.out.println("Eating: " + k  + " met " + s.getSize());
-                System.out.println("Eating: " );
-                System.out.println(board);
-                System.out.println("Eating: " + s);
                 this.moveToEatenSpace(k,id);
             }
     }

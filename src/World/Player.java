@@ -19,7 +19,9 @@ public abstract class Player {
     public int piecesSlain;//or eaten
     public Bot opponent;
 
-
+    public void setOpponent(Bot opponent){
+        this.opponent = opponent;
+    }
 
     Player(int id){
         this.id=id;
@@ -43,10 +45,6 @@ public abstract class Player {
 
     public int getPiecesSlain(){
         return piecesSlain;
-    }
- 
-    public void setOpponent(Bot opponent){
-        this.opponent = opponent;
     }
 
     public int getId() {
