@@ -14,6 +14,7 @@ public class NeuralNet {
     private Layer[] layer;
     private float lr;
 
+
     NeuralNet(float lr){
         Neuron.range(-1, 1);
         //this.dataSet= dataSet;
@@ -227,7 +228,7 @@ public class NeuralNet {
     public ArrayList<TrainData> getDataSet() {
         return dataSet;
     }
-
+    public float getLr(){return lr;}
     public Layer[] getLayer() {
         return layer;
     }
@@ -283,6 +284,32 @@ public class NeuralNet {
     static void AddData(Board b, ArrayList<TrainData> dataSet){
         dataSet.add(new TrainData(new TDGdata(b).data,giveReward(b)));
     }
+
+    @Override
+    public String toString(){
+        String res="";
+        res+="learningrate="+lr+";\n";
+//        res+="dataSet=";
+//        for(int i=0;i<dataSet.size();i++){
+//            res+=dataSet.get(i).toString();
+//        }
+       // res+="layer=";
+        for(int i=0;i<layer.length;i++){
+            res+="layer="+layer[i].toString()+"\n";
+        }
+        return res;
+    }
+
+    NeuralNet(float lr, Layer[]layer){
+        this.lr=lr;
+        this.layer=layer;
+    }
+
+    @Override
+    public boolean equals(Object other){
+        return toString().equals(other.toString());
+    }
+
 }
 
 
