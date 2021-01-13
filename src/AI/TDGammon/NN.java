@@ -1,14 +1,10 @@
 package AI.TDGammon;
 
-import AI.RandomBot;
 import World.Board;
 import World.Player;
 
 import java.io.*;
-import java.nio.FloatBuffer;
 import java.util.*;
-
-import static AI.BotTestingGround.testWithRandomDie;
 
 public class NN {
 
@@ -20,9 +16,9 @@ public class NN {
         ArrayList<TrainData> dataSet = createTrainingData();
         NeuralNet neuralNet = new NeuralNet(lr);
 
-        neuralNet = ImportNN.importNet("target_network");
+        //neuralNet = ImportNN.importNet("AI/TDGammon/target_network");
 
-        trainDataTD3(neuralNet, 1, 0.1f, 0.7f);
+        trainDataTD3(neuralNet, 20, 0.1f, 0.7f);
 
         ExportNN.exportNetworks(neuralNet);
     }
@@ -134,20 +130,23 @@ public class NN {
     }
 
 
-    public static void trainDataTD3(NeuralNet nn, int NumberOfEpochs, float alpha, float lambda) {
-        for (int ep = 0; ep < NumberOfEpochs; ep++) {
-            System.out.println("Game: " + ep + ".");
+    public static void trainDataTD3(NeuralNet nn, int NumberOfGames, float alpha, float lambda) {
+        // For every game
+        for (int ep = 0; ep < NumberOfGames; ep++) {
+            System.out.println("Game: " + (ep+1) + " (of " + NumberOfGames + ").");
+            // Play a whole game against itself and save all board sequences
             ArrayList<TrainData> dataSet = createGameSequence();
+
             int t;
+//            ArrayList<TrainData> dataSet2 = new ArrayList<>();
+//            for (int num = 0; num < 10; num++){
+//                dataSet2.add(dataSet.get(num));
+//            }
+//
+//            dataSet2.add(dataSet.get(dataSet.size()-1));
+//            dataSet = dataSet2;
 
-            ArrayList<TrainData> dataSet2 = new ArrayList<>();
-            for (int num = 0; num < 10; num++){
-                dataSet2.add(dataSet.get(num));
-            }
-
-            dataSet2.add(dataSet.get(dataSet.size()-1));
-            dataSet = dataSet2;
-
+            // For all sequences in the previous game
             for (t = 0; t < dataSet.size() - 1; t++) {
                 // Start at the end and get output from NN (Layer 2 -> Layer 3 a.k.a. Hidden -> Output)
                 float[] Yt0 = nn.returnOutput(dataSet.get(t).getData());
@@ -171,32 +170,49 @@ public class NN {
     public static void UpdateWeightsTD(NeuralNet nn, float alpha, float lambda, float[] Yt0, float[] Yt1,
                                            ArrayList<TrainData> dataSet, int t){
 
+        // Make arrays for changes in weights
         float[][] weightChangeIn = new float[nn.getLayer()[1].neuron.length][nn.getLayer()[0].neuron.length];
         float[][] weightChangeOut = new float[nn.getLayer()[2].neuron.length][nn.getLayer()[1].neuron.length];
+
+        // For every output node
         for (int o = 0; o < nn.getLayer()[2].neuron.length; o++) {
+            // For every node in the hidden layer
             for (int i = 0; i < nn.getLayer()[1].neuron.length; i++) {
+                // For every input node
+                // Calculate the RHS of the formula
                 for (int j = 0; j < nn.getLayer()[0].neuron.length; j++) {
                     float sum = 0;
+                    // Calculate the sum part
                     for (int k = 0; k <= t; k++) {
+                        // Determine all parameters
                         float[] Yk0 = nn.returnOutput(dataSet.get(k).getData());
                         float[] Yki = nn.returnHiddenVal(dataSet.get(k).getData());
                         float[] xjk = dataSet.get(k).getData();
                         float w = nn.getLayer()[2].neuron[o].weights[i];
+
+                        // Calculate the gradient
                         float gradient = MathUtils.sigmoidDerivative(Yk0[o]) *
                                 w * MathUtils.sigmoidDerivative(Yki[i]) *
                                 xjk[j];
+
+                        // Add to the sum
                         sum += (float) Math.pow(lambda, t - k) * gradient;
                     }
 
+                    // Calculate the difference
                     float wDiffij = alpha * (Yt1[o] - Yt0[o]) * sum;
-                    weightChangeIn[i][j] = nn.getLayer()[1].neuron[i].weights[j] + wDiffij;
+
+                    // Add to weight change (because there are multiple outputs sum over it)
+                    weightChangeIn[i][j] += nn.getLayer()[1].neuron[i].weights[j] + wDiffij;
                 }
 
                 // Output Layer (Hidden Layer -> Output Layer)
+                // Do exact same
                 float sum = 0;
                 for (int k = 0; k <= t; k++) {
                     float[] Yk0 = nn.returnOutput(dataSet.get(k).getData());
                     float[] Yki = nn.returnHiddenVal(dataSet.get(k).getData());
+                    // Calculate gradient in a different way
                     float gradient = MathUtils.sigmoidDerivative(Yk0[o]) * Yki[o];
                     sum += (float) Math.pow(lambda, t - k) * gradient;
                 }
@@ -207,14 +223,16 @@ public class NN {
         }
 
         // Start updating weights
-        System.out.println("Start updating weights. Sequence " + (t+1) + " of " + dataSet.size() + ". Weights: " +
-                (nn.getLayer()[2].neuron[0].weights[0]) + " " + (nn.getLayer()[2].neuron[1].weights[0]));
+        System.out.println("Start updating weights. Sequence " + (t+1) + " of " + dataSet.size() + ".");// Weights: " +
+                //(nn.getLayer()[2].neuron[0].weights[0]) + " " + (nn.getLayer()[2].neuron[1].weights[0]));
+
+        // Update the weights
         nn.UpdateWeightsTo(weightChangeIn,1);
         nn.UpdateWeightsTo(weightChangeOut,2);
     }
 
 
-    public static void TrainTDGammon(NeuralNet nn, int NumberOfEpochs, float alpha, float lambda){
+    /*public static void TrainTDGammon(NeuralNet nn, int NumberOfEpochs, float alpha, float lambda){
         Board b = new Board();
         TDG one = new TDG(0);
         TDG two = new TDG(1);
@@ -227,7 +245,7 @@ public class NN {
             b.createBotLoop();
             testWithRandomDie();
         }
-    }
+    }*/
 
 
 public static float[] MinArray(float[] A, float[] B){

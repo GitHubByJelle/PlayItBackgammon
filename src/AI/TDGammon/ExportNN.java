@@ -9,7 +9,7 @@ public class ExportNN {
         public static void exportNetworks(NeuralNet target_network){
             try {
                 // Create the files
-                 FileOutputStream file_target_network = new FileOutputStream(new File("target_network"));
+                 FileOutputStream file_target_network = new FileOutputStream(new File("AI/TDGammon/target_network"));
 
                 // Create a stream
                  ObjectOutputStream out_target_network = new ObjectOutputStream(file_target_network);
