@@ -77,6 +77,19 @@ public class BotTestingGround {
         }
         System.out.println(counter);
     }
+    public static void testMultipleTimes(Player.Bot one, Player.Bot two, int numGames){
+        for(int i = 0; i<numGames; i++){
+            b = new Board();
+
+            one.resetPlayer();
+            two.resetPlayer();
+            b.setPlayers(one,two);
+            b.createBotLoop();
+            testWithRandomDie();
+            //System.out.println(b);
+        }
+        //System.out.println(counter);
+    }
 
     private static void testWithRandomDie(){
         b.getDie().getDieList().clear();
@@ -89,6 +102,27 @@ public class BotTestingGround {
         }
 
         giveWinner(b);
+    }
+
+    public static void executeTourney(int numGamesPerCombination){
+        Player.Bot first;
+        Player.Bot second;
+
+        for(int one = 0; one< Variables.BOTS.length; one++){
+            for(int two=0;two<Variables.BOTS.length;two++){
+                b = new Board();
+                b.setPlayers(Variables.BOTS[one],Variables.BOTS[two]);
+                first=(Player.Bot)b.getPlayer1();
+                second=(Player.Bot)b.getPlayer2();
+                first.pausing=false;
+                second.pausing=false;
+                b.createBotLoop();
+                testMultipleTimes(first,second,numGamesPerCombination);
+                System.out.println(String.format("%17s vs %17s First wins=%4d Second wins=%4d", first.getName(), second.getName(), counter, (numGamesPerCombination-counter)));
+                counter=0;
+            }
+        }
+
     }
 
     private static void testWithSameGivenRoll( ArrayList<int[]> i){
