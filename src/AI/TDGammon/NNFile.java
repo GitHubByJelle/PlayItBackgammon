@@ -14,10 +14,9 @@ public class NNFile {
 
         PrintWriter writer;
         try {
-            if(!file.createNewFile()){
-                file.delete();
-                file.createNewFile();
-            }
+
+            file.delete();
+            file.createNewFile();
             writer = new PrintWriter(new FileWriter(file));
             writer.println(str);
             writer.close();

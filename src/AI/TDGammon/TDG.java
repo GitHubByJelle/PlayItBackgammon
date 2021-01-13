@@ -18,7 +18,7 @@ public class TDG extends Player.Bot{
     public TDG(int id) {
         super(id);
     }
-    private NeuralNet NN = NNFile.importNN("50k");
+    private NeuralNet NN = NNFile.importNN("60k");
 
     @Override
     public String getName() {
