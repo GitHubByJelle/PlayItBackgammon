@@ -265,7 +265,6 @@ public abstract class Player {
                 int[] die = Arrays.copyOf(this.B.getDie().getCurRoll(),this.B.getDie().getCurRoll().length);
                 for(int  i = 0; i  < die.length; i++){
                     die[i] = -die[i];
-
                 }
                 this.B.getDie().setCurRoll(die);
                 return this.B.getValidTurns(this.B.getDie().getCurRoll(),this.id);

@@ -1,3 +1,4 @@
+
 package World;
 
 
@@ -50,7 +51,6 @@ public class Board {
 //        addPieces(8, 3, 1);
 //        addPieces(13, 5, 1);
 //        addPieces(12, 2, 1);
-
         addPieces(1, 2, 0);
         addPieces(12, 5, 0);
         addPieces(17, 3, 0);
@@ -60,7 +60,6 @@ public class Board {
         addPieces(8, 3, 1);
         addPieces(13, 5, 1);
         addPieces(24, 2, 1);
-
 
 //     testboard A
 //
@@ -308,7 +307,7 @@ public class Board {
     }
 
     public boolean checkWinCondition() {
-        return player1.getPiecesOutOfPlay() >= 14 || player2.getPiecesOutOfPlay() == 15;
+        return player1.getPiecesOutOfPlay() == 15 || player2.getPiecesOutOfPlay() == 15;
     }
 
     public void createLoop(JFrame frame) {
@@ -336,14 +335,15 @@ public class Board {
         if (two.equals(Variables.HUMAN)) {
             player2 = new Player.Human(1);
         }
-        if (one.equals(Variables.TMM)) {
-            player1 = new TMM(0);
+        if (one.equals(Variables.RANDOM)) {
+            player1 = new RandomBot(0);
             player1.setBoard(this);
         }
-        if (two.equals(Variables.TMM)) {
-            player2 = new TMM(1);
+        if (two.equals(Variables.RANDOM)) {
+            player2 = new RandomBot(1);
             player2.setBoard(this);
         }
+
         if (one.equals(Variables.SIMPLEBOT)) {
             player1 = new SimpleBot(0);
             player1.setBoard(this);
@@ -360,23 +360,21 @@ public class Board {
             player2 = new PrimeBlitzBot(1);
             player2.setBoard(this);
         }
-
+        if (one.equals(Variables.TMM)) {
+            player1 = new TMM(0);
+            player1.setBoard(this);
+        }
+        if (two.equals(Variables.TMM)) {
+            player2 = new TMM(1);
+            player2.setBoard(this);
+        }
         if (one.equals(Variables.ABB)) {
             player1 = new AlphaBetaBot(0);
             player1.setBoard(this);
-
         }
+
         if (two.equals(Variables.ABB)) {
             player2 = new AlphaBetaBot(1);
-            player2.setBoard(this);
-        }
-
-        if (one.equals(Variables.RANDOM)) {
-            player1 = new RandomBot(0);
-            player1.setBoard(this);
-        }
-        if (two.equals(Variables.RANDOM)) {
-            player2 = new RandomBot(1);
             player2.setBoard(this);
         }
 
@@ -399,9 +397,6 @@ public class Board {
         player1.setBoard(this);
         player2 = two;
         player2.setBoard(this);
-        //if(player1.getName() == "AlphBetaBot"){
-
-        //}
     }
 
 
@@ -913,6 +908,7 @@ public class Board {
         return turns;
     }
 
+
     private boolean isGoingToEat(int from, int to, int id) {
         if (to <= 24 && to != 0) {
             if (this.getSpaces()[to].getSize() == 1) {
@@ -949,4 +945,3 @@ public class Board {
     }
 
 }
-

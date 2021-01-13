@@ -31,12 +31,7 @@ public class AlphaBetaBot extends Player.Bot {
             Node.MAX, Node.CHANCE, Node.MIN, Node.CHANCE
     };
 
-    private static  Node[] NODES1 = new Node[]{
-            Node.MAX, Node.CHANCE, Node.MIN, Node.CHANCE
-    };
-    private static  Node[] NODES2 = new Node[]{
-            Node.MIN, Node.CHANCE, Node.MAX, Node.CHANCE
-    };
+
     private static final int DEFAULT_DEPTH = 3;
 
     private double[] moveQuality;
