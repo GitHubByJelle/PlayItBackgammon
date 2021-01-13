@@ -11,8 +11,13 @@ public class NNFile {
     public static void export(NeuralNet n, String name){
         String str= nnToString(n);
         File file= new File(default_NN_path+name);
+
         PrintWriter writer;
         try {
+            if(!file.createNewFile()){
+                file.delete();
+                file.createNewFile();
+            }
             writer = new PrintWriter(new FileWriter(file));
             writer.println(str);
             writer.close();
@@ -33,6 +38,7 @@ public class NNFile {
             "weightsCache=","value=","gradient=", "bias="};//"inputs=","targets=","dataSet=" };
 
     public static NeuralNet importNN(String fileName){
+
         String[] elements=new String[]{};
         try {
             BufferedReader reader = new BufferedReader(new FileReader(default_NN_path+fileName));
@@ -108,10 +114,13 @@ public class NNFile {
                     gradient=0f;
                     bias=0f;
                 }
+
+
                 layers.add(new Layer(neurons.toArray(new Neuron[neurons.size()])));
                 neurons.clear();
             }
         }
+
 
         NeuralNet n= new NeuralNet(lr, layers.toArray(new Layer[layers.size()]));
 
