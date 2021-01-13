@@ -109,6 +109,7 @@ public class NNFile {
                     bias=0f;
                 }
                 layers.add(new Layer(neurons.toArray(new Neuron[neurons.size()])));
+                neurons.clear();
             }
         }
 

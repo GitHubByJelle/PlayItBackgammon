@@ -13,14 +13,18 @@ public class NN {
         int epoch = 100;
         float lr = 0.05f;
 
-        ArrayList<TrainData> dataSet = createTrainingData();
+        //ArrayList<TrainData> dataSet = createTrainingData();
         NeuralNet neuralNet = new NeuralNet(lr);
 
-        //neuralNet = ImportNN.importNet("AI/TDGammon/target_network");
+        //NNFile.importNN("50k");
 
-        trainDataTD3(neuralNet, 20, 0.1f, 0.7f);
+        trainDataTD3(neuralNet, 50, 0.1f, 0.7f);
 
-        ExportNN.exportNetworks(neuralNet);
+        // trainDataTD3(neuralNet, 50000, 0.1f, 0.7f, Save = True);
+        // if (NumberOfGames % 10000 == 0)
+        //      saveeeeee with name 10k, 20k, 30k, 40k, 50k, ...
+
+        NNFile.export(neuralNet,"50k");
     }
 
     public static  ArrayList<TrainData> createTrainingData() throws IOException {
@@ -133,7 +137,8 @@ public class NN {
     public static void trainDataTD3(NeuralNet nn, int NumberOfGames, float alpha, float lambda) {
         // For every game
         for (int ep = 0; ep < NumberOfGames; ep++) {
-            System.out.println("Game: " + (ep+1) + " (of " + NumberOfGames + ").");
+            long time = System.nanoTime();
+
             // Play a whole game against itself and save all board sequences
             ArrayList<TrainData> dataSet = createGameSequence();
 
@@ -147,13 +152,16 @@ public class NN {
 //            dataSet = dataSet2;
 
             // For all sequences in the previous game
+            float[][] Ew = new float[nn.getLayer()[1].neuron.length][nn.getLayer()[2].neuron.length];
+            float[][][] Ev = new float[nn.getLayer()[0].neuron.length][nn.getLayer()[1].neuron.length][nn.getLayer()[2].neuron.length];
             for (t = 0; t < dataSet.size() - 1; t++) {
                 // Start at the end and get output from NN (Layer 2 -> Layer 3 a.k.a. Hidden -> Output)
                 float[] Yt0 = nn.returnOutput(dataSet.get(t).getData());
                 float[] Yt1 = nn.returnOutput(dataSet.get(t + 1).getData());
 
                 // Update weight with next prediction
-                UpdateWeightsTD(nn, alpha, lambda, Yt0, Yt1, dataSet, t);
+                UpdateWeightsTD2(nn, alpha, lambda, Yt0, Yt1, dataSet, t, Ew, Ev);
+                //System.out.println("Board Sequence " + (t+1) + " of " + dataSet.size()+".");
             }
 
             // Last Layer uses final reward instead of next prediction
@@ -161,9 +169,16 @@ public class NN {
             float[] z = dataSet.get(t).getTarget();
 
             // Update weight with final reward
-            UpdateWeightsTD(nn, alpha, lambda, Yt0, z, dataSet, t);
+            UpdateWeightsTD2(nn, alpha, lambda, Yt0, z, dataSet, t, Ew, Ev);
+            //System.out.println("Board Sequence " + (t+1) + " of " + dataSet.size()+".");
 
-            System.out.println();
+            time = System.nanoTime() - time;
+            double GPS = (1 / (time / 1000000000.));
+            double TL = (NumberOfGames - ep) / GPS / 60;
+//            System.out.println("Completed game: " + (ep+1) + " (of " + NumberOfGames + "). Games/s: "+
+//                     GPS + ". Done after [minutes]: " + TL);
+            System.out.format("Completed game: %i (of %i). Games/s: %.2f. Time remaining [min]: %.2f",
+                    ep+1,NumberOfGames,GPS,TL);
         }
     }
 
@@ -213,7 +228,7 @@ public class NN {
                     float[] Yk0 = nn.returnOutput(dataSet.get(k).getData());
                     float[] Yki = nn.returnHiddenVal(dataSet.get(k).getData());
                     // Calculate gradient in a different way
-                    float gradient = MathUtils.sigmoidDerivative(Yk0[o]) * Yki[o];
+                    float gradient = MathUtils.sigmoidDerivative(Yk0[o]) * Yki[i];
                     sum += (float) Math.pow(lambda, t - k) * gradient;
                 }
 
@@ -231,6 +246,33 @@ public class NN {
         nn.UpdateWeightsTo(weightChangeOut,2);
     }
 
+    public static void UpdateWeightsTD2(NeuralNet nn, float alpha, float lambda, float[] Yt0, float[] Yt1,
+                                       ArrayList<TrainData> dataSet, int t, float[][] Ew, float[][][] Ev){
+        float Yj[] = nn.returnHiddenVal(dataSet.get(t).getData());
+        float Yk[] = nn.returnOutput(dataSet.get(t).getData());
+        for (int j = 0; j < nn.getLayer()[1].neuron.length; j++) {
+            for (int k = 0; k < nn.getLayer()[2].neuron.length; k++) {
+                Ew[j][k] = (lambda * Ew[j][k]) +
+                        MathUtils.sigmoidDerivative(Yk[k]) * nn.getLayer()[1].neuron[j].value;
+                for (int i = 0; i < nn.getLayer()[0].neuron.length; i++) {
+                    Ev[i][j][k] = (lambda * Ev[i][j][k]) +
+                            (MathUtils.sigmoidDerivative(Yk[k]) * nn.getLayer()[2].neuron[k].weights[j] *
+                                    MathUtils.sigmoidDerivative(Yj[j]) * dataSet.get(t).getData()[i]);
+                }
+            }
+        }
+
+        float[] error = MinArray(Yt1,Yt0);
+
+        for (int j = 0; j < nn.getLayer()[1].neuron.length; j++){
+            for (int k = 0; k < error.length; k++){
+                nn.getLayer()[2].neuron[k].weights[j] += alpha * error[k] * Ew[j][k];
+                for (int i = 0; i < nn.getLayer()[0].neuron.length; i++){
+                    nn.getLayer()[1].neuron[j].weights[i] += alpha * error[k] * Ev[i][j][k];
+                }
+            }
+        }
+    }
 
     /*public static void TrainTDGammon(NeuralNet nn, int NumberOfEpochs, float alpha, float lambda){
         Board b = new Board();

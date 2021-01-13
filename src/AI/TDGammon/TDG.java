@@ -18,7 +18,7 @@ public class TDG extends Player.Bot{
     public TDG(int id) {
         super(id);
     }
-    private NeuralNet NN = new NeuralNet(0.1f);
+    private NeuralNet NN = NNFile.importNN("50k");
 
     @Override
     public String getName() {
@@ -58,7 +58,7 @@ public class TDG extends Player.Bot{
         if(possMoves.size()>0) {
             Space[] bestMove = possMoves.get(0);
             float valBestMove = -1; // Forward propagation should always return a value between 0 and 1.
-            int multiplier = 2;
+            int multiplier = 1;
             for (int i = 0; i < possMoves.size(); i++) {
                 // Execute the move
                 simulateMove(getBoardRepresentation(b), possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());

@@ -1,6 +1,9 @@
 package AI;
 
 import AI.AlphaBeta.ABbot;
+import AI.GA.TMM;
+import AI.TDGammon.TDG;
+import Utils.Variables;
 import World.Board;
 import World.Player;
 
@@ -32,16 +35,16 @@ public class BotTestingGround {
 //        long a = System.nanoTime();
 //        testMultipleTimes(one,two);
 //        System.out.println((System.nanoTime()-a)/1000000000.);
-        ABbot one = new ABbot(0);
-        PrimeBlitzBot two = new PrimeBlitzBot(1);
-        one.setOpponent(two);
+        Player.Bot one = new TDG(0);
+        Player.Bot two = new RandomBot(1);
+//        one.setOpponent(two);
 //        two.setOpponent(one);
 	    one.pausing = false;
 	    two.pausing = false;
 	    b.setPlayers(one, two);
 	    b.createBotLoop();
         long a = System.nanoTime();
-        System.out.println("Depth of 3: ");
+        //System.out.println("Depth of 3: ");
         testMultipleTimes(one, two);
         System.out.println((System.nanoTime()-a)/1000000000.);
         
@@ -65,7 +68,7 @@ public class BotTestingGround {
     }
 
     public static void testMultipleTimes(Player.Bot one, Player.Bot two){
-        for(int i = 0; i<100; i++){
+        for(int i = 0; i<1000; i++){
             b = new Board();
 
             one.resetPlayer();
@@ -73,7 +76,7 @@ public class BotTestingGround {
             b.setPlayers(one,two);
             b.createBotLoop();
             testWithRandomDie();
-            System.out.println(b);
+            //System.out.println(b);
         }
         System.out.println(counter);
     }
