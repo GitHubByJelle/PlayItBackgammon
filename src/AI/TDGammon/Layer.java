@@ -25,4 +25,17 @@ public class Layer {
             this.neuron[i]= new Neuron(input[i]);
         }
     }
+
+    @Override
+    public String toString(){
+        String res="";
+        for(int i=0;i<neuron.length;i++){
+            res+= neuron[i].toString();
+        }
+        return res+";";
+    }
+
+    Layer(Neuron[] n){
+        this.neuron=n;
+    }
 }

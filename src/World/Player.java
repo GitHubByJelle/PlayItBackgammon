@@ -19,10 +19,6 @@ public abstract class Player {
     public int piecesSlain;//or eaten
     public Bot opponent;
 
-    public void setOpponent(Bot opponent){
-        this.opponent = opponent;
-    }
-
     Player(int id){
         this.id=id;
         piecesInPlay=15;
@@ -73,6 +69,11 @@ public abstract class Player {
     public void printSelectedMove(int from, int to){
         System.out.println("SELECTED MOVE FROM: "+ from+" TO "+to);
     }
+    //Alaa is not responsible for this Method
+    public void setOpponent(Bot opponent){
+        this.opponent = opponent;
+    }
+//______________________________________________
 
     public static class Human extends Player{
 

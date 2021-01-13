@@ -1,5 +1,7 @@
 package AI.TDGammon;
 
+import java.util.Arrays;
+
 public class Neuron {
     //only there to set the bounds of the weights
     static float minWeight;
@@ -39,6 +41,24 @@ public class Neuron {
 
     public void update_weight(){
         this.weights=this.weightsCache;
+    }
+
+
+
+    @Override
+    public String toString(){
+        return "weights="+ Arrays.toString(weights)+
+                "\nweightsCache=" + Arrays.toString(weightsCache)+
+                "\nvalue="+value+
+                "\ngradient="+gradient+
+                "\nbias="+bias+"\n:";
+    }
+    Neuron(float[] weights,float[] weightsCache,float value, float gradient, float bias){
+        this.weights=weights;
+        this.weightsCache=weightsCache;
+        this.value= value;
+        this.gradient=gradient;
+        this.bias=bias;
     }
 
 

@@ -1,6 +1,9 @@
 package AI;
 
 import AI.AlphaBeta.ABbot;
+import AI.GA.TMM;
+import AI.TDGammon.TDG;
+import Utils.Variables;
 import World.Board;
 import World.Player;
 
@@ -32,16 +35,16 @@ public class BotTestingGround {
 //        long a = System.nanoTime();
 //        testMultipleTimes(one,two);
 //        System.out.println((System.nanoTime()-a)/1000000000.);
-        ABbot one = new ABbot(0);
-        PrimeBlitzBot two = new PrimeBlitzBot(1);
-        one.setOpponent(two);
+        Player.Bot one = new TDG(0);
+        Player.Bot two = new PrimeBlitzBot(1);
+//        one.setOpponent(two);
 //        two.setOpponent(one);
 	    one.pausing = false;
 	    two.pausing = false;
 	    b.setPlayers(one, two);
 	    b.createBotLoop();
         long a = System.nanoTime();
-        System.out.println("Depth of 3: ");
+        //System.out.println("Depth of 3: ");
         testMultipleTimes(one, two);
         System.out.println((System.nanoTime()-a)/1000000000.);
         
@@ -65,7 +68,7 @@ public class BotTestingGround {
     }
 
     public static void testMultipleTimes(Player.Bot one, Player.Bot two){
-        for(int i = 0; i<100; i++){
+        for(int i = 0; i<1000; i++){
             b = new Board();
 
             one.resetPlayer();
@@ -73,9 +76,22 @@ public class BotTestingGround {
             b.setPlayers(one,two);
             b.createBotLoop();
             testWithRandomDie();
-            System.out.println(b);
+            //System.out.println(b);
         }
         System.out.println(counter);
+    }
+    public static void testMultipleTimes(Player.Bot one, Player.Bot two, int numGames){
+        for(int i = 0; i<numGames; i++){
+            b = new Board();
+
+            one.resetPlayer();
+            two.resetPlayer();
+            b.setPlayers(one,two);
+            b.createBotLoop();
+            testWithRandomDie();
+            //System.out.println(b);
+        }
+        //System.out.println(counter);
     }
 
     private static void testWithRandomDie(){
@@ -89,6 +105,27 @@ public class BotTestingGround {
         }
 
         giveWinner(b);
+    }
+
+    public static void executeTourney(int numGamesPerCombination){
+        Player.Bot first;
+        Player.Bot second;
+
+        for(int one = 0; one< Variables.BOTS.length; one++){
+            for(int two=0;two<Variables.BOTS.length;two++){
+                b = new Board();
+                b.setPlayers(Variables.BOTS[one],Variables.BOTS[two]);
+                first=(Player.Bot)b.getPlayer1();
+                second=(Player.Bot)b.getPlayer2();
+                first.pausing=false;
+                second.pausing=false;
+                b.createBotLoop();
+                testMultipleTimes(first,second,numGamesPerCombination);
+                System.out.println(String.format("%17s vs %17s First wins=%4d Second wins=%4d", first.getName(), second.getName(), counter, (numGamesPerCombination-counter)));
+                counter=0;
+            }
+        }
+
     }
 
     private static void testWithSameGivenRoll( ArrayList<int[]> i){

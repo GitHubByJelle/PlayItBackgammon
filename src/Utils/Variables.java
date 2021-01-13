@@ -1,5 +1,6 @@
 package Utils;
 
+import AI.GA.TMM;
 import World.Player;
 import AI.*;
 
@@ -37,9 +38,10 @@ public final class Variables {
     public static final String TDG="TD-Gammon";
 
 
+
     //for now its gonna be like this
-    public static final String[] PLAYERS= {HUMAN, TMM, RANDOM, SIMPLEBOT,BP,ABB};
-    public static final String[] BOTS= {TMM, RANDOM, SIMPLEBOT,BP,ABB};
+    public static final String[] PLAYERS= {HUMAN,  RANDOM, SIMPLEBOT,BP,TMM,ABB};
+    public static final String[] BOTS= {RANDOM, SIMPLEBOT,BP,TMM};
 
     public static String GET_RANDOM_BOT(){
         return BOTS[ (int)(Math.random() * ((BOTS.length) + 1) )];

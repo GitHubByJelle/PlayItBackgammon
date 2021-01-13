@@ -14,6 +14,7 @@ public class NeuralNet {
     private Layer[] layer;
     private float lr;
 
+
     NeuralNet(float lr){
         Neuron.range(-1, 1);
         //this.dataSet= dataSet;
@@ -28,12 +29,12 @@ public class NeuralNet {
 
 
         //small network for TD-gammon
-        layer= new Layer[5];
-        layer[0]= null;
-        layer[1]= new Layer(4*27*2,16);
-        layer[2]= new Layer(16,32);
-        layer[3]= new Layer(32,16);
-        layer[4]= new Layer(16,4);
+        layer= new Layer[3];
+        //layer[0]= null;
+        float[] input = new float[4*27*2];
+        layer[0] = new Layer(input);
+        layer[1]= new Layer(4*27*2,40);
+        layer[2]= new Layer(40,4);
 
 
         //Big network for TD-gammon
@@ -170,6 +171,24 @@ public class NeuralNet {
         return ans;
     }
 
+    float[] returnHiddenVal(float[] input){
+        float[] ans= new float[layer[1].neuron.length];
+        forwardProp(input);
+        for(int j=0; j<layer[1].neuron.length; j++){
+            ans[j] = layer[1].neuron[j].value;
+        }
+        return ans;
+    }
+
+    void UpdateWeightsTo(float[][] A, int numLayer){
+        int jMax = A[0].length;
+        for (int i = 0; i < A.length; i++){
+            for (int j = 0; j < jMax; j++){
+                layer[numLayer].neuron[i].weights[j] = A[i][j];
+            }
+        }
+    }
+
     //drops random neurons for a specific training but the neurons are active again for the next one
     void droupout(){
 
@@ -209,7 +228,7 @@ public class NeuralNet {
     public ArrayList<TrainData> getDataSet() {
         return dataSet;
     }
-
+    public float getLr(){return lr;}
     public Layer[] getLayer() {
         return layer;
     }
@@ -226,7 +245,7 @@ public class NeuralNet {
             two.resetPlayer();
             b.setPlayers(one,two);
             b.createBotLoop();
-            NeuralNet.PlayWithRandomDie(b, dataSet);
+            PlayWithRandomDie(b, dataSet);
 //            System.out.println(b);
         }
     }
@@ -265,6 +284,32 @@ public class NeuralNet {
     static void AddData(Board b, ArrayList<TrainData> dataSet){
         dataSet.add(new TrainData(new TDGdata(b).data,giveReward(b)));
     }
+
+    @Override
+    public String toString(){
+        String res="";
+        res+="learningrate="+lr+";\n";
+//        res+="dataSet=";
+//        for(int i=0;i<dataSet.size();i++){
+//            res+=dataSet.get(i).toString();
+//        }
+       // res+="layer=";
+        for(int i=0;i<layer.length;i++){
+            res+="layer="+layer[i].toString()+"\n";
+        }
+        return res;
+    }
+
+    NeuralNet(float lr, Layer[]layer){
+        this.lr=lr;
+        this.layer=layer;
+    }
+
+    @Override
+    public boolean equals(Object other){
+        return toString().equals(other.toString());
+    }
+
 }
 
 
