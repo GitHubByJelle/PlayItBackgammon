@@ -261,11 +261,12 @@ public abstract class Player {
             if(id == 0){
                 return this.B.getValidTurns(this.B.getDie().getCurRoll(),this.id);
             }else{
+
                 int[] die = Arrays.copyOf(this.B.getDie().getCurRoll(),this.B.getDie().getCurRoll().length);
                 for(int  i = 0; i  < die.length; i++){
                     die[i] = -die[i];
-                    this.B.getDie().setCurRoll(die);
                 }
+                this.B.getDie().setCurRoll(die);
                 return this.B.getValidTurns(this.B.getDie().getCurRoll(),this.id);
 
             }
@@ -287,7 +288,7 @@ public abstract class Player {
         }
         public void unDoTurn(Turn turn,int dummy) {
             for(int i = turn.moves.size()-1; i>-1; i--){
-                this.B.undoBotMove(turn.moves.get(i));
+                this.B.undoBotMove(turn.moves.get(i),dummy);
             }
         }
         public ArrayList<Move> generateMoves2() {

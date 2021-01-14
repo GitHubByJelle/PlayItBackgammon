@@ -1,5 +1,5 @@
-package World;
 
+package World;
 
 
 import AI.*;
@@ -83,21 +83,25 @@ public class Board {
     }
 
 
-    public Space getOutOfPlay(){return outOfPlay;}
+    public Space getOutOfPlay() {
+        return outOfPlay;
+    }
 
 
-    public void forceHomeCheck(){
+    public void forceHomeCheck() {
         for (int i = 0; i < spaces.length; i++) {
             for (int a = 0; a < spaces[i].getPieces().size(); a++) {
                 spaces[i].checkHome(spaces[i].getPieces().get(a));
             }
         }
     }
+
     //methods for board creation
     private void addPieces(int spaceIndex, int num, int colorId) {
         for (int i = 0; i < num; i++)
             spaces[spaceIndex].getPieces().add(new World.Piece(colorId));
     }
+
     private void createSpaces() {
         int x = 0;
         for (int i = 0; i < spaces.length; i++) {
@@ -112,14 +116,14 @@ public class Board {
 
         Space target;
         int[] roll = die.getCurRoll();
-        if(roll.length==0){
+        if (roll.length == 0) {
             roll = die.getNextRoll();
         }
-        int bigger=0;
-        int smaller=0;
+        int bigger = 0;
+        int smaller = 0;
 
         for (int i = 0; i < roll.length; i++) {
-            if(selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0){//check for bounds
+            if (selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0) {//check for bounds
                 target = spaces[selected.getId() + roll[i]];
                 if (validityCheck(selected, target)) {
                     res.add(spaces[selected.getId() + roll[i]]);
@@ -127,9 +131,9 @@ public class Board {
 
             } else {
                 //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
-                if (!selected.isEmpty() &&allPiecesHome(selected.getPieces().get(0).getId())) {
+                if (!selected.isEmpty() && allPiecesHome(selected.getPieces().get(0).getId())) {
 
-                    if (selected.getId()>6) {
+                    if (selected.getId() > 6) {
                         for (int j = 24; j > 18; j--) {
                             if (spaces[j].getPieces().size() > 0) {
                                 bigger = j;
@@ -140,10 +144,9 @@ public class Board {
                             if ((25 - selected.getId()) == die.getCurRoll()[0] || (25 - selected.getId()) == die.getCurRoll()[1])
                                 res.add(outOfPlay);
 
-                            else if (selected.getId()== bigger && die.getCurRoll()[0] > (25 - selected.getId()) || selected.getId()== bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
+                            else if (selected.getId() == bigger && die.getCurRoll()[0] > (25 - selected.getId()) || selected.getId() == bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
                                 res.add(outOfPlay);
-                            }
-                            else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId()) && selected.getId() > bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
+                            } else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId()) && selected.getId() > bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
                                 res.remove(outOfPlay);
                             }
                         } else {
@@ -166,10 +169,9 @@ public class Board {
                             if (selected.getId() == Math.abs(die.getCurRoll()[0]) || selected.getId() == Math.abs(die.getCurRoll()[1]))
                                 res.add(outOfPlay);
 
-                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() || selected.getId() == bigger && Math.abs(die.getCurRoll()[1]) > selected.getId() ) {
+                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() || selected.getId() == bigger && Math.abs(die.getCurRoll()[1]) > selected.getId()) {
                                 res.add(outOfPlay);
-                            }
-                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() && Math.abs(die.getCurRoll()[1]) > selected.getId()) {
+                            } else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() && Math.abs(die.getCurRoll()[1]) > selected.getId()) {
                                 res.remove(outOfPlay);
                             }
                         } else {
@@ -178,8 +180,7 @@ public class Board {
 
                             else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
                                 res.add(outOfPlay);
-                            }
-                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
+                            } else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
                                 res.remove(outOfPlay);
                             }
 
@@ -190,7 +191,6 @@ public class Board {
         }
         return res;
     }
-
 
 
     private boolean allPiecesHome(int pieceID) {
@@ -209,7 +209,7 @@ public class Board {
 
     //check if the target space is empty or if it has pieces of the same color, or if it has 1 piece of the opposite color
     public boolean validityCheck(Space selected, Space target) {
-        return !selected.isEmpty() &&(target.isEmpty() || //if the target space is empty
+        return !selected.isEmpty() && (target.isEmpty() || //if the target space is empty
                 piecesOfSameColor(selected, target) || //if the space has pieces of the same color
                 pieceCanBeEaten(selected, target)); //target has one piece and its color doesnt match
     }
@@ -230,21 +230,21 @@ public class Board {
         int id = gameLoop.getCurrentPlayer().getId();
 
         ArrayList<Space> poss = getValidMoves(spaces[from]);
-        if(to==26) {
+        if (to == 26) {
 
-            if(allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
+            if (allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
-                lastPlays(from,to);
+                lastPlays(from, to);
 
                 gameLoop.getCurrentPlayer().pieceOut();
                 gameLoop.repaintBV();
                 return true;
-            }else{
+            } else {
                 System.out.println("Move invalid: All pieces must be home");
                 return false;
             }
-        }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
-            if(from==0 ||from==25){
+        } else if ((to != from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to])) {
+            if (from == 0 || from == 25) {
                 gameLoop.getCurrentPlayer().revivePiece();
                 gameLoop.repaintBV();
             }
@@ -257,7 +257,7 @@ public class Board {
         } else {
             this.getDie().printCurRoll();
             System.out.println("from: " + from + "  to: " + to);
-            System.out.println( validityCheck(spaces[from], spaces[to]));
+            System.out.println(validityCheck(spaces[from], spaces[to]));
             System.out.println(poss.contains(spaces[to]));
             System.out.println(this.toString());
             System.out.println("Move invalid");
@@ -267,23 +267,24 @@ public class Board {
     }
 
     //Used for thinking in bot
-    public void playerMoveNoCheck(int from, int to, int pieceID){
-        if(to>=26){
+    public void playerMoveNoCheck(int from, int to, int pieceID) {
+        if (to >= 26) {
             spaces[from].getPieces().remove(0);
-        }else if(from==26){
+        } else if (from == 26) {
             spaces[to].getPieces().add(new Piece(pieceID));
 
-        } else{
+        } else {
             spaces[from].movePiece(spaces[to]);
         }
     }
-    public void playerMoveNoCheckBot(int from, int to, int pieceID){
-        if(to>=26){
+
+    public void playerMoveNoCheckBot(int from, int to, int pieceID) {
+        if (to >= 26) {
             spaces[from].getPieces().remove(0);
-        }else if(from==26){
+        } else if (from == 26) {
             spaces[to].getPieces().add(new Piece(pieceID));
 
-        } else{
+        } else {
             spaces[from].moveBotPiece(spaces[to]);
         }
     }
@@ -292,68 +293,90 @@ public class Board {
     public Space[] getSpaces() {
         return spaces;
     }
-    public void setDice(Die die){ this.die = die; }
-    public GameLoop getGameLoop(){ return this.gameLoop; }
-    public Die getDie() { return die; }
-    public boolean checkWinCondition() { return player1.getPiecesOutOfPlay()==15 ||player2.getPiecesOutOfPlay()==15; }
-    public void createLoop(JFrame frame){ gameLoop= new GameLoop(this, frame); }
-    public void createBotLoop(){ gameLoop= new GameLoop(this); }
-    public Player getPlayer1(){return player1;}
-    public Player getPlayer2(){return player2;}
+
+    public void setDice(Die die) {
+        this.die = die;
+    }
+
+    public GameLoop getGameLoop() {
+        return this.gameLoop;
+    }
+
+    public Die getDie() {
+        return die;
+    }
+
+    public boolean checkWinCondition() {
+        return player1.getPiecesOutOfPlay() == 15 || player2.getPiecesOutOfPlay() == 15;
+    }
+
+    public void createLoop(JFrame frame) {
+        gameLoop = new GameLoop(this, frame);
+    }
+
+    public void createBotLoop() {
+        gameLoop = new GameLoop(this);
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
 
     //players setup
-    public  void setPlayers(String one, String two){
+    public void setPlayers(String one, String two) {
 
-        if(one.equals(Variables.HUMAN)){
-            player1= new Player.Human(0);
+        if (one.equals(Variables.HUMAN)) {
+            player1 = new Player.Human(0);
         }
-        if(two.equals(Variables.HUMAN)){
-            player2= new Player.Human(1);
+        if (two.equals(Variables.HUMAN)) {
+            player2 = new Player.Human(1);
         }
-        if(one.equals(Variables.RANDOM)){
-            player1= new RandomBot(0);
+        if (one.equals(Variables.RANDOM)) {
+            player1 = new RandomBot(0);
             player1.setBoard(this);
         }
-        if(two.equals(Variables.RANDOM)){
-            player2= new RandomBot(1);
+        if (two.equals(Variables.RANDOM)) {
+            player2 = new RandomBot(1);
             player2.setBoard(this);
         }
 
-        if(one.equals(Variables.SIMPLEBOT)){
-            player1= new SimpleBot(0);
+        if (one.equals(Variables.SIMPLEBOT)) {
+            player1 = new SimpleBot(0);
             player1.setBoard(this);
         }
-        if(two.equals(Variables.SIMPLEBOT)){
-            player2= new SimpleBot(1);
+        if (two.equals(Variables.SIMPLEBOT)) {
+            player2 = new SimpleBot(1);
             player2.setBoard(this);
         }
-        if(one.equals(Variables.BP)){
-            player1= new PrimeBlitzBot(0);
+        if (one.equals(Variables.BP)) {
+            player1 = new PrimeBlitzBot(0);
             player1.setBoard(this);
         }
-        if(two.equals(Variables.BP)){
-            player2= new PrimeBlitzBot(1);
+        if (two.equals(Variables.BP)) {
+            player2 = new PrimeBlitzBot(1);
             player2.setBoard(this);
         }
-        if(one.equals(Variables.TMM)){
-            player1= new TMM(0);
+        if (one.equals(Variables.TMM)) {
+            player1 = new TMM(0);
             player1.setBoard(this);
         }
-        if(two.equals(Variables.TMM)){
-            player2= new TMM(1);
+        if (two.equals(Variables.TMM)) {
+            player2 = new TMM(1);
             player2.setBoard(this);
         }
-        if(one.equals(Variables.ABB)){
-            player1= new AlphaBetaBot(0);
+        if (one.equals(Variables.ABB)) {
+            player1 = new AlphaBetaBot(0);
             player1.setBoard(this);
         }
 
-        if(two.equals(Variables.ABB)){
-            player2= new AlphaBetaBot(1);
+        if (two.equals(Variables.ABB)) {
+            player2 = new AlphaBetaBot(1);
             player2.setBoard(this);
         }
-
-
 
 
 //        if(player1==null ||player2==null) {
@@ -368,64 +391,60 @@ public class Board {
 //            }
 //        }
     }
-    public void setPlayers(Player one, Player two){
-        player1=one;
+
+    public void setPlayers(Player one, Player two) {
+        player1 = one;
         player1.setBoard(this);
-        player2=two;
+        player2 = two;
         player2.setBoard(this);
-        //if(player1.getName() == "AlphBetaBot"){
-            
-        //}
     }
 
 
-
-    public void moveToEatenSpace(int k){
-        Piece p= spaces[k].getPieces().get(0);
-        if(p.getId()==player1.getId())
+    public void moveToEatenSpace(int k) {
+        Piece p = spaces[k].getPieces().get(0);
+        if (p.getId() == player1.getId())
             spaces[k].movePiece(spaces[0]);
         else
             spaces[k].movePiece(spaces[25]);
     }
 
-    public void moveBackFromEatenSpace(int k, Piece p){
-        if(p.getId()==player1.getId())
-            spaces[0].movePiece(spaces[k]);
-        else
-            spaces[25].movePiece(spaces[k]);
-    }
-    public void moveBackFromEatenSpaceID(int k, int p){
-        if(p==player1.getId())
+    public void moveBackFromEatenSpace(int k, Piece p) {
+        if (p.getId() == player1.getId())
             spaces[0].movePiece(spaces[k]);
         else
             spaces[25].movePiece(spaces[k]);
     }
 
-    public void moveOutOfPlay(int k){
+    public void moveBackFromEatenSpaceID(int k, int p) {
+        if (p == player1.getId())
+            spaces[0].movePiece(spaces[k]);
+        else
+            spaces[25].movePiece(spaces[k]);
+    }
+
+    public void moveOutOfPlay(int k) {
         spaces[k].movePiece(outOfPlay);
     }
 
-    public void checkAllPiecesHome(){
-        for(Space space : this.getSpaces()){
-            for(Piece piece: space.getPieces()){
+    public void checkAllPiecesHome() {
+        for (Space space : this.getSpaces()) {
+            for (Piece piece : space.getPieces()) {
                 space.checkHome(piece);
                 //System.out.println(piece.isHome);
-                if(!piece.isHome){
+                if (!piece.isHome) {
                     //System.out.println(piece.toString());
                 }
             }
         }
     }
 
-    public void moveToEatenSpace(int k,int id) {
+    public void moveToEatenSpace(int k, int id) {
         World.Piece p = spaces[k].getPieces().get(0);
-        if (p.getId() ==id)
+        if (p.getId() == id)
             spaces[k].movePiece(spaces[0]);
         else
             spaces[k].movePiece(spaces[25]);
     }
-
-
 
 
     @Override
@@ -445,17 +464,17 @@ public class Board {
         ArrayList<Space> res = new ArrayList<Space>();
         final Piece dummyPiece = new Piece(gameLoop.getCurrentPlayer().id);
         Space target;
-        int bigger=0;
-        int smaller=0;
+        int bigger = 0;
+        int smaller = 0;
         int[] diffroll;
         for (int i = 0; i < roll.length; i++) {
-            if(selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0){//check for bounds
+            if (selected.getId() + roll[i] < 25 && selected.getId() + roll[i] > 0) {//check for bounds
                 target = spaces[selected.getId() + roll[i]];
                 if (validityCheck(selected, target)) {
                     res.add(target);
                     target.addPiece(dummyPiece);
 
-                    diffroll= getRollWithout(roll, roll[i]);
+                    diffroll = getRollWithout(roll, roll[i]);
                     ArrayList<Space> otherPass = getDeepValidMoves(target, diffroll);
                     res.addAll(otherPass);
 
@@ -463,12 +482,11 @@ public class Board {
                 }
 
 
-
             } else {
                 //check if all the pieces are home in case the rolls can take the current piece out of play(eaten Space)
-                if (!selected.isEmpty() &&allPiecesHome(selected.getPieces().get(0).getId())) {
+                if (!selected.isEmpty() && allPiecesHome(selected.getPieces().get(0).getId())) {
 
-                    if (selected.getId()>6) {
+                    if (selected.getId() > 6) {
                         for (int j = 24; j > 18; j--) {
                             if (spaces[j].getPieces().size() > 0) {
                                 bigger = j;
@@ -479,10 +497,9 @@ public class Board {
                             if ((25 - selected.getId()) == die.getCurRoll()[0] || (25 - selected.getId()) == die.getCurRoll()[1])
                                 res.add(outOfPlay);
 
-                            else if (selected.getId()== bigger && die.getCurRoll()[0] > (25 - selected.getId()) || selected.getId()== bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
+                            else if (selected.getId() == bigger && die.getCurRoll()[0] > (25 - selected.getId()) || selected.getId() == bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
                                 res.add(outOfPlay);
-                            }
-                            else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId()) && selected.getId() > bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
+                            } else if (selected.getId() > bigger && die.getCurRoll()[0] > (25 - selected.getId()) && selected.getId() > bigger && die.getCurRoll()[1] > (25 - selected.getId())) {
                                 res.remove(outOfPlay);
                             }
                         } else {
@@ -505,10 +522,9 @@ public class Board {
                             if (selected.getId() == Math.abs(die.getCurRoll()[0]) || selected.getId() == Math.abs(die.getCurRoll()[1]))
                                 res.add(outOfPlay);
 
-                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() || selected.getId() == bigger && Math.abs(die.getCurRoll()[1]) > selected.getId() ) {
+                            else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() || selected.getId() == bigger && Math.abs(die.getCurRoll()[1]) > selected.getId()) {
                                 res.add(outOfPlay);
-                            }
-                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() && Math.abs(die.getCurRoll()[1]) > selected.getId()) {
+                            } else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId() && Math.abs(die.getCurRoll()[1]) > selected.getId()) {
                                 res.remove(outOfPlay);
                             }
                         } else {
@@ -517,8 +533,7 @@ public class Board {
 
                             else if (selected.getId() == bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
                                 res.add(outOfPlay);
-                            }
-                            else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
+                            } else if (selected.getId() < bigger && Math.abs(die.getCurRoll()[0]) > selected.getId()) {
                                 res.remove(outOfPlay);
                             }
 
@@ -531,36 +546,34 @@ public class Board {
     }
 
     private int[] getRollWithout(int[] roll, int i) {
-        int[] res=new int[roll.length-1];
-        boolean found= false;
-        for(int a=0; a<roll.length;a++){
-            if(!found){
-                if(roll[a]==i){
-                    found=true;
-                }else{
-                    res[a]=roll[a];
+        int[] res = new int[roll.length - 1];
+        boolean found = false;
+        for (int a = 0; a < roll.length; a++) {
+            if (!found) {
+                if (roll[a] == i) {
+                    found = true;
+                } else {
+                    res[a] = roll[a];
                     // System.out.println(Arrays.toString(res));
                 }
-            }else{
+            } else {
                 //System.out.println(a+" "+found+" "+i+" "+ Arrays.toString(roll)+" "+Arrays.toString(res));
-                res[a-1]=roll[a];
+                res[a - 1] = roll[a];
             }
         }
         return res;
     }
 
 
-
-
 //Methods that Alaa is not responsible for and has no idea what they do anymore__________________________________________________________________________________________
 
     //Probably temporary but thanks to this function we can work on Evolution until the unknown bug is fixed
-    public void BotMove(int from, int to){
-        if(gameLoop == null){
+    public void BotMove(int from, int to) {
+        if (gameLoop == null) {
             System.out.println("Null Game Loop");
         }
         int id = gameLoop.getCurrentPlayer().getId();
-        if(from < 26) {
+        if (from < 26) {
             ArrayList<Space> poss = getValidMoves(spaces[from]);
             if (to == 26) {
                 moveOutOfPlay(from);
@@ -580,36 +593,39 @@ public class Board {
             }
         }
     }
-    public void undoBotMove(Move move){
+
+    public void undoBotMove(Move move) {
         int from = move.to;
         int to = move.from;
-        if(from < 26) {
+        if (from < 26) {
 
-            if(spaces[from].getSize() > 0) {
+            if (spaces[from].getSize() > 0) {
                 spaces[from].movePiece(spaces[to]);
                 if (move.isKill) {
                     if (move.playerId == 0) {
-                        moveBackFromEatenSpaceID(from,0);
-
+                        System.out.println("Move back from eaten space");
+                        moveBackFromEatenSpaceID(from, 0);
                     } else {
-                        moveBackFromEatenSpaceID(from,1);
+                        moveBackFromEatenSpaceID(from, 1);
 
                     }
                 }
             }
-        }else{
-            outOfPlay.movePiece(spaces[to],move.playerId);
+        } else {
+            outOfPlay.movePiece(spaces[to], move.playerId);
         }
     }
-    public void undoBotMove(Move move,int dummy){
+
+    public void undoBotMove(Move move, int dummy) {
         int from = move.to;
         int to = move.from;
-        if(from < 26) {
+        if (from < 26) {
 
 
-            if(spaces[from].getSize() > 0) {
+            if (spaces[from].getSize() > 0) {
                 spaces[from].movePiece(spaces[to]);
                 if (move.isKill) {
+                    System.out.println("ABC" + move.playerId);
                     if (move.playerId == 0) {
                         spaces[25].movePiece(spaces[from]);
 
@@ -618,26 +634,27 @@ public class Board {
                     }
                 }
             }
-        }else{
-            outOfPlay.movePiece(spaces[to],move.playerId);
+        } else {
+            outOfPlay.movePiece(spaces[to], move.playerId);
         }
     }
-    public void BotMove(Move move){
+
+    public void BotMove(Move move) {
 
         int from = move.from;
         int to = move.to;
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         int id = gameLoop.getCurrentPlayer().getId();
-        if(isGoingToEat(move.from,move.to, id)) move.isKill = true;
-        if(to==26) {
+        if (isGoingToEat(move.from, move.to, id)) move.isKill = true;
+        if (to == 26) {
             moveOutOfPlay(from);
-            lastPlays(from,to);
+            lastPlays(from, to);
             move.isMoveOut = true;
             gameLoop.getCurrentPlayer().pieceOut();
 
 
-        }else if ((to!=from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to]) ) {
-            if(from==0 ||from==25){
+        } else if ((to != from) && validityCheck(spaces[from], spaces[to]) && poss.contains(spaces[to])) {
+            if (from == 0 || from == 25) {
                 gameLoop.getCurrentPlayer().revivePiece();
             }
             die.removeUsedRoll(to - from);
@@ -647,6 +664,7 @@ public class Board {
         assert move.playerId == gameLoop.getCurrentPlayer().getId();
 
     }
+
     public void botMove(Move move) {
         // int id = gameLoop.getCurrentPlayer().getId();
         if (isGoingToEat(move.from, move.to, move.playerId)) {
@@ -661,16 +679,17 @@ public class Board {
         if (to < 26) {
             if (spaces[from].getSize() >= 1) {
                 spaces[from].movePiece(spaces[to]);
-                this.checkEaten(to, id,this);
+                this.checkEaten(to, id, this);
             }
-            die.removeUsedRoll(to-from);
-        }else{
-            moveOutOfPlay(from); lastPlays(from,to);
+            die.removeUsedRoll(to - from);
+        } else {
+            moveOutOfPlay(from);
+            lastPlays(from, to);
         }
 
 
-
     }
+
     public void botDummyMove(Move move) {
         // int id = gameLoop.getCurrentPlayer().getId();
         if (isGoingToEat(move.from, move.to, move.playerId)) {
@@ -687,14 +706,14 @@ public class Board {
                 spaces[from].movePiece(spaces[to]);
                 this.checkEaten(to, id);
             }
-        }else{
+        } else {
             moveOutOfPlay(from);
         }
 
 
-
     }
-    public void botMove(Move move,int dummy) {
+
+    public void botMove(Move move, int dummy) {
         // int id = gameLoop.getCurrentPlayer().getId();
         if (isGoingToEat(move.from, move.to, move.playerId)) {
             move.isKill = true;
@@ -711,34 +730,37 @@ public class Board {
                 spaces[from].movePiece(spaces[to]);
                 this.checkEaten(to, id);
             }
-        }else{
+        } else {
             moveOutOfPlay(from);
         }
 
     }
-    public void checkEaten(int k,int id) {
+
+    public void checkEaten(int k, int id) {
         World.Space s = getSpaces()[k];
         if (s.getSize() == 2)
             if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
 
-                this.moveToEatenSpace(k,id);
+                this.moveToEatenSpace(k, id);
             }
     }
-    public void checkEaten(int k,int id, Board board) {
+
+    public void checkEaten(int k, int id, Board board) {
 
         World.Space s = getSpaces()[k];
         if (s.getSize() == 2)
             if (s.getPieces().get(0).getId() != s.getPieces().get(1).getId()) {
-                this.moveToEatenSpace(k,id);
+                this.moveToEatenSpace(k, id);
             }
     }
+
     private void doNotAllow(Space space) {
         space.movePiece(outOfPlay);
         System.out.println("not allowed, you first need to advance the further pieces");
     }
 
     public void lastPlays(int from, int to) {
-        int newFrom= 26-from;
+        int newFrom = 26 - from;
         if (from > 6) {
             if (26 - (from + 1) <= 6) {
                 if (die.getCurRoll().length > 1) {
@@ -786,23 +808,24 @@ public class Board {
         }
         return possible_moves;
     }
-    public ArrayList<Turn> getValidTurns(int[] roll, int playerId){
+
+    public ArrayList<Turn> getValidTurns(int[] roll, int playerId) {
         ArrayList<Turn> turns = new ArrayList<>();
         int[] rolls;
-        if(roll[0] == roll[1]){
+        if (roll[0] == roll[1]) {
             rolls = new int[4];
-            for(int i = 0; i < 4; i++){
+            for (int i = 0; i < 4; i++) {
                 rolls[i] = roll[0];
             }
-        }else{
+        } else {
             rolls = new int[2];
             rolls[0] = roll[0];
             rolls[1] = roll[1];
         }
-        if(rolls.length == 2){
+        if (rolls.length == 2) {
 
             turns = generateTwo(rolls, playerId);
-        }else if(rolls.length == 4){
+        } else if (rolls.length == 4) {
             turns = generateFour(rolls, playerId);
         }
         return turns;
@@ -811,33 +834,46 @@ public class Board {
     private ArrayList<Turn> generateFour(int[] rolls, int playerId) {
         ArrayList<Turn> turns = new ArrayList<>();
         ArrayList<Move> moves = generateMovesBoard(playerId);
-        int[] previousUsedDice = Arrays.copyOf(rolls,rolls.length);
-        for(Move move: moves){
-            this.getDie().setCurRoll(Arrays.copyOf(previousUsedDice,previousUsedDice.length));
+        int[] previousUsedDice = Arrays.copyOf(rolls, rolls.length);
+        for (Move move : moves) {
+            this.getDie().setCurRoll(Arrays.copyOf(previousUsedDice, previousUsedDice.length));
             Turn t = new Turn();
             t.addMoves(move);
             botDummyMove(move);
             moves = generateMovesBoard(playerId);
-            for (Move m1 : moves){
-                t.addMoves(m1);
-                botDummyMove(m1);
-                moves = generateMovesBoard(playerId);
-                for(Move m2: moves){
-                    t.addMoves(m2);
-                    botDummyMove(m2);
+            if (moves.size() > 0) {
+                for (Move m1 : moves) {
+
+                    t.addMoves(m1);
+                    botDummyMove(m1);
                     moves = generateMovesBoard(playerId);
-                    for(Move m3: moves){
-                        t.addMoves(m3);
+                    if (moves.size() > 0) {
+                        for (Move m2 : moves) {
+                            t.addMoves(m2);
+                            botDummyMove(m2);
+                            moves = generateMovesBoard(playerId);
+                            if (moves.size() > 0) {
+                                for (Move m3 : moves) {
+                                    t.addMoves(m3);
+                                    turns.add(t);
+                                    break;
+                                }
+                            } else {
+                                turns.add(t);
+                            }
+                            undoBotMove(m2);
+
+                            break;
+                        }
+                    } else {
                         turns.add(t);
-                        break;
                     }
-                    undoBotMove(m2);
+                    undoBotMove(m1);
 
                     break;
                 }
-                undoBotMove(m1);
-
-                break;
+            } else {
+                turns.add(t);
             }
             undoBotMove(move);
 
@@ -849,18 +885,23 @@ public class Board {
     private ArrayList<Turn> generateTwo(int[] rolls, int playerId) {
         ArrayList<Turn> turns = new ArrayList<>();
         ArrayList<Move> moves = generateMovesBoard(playerId);
-        for(Move move : moves){
+        for (Move move : moves) {
             int[] previousUsedDice = Arrays.copyOf(this.getDie().getCurRoll(), this.getDie().getCurRoll().length);
             Turn t = new Turn();
             t.addMoves(move);
+
             botMove(move);
             moves = generateMovesBoard(playerId);
-            for(Move m : moves){
-                t.addMoves(m);
-                turns.add(t);
-                t= new Turn();
-                t.addMoves(move);
+            if (moves.size() > 0) {
+                for (Move m : moves) {
+                    t.addMoves(m);
+                    turns.add(t);
+                    t = new Turn();
+                    t.addMoves(move);
 
+                }
+            } else {
+                turns.add(t);
             }
             this.getDie().setCurRoll(previousUsedDice);
             undoBotMove(move);
@@ -868,8 +909,9 @@ public class Board {
         return turns;
     }
 
-    private boolean isGoingToEat(int from, int to, int id){
-        if(to <= 24 && to != 0) {
+
+    private boolean isGoingToEat(int from, int to, int id) {
+        if (to <= 24 && to != 0) {
             if (this.getSpaces()[to].getSize() == 1) {
                 if (this.getSpaces()[to].getPieces().get(0).getId() != id) {
                     return true;
@@ -878,18 +920,20 @@ public class Board {
         }
         return false;
     }
-    private boolean isGoingOut(int from, int to, int id){
-        if((from + to) == 26 ){
+
+    private boolean isGoingOut(int from, int to, int id) {
+        if ((from + to) == 26) {
             return true;
         }
         return false;
     }
-    public boolean isValidBoard(){
-        for (Space space : this.getSpaces()){
-            if (space.getSize() > 0){
-                for (int i = 0; i < space.getSize()-1; i++){
-                    for (int j = i+1; j < space.getSize(); j++){
-                        if (space.getPieces().get(i).getId() != space.getPieces().get(j).getId()){
+
+    public boolean isValidBoard() {
+        for (Space space : this.getSpaces()) {
+            if (space.getSize() > 0) {
+                for (int i = 0; i < space.getSize() - 1; i++) {
+                    for (int j = i + 1; j < space.getSize(); j++) {
+                        if (space.getPieces().get(i).getId() != space.getPieces().get(j).getId()) {
                             System.out.println(this.toString());
                             return false;
                         }
@@ -902,4 +946,3 @@ public class Board {
     }
 
 }
-
