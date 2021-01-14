@@ -1,6 +1,7 @@
 package AI.TDGammon;
 
 import AI.GA.TMM;
+import Utils.EasySim;
 import World.Board;
 import World.Player;
 import World.Space;
@@ -9,14 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static Utils.EasySim.simulateMove;
-import static Utils.EasySim.unDoMoveSim;
+import static Utils.EasySim.*;
 
 public class TDG extends Player.Bot{
     public TDG(int id) {
         super(id);
     }
-    private static NeuralNet neuralnet = NNFile.importNN("newtest"); //new NeuralNet(.1f);
+    private static NeuralNet neuralnet = NNFile.importNN("newnewtest"); //new NeuralNet(.1f); //NNFile.importNN("newtest"); //new NeuralNet(.1f);
 
     public boolean learningmode = false;
     public static float[][] Ew = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
@@ -57,6 +57,7 @@ public class TDG extends Player.Bot{
     }
 
     private void moveChoice(Board b) {
+        System.out.println(b);
         // Get all possible moves
         ArrayList<Space> possFrom = getPossibleFrom();
         ArrayList<Space[]> possMoves= getPossibleMoves(possFrom);
@@ -72,25 +73,33 @@ public class TDG extends Player.Bot{
             Space[] bestMove = possMoves.get(0);
             float valBestMove = -1; // Forward propagation should always return a value between 0 and 1.
             int multiplier = 1;
+            System.out.println("Let's Try ALLLLL moves");
+
             for (int i = 0; i < possMoves.size(); i++) {
                 // Execute the move
-                simulateMove(getBoardRepresentation(b), possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());
+                simulateMove(possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());
 
+                Board btemp = new Board(EasySim.getBoardRep(),id);
                 // Translate board to TDGdata
-                inputNN = new TDGdata(b);
+                inputNN = new TDGdata(btemp);
 
                 // Use forward propagation to predict
                 outputNN = this.neuralnet.returnOutput(inputNN.data);
+
+                System.out.println(btemp);
+                System.out.println("Output: " + outputNN[0]);
                 //Check if the best move
                 if (b.getGameLoop().getCurrentPlayer().getId() == 0) {
-                  float currentBestVal = outputNN[0] > outputNN[1]*multiplier ? outputNN[0] : outputNN[1]*multiplier;
-                  if (currentBestVal > valBestMove) {
+                  //float currentBestVal = outputNN[0] > outputNN[1]*multiplier ? outputNN[0] : outputNN[1]*multiplier;
+                    float currentBestVal = outputNN[0];
+                    if (currentBestVal > valBestMove) {
                       valBestMove = currentBestVal;
                       bestMove = possMoves.get(i);
                   }
 
                 } else if (b.getGameLoop().getCurrentPlayer().getId() == 1) {
-                    float currentBestVal = outputNN[2] > outputNN[3] * multiplier ? outputNN[2] : outputNN[3] * multiplier;
+                    //float currentBestVal = outputNN[2] > outputNN[3] * multiplier ? outputNN[2] : outputNN[3] * multiplier;
+                    float currentBestVal = 1 - outputNN[0];
                     if (currentBestVal > valBestMove) {
                         valBestMove = currentBestVal;
                         bestMove = possMoves.get(i);
@@ -98,7 +107,7 @@ public class TDG extends Player.Bot{
 
                 }
                 // Undo Move
-                unDoMoveSim(getBoardRepresentation(b), possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());
+                unDoMoveSim(possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());
             }
             // Make move to board with the best probability of winning for the player
             b.playerMove(bestMove[0].getId(), bestMove[1].getId());
@@ -111,8 +120,8 @@ public class TDG extends Player.Bot{
                 else
                     nOutput = this.neuralnet.returnOutput(nInput.data);
 
-                System.out.println(Arrays.toString(cOutput));
-                System.out.println(Arrays.toString(nOutput));
+                //System.out.println(Arrays.toString(cOutput));
+                //System.out.println(Arrays.toString(nOutput));
 //
 //                System.out.println(Arrays.toString(Ev[4][0]));
 
@@ -124,7 +133,7 @@ public class TDG extends Player.Bot{
                 NN.UpdateWeightsTD2(neuralnet, 0.1f, 0.7f, cOutput, nOutput, dataSet, 0,Ew,Ev);
 
 //                System.out.println(Arrays.toString(Ev[4][0]));
-               System.out.println();
+               //System.out.println();
             }
 
         } else{

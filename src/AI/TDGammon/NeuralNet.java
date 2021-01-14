@@ -34,7 +34,7 @@ public class NeuralNet {
         float[] input = new float[4*27*2];
         layer[0] = new Layer(input);
         layer[1]= new Layer(4*27*2,40);
-        layer[2]= new Layer(40,4);
+        layer[2]= new Layer(40,1);
 
 
         //Big network for TD-gammon
@@ -264,20 +264,27 @@ public class NeuralNet {
     }
 
      static float [] giveReward(Board b){
-        float [] win= new float[4];//{player 0 win, player 0 gammon, player 1 win, player 1 gammon}
-        if(b.getPlayer1().getPiecesOutOfPlay()==15){
-            if(b.getPlayer2().getPiecesOutOfPlay()==0){
-                win[1]=1f;
-            }else{
-                win[0]=1f;
-            }
-        } else if(b.getPlayer2().getPiecesOutOfPlay()==15) {
-            if(b.getPlayer1().getPiecesOutOfPlay()==0){
-                win[3]=1f;
-            }else{
-                win[2]=1f;
-            }
-        }
+//        float [] win= new float[4];//{player 0 win, player 0 gammon, player 1 win, player 1 gammon}
+//        if(b.getPlayer1().getPiecesOutOfPlay()==15){
+//            if(b.getPlayer2().getPiecesOutOfPlay()==0){
+//                win[1]=1f;
+//            }else{
+//                win[0]=1f;
+//            }
+//        } else if(b.getPlayer2().getPiecesOutOfPlay()==15) {
+//            if(b.getPlayer1().getPiecesOutOfPlay()==0){
+//                win[3]=1f;
+//            }else{
+//                win[2]=1f;
+//            }
+//        }
+
+         float[] win = new float[1];
+         if(b.getPlayer1().getPiecesOutOfPlay()==15)
+             win[0] = 1;
+         else
+             win[0] = 0;
+
         return win;
     }
 

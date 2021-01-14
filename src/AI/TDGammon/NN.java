@@ -17,11 +17,11 @@ public class NN {
         //ArrayList<TrainData> dataSet = createTrainingData();
         NeuralNet neuralNet = new NeuralNet(lr);
 
-        //neuralNet = NNFile.importNN("newtest");
+        neuralNet = NNFile.importNN("newnewtest");
 
         trainDataTD4(neuralNet, 1, 0.1f, 0.7f);
 
-        //NNFile.export(neuralNet,"newtest");
+        NNFile.export(neuralNet,"newnewtest");
     }
 
     public static  ArrayList<TrainData> createTrainingData() throws IOException {

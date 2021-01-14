@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class EasySim {
-    static int [][] boardRep;//{id, this player pieces, opponent pieces}
+    static int [][] boardRep = new int[27][3];//{id, this player pieces, opponent pieces}
     static boolean eaten=false;
     public static void main(String [] args){
         Board b= new Board();
@@ -23,10 +23,10 @@ public class EasySim {
         int[][] rep = setBoardRep(b, 1);
         printRep();
 
-        simulateMove(rep,1,2);
+        simulateMove(1,2);
         printRep();
 
-        unDoMoveSim(rep, 1,2);
+        unDoMoveSim(1,2);
         printRep();
 
 
@@ -39,14 +39,14 @@ public class EasySim {
 
     }
 
-    public static void simulateMove(int[][] board, int from, int to) {
-        for(int i=0;i<board.length;i++){
-            if(board[i][0]==from){
-                --board[i][1];
-            }else if(board[i][0]==to){
-                ++board[i][1];
-                if(board[i][2]==1){
-                    --board[i][2];
+    public static void simulateMove(int from, int to) {
+        for(int i=0;i<boardRep.length;i++){
+            if(boardRep[i][0]==from){
+                --boardRep[i][1];
+            }else if(boardRep[i][0]==to){
+                ++boardRep[i][1];
+                if(boardRep[i][2]==1){
+                    --boardRep[i][2];
                     eaten=true;
                 }
             }
@@ -56,20 +56,24 @@ public class EasySim {
     public Board getBoard(int[][] boardrep, int id){
         return new Board(boardrep,id);
     }
-    public static void unDoMoveSim(int[][] board, int from, int to) {
-        for(int i=0;i<board.length;i++){
-            if(board[i][0]==from){
-                ++board[i][1];
-            }else if(board[i][0]==to){
-                --board[i][1];
+
+    public static void unDoMoveSim(int from, int to) {
+        for(int i=0;i<boardRep.length;i++){
+            if(boardRep[i][0]==from){
+                ++boardRep[i][1];
+            }else if(boardRep[i][0]==to){
+                --boardRep[i][1];
                 if(eaten){
                     eaten=false;
-                    ++board[i][2];
+                    ++boardRep[i][2];
                 }
             }
         }
     }
 
+    public static int[][] getBoardRep() {
+        return boardRep;
+    }
 
     public static int[][] setBoardRep(Board b, int id){
         boardRep = new int[27][3];//{id,num pieces this player, num pieces opponent}

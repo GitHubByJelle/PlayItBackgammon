@@ -89,10 +89,12 @@ public class Board {
 
 
     public void forceHomeCheck() {
-        for (int i = 0; i < spaces.length; i++) {
+        try {for (int i = 0; i < spaces.length; i++) {
             for (int a = 0; a < spaces[i].getPieces().size(); a++) {
                 spaces[i].checkHome(spaces[i].getPieces().get(a));
             }
+        }} catch(NullPointerException e){
+            e.printStackTrace();
         }
     }
 
