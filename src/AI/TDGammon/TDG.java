@@ -66,6 +66,7 @@ public class TDG extends Player.Bot{
         // For all possible moves do:
         TDGdata cInput = new TDGdata(b);
         float[] cOutput = this.neuralnet.returnOutput(cInput.data);
+        EasySim.setBoardRep(b,id);
 
         TDGdata inputNN = null;
         float[] outputNN = null;

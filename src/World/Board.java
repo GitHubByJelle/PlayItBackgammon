@@ -89,12 +89,11 @@ public class Board {
 
 
     public void forceHomeCheck() {
-        try {for (int i = 0; i < spaces.length; i++) {
+       for (int i = 0; i < spaces.length; i++) {
+
             for (int a = 0; a < spaces[i].getPieces().size(); a++) {
                 spaces[i].checkHome(spaces[i].getPieces().get(a));
             }
-        }} catch(NullPointerException e){
-            e.printStackTrace();
         }
     }
 
@@ -951,32 +950,26 @@ public class Board {
     public Board(int[][] boardrep, int id){
         this.spaces = new Space[26];
         for(int i=0;i< boardrep.length-1;i++){
+            this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
             if(id==0){
-                this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
-                for(int a=0;a<boardrep[i][1];a++){
-                    this.spaces[boardrep[i][0]].addPiece(new Piece(0));
-                }
-                for(int a=0;a<boardrep[i][2];a++){
-                    this.spaces[boardrep[i][0]].addPiece(new Piece(1));
-                }
+
+                this.addPieces(boardrep[i][0],boardrep[i][1],0);
+                this.addPieces(boardrep[i][0],boardrep[i][2],1);
+
 
                 //boardrep[1] for palyer 0 boardrep[2 for player 1
 
             }else{
-                this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
-                for(int a=0;a<boardrep[i][1];a++){
-                    this.spaces[boardrep[i][0]].addPiece(new Piece(1));
-                }
-                for(int a=0;a<boardrep[i][2];a++){
-                    this.spaces[boardrep[i][0]].addPiece(new Piece(0));
-                }
+
+                this.addPieces(boardrep[i][0],boardrep[i][1],1);
+                this.addPieces(boardrep[i][0],boardrep[i][2],0);
 
             }
 
         }
 
         this.outOfPlay = new Space(26);
-
+        //System.out.println(this);
         //to correct for is home values of the pieces
         forceHomeCheck();
     }
