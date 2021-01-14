@@ -65,7 +65,7 @@ public class NeuralNet {
                 for (int k = 0; k < layer[i - 1].neuron.length; k++) {
                     sum += (layer[i - 1].neuron[k].value) * (layer[i].neuron[j].weights[k]);
                 }
-                sum += layer[i].neuron[j].bias;
+                //sum += layer[i].neuron[j].bias; //TODO HEREEEEEEEEEEEE TEMP COMMENT
                 //layer[i].neuron[j].value= MathUtils.reLu(sum);
                 layer[i].neuron[j].value = MathUtils.sigmoid(sum);
             }
@@ -239,7 +239,7 @@ public class NeuralNet {
 
     public static void PlayMultipleTimes(Player.Bot one, Player.Bot two, Board b, int NumberOfGames, ArrayList<TrainData> dataSet){
         for(int i = 0; i<NumberOfGames; i++){
-            b = new Board();
+            //b = new Board();
 
             one.resetPlayer();
             two.resetPlayer();

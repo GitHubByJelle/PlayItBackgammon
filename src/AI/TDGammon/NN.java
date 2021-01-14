@@ -4,6 +4,7 @@ import World.Board;
 import World.Player;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class NN {
@@ -11,17 +12,16 @@ public class NN {
 
     public static void main(String[] args) throws IOException {
         int epoch = 100;
-        float lr = 0.05f;
+        float lr = 0.1f;
 
         //ArrayList<TrainData> dataSet = createTrainingData();
         NeuralNet neuralNet = new NeuralNet(lr);
 
-        NNFile.importNN("60k");
+        //neuralNet = NNFile.importNN("newtest");
 
-        trainDataTD3(neuralNet, 1000000, 0.1f, 0.7f);
+        trainDataTD4(neuralNet, 1, 0.1f, 0.7f);
 
-
-        //NNFile.export(neuralNet,"10k");
+        //NNFile.export(neuralNet,"newtest");
     }
 
     public static  ArrayList<TrainData> createTrainingData() throws IOException {
@@ -67,8 +67,8 @@ public class NN {
 
         // Create a whole game
         Board b = new Board();
-        Player.Bot one= new TDG(0);
-        Player.Bot two = new TDG(1);
+        Player.Bot one= new TDG(0); // Ew from bot 0
+        Player.Bot two = new TDG(1); // Ew from bot 1
         one.pausing=false;
         two.pausing=false;
         b.setPlayers(one,two);
@@ -85,7 +85,7 @@ public class NN {
 
         // Create a whole game
         Board b = new Board();
-        Player.Bot one= new TDG(0);
+        Player.Bot one = new TDG(0);
         Player.Bot two = new TDG(1);
         one.pausing=false;
         two.pausing=false;
@@ -130,6 +130,48 @@ public class NN {
         }
     }
 
+    public static void trainDataTD4(NeuralNet nn, int NumberOfGames, float alpha, float lambda){
+        // For every game
+        // Create a whole game
+        Board b = new Board();
+        TDG one = new TDG(0);
+        TDG two = new TDG(1);
+        one.pausing=false;
+        two.pausing=false;
+        one.learningmode = true;
+        two.learningmode = true;
+        b.setPlayers(one,two);
+        b.createBotLoop();
+
+        for (int ep = 0; ep < NumberOfGames; ep++) {
+            //System.out.println(one.getNeuralnet().getLayer()[2].neuron[3].weights[0]);
+            long time = System.nanoTime();
+            one.resetPlayer();
+            two.resetPlayer();
+            b = new Board();
+
+            one.resetElig();
+            two.resetElig();
+
+            //Play a whole game and add to data
+            ArrayList<TrainData> temp = new ArrayList<>();
+            NeuralNet.PlayMultipleTimes(one,two,b,1, temp);
+
+            time = System.nanoTime() - time;
+            double GPS = (1 / (time / 1000000000.));
+            double TL = (NumberOfGames - ep) / GPS / 60;
+//            System.out.println("Completed game: " + (ep+1) + " (of " + NumberOfGames + "). Games/s: "+
+//                     GPS + ". Done after [minutes]: " + TL);
+            System.out.format("Completed game: %d (of %d). Games/s: %.2f. Time remaining [min]: %.2f\n",
+                    ep+1,NumberOfGames,GPS,TL);
+//
+//            if ((ep+1) % 5000 == 0){
+//                NNFile.export(nn,""+((ep+1)/1000 + 60)+"k");
+//            }
+            //System.out.println(one.getNeuralnet().getLayer()[2].neuron[2].weights[0]);
+            //System.out.println();
+        }
+    }
 
     public static void trainDataTD3(NeuralNet nn, int NumberOfGames, float alpha, float lambda) {
         // For every game
@@ -151,6 +193,14 @@ public class NN {
             // For all sequences in the previous game
             float[][] Ew = new float[nn.getLayer()[1].neuron.length][nn.getLayer()[2].neuron.length];
             float[][][] Ev = new float[nn.getLayer()[0].neuron.length][nn.getLayer()[1].neuron.length][nn.getLayer()[2].neuron.length];
+
+//            float[][] Yt0 = new float[dataSet.size()][nn.getLayer()[2].neuron.length];
+//            float[][] Yt1 = new float[dataSet.size()][nn.getLayer()[2].neuron.length];
+//            for (t = 0; t < dataSet.size() - 1; t++){
+//                Yt0[t] = nn.returnOutput(dataSet.get(t).getData());
+//                Yt1[t] = nn.returnOutput(dataSet.get(t+1).getData());
+//            }
+
             for (t = 0; t < dataSet.size() - 1; t++) {
                 // Start at the end and get output from NN (Layer 2 -> Layer 3 a.k.a. Hidden -> Output)
                 float[] Yt0 = nn.returnOutput(dataSet.get(t).getData());
@@ -176,10 +226,10 @@ public class NN {
 //                     GPS + ". Done after [minutes]: " + TL);
             System.out.format("Completed game: %d (of %d). Games/s: %.2f. Time remaining [min]: %.2f\n",
                     ep+1,NumberOfGames,GPS,TL);
-
-            if ((ep+1) % 5000 == 0){
-                NNFile.export(nn,""+((ep+1)/1000 + 60)+"k");
-            }
+//
+//            if ((ep+1) % 5000 == 0){
+//                NNFile.export(nn,""+((ep+1)/1000 + 60)+"k");
+//            }
         }
     }
 
@@ -250,6 +300,7 @@ public class NN {
     public static void UpdateWeightsTD2(NeuralNet nn, float alpha, float lambda, float[] Yt0, float[] Yt1,
                                        ArrayList<TrainData> dataSet, int t, float[][] Ew, float[][][] Ev){
         float Yj[] = nn.returnHiddenVal(dataSet.get(t).getData());
+        // Calculating and saving the sum part of RHS
         for (int j = 0; j < nn.getLayer()[1].neuron.length; j++) {
             for (int k = 0; k < nn.getLayer()[2].neuron.length; k++) {
                 Ew[j][k] = (lambda * Ew[j][k]) +
@@ -262,8 +313,14 @@ public class NN {
             }
         }
 
+        // Calculating the difference RHS
         float[] YDiff = MinArray(Yt1,Yt0);
 
+//        System.out.println(Arrays.toString(YDiff));
+//        for (int k = 0; k < 4; k++)
+//            System.out.println(alpha * YDiff[k] * Ev[4][0][k]);
+
+        // Updating the weights
         for (int j = 0; j < nn.getLayer()[1].neuron.length; j++){
             for (int k = 0; k < YDiff.length; k++){
                 nn.getLayer()[2].neuron[k].weights[j] += alpha * YDiff[k] * Ew[j][k];

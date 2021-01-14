@@ -35,8 +35,8 @@ public class BotTestingGround {
 //        long a = System.nanoTime();
 //        testMultipleTimes(one,two);
 //        System.out.println((System.nanoTime()-a)/1000000000.);
-        Player.Bot one = new TDG(0);
-        Player.Bot two = new PrimeBlitzBot(1);
+        TDG one = new TDG(0);
+        Player.Bot two = new TMM(1);
 //        one.setOpponent(two);
 //        two.setOpponent(one);
 	    one.pausing = false;
