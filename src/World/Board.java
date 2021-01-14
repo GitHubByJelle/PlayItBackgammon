@@ -945,4 +945,37 @@ public class Board {
         return true;
     }
 
+
+    public Board(int[][] boardrep, int id){
+        this.spaces = new Space[26];
+        for(int i=0;i< boardrep.length-1;i++){
+            if(id==0){
+                this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
+                for(int a=0;a<boardrep[i][1];a++){
+                    this.spaces[boardrep[i][0]].addPiece(new Piece(0));
+                }
+                for(int a=0;a<boardrep[i][2];a++){
+                    this.spaces[boardrep[i][0]].addPiece(new Piece(1));
+                }
+
+                //boardrep[1] for palyer 0 boardrep[2 for player 1
+
+            }else{
+                this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
+                for(int a=0;a<boardrep[i][1];a++){
+                    this.spaces[boardrep[i][0]].addPiece(new Piece(1));
+                }
+                for(int a=0;a<boardrep[i][2];a++){
+                    this.spaces[boardrep[i][0]].addPiece(new Piece(0));
+                }
+
+            }
+
+        }
+
+        this.outOfPlay = new Space(26);
+
+        //to correct for is home values of the pieces
+        forceHomeCheck();
+    }
 }

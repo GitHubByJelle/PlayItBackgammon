@@ -3,6 +3,7 @@ package Utils;
 import AI.RandomBot;
 import AI.SimpleBot;
 import World.Board;
+import World.Die;
 import World.Player;
 import World.Space;
 
@@ -29,7 +30,11 @@ public class EasySim {
         printRep();
 
 
+
         System.out.println(Arrays.toString(getPossMoves(new int[]{1,2},1,0,rep).toArray()));
+
+        Board b2 = new Board(rep,1);
+        System.out.println(b2);
 
 
     }
@@ -46,6 +51,10 @@ public class EasySim {
                 }
             }
         }
+    }
+
+    public Board getBoard(int[][] boardrep, int id){
+        return new Board(boardrep,id);
     }
     public static void unDoMoveSim(int[][] board, int from, int to) {
         for(int i=0;i<board.length;i++){
