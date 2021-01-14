@@ -288,7 +288,7 @@ public abstract class Player {
         }
         public void unDoTurn(Turn turn,int dummy) {
             for(int i = turn.moves.size()-1; i>-1; i--){
-                this.B.undoBotMove(turn.moves.get(i));
+                this.B.undoBotMove(turn.moves.get(i),dummy);
             }
         }
         public ArrayList<Move> generateMoves2() {

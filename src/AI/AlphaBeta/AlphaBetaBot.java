@@ -32,13 +32,12 @@ public class AlphaBetaBot extends Player.Bot {
     };
 
 
-    private static final int DEFAULT_DEPTH = 3;
+    private static final int DEFAULT_DEPTH =3;
 
     private double[] moveQuality;
     public Bot opponent;
     private int initialDepth = -1;
-    public StringBuilder treeStringRepresentationBuilder = new StringBuilder("");
-    private boolean logExpectiminimaxTree = false;
+
 
     public AlphaBetaBot(int id) {
 
@@ -46,10 +45,12 @@ public class AlphaBetaBot extends Player.Bot {
 //        System.out.println("Test tostring");
 //        System.out.println(this.B);
 //        System.out.println("-------------------------------------------------");
+
+
         if(id == 0){
             opponent = new SimpleBot(1);
             //NODES = NODES1;//
-        }else{
+        }else if (id == 1){
             opponent = new SimpleBot(0);
            // NODES = NODES2;
         }
@@ -116,8 +117,7 @@ public class AlphaBetaBot extends Player.Bot {
 
                 turns = this.getValidTurns(this.id);
                 System.out.println("Turns within: " + turns);
-                if(turns.size() == 0){
-                }
+
                 if (!turns.isEmpty()) {
                     double[] moveQuality = new double[turns.size()];
 
@@ -125,7 +125,6 @@ public class AlphaBetaBot extends Player.Bot {
                         makeTurn(turns.get(i), 0);
                         moveQuality[i] = expectiminimax(depth - 1, (currentNodeIndex + 1) % 4);
                         unDoTurn(turns.get(i), 0);
-
 
                     }
 
@@ -145,9 +144,11 @@ public class AlphaBetaBot extends Player.Bot {
                     double[] moveQuality = new double[turns.size()];
 
                     for (int i = 0; i < turns.size(); i++) {
+
                         opponent.makeTurn(turns.get(i), 1);
                         moveQuality[i] = expectiminimax(depth - 1, (currentNodeIndex + 1) % 4);
                         opponent.unDoTurn(turns.get(i), 1);
+
 
                     }
 
@@ -378,7 +379,13 @@ public class AlphaBetaBot extends Player.Bot {
                 maxQualityMoveIndex = i;
             }
         }
-
+        int secondMaxQuality;
+        for (int i = 0; i < moveQuality.length; i++) {
+            if (moveQuality[i] > maxMoveQuality) {
+                maxMoveQuality = moveQuality[i];
+                maxQualityMoveIndex = i;
+            }
+        }
         System.out.println(turns1);
         if(maxQualityMoveIndex == -1){
             requestPassTurn();

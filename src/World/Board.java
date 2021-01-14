@@ -603,8 +603,8 @@ public class Board {
                 spaces[from].movePiece(spaces[to]);
                 if (move.isKill) {
                     if (move.playerId == 0) {
+                        System.out.println("Move back from eaten space");
                         moveBackFromEatenSpaceID(from, 0);
-
                     } else {
                         moveBackFromEatenSpaceID(from, 1);
 
@@ -625,6 +625,7 @@ public class Board {
             if (spaces[from].getSize() > 0) {
                 spaces[from].movePiece(spaces[to]);
                 if (move.isKill) {
+                    System.out.println("ABC" + move.playerId);
                     if (move.playerId == 0) {
                         spaces[25].movePiece(spaces[from]);
 
