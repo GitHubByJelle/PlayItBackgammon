@@ -16,7 +16,7 @@ public class TDG extends Player.Bot{
     public TDG(int id) {
         super(id);
     }
-    private static NeuralNet neuralnet = NNFile.importNN("newnewtest"); //new NeuralNet(.1f); //NNFile.importNN("newtest"); //new NeuralNet(.1f);
+    private static NeuralNet neuralnet = new NeuralNet(.1f); //NNFile.importNN("newnewtest"); //new NeuralNet(.1f); //NNFile.importNN("newtest"); //new NeuralNet(.1f);
 
     public boolean learningmode = false;
     public static float[][] Ew = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
@@ -57,7 +57,7 @@ public class TDG extends Player.Bot{
     }
 
     private void moveChoice(Board b) {
-        System.out.println(b);
+        //System.out.println(b);
         // Get all possible moves
         ArrayList<Space> possFrom = getPossibleFrom();
         ArrayList<Space[]> possMoves= getPossibleMoves(possFrom);
@@ -74,7 +74,7 @@ public class TDG extends Player.Bot{
             Space[] bestMove = possMoves.get(0);
             float valBestMove = -1; // Forward propagation should always return a value between 0 and 1.
             int multiplier = 1;
-            System.out.println("Let's Try ALLLLL moves");
+            //System.out.println("Let's Try ALLLLL moves");
 
             for (int i = 0; i < possMoves.size(); i++) {
                 // Execute the move
@@ -87,8 +87,8 @@ public class TDG extends Player.Bot{
                 // Use forward propagation to predict
                 outputNN = this.neuralnet.returnOutput(inputNN.data);
 
-                System.out.println(btemp);
-                System.out.println("Output: " + outputNN[0]);
+                //System.out.println(btemp);
+                //System.out.println("Output: " + outputNN[0]);
                 //Check if the best move
                 if (b.getGameLoop().getCurrentPlayer().getId() == 0) {
                   //float currentBestVal = outputNN[0] > outputNN[1]*multiplier ? outputNN[0] : outputNN[1]*multiplier;
@@ -110,6 +110,7 @@ public class TDG extends Player.Bot{
                 // Undo Move
                 unDoMoveSim(possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());
             }
+            //System.out.println("MAKE THE ACTUAL MOVEEEEEEE");
             // Make move to board with the best probability of winning for the player
             b.playerMove(bestMove[0].getId(), bestMove[1].getId());
 

@@ -17,9 +17,9 @@ public class NN {
         //ArrayList<TrainData> dataSet = createTrainingData();
         NeuralNet neuralNet = new NeuralNet(lr);
 
-        neuralNet = NNFile.importNN("newnewtest");
+        //neuralNet = NNFile.importNN("newnewtest");
 
-        trainDataTD4(neuralNet, 1, 0.1f, 0.7f);
+        trainDataTD4(neuralNet, 5000, 0.1f, 0.7f);
 
         NNFile.export(neuralNet,"newnewtest");
     }
