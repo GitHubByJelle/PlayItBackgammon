@@ -92,8 +92,13 @@ public class EasySim {
         }
 
         boardRep[26][0]= 26;
-        boardRep[26][1]=b.getPlayer1().getPiecesOutOfPlay();
-        boardRep[26][2]= b.getPlayer2().getPiecesOutOfPlay();
+        if(id==0){
+            boardRep[26][1]=b.getPlayer1().getPiecesOutOfPlay();
+            boardRep[26][2]= b.getPlayer2().getPiecesOutOfPlay();
+        }else{
+            boardRep[26][1]=b.getPlayer2().getPiecesOutOfPlay();
+            boardRep[26][2]= b.getPlayer1().getPiecesOutOfPlay();
+        }
         return boardRep;
     }
 
@@ -244,8 +249,8 @@ public class EasySim {
             w = boardRep[26][2];
             r = boardRep[26][1];
         }
-
-        return r==15 ||w==15;
+     
+        return r==15||w==15;
     }
 
 }

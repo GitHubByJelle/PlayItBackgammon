@@ -87,25 +87,20 @@ public class Board {
         this.player1=b.getPlayer1();
         this.player2=b.getPlayer2();
         this.spaces = new Space[26];
-        this.outOfPlay = new Space(26);
+
         for(int i=0;i< boardrep.length-1;i++){
             this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
             if(id==0){
-
                 this.addPieces(boardrep[i][0],boardrep[i][1],0);
                 this.addPieces(boardrep[i][0],boardrep[i][2],1);
-
-
-                //boardrep[1] for palyer 0 boardrep[2 for player 1
-
             }else{
-
                 this.addPieces(boardrep[i][0],boardrep[i][1],1);
                 this.addPieces(boardrep[i][0],boardrep[i][2],0);
 
             }
 
         }
+        this.outOfPlay = new Space(26);
         if(id==0) {
             for(int i=0;i<boardrep[26][1];i++) {
                 outOfPlay.addPiece(new Piece(0));
@@ -499,7 +494,7 @@ public class Board {
         for (int i = 1; i <= 12; i++) {
             res += String.format("%2d  %15s | %15s  %2d\n", i, spaces[i], spaces[25 - i], (25 - i));
         }
-        res+= String.format("%2d  %15s \n", 26, outOfPlay, (26));
+        res+= String.format("%2d  %15s \n", 26, outOfPlay);
         return res;
 
     }
