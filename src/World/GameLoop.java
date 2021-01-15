@@ -136,10 +136,10 @@ public class GameLoop {
 //        System.out.println("Changing turn");
         if (getCurrentPlayer().getId() == 0) {
             setCurrentPlayer(board.getPlayer2());
-            System.out.println("Switched to R");
+//            System.out.println("Switched to R");
         } else {
             setCurrentPlayer(board.getPlayer1());
-            System.out.println("Switched to W");
+//            System.out.println("Switched to W");
         }
         board.getDie().getNextRoll();
         rollCheck(board.getDie().getCurRoll());

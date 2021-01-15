@@ -16,7 +16,7 @@ public class TDG extends Player.Bot{
     public TDG(int id) {
         super(id);
     }
-    private static NeuralNet neuralnet = NNFile.importNN("newtest");//new NeuralNet(.1f); //NNFile.importNN("newtest"); //new NeuralNet(.1f);
+    private static NeuralNet neuralnet = new NeuralNet(.1f); //NNFile.importNN("newtest"); //new NeuralNet(.1f);
 
     public boolean learningmode = false;
     public static float[][] Ew = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
@@ -57,10 +57,10 @@ public class TDG extends Player.Bot{
     }
 
     private void moveChoice(Board b) {
-        System.out.println(b);
-        System.out.println("Die:");
-        b.getDie().printCurRoll();
-        System.out.println();
+//        System.out.println(b);
+//        System.out.println("Die:");
+//        b.getDie().printCurRoll();
+//        System.out.println();
         // Get all possible moves
         ArrayList<Space> possFrom = getPossibleFrom();
         ArrayList<Space[]> possMoves= getPossibleMoves(possFrom);
@@ -78,11 +78,11 @@ public class TDG extends Player.Bot{
             Space[] bestMove = possMoves.get(0);
             float valBestMove = -10000; // Forward propagation should always return a value between 0 and 1.
             int multiplier = 1;
-            System.out.println("Let's Try ALLLLL moves");
+//            System.out.println("Let's Try ALLLLL moves");
 
             float[] nOutput = new float[4];
             for (int i = 0; i < possMoves.size(); i++) {
-                System.out.println("From: " + possMoves.get(i)[0].getId() + "-> To: " + possMoves.get(i)[1].getId());
+//                System.out.println("From: " + possMoves.get(i)[0].getId() + "-> To: " + possMoves.get(i)[1].getId());
                 // Execute the move
                 simulateMove(possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());
 
@@ -92,16 +92,16 @@ public class TDG extends Player.Bot{
 
                 // Use forward propagation to predict
                 //outputNN = this.neuralnet.returnOutput(inputNN.data);
-                System.out.println(btemp.getGameLoop().getCurrentPlayer().getPiecesOutOfPlay());
+//                System.out.println(btemp.getGameLoop().getCurrentPlayer().getPiecesOutOfPlay());
                 if (EasySim.checkWinCondition(id)) {
                     outputNN = NeuralNet.giveReward(btemp);
-                    System.out.println("Yeah got reward xox");
+//                    System.out.println("Yeah got reward xox");
                 }
                 else
                     outputNN = this.neuralnet.returnOutput(inputNN.data);
 
-                System.out.println(btemp);
-                System.out.println("Output: " + outputNN[0]);
+//                System.out.println(btemp);
+//                System.out.println("Output: " + outputNN[0]);
                 //Check if the best move
                 if (btemp.getGameLoop().getCurrentPlayer().getId() == 0) {
                   //float currentBestVal = outputNN[0] > outputNN[1]*multiplier ? outputNN[0] : outputNN[1]*multiplier;
