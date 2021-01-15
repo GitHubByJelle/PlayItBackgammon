@@ -16,7 +16,7 @@ public class TDG extends Player.Bot{
     public TDG(int id) {
         super(id);
     }
-    private static NeuralNet neuralnet = new NeuralNet(.1f); //NNFile.importNN("newtest"); //new NeuralNet(.1f);
+    private static NeuralNet neuralnet = NNFile.importNN("newnewtest"); //new NeuralNet(.1f);
 
     public boolean learningmode = false;
     public static float[][] Ew = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
@@ -94,8 +94,9 @@ public class TDG extends Player.Bot{
                 //outputNN = this.neuralnet.returnOutput(inputNN.data);
 //                System.out.println(btemp.getGameLoop().getCurrentPlayer().getPiecesOutOfPlay());
                 if (EasySim.checkWinCondition(id)) {
-                    outputNN = NeuralNet.giveReward(btemp);
-//                    System.out.println("Yeah got reward xox");
+//                    System.out.println(btemp.getOutOfPlay());
+                    outputNN = NeuralNet.giveReward(EasySim.getBoardRep(), id);
+//                    System.out.println("Yeah got reward: " + outputNN[0]);
                 }
                 else
                     outputNN = this.neuralnet.returnOutput(inputNN.data);
@@ -145,7 +146,7 @@ public class TDG extends Player.Bot{
                 ArrayList<TrainData> dataSet = new ArrayList<>();
                 dataSet.add(data1); //dataSet.add(data2);
 
-                NN.UpdateWeightsTD2(neuralnet, 0.3f, 0.7f, cOutput, nOutput, dataSet, 0,Ew,Ev);
+                NN.UpdateWeightsTD2(neuralnet, 0.1f, 0.7f, cOutput, nOutput, dataSet, 0,Ew,Ev);
 
 //                System.out.println(Arrays.toString(Ev[4][0]));
 //               System.out.println();

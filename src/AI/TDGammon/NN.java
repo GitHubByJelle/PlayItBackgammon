@@ -21,7 +21,7 @@ public class NN {
 
         trainDataTD4(neuralNet, 5000, 0.1f, 0.7f);
 
-        NNFile.export(neuralNet,"newtest");
+        NNFile.export(neuralNet,"newnewtest");
     }
 
     public static  ArrayList<TrainData> createTrainingData() throws IOException {

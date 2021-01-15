@@ -263,7 +263,7 @@ public class NeuralNet {
         }
     }
 
-     static float [] giveReward(Board b){
+     static float [] giveReward(int[][] bRep, int id){
 //        float [] win= new float[4];//{player 0 win, player 0 gammon, player 1 win, player 1 gammon}
 //        if(b.getPlayer1().getPiecesOutOfPlay()==15){
 //            if(b.getPlayer2().getPiecesOutOfPlay()==0){
@@ -280,16 +280,37 @@ public class NeuralNet {
 //        }
 
          float[] win = new float[1];
-         if(b.getPlayer1().getPiecesOutOfPlay()==15)
-             win[0] = 1;
-         else
-             win[0] = 0;
+         if(id==0){
+             if(bRep[26][1]==15){
+                 win[0] = 1;
+             }else{
+                 win[0] = 0;
+             }
+         }else{
+             if(bRep[26][2]==15){
+                 win[0] = 1;
+             }else{
+                 win[0] = 0;
+             }
 
-        return win;
+         }
+
+         return win;
     }
 
     static void AddData(Board b, ArrayList<TrainData> dataSet){
         dataSet.add(new TrainData(new TDGdata(b).data,giveReward(b)));
+    }
+
+    static float[] giveReward(Board b){
+
+        float[] win = new float[1];
+        if(b.getPlayer1().getPiecesOutOfPlay()==15)
+            win[0] = 1;
+        else
+            win[0] = 0;
+        return win;
+
     }
 
     @Override
