@@ -234,4 +234,18 @@ public class EasySim {
     }
 
 
+    public static boolean checkWinCondition(int id){
+        int w;
+        int r;
+        if(id==0) {
+            w = boardRep[26][1];
+            r = boardRep[26][2];
+        }else{
+            w = boardRep[26][2];
+            r = boardRep[26][1];
+        }
+
+        return r==15 ||w==15;
+    }
+
 }

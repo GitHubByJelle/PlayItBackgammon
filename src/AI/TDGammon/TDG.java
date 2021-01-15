@@ -98,7 +98,7 @@ public class TDG extends Player.Bot{
                       valBestMove = currentBestVal;
                       bestMove = possMoves.get(i);
                         TDGdata nInput = new TDGdata(btemp);
-                        if (btemp.checkWinCondition())
+                        if (EasySim.checkWinCondition(id))
                             nOutput = NeuralNet.giveReward(btemp);
                         else
                             nOutput = this.neuralnet.returnOutput(nInput.data);

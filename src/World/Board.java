@@ -107,11 +107,20 @@ public class Board {
 
         }
         if(id==0) {
-            addPieces(26, boardrep[26][1], 0);
-            addPieces(26, boardrep[26][2], 1);
+            for(int i=0;i<boardrep[26][1];i++) {
+                outOfPlay.addPiece(new Piece(0));
+            }
+            for(int i=0;i<boardrep[26][2];i++) {
+                outOfPlay.addPiece(new Piece(1));
+            }
+
         }else if(id==1) {
-            addPieces(26, boardrep[26][1], 1);
-            addPieces(26, boardrep[26][2], 0);
+            for(int i=0;i<boardrep[26][1];i++) {
+                outOfPlay.addPiece(new Piece(1));
+            }
+            for(int i=0;i<boardrep[26][2];i++) {
+                outOfPlay.addPiece(new Piece(0));
+            }
         }
 
 
@@ -269,7 +278,6 @@ public class Board {
 
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         if (to == 26) {
-
             if (allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
                 lastPlays(from, to);
