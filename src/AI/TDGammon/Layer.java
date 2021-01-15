@@ -1,6 +1,8 @@
 package AI.TDGammon;
 
-public class Layer {
+import java.io.Serializable;
+
+public class Layer implements Serializable {
     public Neuron[] neuron;
 
     //Output layer + hidden layers

@@ -1,5 +1,6 @@
 package AI.TDGammon;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +10,7 @@ import AI.RandomBot;
 import World.Board;
 import World.Player;
 
-public class NeuralNet {
+public class NeuralNet implements Serializable {
     private ArrayList<TrainData> dataSet;
     private Layer[] layer;
     private float lr;

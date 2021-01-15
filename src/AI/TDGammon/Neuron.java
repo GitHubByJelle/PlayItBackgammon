@@ -1,8 +1,9 @@
 package AI.TDGammon;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Neuron {
+public class Neuron implements Serializable {
     //only there to set the bounds of the weights
     static float minWeight;
     static float maxWeight;
