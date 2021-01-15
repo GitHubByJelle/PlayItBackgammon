@@ -87,6 +87,7 @@ public class Board {
         this.player1=b.getPlayer1();
         this.player2=b.getPlayer2();
         this.spaces = new Space[26];
+        this.outOfPlay = new Space(26);
         for(int i=0;i< boardrep.length-1;i++){
             this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
             if(id==0){
@@ -105,8 +106,15 @@ public class Board {
             }
 
         }
+        if(id==0) {
+            addPieces(26, boardrep[26][1], 0);
+            addPieces(26, boardrep[26][2], 1);
+        }else if(id==1) {
+            addPieces(26, boardrep[26][1], 1);
+            addPieces(26, boardrep[26][2], 0);
+        }
 
-        this.outOfPlay = new Space(26);
+
         //System.out.println(this);
         //to correct for is home values of the pieces
         forceHomeCheck();
@@ -483,7 +491,7 @@ public class Board {
         for (int i = 1; i <= 12; i++) {
             res += String.format("%2d  %15s | %15s  %2d\n", i, spaces[i], spaces[25 - i], (25 - i));
         }
-
+        res+= String.format("%2d  %15s \n", 26, outOfPlay, (26));
         return res;
 
     }
