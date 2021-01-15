@@ -16,7 +16,7 @@ public class TDG extends Player.Bot{
     public TDG(int id) {
         super(id);
     }
-    private static NeuralNet neuralnet = new NeuralNet(.1f); //NNFile.importNN("newnewtest"); //new NeuralNet(.1f); //NNFile.importNN("newtest"); //new NeuralNet(.1f);
+    private static NeuralNet neuralnet = NNFile.importNN("newtest"); //new NeuralNet(.1f); //NNFile.importNN("newtest"); //new NeuralNet(.1f);
 
     public boolean learningmode = false;
     public static float[][] Ew = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
@@ -38,7 +38,7 @@ public class TDG extends Player.Bot{
         Board b = new Board();
 
         Player one = new TDG(0);
-        Player two = new TMM(1);
+        Player two = new TDG(1);
         one.resetPlayer();
         two.resetPlayer();
         b.setPlayers(one,two);
@@ -72,10 +72,11 @@ public class TDG extends Player.Bot{
         float[] outputNN = null;
         if(possMoves.size()>0) {
             Space[] bestMove = possMoves.get(0);
-            float valBestMove = -1; // Forward propagation should always return a value between 0 and 1.
+            float valBestMove = -10000; // Forward propagation should always return a value between 0 and 1.
             int multiplier = 1;
             //System.out.println("Let's Try ALLLLL moves");
 
+            float[] nOutput = new float[4];
             for (int i = 0; i < possMoves.size(); i++) {
                 // Execute the move
                 simulateMove(possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());
@@ -90,56 +91,67 @@ public class TDG extends Player.Bot{
                 //System.out.println(btemp);
                 //System.out.println("Output: " + outputNN[0]);
                 //Check if the best move
-                if (b.getGameLoop().getCurrentPlayer().getId() == 0) {
+                if (btemp.getGameLoop().getCurrentPlayer().getId() == 0) {
                   //float currentBestVal = outputNN[0] > outputNN[1]*multiplier ? outputNN[0] : outputNN[1]*multiplier;
                     float currentBestVal = outputNN[0];
                     if (currentBestVal > valBestMove) {
                       valBestMove = currentBestVal;
                       bestMove = possMoves.get(i);
+                        TDGdata nInput = new TDGdata(btemp);
+                        if (btemp.checkWinCondition())
+                            nOutput = NeuralNet.giveReward(btemp);
+                        else
+                            nOutput = this.neuralnet.returnOutput(nInput.data);
                   }
 
-                } else if (b.getGameLoop().getCurrentPlayer().getId() == 1) {
+                } else if (btemp.getGameLoop().getCurrentPlayer().getId() == 1) {
                     //float currentBestVal = outputNN[2] > outputNN[3] * multiplier ? outputNN[2] : outputNN[3] * multiplier;
                     float currentBestVal = 1 - outputNN[0];
                     if (currentBestVal > valBestMove) {
                         valBestMove = currentBestVal;
                         bestMove = possMoves.get(i);
+                        TDGdata nInput = new TDGdata(btemp);
+                        if (btemp.checkWinCondition())
+                            nOutput = NeuralNet.giveReward(btemp);
+                        else
+                            nOutput = this.neuralnet.returnOutput(nInput.data);
                     }
 
                 }
                 // Undo Move
                 unDoMoveSim(possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());
             }
-            //System.out.println("MAKE THE ACTUAL MOVEEEEEEE");
-            // Make move to board with the best probability of winning for the player
-            b.playerMove(bestMove[0].getId(), bestMove[1].getId());
 
             if (learningmode){
-                TDGdata nInput = new TDGdata(b);
-                float[] nOutput;
-                if (b.checkWinCondition())
-                    nOutput = NeuralNet.giveReward(b);
-                else
-                    nOutput = this.neuralnet.returnOutput(nInput.data);
+//                TDGdata nInput = new TDGdata(b);
+//                if (b.checkWinCondition())
+//                    nOutput = NeuralNet.giveReward(b);
+//                else
+//                    nOutput = this.neuralnet.returnOutput(nInput.data);
 
-                //System.out.println(Arrays.toString(cOutput));
-                //System.out.println(Arrays.toString(nOutput));
-//
+//                System.out.println(Arrays.toString(cOutput));
+//                System.out.println(Arrays.toString(nOutput));
+
 //                System.out.println(Arrays.toString(Ev[4][0]));
 
                 TrainData data1 = new TrainData(cInput.data,cOutput);
-                TrainData data2 = new TrainData(nInput.data,nOutput);
+//                TrainData data2 = new TrainData(nInput.data,nOutput);
                 ArrayList<TrainData> dataSet = new ArrayList<>();
-                dataSet.add(data1); dataSet.add(data2);
+                dataSet.add(data1); //dataSet.add(data2);
 
                 NN.UpdateWeightsTD2(neuralnet, 0.1f, 0.7f, cOutput, nOutput, dataSet, 0,Ew,Ev);
 
 //                System.out.println(Arrays.toString(Ev[4][0]));
-               //System.out.println();
+//               System.out.println();
             }
+
+            //System.out.println("MAKE THE ACTUAL MOVEEEEEEE");
+            // Make move to board with the best probability of winning for the player
+            b.playerMove(bestMove[0].getId(), bestMove[1].getId());
 
         } else{
             requestPassTurn();
+//            System.out.println("TD PASSED!");
         }
     }
     private int [][] getBoardRepresentation(Board b){

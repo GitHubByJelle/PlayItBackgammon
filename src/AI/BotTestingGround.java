@@ -8,6 +8,7 @@ import World.Board;
 import World.Player;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BotTestingGround {
     private static ArrayList<int[]> i= new ArrayList<int[]>();
@@ -35,8 +36,8 @@ public class BotTestingGround {
 //        long a = System.nanoTime();
 //        testMultipleTimes(one,two);
 //        System.out.println((System.nanoTime()-a)/1000000000.);
-        TDG one = new TDG(0);
-        Player.Bot two = new PrimeBlitzBot(1);
+        Player.Bot one = new TDG(0);
+        Player.Bot two = new PrimeBlitzBot( 1);
 //        one.setOpponent(two);
 //        two.setOpponent(one);
 	    one.pausing = false;
@@ -45,7 +46,7 @@ public class BotTestingGround {
 	    b.createBotLoop();
         long a = System.nanoTime();
         //System.out.println("Depth of 3: ");
-        testMultipleTimes(one, two);
+        testMultipleTimes(one, two, 1000);
         System.out.println((System.nanoTime()-a)/1000000000.);
         
 //        ABbot one = new ABbot(0);
@@ -91,7 +92,7 @@ public class BotTestingGround {
             testWithRandomDie();
             //System.out.println(b);
         }
-        //System.out.println(counter);
+        System.out.println(one.getName() + " vs " + two.getName() + ". Number of wins: " + counter);
     }
 
     private static void testWithRandomDie(){

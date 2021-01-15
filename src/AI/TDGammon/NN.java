@@ -19,9 +19,9 @@ public class NN {
 
         //neuralNet = NNFile.importNN("newnewtest");
 
-        trainDataTD4(neuralNet, 5000, 0.1f, 0.7f);
+        trainDataTD4(neuralNet, 7500, 0.1f, 0.7f);
 
-        NNFile.export(neuralNet,"newnewtest");
+        NNFile.export(neuralNet,"newtest");
     }
 
     public static  ArrayList<TrainData> createTrainingData() throws IOException {
@@ -67,8 +67,8 @@ public class NN {
 
         // Create a whole game
         Board b = new Board();
-        Player.Bot one= new TDG(0); // Ew from bot 0
-        Player.Bot two = new TDG(1); // Ew from bot 1
+        Player.Bot one= new TDG(0);
+        Player.Bot two = new TDG(1);
         one.pausing=false;
         two.pausing=false;
         b.setPlayers(one,two);
@@ -299,33 +299,41 @@ public class NN {
 
     public static void UpdateWeightsTD2(NeuralNet nn, float alpha, float lambda, float[] Yt0, float[] Yt1,
                                        ArrayList<TrainData> dataSet, int t, float[][] Ew, float[][][] Ev){
-        float Yj[] = nn.returnHiddenVal(dataSet.get(t).getData());
+
+        // Yt0 cOut, Yt1 nOut, dataSet cInp
+        //float Yj[] = nn.returnHiddenVal(dataSet.get(t).getData());
+        nn.forwardProp(dataSet.get(t).getData());
         // Calculating and saving the sum part of RHS
         for (int j = 0; j < nn.getLayer()[1].neuron.length; j++) {
             for (int k = 0; k < nn.getLayer()[2].neuron.length; k++) {
                 Ew[j][k] = (lambda * Ew[j][k]) +
-                        MathUtils.sigmoidDerivative(Yt0[k]) * nn.getLayer()[1].neuron[j].value;
+                        MathUtils.sigmoidDerivative(nn.getLayer()[2].neuron[k].value) * nn.getLayer()[1].neuron[j].value;
                 for (int i = 0; i < nn.getLayer()[0].neuron.length; i++) {
                     Ev[i][j][k] = (lambda * Ev[i][j][k]) +
-                            (MathUtils.sigmoidDerivative(Yt0[k]) * nn.getLayer()[2].neuron[k].weights[j] *
-                                    MathUtils.sigmoidDerivative(Yj[j]) * dataSet.get(t).getData()[i]);
+                            (MathUtils.sigmoidDerivative(nn.getLayer()[2].neuron[k].value) * nn.getLayer()[2].neuron[k].weights[j] *
+                                    MathUtils.sigmoidDerivative(nn.getLayer()[1].neuron[j].value) * dataSet.get(t).getData()[i]);
                 }
             }
         }
 
         // Calculating the difference RHS
-        float[] YDiff = MinArray(Yt1,Yt0);
+        //float[] YDiff = MinArray(Yt1,Yt0);
+        float[] YDiff = new float[Yt0.length];
+        for (int k = 0; k < Yt0.length; k++){
+            YDiff[k] = Yt1[k] - Yt0[k];
+        }
 
-//        System.out.println(Arrays.toString(YDiff));
+
+//        System.out.println(YDiff[0]);
 //        for (int k = 0; k < 4; k++)
 //            System.out.println(alpha * YDiff[k] * Ev[4][0][k]);
 
         // Updating the weights
         for (int j = 0; j < nn.getLayer()[1].neuron.length; j++){
             for (int k = 0; k < YDiff.length; k++){
-                nn.getLayer()[2].neuron[k].weights[j] += alpha * YDiff[k] * Ew[j][k];
+                nn.getLayer()[2].neuron[k].weights[j] += alpha*.2 * YDiff[k] * Ew[j][k];
                 for (int i = 0; i < nn.getLayer()[0].neuron.length; i++){
-                    nn.getLayer()[1].neuron[j].weights[i] += alpha * YDiff[k] * Ev[i][j][k];
+                    nn.getLayer()[1].neuron[j].weights[i] += alpha*.8 * YDiff[k] * Ev[i][j][k];
                 }
             }
         }
