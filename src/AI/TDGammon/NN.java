@@ -19,9 +19,9 @@ public class NN {
 
         //neuralNet = NNFile.importNN("newnewtest");
 
-        trainDataTD4(neuralNet, 7500, 0.1f, 0.7f);
+        trainDataTD4(neuralNet, 1, 0.1f, 0.7f);
 
-        NNFile.export(neuralNet,"newtest");
+        //NNFile.export(neuralNet,"newtest");
     }
 
     public static  ArrayList<TrainData> createTrainingData() throws IOException {
