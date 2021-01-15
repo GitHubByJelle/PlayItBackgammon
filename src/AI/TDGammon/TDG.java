@@ -81,7 +81,7 @@ public class TDG extends Player.Bot{
                 // Execute the move
                 simulateMove(possMoves.get(i)[0].getId(), possMoves.get(i)[1].getId());
 
-                Board btemp = new Board(EasySim.getBoardRep(),id);
+                Board btemp = new Board(EasySim.getBoardRep(),id,b);
                 // Translate board to TDGdata
                 inputNN = new TDGdata(btemp);
 

@@ -33,7 +33,7 @@ public class EasySim {
 
         System.out.println(Arrays.toString(getPossMoves(new int[]{1,2},1,0,rep).toArray()));
 
-        Board b2 = new Board(rep,1);
+        Board b2 = new Board(rep,1,b);
         System.out.println(b2);
 
 
@@ -53,8 +53,8 @@ public class EasySim {
         }
     }
 
-    public Board getBoard(int[][] boardrep, int id){
-        return new Board(boardrep,id);
+    public Board getBoard(int[][] boardrep, int id, Board ba){
+        return new Board(boardrep,id, ba);
     }
 
     public static void unDoMoveSim(int from, int to) {

@@ -81,7 +81,36 @@ public class Board {
         //to correct for is home values of the pieces
         forceHomeCheck();
     }
+    public Board(int[][] boardrep, int id, Board b){
+        this.die=b.getDie();
+        this.gameLoop=b.getGameLoop();
+        this.player1=b.getPlayer1();
+        this.player2=b.getPlayer2();
+        this.spaces = new Space[26];
+        for(int i=0;i< boardrep.length-1;i++){
+            this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
+            if(id==0){
 
+                this.addPieces(boardrep[i][0],boardrep[i][1],0);
+                this.addPieces(boardrep[i][0],boardrep[i][2],1);
+
+
+                //boardrep[1] for palyer 0 boardrep[2 for player 1
+
+            }else{
+
+                this.addPieces(boardrep[i][0],boardrep[i][1],1);
+                this.addPieces(boardrep[i][0],boardrep[i][2],0);
+
+            }
+
+        }
+
+        this.outOfPlay = new Space(26);
+        //System.out.println(this);
+        //to correct for is home values of the pieces
+        forceHomeCheck();
+    }
 
     public Space getOutOfPlay() {
         return outOfPlay;
@@ -947,30 +976,5 @@ public class Board {
     }
 
 
-    public Board(int[][] boardrep, int id){
-        this.spaces = new Space[26];
-        for(int i=0;i< boardrep.length-1;i++){
-            this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
-            if(id==0){
 
-                this.addPieces(boardrep[i][0],boardrep[i][1],0);
-                this.addPieces(boardrep[i][0],boardrep[i][2],1);
-
-
-                //boardrep[1] for palyer 0 boardrep[2 for player 1
-
-            }else{
-
-                this.addPieces(boardrep[i][0],boardrep[i][1],1);
-                this.addPieces(boardrep[i][0],boardrep[i][2],0);
-
-            }
-
-        }
-
-        this.outOfPlay = new Space(26);
-        //System.out.println(this);
-        //to correct for is home values of the pieces
-        forceHomeCheck();
-    }
 }
