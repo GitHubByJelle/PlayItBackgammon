@@ -123,6 +123,7 @@ public class BotTestingGround {
                 b.createBotLoop();
                 testMultipleTimes(first,second,numGamesPerCombination);
                 System.out.println(String.format("%17s vs %17s First wins=%4d Second wins=%4d", first.getName(), second.getName(), counter, (numGamesPerCombination-counter)));
+                System.out.println(String.format("%17s vs %17s  First wins = %4d  Second wins = %4d", first.getName(), second.getName(), counter, (numGamesPerCombination-counter)));
                 counter=0;
             }
         }
