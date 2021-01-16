@@ -14,10 +14,10 @@ public class NN {
 
 
     public static void main(String[] args) {
-        trainDataTD(10000, true);
+        trainDataTD(2000000, true, 10);
     }
 
-    public static void trainDataTD(int NumberOfGames, boolean Save){
+    public static void trainDataTD(int NumberOfGames, boolean Save, int offSet){
         // For every game
         // Create a whole game
         Board b = new Board();
@@ -51,8 +51,8 @@ public class NN {
 
             // Saving the NN every 10k
             if (Save) {
-                if ((ep + 1) % 10000 == 0) {
-                    NNFile.export(one.getNeuralnet(), ((ep + 1) / 1000) + "k");
+                if ((ep + 1) % 50000 == 0) {
+                    NNFile.export(one.getNeuralnet(), ((ep + 1) / 1000 + offSet) + "k");
                 }
             }
         }

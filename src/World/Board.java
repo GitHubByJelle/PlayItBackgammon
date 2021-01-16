@@ -8,6 +8,7 @@ import AI.AlphaBeta.AlphaBetaBot;
 import AI.AlphaBeta.Move;
 import AI.AlphaBeta.Turn;
 import AI.GA.TMM;
+import AI.TDGammon.TDG;
 import Utils.Variables;
 
 import javax.swing.*;
@@ -416,6 +417,15 @@ public class Board {
 
         if (two.equals(Variables.ABB)) {
             player2 = new AlphaBetaBot(1);
+            player2.setBoard(this);
+        }
+        if (one.equals(Variables.TDG)) {
+            player1 = new TDG(0);
+            player1.setBoard(this);
+        }
+
+        if (two.equals(Variables.TDG)) {
+            player2 = new TDG(1);
             player2.setBoard(this);
         }
 

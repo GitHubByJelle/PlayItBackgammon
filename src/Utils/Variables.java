@@ -40,8 +40,8 @@ public final class Variables {
 
 
     //for now its gonna be like this
-    public static final String[] PLAYERS= {HUMAN,  RANDOM, SIMPLEBOT,BP,TMM,ABB};
-    public static final String[] BOTS= {RANDOM, SIMPLEBOT,BP,TMM};
+    public static final String[] PLAYERS= {HUMAN,  RANDOM, SIMPLEBOT,BP,TMM,ABB,TDG};
+    public static final String[] BOTS= {RANDOM, SIMPLEBOT,BP,TMM,TDG};
 
     public static String GET_RANDOM_BOT(){
         return BOTS[ (int)(Math.random() * ((BOTS.length) + 1) )];
