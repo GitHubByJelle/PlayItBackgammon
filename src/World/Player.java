@@ -212,10 +212,7 @@ public abstract class Player {
                        newEntry.setRoll(curRoll);
                        res.add(newEntry);
                    }
-
                }
-
-
             }
 
             ArrayList<DummyMove> a = new ArrayList<>(res);
