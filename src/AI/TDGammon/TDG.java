@@ -16,7 +16,9 @@ public class TDG extends Player.Bot{
     public TDG(int id) {
         super(id);
     }
-    private static NeuralNet neuralnet = NNFile.importNN("newnewtest"); //new NeuralNet(.1f);
+    private static NeuralNet neuralnet = NNFile.importNN("nn2"); //new NeuralNet(.1f);
+    //private static NeuralNet neuralnet = ImportNN.importNet("nn1"); //new NeuralNet(.1f);
+    //private static NeuralNet neuralnet = new NeuralNet(.1f);
 
     public boolean learningmode = false;
     public static float[][] Ew = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
@@ -160,7 +162,7 @@ public class TDG extends Player.Bot{
             requestPassTurn();
             //System.out.println("TD PASSED!");
         }
-        //System.out.println("#####################################################");
+//        System.out.println("#####################################################");
     }
     private int [][] getBoardRepresentation(Board b){
         int[][] board = new int[24][3];//{id,num pieces this player, num pieces opp}

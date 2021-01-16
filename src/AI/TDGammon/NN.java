@@ -1,5 +1,8 @@
 package AI.TDGammon;
 
+import AI.BotTestingGround;
+import AI.GA.TMM;
+import AI.RandomBot;
 import World.Board;
 import World.Player;
 
@@ -17,11 +20,29 @@ public class NN {
         //ArrayList<TrainData> dataSet = createTrainingData();
         NeuralNet neuralNet = new NeuralNet(lr);
 
+        System.out.println(Arrays.toString(neuralNet.getLayer()[2].neuron[0].weights));
+
         //neuralNet = NNFile.importNN("newnewtest");
 
-        trainDataTD4(neuralNet, 5000, 0.1f, 0.7f);
+//        Board b = new Board();
+//
+//        TDG one = new TDG(0);
+//        Player.Bot two = new RandomBot(1);
+////        one.setOpponent(two);
+////        two.setOpponent(one);
+//        one.pausing = false;
+//        two.pausing = false;
+//        b.setPlayers(one, two);
+//        b.createBotLoop();
 
-        NNFile.export(neuralNet,"newnewtest");
+        trainDataTD4(neuralNet, 10000, 0.1f, 0.7f);
+
+//        System.out.println();
+//        System.out.println("Started Testing");
+//        BotTestingGround.testMultipleTimes(one,two,1000);
+
+        //NNFile.export(neuralNet,"nn2");
+        //ExportNN.exportNetwork(neuralNet,"nn1");
     }
 
     public static  ArrayList<TrainData> createTrainingData() throws IOException {
@@ -143,8 +164,10 @@ public class NN {
         b.setPlayers(one,two);
         b.createBotLoop();
 
+        System.out.println(Arrays.toString(one.getNeuralnet().getLayer()[2].neuron[0].weights));
+
         for (int ep = 0; ep < NumberOfGames; ep++) {
-            //System.out.println(one.getNeuralnet().getLayer()[2].neuron[3].weights[0]);
+//            System.out.println(one.getNeuralnet().getLayer()[2].neuron[0].weights[0]);
             long time = System.nanoTime();
             one.resetPlayer();
             two.resetPlayer();
@@ -171,6 +194,8 @@ public class NN {
             //System.out.println(one.getNeuralnet().getLayer()[2].neuron[2].weights[0]);
             //System.out.println();
         }
+        NNFile.export(one.getNeuralnet(),"nn2");
+        System.out.println(Arrays.toString(one.getNeuralnet().getLayer()[2].neuron[0].weights));
     }
 
     public static void trainDataTD3(NeuralNet nn, int NumberOfGames, float alpha, float lambda) {
@@ -324,16 +349,16 @@ public class NN {
         }
 
 
-//        System.out.println(YDiff[0]);
+//        System.out.println("Diff: " + YDiff[0]);
 //        for (int k = 0; k < 4; k++)
 //            System.out.println(alpha * YDiff[k] * Ev[4][0][k]);
 
         // Updating the weights
         for (int j = 0; j < nn.getLayer()[1].neuron.length; j++){
             for (int k = 0; k < YDiff.length; k++){
-                nn.getLayer()[2].neuron[k].weights[j] += alpha*.2 * YDiff[k] * Ew[j][k];
+                nn.getLayer()[2].neuron[k].weights[j] += alpha * YDiff[k] * Ew[j][k];
                 for (int i = 0; i < nn.getLayer()[0].neuron.length; i++){
-                    nn.getLayer()[1].neuron[j].weights[i] += alpha*.8 * YDiff[k] * Ev[i][j][k];
+                    nn.getLayer()[1].neuron[j].weights[i] += alpha * YDiff[k] * Ev[i][j][k];
                 }
             }
         }
