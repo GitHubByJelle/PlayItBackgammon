@@ -108,6 +108,37 @@ public class BotTestingGround {
         giveWinner(b);
     }
 
+    public static void executeOneBotTourney(int numGamesPerCombination, int secondplayer){
+        Player.Bot first;
+        Player.Bot second;
+
+        for(int one = 0; one< Variables.BOTS.length; one++){
+                b = new Board();
+                b.setPlayers(Variables.BOTS[one],Variables.BOTS[secondplayer]);
+                first=(Player.Bot)b.getPlayer1();
+                second=(Player.Bot)b.getPlayer2();
+                first.pausing=false;
+                second.pausing=false;
+                b.createBotLoop();
+                testMultipleTimes(first,second,numGamesPerCombination);
+                System.out.println(String.format("%17s vs %17s  First wins = %4d  Second wins = %4d", first.getName(), second.getName(), counter, (numGamesPerCombination-counter)));
+                counter=0;
+
+                b = new Board();
+                b.setPlayers(Variables.BOTS[secondplayer],Variables.BOTS[one]);
+                second=(Player.Bot)b.getPlayer1();
+                first=(Player.Bot)b.getPlayer2();
+                first.pausing=false;
+                second.pausing=false;
+                b.createBotLoop();
+                testMultipleTimes(second,first,numGamesPerCombination);
+                System.out.println(String.format("%17s vs %17s  First wins = %4d  Second wins = %4d",  second.getName(),first.getName(), counter, (numGamesPerCombination-counter)));
+                counter=0;
+
+
+        }
+    }
+
     public static void executeTourney(int numGamesPerCombination){
         Player.Bot first;
         Player.Bot second;
