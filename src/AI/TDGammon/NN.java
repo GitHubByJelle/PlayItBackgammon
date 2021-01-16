@@ -31,12 +31,13 @@ public class NN {
         b.createBotLoop();
 
         for (int ep = 0; ep < NumberOfGames; ep++) {
-//            System.out.println(one.getNeuralnet().getLayer()[2].neuron[0].weights[0]);
+            // Keeping track of time (for printing)
             long time = System.nanoTime();
+
+            // Reset the game
+            b = new Board();
             one.resetPlayer();
             two.resetPlayer();
-            b = new Board();
-
             one.resetElig();
             two.resetElig();
 
@@ -51,7 +52,7 @@ public class NN {
 
             if (Save) {
                 if ((ep + 1) % 10000 == 0) {
-                    NNFile.export(one.getNeuralnet(), ((ep + 1) / 1000 + 60) + "k");
+                    NNFile.export(one.getNeuralnet(), ((ep + 1) / 1000) + "k");
                 }
             }
         }
