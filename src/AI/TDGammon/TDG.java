@@ -1,6 +1,5 @@
 package AI.TDGammon;
 
-import AI.GA.TMM;
 import Utils.EasySim;
 import World.Board;
 import World.Player;
@@ -8,7 +7,6 @@ import World.Space;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static Utils.EasySim.*;
 
@@ -21,14 +19,14 @@ public class TDG extends Player.Bot{
     //private static NeuralNet neuralnet = new NeuralNet(.1f);
 
     public boolean learningmode = false;
-    public static float[][] Ew = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
-    public static float[][][] Ev = new float[neuralnet.getLayer()[0].neuron.length][neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
+    public static float[][] sumWeightsOut = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
+    public static float[][][] sumWeightsIn = new float[neuralnet.getLayer()[0].neuron.length][neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
 
     public NeuralNet getNeuralnet(){return neuralnet;}
 
     public void resetElig(){
-        this.Ew = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
-        this.Ev = new float[neuralnet.getLayer()[0].neuron.length][neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
+        this.sumWeightsOut = new float[neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
+        this.sumWeightsIn = new float[neuralnet.getLayer()[0].neuron.length][neuralnet.getLayer()[1].neuron.length][neuralnet.getLayer()[2].neuron.length];
     }
 
     @Override
@@ -143,12 +141,7 @@ public class TDG extends Player.Bot{
 
 //                System.out.println(Arrays.toString(Ev[4][0]));
 
-                TrainData data1 = new TrainData(cInput.data,cOutput);
-//                TrainData data2 = new TrainData(nInput.data,nOutput);
-                ArrayList<TrainData> dataSet = new ArrayList<>();
-                dataSet.add(data1); //dataSet.add(data2);
-
-                NN.UpdateWeightsTD2(neuralnet, 0.1f, 0.7f, cOutput, nOutput, dataSet, 0,Ew,Ev);
+                NN.UpdateWeightsTD2(neuralnet, 0.1f, 0.7f, cOutput, nOutput, cInput.data, sumWeightsOut, sumWeightsIn);
 
 //                System.out.println(Arrays.toString(Ev[4][0]));
 //               System.out.println();
