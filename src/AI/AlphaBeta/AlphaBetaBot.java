@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.*;
 
 import AI.SimpleBot;
+import AI.GA.TMM;
 import World.*;
 
 
@@ -32,7 +33,7 @@ public class AlphaBetaBot extends Player.Bot {
     };
 
 
-    private static final int DEFAULT_DEPTH =3;
+    private static final int DEFAULT_DEPTH = 3;
 
     private double[] moveQuality;
     public Bot opponent;
@@ -48,10 +49,10 @@ public class AlphaBetaBot extends Player.Bot {
 
 
         if(id == 0){
-            opponent = new SimpleBot(1);
+            opponent = new TMM(1);
             //NODES = NODES1;//
         }else if (id == 1){
-            opponent = new SimpleBot(0);
+            opponent = new TMM(0);
            // NODES = NODES2;
         }
 
@@ -105,7 +106,7 @@ public class AlphaBetaBot extends Player.Bot {
     }
 
 
-    public double expectiminimax(int depth, int currentNodeIndex) {
+    public double expectiminimax(int depth, int currentNodeIndex, double alpha, double beta) {
         double result = 0.;
         List<Turn> turns;
 
@@ -121,11 +122,17 @@ public class AlphaBetaBot extends Player.Bot {
                 if (!turns.isEmpty()) {
                     double[] moveQuality = new double[turns.size()];
 
-                    for (int i = 0; i < turns.size(); i++) {
-                        makeTurn(turns.get(i), 0);
-                        moveQuality[i] = expectiminimax(depth - 1, (currentNodeIndex + 1) % 4);
-                        unDoTurn(turns.get(i), 0);
-
+                    for (int i = 0; i < turns.size(); i++) { 
+                    	makeTurn(turns.get(i), 0);
+                        if(alpha<expectiminimax(depth - 1, (currentNodeIndex + 1) % 4, alpha, beta)) {                        	moveQuality[i] = expectiminimax(depth - 1, (currentNodeIndex + 1) % 4, alpha, beta);
+	                        alpha = moveQuality[i];  
+	                        unDoTurn(turns.get(i), 0);
+                        }
+                        else {
+                        	moveQuality[i] = alpha;
+                        	unDoTurn(turns.get(i), 0);
+                        }
+                        
                     }
 
                     if (depth == initialDepth) {
@@ -144,12 +151,18 @@ public class AlphaBetaBot extends Player.Bot {
                     double[] moveQuality = new double[turns.size()];
 
                     for (int i = 0; i < turns.size(); i++) {
-
-                        opponent.makeTurn(turns.get(i), 1);
-                        moveQuality[i] = expectiminimax(depth - 1, (currentNodeIndex + 1) % 4);
-                        opponent.unDoTurn(turns.get(i), 1);
-
-
+                    	opponent.makeTurn(turns.get(i), 1);
+                    	if(beta>expectiminimax(depth - 1, (currentNodeIndex + 1) % 4,alpha, beta)) {
+                    		
+                    		moveQuality[i] = expectiminimax(depth - 1, (currentNodeIndex + 1) % 4, alpha, beta);
+                            beta = moveQuality[i];
+//                            opponent.unDoTurn(turns.get(i), 1);
+                    	}
+                    	else {
+                        	moveQuality[i] = beta;
+                        	opponent.unDoTurn(turns.get(i), 1);
+                        }
+                    	
                     }
 
                     result = min(moveQuality);
@@ -175,7 +188,7 @@ public class AlphaBetaBot extends Player.Bot {
                             currentDie = opponent.getDie(i);
                             opponent.B.getDie().setCurRoll(currentDie);
                         }
-                        values.add(expectiminimax(depth - 1, (currentNodeIndex + 1) % 4));
+                        values.add(expectiminimax(depth - 1, (currentNodeIndex + 1) % 4,alpha,beta));
                         if (NODES[(currentNodeIndex + 1) % 4] == Node.MAX) {
                             this.B.getDie().setCurRoll(currentDie);
                         } else {
@@ -366,7 +379,7 @@ public class AlphaBetaBot extends Player.Bot {
         ArrayList<Turn> turns1 = this.getValidTurns(this.id);
         System.out.println("Turn for a" + this.id );
         System.out.println(turns1);
-        expectiminimax(DEFAULT_DEPTH, 0);
+        expectiminimax(1, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         Instant finish = Instant.now();
 
         initialDepth = -1;
@@ -379,11 +392,12 @@ public class AlphaBetaBot extends Player.Bot {
                 maxQualityMoveIndex = i;
             }
         }
-        int secondMaxQuality;
+        double secondMaxQuality  = -Double.MAX_VALUE;
+        int secondMaxQualityIndex = -1;
         for (int i = 0; i < moveQuality.length; i++) {
-            if (moveQuality[i] > maxMoveQuality) {
-                maxMoveQuality = moveQuality[i];
-                maxQualityMoveIndex = i;
+            if (moveQuality[i] > secondMaxQuality && moveQuality[i]  < maxMoveQuality) {
+                secondMaxQuality = moveQuality[i];
+                secondMaxQualityIndex = i;
             }
         }
         System.out.println(turns1);
@@ -391,6 +405,9 @@ public class AlphaBetaBot extends Player.Bot {
             requestPassTurn();
             return null;
         }else {
+            if(maxQualityMoveIndex >= turns1.size()-1){
+                return secondMaxQualityIndex != -1 ? turns1.get(secondMaxQualityIndex) : null;
+            }
             return maxQualityMoveIndex != -1 ? turns1.get(maxQualityMoveIndex) : null;
         }
     }
