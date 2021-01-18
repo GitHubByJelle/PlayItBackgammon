@@ -8,6 +8,7 @@ import AI.AlphaBeta.AlphaBetaBot;
 import AI.AlphaBeta.Move;
 import AI.AlphaBeta.Turn;
 import AI.GA.TMM;
+import AI.TDGammon.TDG;
 import Utils.Variables;
 
 import javax.swing.*;
@@ -81,7 +82,48 @@ public class Board {
         //to correct for is home values of the pieces
         forceHomeCheck();
     }
+    public Board(int[][] boardrep, int id, Board b){
+        this.die=b.getDie();
+        this.gameLoop=b.getGameLoop();
+        this.player1=b.getPlayer1();
+        this.player2=b.getPlayer2();
+        this.spaces = new Space[26];
 
+        for(int i=0;i< boardrep.length-1;i++){
+            this.spaces[boardrep[i][0]]= new Space(boardrep[i][0]);
+            if(id==0){
+                this.addPieces(boardrep[i][0],boardrep[i][1],0);
+                this.addPieces(boardrep[i][0],boardrep[i][2],1);
+            }else{
+                this.addPieces(boardrep[i][0],boardrep[i][1],1);
+                this.addPieces(boardrep[i][0],boardrep[i][2],0);
+
+            }
+
+        }
+        this.outOfPlay = new Space(26);
+        if(id==0) {
+            for(int i=0;i<boardrep[26][1];i++) {
+                outOfPlay.addPiece(new Piece(0));
+            }
+            for(int i=0;i<boardrep[26][2];i++) {
+                outOfPlay.addPiece(new Piece(1));
+            }
+
+        }else if(id==1) {
+            for(int i=0;i<boardrep[26][1];i++) {
+                outOfPlay.addPiece(new Piece(1));
+            }
+            for(int i=0;i<boardrep[26][2];i++) {
+                outOfPlay.addPiece(new Piece(0));
+            }
+        }
+
+
+        //System.out.println(this);
+        //to correct for is home values of the pieces
+        forceHomeCheck();
+    }
 
     public Space getOutOfPlay() {
         return outOfPlay;
@@ -89,7 +131,8 @@ public class Board {
 
 
     public void forceHomeCheck() {
-        for (int i = 0; i < spaces.length; i++) {
+       for (int i = 0; i < spaces.length; i++) {
+
             for (int a = 0; a < spaces[i].getPieces().size(); a++) {
                 spaces[i].checkHome(spaces[i].getPieces().get(a));
             }
@@ -231,7 +274,6 @@ public class Board {
 
         ArrayList<Space> poss = getValidMoves(spaces[from]);
         if (to == 26) {
-
             if (allPiecesHome(gameLoop.getCurrentPlayer().getId()) && poss.contains(outOfPlay)) {
                 moveOutOfPlay(from);
                 lastPlays(from, to);
@@ -377,6 +419,15 @@ public class Board {
             player2 = new AlphaBetaBot(1);
             player2.setBoard(this);
         }
+        if (one.equals(Variables.TDG)) {
+            player1 = new TDG(0);
+            player1.setBoard(this);
+        }
+
+        if (two.equals(Variables.TDG)) {
+            player2 = new TDG(1);
+            player2.setBoard(this);
+        }
 
 
 //        if(player1==null ||player2==null) {
@@ -453,7 +504,7 @@ public class Board {
         for (int i = 1; i <= 12; i++) {
             res += String.format("%2d  %15s | %15s  %2d\n", i, spaces[i], spaces[25 - i], (25 - i));
         }
-
+        res+= String.format("%2d  %15s \n", 26, outOfPlay);
         return res;
 
     }
@@ -944,5 +995,7 @@ public class Board {
 
         return true;
     }
+
+
 
 }

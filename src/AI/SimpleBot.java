@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class SimpleBot extends Player.Bot{
     //mainly to see that everything in the testing class works as we expect
     //also easier to see what you need for other bots
-    //dumbest, will execute the first move it can looking from beginning->home direction
+    //one of the dumbest, will execute the first move it can looking from beginning->home direction
     public SimpleBot(int id) {
         super(id);
     }

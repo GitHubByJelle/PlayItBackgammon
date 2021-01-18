@@ -8,6 +8,7 @@ import World.Board;
 import World.Player;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BotTestingGround {
     private static ArrayList<int[]> i= new ArrayList<int[]>();
@@ -36,7 +37,7 @@ public class BotTestingGround {
 //        testMultipleTimes(one,two);
 //        System.out.println((System.nanoTime()-a)/1000000000.);
         Player.Bot one = new TDG(0);
-        Player.Bot two = new PrimeBlitzBot(1);
+        Player.Bot two = new RandomBot(1);
 //        one.setOpponent(two);
 //        two.setOpponent(one);
 	    one.pausing = false;
@@ -45,7 +46,7 @@ public class BotTestingGround {
 	    b.createBotLoop();
         long a = System.nanoTime();
         //System.out.println("Depth of 3: ");
-        testMultipleTimes(one, two);
+        testMultipleTimes(one, two, 1000);
         System.out.println((System.nanoTime()-a)/1000000000.);
         
 //        ABbot one = new ABbot(0);
@@ -91,7 +92,7 @@ public class BotTestingGround {
             testWithRandomDie();
             //System.out.println(b);
         }
-        //System.out.println(counter);
+        System.out.println(one.getName() + " vs " + two.getName() + ". Number of wins: " + counter);
     }
 
     private static void testWithRandomDie(){
@@ -105,6 +106,37 @@ public class BotTestingGround {
         }
 
         giveWinner(b);
+    }
+
+    public static void executeOneBotTourney(int numGamesPerCombination, int secondplayer){
+        Player.Bot first;
+        Player.Bot second;
+
+        for(int one = 0; one< Variables.BOTS.length; one++){
+                b = new Board();
+                b.setPlayers(Variables.BOTS[one],Variables.BOTS[secondplayer]);
+                first=(Player.Bot)b.getPlayer1();
+                second=(Player.Bot)b.getPlayer2();
+                first.pausing=false;
+                second.pausing=false;
+                b.createBotLoop();
+                testMultipleTimes(first,second,numGamesPerCombination);
+                System.out.println(String.format("%17s vs %17s  First wins = %4d  Second wins = %4d", first.getName(), second.getName(), counter, (numGamesPerCombination-counter)));
+                counter=0;
+
+                b = new Board();
+                b.setPlayers(Variables.BOTS[secondplayer],Variables.BOTS[one]);
+                second=(Player.Bot)b.getPlayer1();
+                first=(Player.Bot)b.getPlayer2();
+                first.pausing=false;
+                second.pausing=false;
+                b.createBotLoop();
+                testMultipleTimes(second,first,numGamesPerCombination);
+                System.out.println(String.format("%17s vs %17s  First wins = %4d  Second wins = %4d",  second.getName(),first.getName(), counter, (numGamesPerCombination-counter)));
+                counter=0;
+
+
+        }
     }
 
     public static void executeTourney(int numGamesPerCombination){
@@ -121,7 +153,7 @@ public class BotTestingGround {
                 second.pausing=false;
                 b.createBotLoop();
                 testMultipleTimes(first,second,numGamesPerCombination);
-                System.out.println(String.format("%17s vs %17s First wins=%4d Second wins=%4d", first.getName(), second.getName(), counter, (numGamesPerCombination-counter)));
+                System.out.println(String.format("%17s vs %17s  First wins = %4d  Second wins = %4d", first.getName(), second.getName(), counter, (numGamesPerCombination-counter)));
                 counter=0;
             }
         }
