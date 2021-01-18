@@ -1,6 +1,7 @@
 package AI;
 
 import AI.AlphaBeta.ABbot;
+import AI.AlphaBeta.AlphaBetaBot;
 import AI.GA.TMM;
 import AI.TDGammon.TDG;
 import Utils.Variables;
@@ -36,8 +37,8 @@ public class BotTestingGround {
 //        long a = System.nanoTime();
 //        testMultipleTimes(one,two);
 //        System.out.println((System.nanoTime()-a)/1000000000.);
-        Player.Bot one = new TDG(0);
-        Player.Bot two = new TMM(1);
+        Player.Bot one = new AlphaBetaBot(0);
+        Player.Bot two = new PrimeBlitzBot(1);
 //        one.setOpponent(two);
 //        two.setOpponent(one);
 	    one.pausing = false;
@@ -46,9 +47,9 @@ public class BotTestingGround {
 	    b.createBotLoop();
         long a = System.nanoTime();
         //System.out.println("Depth of 3: ");
-        testMultipleTimes(one, two, 1000);
+        testAgainstAlphaBeTaMultipleTimes(one, two);
         System.out.println((System.nanoTime()-a)/1000000000.);
-        
+
 //        ABbot one = new ABbot(0);
 //        ABbot two = new ABbot(1);
 //        one.pausing = false;
@@ -183,5 +184,24 @@ public class BotTestingGround {
         }else{
             //System.out.println("Question Epic Life decisions");
         }
+    }
+    public static void testAgainstAlphaBeTaMultipleTimes(Player.Bot one,Player.Bot two){
+        for(int i = 0; i<100; i++){
+            b = new Board();
+            one = new AlphaBetaBot(0);
+            one.setOpponent(two);
+            one.opponent.setBoard(b);
+            one.pausing = false;
+            two.resetPlayer();
+            b.setPlayers(one,two);
+            b.createBotLoop();
+            testWithRandomDie();
+            //System.out.println(b);
+            if(i % 10 == 0){
+                System.out.println("Counting wins: " + counter + " over " + i);
+            }
+        }
+        System.out.println(counter);
+
     }
 }

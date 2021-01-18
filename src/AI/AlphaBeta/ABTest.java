@@ -5,10 +5,10 @@ import World.Board;
 import java.util.ArrayList;
 public class ABTest {
     public static void main(String[] args) {
-        AlphaBetaBot player0 = new AlphaBetaBot(0);
+        AlphaBetaBot player0 = new AlphaBetaBot(1);
         System.out.println(player0.B);
         Turn t = player0.getBestMove();
-        System.out.println(player0.B);
+        System.out.println(t);
     }
    // public static void abc(){
 //        AlphaBetaBot player1 = new AlphaBetaBot(1);

@@ -297,12 +297,12 @@ public class Board {
             return true;
 
         } else {
-            this.getDie().printCurRoll();
-            System.out.println("from: " + from + "  to: " + to);
-            System.out.println(validityCheck(spaces[from], spaces[to]));
-            System.out.println(poss.contains(spaces[to]));
-            System.out.println(this.toString());
-            System.out.println("Move invalid");
+            //this.getDie().printCurRoll();
+//            System.out.println("from: " + from + "  to: " + to);
+//            System.out.println(validityCheck(spaces[from], spaces[to]));
+//            System.out.println(poss.contains(spaces[to]));
+//            System.out.println(this.toString());
+//            System.out.println("Move invalid");
             return false;
         }
 
@@ -654,7 +654,6 @@ public class Board {
                 spaces[from].movePiece(spaces[to]);
                 if (move.isKill) {
                     if (move.playerId == 0) {
-                        System.out.println("Move back from eaten space");
                         moveBackFromEatenSpaceID(from, 0);
                     } else {
                         moveBackFromEatenSpaceID(from, 1);
@@ -676,7 +675,6 @@ public class Board {
             if (spaces[from].getSize() > 0) {
                 spaces[from].movePiece(spaces[to]);
                 if (move.isKill) {
-                    System.out.println("ABC" + move.playerId);
                     if (move.playerId == 0) {
                         spaces[25].movePiece(spaces[from]);
 
