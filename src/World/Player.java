@@ -250,7 +250,7 @@ public abstract class Player {
 
 
 
-        //Methods Alaa is not responsible for__________________________________________
+      
         public ArrayList<Turn> getValidTurns(){
             return this.B.getValidTurns(this.B.getDie().getCurRoll(),this.id);
         }
@@ -328,12 +328,12 @@ public abstract class Player {
 
 
     }
-    //_______________________________________________________________________________
+
 
 
 }
 
-//this is Alaa's class.
+
 class DummyMove{
     Space[] move;
     int [] roll;
