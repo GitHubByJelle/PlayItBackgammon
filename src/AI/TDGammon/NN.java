@@ -14,7 +14,7 @@ public class NN {
 
 
     public static void main(String[] args) {
-        trainDataTD(2000000, true, 10);
+        trainDataTD(2000000, true, 900);
     }
 
     public static void trainDataTD(int NumberOfGames, boolean Save, int offSet){

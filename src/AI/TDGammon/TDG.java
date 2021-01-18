@@ -15,7 +15,7 @@ public class TDG extends Player.Bot{
         super(id);
     }
     // Import network
-    private static NeuralNet neuralnet = NNFile.importNN("10k");
+    private static NeuralNet neuralnet = NNFile.importNN("900k");
 
     // Initialise parameters
     public static boolean learningmode = false;
