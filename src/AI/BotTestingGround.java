@@ -123,17 +123,18 @@ public class BotTestingGround {
                 testMultipleTimes(first,second,numGamesPerCombination);
                 System.out.println(String.format("%17s vs %17s  First wins = %4d  Second wins = %4d", first.getName(), second.getName(), counter, (numGamesPerCombination-counter)));
                 counter=0;
-
+            if(!Variables.BOTS[one].equals(Variables.ABB)) {
                 b = new Board();
-                b.setPlayers(Variables.BOTS[secondplayer],Variables.BOTS[one]);
-                second=(Player.Bot)b.getPlayer1();
-                first=(Player.Bot)b.getPlayer2();
-                first.pausing=false;
-                second.pausing=false;
+                b.setPlayers(Variables.BOTS[secondplayer], Variables.BOTS[one]);
+                second = (Player.Bot) b.getPlayer1();
+                first = (Player.Bot) b.getPlayer2();
+                first.pausing = false;
+                second.pausing = false;
                 b.createBotLoop();
-                testMultipleTimes(second,first,numGamesPerCombination);
-                System.out.println(String.format("%17s vs %17s  First wins = %4d  Second wins = %4d",  second.getName(),first.getName(), counter, (numGamesPerCombination-counter)));
-                counter=0;
+                testMultipleTimes(second, first, numGamesPerCombination);
+                System.out.println(String.format("%17s vs %17s  First wins = %4d  Second wins = %4d", second.getName(), first.getName(), counter, (numGamesPerCombination - counter)));
+                counter = 0;
+            }
 
 
         }
