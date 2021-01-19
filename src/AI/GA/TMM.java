@@ -20,11 +20,13 @@ public class TMM extends Player.Bot{
         super(id);
         this.weightsarr = weightsarr;
     }
+    //calculates measures times weights
     public double EvaluationFunc(){
         int [][] currentBoard = getBoardRep();
         int [][] home= getHome(currentBoard);
         return this.OtherPiecesSlain()*weightsarr[0] + this.pipCount()*weightsarr[1] + this.DoneScore()*weightsarr[2] + this.DoneBoardScore()*weightsarr[3] + this.piecesAlone()*weightsarr[4] + this.countWalls(home, 2)*weightsarr[5] + this.countHighStacks(home)*weightsarr[6];
     }
+    // gets representation for board
     private int [][] getBoardRep(){
         int[][] board = new int[24][3];//{id,num pieces this player, num pieces opp}
         for(int i=0;i<board.length;i++){
@@ -43,6 +45,7 @@ public class TMM extends Player.Bot{
         }
         return board;
     }
+    //counts number of walls with size
     private int countWalls(int[][] currentHomeSpace, int wallSize) {
         int numWalls=0;
         for(int i=0;i<currentHomeSpace.length;i++){
@@ -52,7 +55,7 @@ public class TMM extends Player.Bot{
         }
         return numWalls;
     }
-
+    // calculates too high stacks
     private int countHighStacks(int[][] home) {
         int res =0;
         int totalPieces=0;
@@ -67,6 +70,7 @@ public class TMM extends Player.Bot{
         }
         return -res;
     }
+    // gets all home spaces
     private int[][] getHome(int[][] currentBoard) {
         int[][] homeSpaces= new int[6][3];//per space, [id,number of this player's pieces] {{6,5},{5,0},{4,0}{3,0},{2,0},{1,2}}
         int spaceIndex=0;
@@ -83,7 +87,7 @@ public class TMM extends Player.Bot{
         }
         return homeSpaces;
     }
-
+    // gets highest moves for space
     public ArrayList<Space> GetHighestMoves(ArrayList<Space> selected_spaces){
         ArrayList<Space> moves = new ArrayList<Space>();
         for(int i = 0; i<selected_spaces.size(); i++){
@@ -154,6 +158,7 @@ public class TMM extends Player.Bot{
 //            return new double[3];
 //        }
 //    }
+    //gets best move
     public double[] GetBestMove(){
         ArrayList<Space> all_selected = GetAllSelectedSpaces();
         ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
@@ -205,6 +210,7 @@ public class TMM extends Player.Bot{
             return new double[3];
         }
     }
+    //gets valid roll given from and to spaces
     public int getValidRoll(int from, int to, int pieceID){
         if(this.B.getDie().getCurRoll().length == 1 ){
             return this.B.getDie().getCurRoll()[0];
@@ -229,6 +235,7 @@ public class TMM extends Player.Bot{
             return to - from;
         }
     }
+    // returns true if dice[] is empty
     public boolean diceCopyEmpty(int[] dicecopy){
         for(Integer inte: dicecopy){
             if(inte!=0){
@@ -237,6 +244,7 @@ public class TMM extends Player.Bot{
         }
         return true;
     }
+    // executes move
     public void ExecuteNextMove2(){
         double[] move = GetBestMove();
         B.forceHomeCheck();
@@ -248,6 +256,7 @@ public class TMM extends Player.Bot{
             B.playerMove((int) move[0], (int) move[1]);
         }
     }
+    // makes dice copy
     public int[] diceCopy(int[] die){
         int[] returndice = new int[die.length];
         for(int i = 0; i<die.length; i++){
@@ -255,7 +264,7 @@ public class TMM extends Player.Bot{
         }
         return returndice;
     }
-
+    // executes move but only looking at 1 dice (not used)
     public void ExecuteNextMove(){
         ArrayList<Space> all_selected = GetAllSelectedSpaces();
         ArrayList<Space> all_highest_moves = GetHighestMoves(all_selected);
@@ -281,7 +290,7 @@ public class TMM extends Player.Bot{
             }
         }
     }
-
+    // gets all selected spaces given board
     public ArrayList<Space> GetAllSelectedSpaces(Board board){
         ArrayList returnSpaces = new ArrayList<Space>();
         if(board.getGameLoop().getCurrentPlayer().getId() == 1) {
@@ -317,7 +326,7 @@ public class TMM extends Player.Bot{
             return returnSpaces;
         }
     }
-
+    // gets all selected spaces
     public ArrayList<Space> GetAllSelectedSpaces(){
         ArrayList returnSpaces = new ArrayList<Space>();
         if(this.B.getGameLoop().getCurrentPlayer().getId() == 1) {
@@ -353,7 +362,7 @@ public class TMM extends Player.Bot{
             return returnSpaces;
         }
     }
-
+    //gets highest move in space
     public Space GetHighestSubSpace(Space selected, ArrayList<Space> moves){
         double[] valuemoves = new double[moves.size()];
         int pieceID = 0;
@@ -474,7 +483,7 @@ public class TMM extends Player.Bot{
         }
     }
 
-
+    
     static int argmax(double[] weights) {
         if (weights == null)
             return -1;
