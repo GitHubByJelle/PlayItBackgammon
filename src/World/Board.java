@@ -616,7 +616,6 @@ public class Board {
     }
 
 
-//Methods that Alaa is not responsible for and has no idea what they do anymore__________________________________________________________________________________________
 
     //Probably temporary but thanks to this function we can work on Evolution until the unknown bug is fixed
     public void BotMove(int from, int to) {
