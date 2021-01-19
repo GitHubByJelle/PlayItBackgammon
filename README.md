@@ -7,3 +7,4 @@
   * To use a new file, it needs to be imported in TDG class as neuralNet using the NNFile.Import(String filename) method. 
 * To train Trained Measures Model bot run the Evolution class, start a new population, and call Population.populationEvolver().
 * WARNING: AlphaBetaBot cannot play as Player 2 in any circumstance. 
+* WARNING: The Alpha-Beta bot gives rare errors and infinite loops when running as player 1. Therefore, when running the BotTestingGround for Alpha-Beta, the numGames parameter in  executeTourney(int numGames) should be set to a small number, i.e 10 or 100
