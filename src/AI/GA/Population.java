@@ -30,7 +30,7 @@ public class Population{
             this.poolOfIndividuals.add(new Individual());
         }
     }
-
+    //Evolve population
     public void PopulationEvolver()  {
         //tournament selection
         this.setEveryIndividualEnemyWeights(this.getFittest().getGenome());
@@ -57,12 +57,12 @@ public class Population{
             this.poolOfIndividuals.add(new Individual());
         }
     }
-
+    //gets pool of individuals
     public ArrayList<Individual> getPoolOfIndividuals(){
         return this.poolOfIndividuals;
     }
 
-
+    //gets fittest from population
     public Individual getFittest(){
         double maxFit = 0;
         for (Individual maxInd : this.poolOfIndividuals){
@@ -77,7 +77,7 @@ public class Population{
     }
     // Selects 10 random Individuals and returns best 2
 
-
+    //gets random best 2
     public ArrayList<Individual> getRandomBest2_NoSimilarity(){
         ArrayList<Individual> tempList = new ArrayList<Individual>();
         for(int i = 0; i < 0.4 * POOL_SIZE; i++){
@@ -95,6 +95,7 @@ public class Population{
         returnlist.add(tempList.get(1));
         return returnlist;
     }
+    //gets random best 2 no similarity
     public ArrayList<Individual> getRandomBest2(){
         ArrayList<Individual> tempList = new ArrayList<Individual>();
         for(int i = 0; i < 0.4 * POOL_SIZE; i++){
@@ -109,6 +110,7 @@ public class Population{
 
             return tempList;
     }
+    //checks if individual is too similar
     public boolean ToSimilar(Individual a, Individual b){
         for(int i = 0; i < 5; i++){
             if(((a.getGenome()[i] - b.getGenome()[i]) > similarityrate) && ((a.getGenome()[i] - b.getGenome()[i]) < -similarityrate)){
@@ -117,7 +119,7 @@ public class Population{
         }
         return false;
     }
-
+    // gets average fitness population
     public double getAverage(){
         double a = 0;
         for(int i = 0; i  < this.poolOfIndividuals.size(); i++){

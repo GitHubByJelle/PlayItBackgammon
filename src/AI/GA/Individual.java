@@ -114,6 +114,7 @@ public class Individual implements Comparable<Individual>{
 //        }
 //        return this.d/SIZE_OF_INDIVIDUAL;
 //    }
+    //gets average for individual with multithreading
 public double individualAvg() {
     Runnable task = () -> {
         try{
