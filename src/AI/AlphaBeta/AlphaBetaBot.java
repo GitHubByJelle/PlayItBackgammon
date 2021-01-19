@@ -14,7 +14,7 @@ public class AlphaBetaBot extends Player.Bot {
     private int[][] DIES_COMBINATION = new int[21][2];
     int[] currentDie;
 
-
+    private final double TERMINAL_VAR = 0.9;
     private enum Node {
         MAX("MAX"), MIN("MIN"), CHANCE("CHANCE");
 
@@ -43,17 +43,11 @@ public class AlphaBetaBot extends Player.Bot {
     public AlphaBetaBot(int id) {
 
         super(id);
-//        System.out.println("Test tostring");
-//        System.out.println(this.B);
-//        System.out.println("-------------------------------------------------");
-
 
         if(id == 0){
             opponent = new TMM(1);
-            //NODES = NODES1;//
         }else if (id == 1){
             opponent = new TMM(0);
-            // NODES = NODES2;
         }
 
         Board board = new Board();
@@ -140,7 +134,8 @@ public class AlphaBetaBot extends Player.Bot {
                     result = max(moveQuality);
                 } else {
                     if (depth == initialDepth) moveQuality = new double[0];
-                    result = -0.9;
+                    requestPassTurn();
+                    result = -TERMINAL_VAR;
                 }
                 break;
             case MIN:
@@ -165,7 +160,7 @@ public class AlphaBetaBot extends Player.Bot {
 
                     result = min(moveQuality);
                 } else {
-                    result = 0.9;
+                    result = TERMINAL_VAR;
                 }
                 break;
             case CHANCE:
@@ -450,6 +445,4 @@ public class AlphaBetaBot extends Player.Bot {
             this.B.undoBotMove(turn.moves.get(i), dummy);
         }
     }
-
-
 }
