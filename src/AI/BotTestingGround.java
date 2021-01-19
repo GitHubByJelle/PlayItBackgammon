@@ -19,24 +19,7 @@ public class BotTestingGround {
     static double[] diffweightsarr = {1,1,1,1,1};
 
     public static void main(String []args){
-        executeOneBotTourney(10,4);
-//        ABbot one = new ABbot(0);
-//        ABbot two = new ABbot(1);
-//        one.pausing = false;
-//        two.pausing = false;
-//        b.setPlayers(one,two);
-//        one.setBoard(b);
-//	    one.pausing = false;
-//	    two.pausing = false;
-//	    b.createBotLoop();
-//	    one.setOpponent(two);
-//        two.setOpponent(one);
-//        long a = System.nanoTime();
-//        System.out.println("Depth of 3: ");
-//        one.khaiTrial(2, one);
-//        System.out.println((System.nanoTime()-a)/1000000000.);
-
-
+        executeTourney(10);
     }
 
     public static void testMultipleTimes(Player.Bot one, Player.Bot two){
@@ -63,7 +46,7 @@ public class BotTestingGround {
             testWithRandomDie();
             //System.out.println(b);
         }
-        System.out.println(one.getName() + " vs " + two.getName() + ". Number of wins: " + counter);
+        //System.out.println(one.getName() + " vs " + two.getName() + ". Number of wins: " + counter);
     }
 
     private static void testWithRandomDie(){
